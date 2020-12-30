@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/zhangtong
+    username: postgres
+    password: 123456
+  redis:
+    host: 127.0.0.1
+    database: 4
+    port: 6379
+    timeout: 10000
+    jedis:
+      pool:
+        max-active:  8 #最大连接数
+        max-wait: -1   #最大阻塞等待时间(负数表示没限制)
+        max-idle: 8  #最大空闲
+        min-idle: 0  #最小空闲
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+
+
+server:
+  port: 8111
+
+sim:
+  # jwt 配置
+  jwt:
+    # jwt token 有效时间 单位是秒
+    expired-in: '25920000' # 登录有效时间 7 * 24 小时
+    # 使用非对称加密算法 rs256, 自动生成私钥，公钥可以从服务器获取
+    algorithm: 'rs256'
+    private-key: ''
+
