@@ -258,7 +258,7 @@ create table if not exists courseware_remark(
     CONSTRAINT "courseware_remark_pk" PRIMARY KEY ( "courseware_id", "user_id")
 );
 
-create trigger t_name before update on experiment_remark for each row execute procedure upd_timestamp();
+create trigger t_name before update on courseware_remark for each row execute procedure upd_timestamp();
 
 
 create table if not exists user_serve(
