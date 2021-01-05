@@ -1,8 +1,9 @@
 package org.tdos.tdospractice.entity;
 
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.io.Serializable;
+import javax.persistence.EntityListeners;
 import java.time.LocalDateTime;
 
 @Data
@@ -10,7 +11,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Builder
-public class UserEntity implements Serializable {
+@EntityListeners(AuditingEntityListener.class)
+public class UserEntity {
 
     private String id;
 

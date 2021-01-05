@@ -6,4 +6,33 @@
     <select id="findAll" resultType="org.tdos.tdospractice.entity.UserEntity">
         select * from sim_user;
     </select>
+
+    <select id="findUserByIdAndPwd" resultMap="user">
+        select * from sim_user where id = #{id} and password = #{password};
+    </select>
+
+    <select id="findUserById" resultMap="user">
+        select * from sim_user where id = #{id};
+    </select>
+
+    <select id="findAllByRoleID" resultMap="user">
+        select * from sim_user where role_id = #{role_id};
+    </select>
+
+    <delete id="deleteUserById">
+        delete from sim_user where id=#{id}
+    </delete>
+
+    <!-- 自定义高级映射 -->
+    <resultMap type="org.tdos.tdospractice.entity.UserEntity" id="user">
+        <!-- 映射主键 -->
+        <id column="id" property="id"/>
+        <!-- 映射其他列 -->
+        <result column="role_id" property="roleID"/>
+        <result column="class_id" property="classID"/>
+        <result column="identification_number" property="identificationNumber"/>
+        <result column="phone" property="phoneNumber"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
 </mapper>
