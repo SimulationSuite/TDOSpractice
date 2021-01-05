@@ -1,9 +1,6 @@
 package org.tdos.tdospractice.entity;
 
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import javax.persistence.EntityListeners;
 import java.time.LocalDateTime;
 
 @Data
@@ -11,7 +8,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Builder
-@EntityListeners(AuditingEntityListener.class)
 public class UserEntity {
 
     private String id;
