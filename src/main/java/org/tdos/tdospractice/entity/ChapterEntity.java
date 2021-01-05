@@ -1,6 +1,7 @@
 package org.tdos.tdospractice.entity;
 
 import lombok.*;
+
 import java.time.LocalDateTime;
 
 @Data
@@ -8,25 +9,18 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Builder
-public class UserEntity {
+public class ChapterEntity {
 
     private String id;
 
     private String name;
 
-    private String password;
+    private String introduction;
 
-    private Integer roleID;
-
-    private String classID;
-
-    private Integer gender;
-
-    private String identificationNumber;
-
-    private String phoneNumber;
+    private int order;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
 }

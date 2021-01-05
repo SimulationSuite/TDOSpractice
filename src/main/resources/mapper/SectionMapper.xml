@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tdos.tdospractice.mapper.SectionMapper">
+    <update id="modifySectionNameById">
+        update section set "name"= #{sectionName} where id=#{id}::uuid
+    </update>
+
+    <select  id="hasSection" resultType="int">
+        select count(*) from section where id=#{id}::uuid
+    </select>
+
+</mapper>

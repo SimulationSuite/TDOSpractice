@@ -10,4 +10,12 @@ import java.util.List;
 @Repository
 public interface UserMapper {
     List<UserEntity> findAll();
+
+    UserEntity findUserByIdAndPwd(String id,String password);
+
+    UserEntity findUserById(String id);
+
+    List<UserEntity> findAllByRoleID(Integer roleId);
+
+    int deleteUserById(String id);
 }
