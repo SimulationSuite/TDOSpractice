@@ -5,15 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a64c4ff1-621d-4bb3-ac99-1eb36eef42df" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/tdos/tdospractice/body/Section.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/tdos/tdospractice/controller/SectionController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/tdos/tdospractice/mapper/SectionMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/tdos/tdospractice/service/Impl/SectionServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/tdos/tdospractice/service/SectionService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/mapper/SectionMapper.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.7.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7.1/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.7.1/fileChanges/last-build.bin" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/6.7.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/6.7.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/6.7.1/gc.properties" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/cache.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/checksums.lock" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/md5-checksums.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/checksums/sha1-checksums.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/configuration-cache/gc.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/vcs-1/gc.properties" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -251,7 +253,7 @@
       <workItem from="1609821021852" duration="315000" />
       <workItem from="1609821346687" duration="61000" />
       <workItem from="1609821596261" duration="111000" />
-      <workItem from="1609821721679" duration="2470000" />
+      <workItem from="1609821721679" duration="2771000" />
     </task>
     <servers />
   </component>
@@ -271,38 +273,38 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="933" y="260" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1609820901869" />
-    <state width="1860" height="401" key="GridCell.Tab.0.bottom" timestamp="1609825894007">
+    <state width="1860" height="401" key="GridCell.Tab.0.bottom" timestamp="1609825917900">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1860" height="401" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1609825894007" />
-    <state width="1860" height="401" key="GridCell.Tab.0.center" timestamp="1609825894007">
+    <state width="1860" height="401" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1609825917900" />
+    <state width="1860" height="401" key="GridCell.Tab.0.center" timestamp="1609825917898">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1860" height="401" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1609825894007" />
-    <state width="1860" height="401" key="GridCell.Tab.0.left" timestamp="1609825894007">
+    <state width="1860" height="401" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1609825917898" />
+    <state width="1860" height="401" key="GridCell.Tab.0.left" timestamp="1609825917898">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1860" height="401" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1609825894007" />
-    <state width="1860" height="401" key="GridCell.Tab.0.right" timestamp="1609825894007">
+    <state width="1860" height="401" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1609825917898" />
+    <state width="1860" height="401" key="GridCell.Tab.0.right" timestamp="1609825917900">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1860" height="401" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1609825894007" />
-    <state width="1860" height="401" key="GridCell.Tab.1.bottom" timestamp="1609825894007">
+    <state width="1860" height="401" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1609825917900" />
+    <state width="1860" height="401" key="GridCell.Tab.1.bottom" timestamp="1609825917901">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1860" height="401" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1609825894007" />
-    <state width="1860" height="401" key="GridCell.Tab.1.center" timestamp="1609825894007">
+    <state width="1860" height="401" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1609825917901" />
+    <state width="1860" height="401" key="GridCell.Tab.1.center" timestamp="1609825917901">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1860" height="401" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1609825894007" />
-    <state width="1860" height="401" key="GridCell.Tab.1.left" timestamp="1609825894007">
+    <state width="1860" height="401" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1609825917901" />
+    <state width="1860" height="401" key="GridCell.Tab.1.left" timestamp="1609825917901">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1860" height="401" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1609825894007" />
-    <state width="1860" height="401" key="GridCell.Tab.1.right" timestamp="1609825894007">
+    <state width="1860" height="401" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1609825917901" />
+    <state width="1860" height="401" key="GridCell.Tab.1.right" timestamp="1609825917901">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1860" height="401" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1609825894007" />
+    <state width="1860" height="401" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1609825917901" />
     <state width="1876" height="320" key="GridCell.Tab.2.bottom" timestamp="1609818008025">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
