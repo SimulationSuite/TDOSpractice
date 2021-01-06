@@ -9,4 +9,6 @@ public interface CourseService {
 
     List<Course> getAdminCourseList();
 
+    List<Course> getAdminCourseListByClassId(String classId);
+
 }

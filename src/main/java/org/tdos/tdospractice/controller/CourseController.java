@@ -2,6 +2,7 @@ package org.tdos.tdospractice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.tdos.tdospractice.service.CourseService;
 import org.tdos.tdospractice.type.Course;
@@ -18,6 +19,11 @@ public class CourseController {
     @GetMapping(value = "/get_admin_course_list")
     public Response<List<Course>> getAdminCourseList() {
         return Response.success(courseService.getAdminCourseList());
+    }
+
+    @GetMapping(value = "/get_admin_course_list_by_class_id")
+    public Response<List<Course>> getAdminCourseList(@RequestParam(value = "class_id") String classId) {
+        return Response.success(courseService.getAdminCourseListByClassId(classId));
     }
 
 }

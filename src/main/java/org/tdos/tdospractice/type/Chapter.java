@@ -1,7 +1,10 @@
 package org.tdos.tdospractice.type;
 
+import lombok.Getter;
+
 import java.util.List;
 
+@Getter
 public class Chapter {
 
     public String id;
