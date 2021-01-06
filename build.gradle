@@ -1,3 +1,24 @@
+
+buildscript {
+    ext {
+        springBootVersion = '2.4.1'
+    }
+    repositories {
+        mavenCentral()
+        //添加maven仓库
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        // mybatis-generator 插件路径
+        classpath "gradle.plugin.com.arenagod.gradle:mybatis-generator-plugin:1.4"
+    }
+}
+
+
+
 plugins {
     id 'org.springframework.boot' version '2.4.1'
     id 'io.spring.dependency-management' version '1.0.10.RELEASE'
@@ -19,6 +40,8 @@ ext {
     fastjson = '1.2.62'
 }
 
+apply plugin: "com.arenagod.gradle.MybatisGenerator"
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -34,8 +57,21 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-data-redis')
     // https://mvnrepository.com/artifact/com.github.oshi/oshi-core
     compile group: 'com.github.oshi', name: 'oshi-core', version: '5.3.7'
+    compile group: 'org.mybatis.generator', name: 'mybatis-generator-core', version:'1.3.2'
 }
+
 
 test {
     useJUnitPlatform()
+}
+
+configurations {
+    mybatisGenerator
+}
+// mybatis-generator.xml 配置路径
+//这里会遇到个问题：MyBatis Generator 通过xml生成，有日志但是没有生成文件成功的问题， 
+//原因：mac下是找不到 ./src 路径的，需要全路径，如下配置。windows则为src/main/resources/generator.xml
+mybatisGenerator {
+    verbose = true
+    configFile = '/Users/yongyang/work/project/TDOSpractice/src/main/resources/generator.xml'
 }
