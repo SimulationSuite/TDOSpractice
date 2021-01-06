@@ -14,12 +14,15 @@ public class Course {
     @JsonProperty("pic_url")
     public String picUrl;
 
-    List<Chapter> chapters;
+    public List<Chapter> chapters;
 
     public String introduction;
 
     @JsonProperty("start_at")
     public LocalDateTime startAt;
+
+    @JsonProperty("end_at")
+    public LocalDateTime endAt;
 
     public int status;
 
@@ -31,10 +34,5 @@ public class Course {
     @JsonProperty("model_id")
     public String modelId;
 
-    @JsonProperty("created_at")
-    public LocalDateTime createdAt;
-
-    @JsonProperty("updated_at")
-    public LocalDateTime updatedAt;
 
 }
