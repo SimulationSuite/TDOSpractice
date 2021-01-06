@@ -1,10 +1,12 @@
 package org.tdos.tdospractice.service;
 
 
-import javafx.util.Pair;
+import org.tdos.tdospractice.type.Course;
+
+import java.util.List;
 
 public interface CourseService {
 
-    Pair<Boolean,String> modifyChapterNameById(String id, String chapterName, String introduction);
+    List<Course> getAdminCourseList();
 
 }

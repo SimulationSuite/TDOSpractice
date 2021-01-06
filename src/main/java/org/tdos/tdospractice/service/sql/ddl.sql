@@ -48,9 +48,9 @@ create table if not exists class_course(
 create trigger t_name before update on class_course for each row execute procedure upd_timestamp();
 
 create table if not exists course_chapter_section(
-    course_id varchar(255) NOT NULL,
-    chapter_id varchar(255) NOT NULL,
-    section_id varchar(255) NOT NULL,
+    course_id UUID NOT NULL,
+    chapter_id UUID NOT NULL,
+    section_id UUID NOT NULL,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     CONSTRAINT "course_chapter_section_pk" PRIMARY KEY ( "course_id", "chapter_id", "section_id")
