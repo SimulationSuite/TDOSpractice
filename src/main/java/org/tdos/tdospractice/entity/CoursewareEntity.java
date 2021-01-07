@@ -1,10 +1,19 @@
 package org.tdos.tdospractice.entity;
 
+import lombok.*;
+
 import java.time.LocalDateTime;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Builder
 public class CoursewareEntity {
 
     private String id;
+
+    private String name;
 
     private int kind;
 
@@ -12,7 +21,7 @@ public class CoursewareEntity {
 
     private String url;
 
-    private String category_id;
+    private String categoryId;
 
     private LocalDateTime createdAt;
 

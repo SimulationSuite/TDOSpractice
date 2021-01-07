@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tdos.tdospractice.mapper.CoursewareMapper">
+
+    <select  id="getCoursewareByClassId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
+        select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId, c.created_at as createdAt, c.updated_at as updatedAt from class_course cc inner join course_chapter_section ccs on ccs.course_id = cc.course_id inner join section_courseware sc on sc.section_id = ccs.section_id inner join courseware c on c.id = sc.courseware_id ::uuid  where cc.class_id =#{classId};
+    </select>
+
+    <select  id="getCoursewareBySectionId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
+        select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId, c.created_at as createdAt, c.updated_at as updatedAt from section_courseware sc inner join courseware c on c.id = sc.courseware_id ::uuid  where sc.section_id =#{sectionId};
+    </select>
+
+    <select  id="getCoursewareByChapterId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
+        select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId, c.created_at as createdAt, c.updated_at as updatedAt from course_chapter_section ccs inner join section_courseware sc on sc.section_id = ccs.section_id inner join courseware c on c.id = sc.courseware_id ::uuid  where ccs.chapter_id =#{chapterId};
+    </select>
+
+    <select  id="getCoursewareByCourseId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
+        select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId, c.created_at as createdAt, c.updated_at as updatedAt from course_chapter_section ccs inner join section_courseware sc on sc.section_id = ccs.section_id inner join courseware c on c.id = sc.courseware_id ::uuid  where sc.section_id =#{courseId};
+    </select>
+
+    <delete id="deleteCoursewareById">
+        delete from courseware where id=#{id}::uuid
+    </delete>
+
+    <select id="ifSectionCoursewareByCoursewareId"  resultType="int">
+        select count(*) from chapter where id=#{id}::uuid
+    </select>
+
+    <update id="modifyCoursewareNameById">
+        update courseware set name= #{coursewareName} where id=#{id}::uuid
+    </update>
+
+    <insert id="addCourseware" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO courseware (name, kind, type, url)
+        VALUES
+          (#{name}, #{kind}, #{type}, #{url}) ;
+    </insert>
+
+    <!-- 自定义高级映射 -->
+    <resultMap type="org.tdos.tdospractice.entity.CoursewareEntity" id="courseware">
+        <!-- 映射主键 -->
+        <id column="id" property="id"/>
+        <!-- 映射其他列 -->
+        <result column="name" property="name"/>
+        <result column="kind" property="kind"/>
+        <result column="type" property="type"/>
+        <result column="url" property="url"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
+
+</mapper>
