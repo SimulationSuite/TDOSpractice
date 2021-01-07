@@ -14,4 +14,6 @@ public interface CourseService {
     List<Course> getAdminCourseListByClassId(String classId);
 
     Pair<Boolean, String> prepareCourse(PrepareCourse prepareCourse);
+
+    List<Course> getCourseListById(String userId);
 }

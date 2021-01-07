@@ -44,6 +44,7 @@ public class CourseServiceImpl implements CourseService {
             });
             x.chapters = x.chapters.stream().sorted(Comparator.comparing(Chapter::getOrder)).collect(Collectors.toList());
         });
+        courses = courses.stream().sorted(Comparator.comparing(Course::getName)).collect(Collectors.toList());
         return courses;
     }
 
@@ -77,5 +78,12 @@ public class CourseServiceImpl implements CourseService {
         });
         courseChapterSectionMapper.insertCourseChapterSection(list);
         return new Pair<>(true, "");
+    }
+
+    @Override
+    public List<Course> getCourseListById(String userId) {
+        List<Course> courses = courseMapper.getCourseListById(userId);
+        courses = courses.stream().sorted(Comparator.comparing(Course::getName)).collect(Collectors.toList());
+        return courses;
     }
 }

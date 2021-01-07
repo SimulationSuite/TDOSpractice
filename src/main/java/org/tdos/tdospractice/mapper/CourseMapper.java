@@ -18,4 +18,5 @@ public interface CourseMapper {
 
     int insertPrepareCourse(Course course);
 
+    List<Course> getCourseListById(String userId);
 }

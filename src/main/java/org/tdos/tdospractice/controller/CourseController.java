@@ -35,4 +35,9 @@ public class CourseController {
         return Response.error(pair.getValue());
     }
 
+    @GetMapping(value = "/get_course_list_by_user_id")
+    public Response<List<Course>> getCourseListById(@RequestParam(value = "user_id") String userId) {
+        return Response.success(courseService.getCourseListById(userId));
+    }
+
 }
