@@ -219,6 +219,17 @@ create table if not exists experiment(
 
 create trigger t_name before update on experiment for each row execute procedure upd_timestamp();
 
+
+create table if not exists experiment_image(
+    experiment_id UUID NOT NULL,
+    image_id UUID NOT NULL,
+    created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
+    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
+    CONSTRAINT "experiment_image_pk" PRIMARY KEY ( "experiment_id", "image_id")
+);
+
+create trigger t_name before update on experiment_image for each row execute procedure upd_timestamp();
+
 create table if not exists image(
     id UUID primary key DEFAULT uuid_generate_v4(),
     "name" varchar(255) NOT NULL,
