@@ -211,7 +211,6 @@ create table if not exists experiment(
     end_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     step_url varchar(255) DEFAULT null,
     duration int8 DEFAULT 0,
-    image_id varchar(255) NOT null,
     category_id varchar(255) NOT null,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
