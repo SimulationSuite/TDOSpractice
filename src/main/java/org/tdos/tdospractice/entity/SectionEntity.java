@@ -2,6 +2,7 @@ package org.tdos.tdospractice.entity;
 
 import java.time.LocalDateTime;
 
+
 public class SectionEntity {
 
     private String id;

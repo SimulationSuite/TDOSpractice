@@ -28,6 +28,7 @@
         </collection>
     </resultMap>
 
+
     <select  id="getAdminCourseList" resultMap="CourseResult">
         SELECT c.id as course_id,c.name as course_name,c.pic_url,c.owner_id,c.introduction as course_introduction,c.start_at, c.end_at,c.status,c."type",c.model_id,
 chapter.id as chapter_id, chapter.name as chapter_name, chapter.introduction as chapter_introduction, chapter."order" as chapter_order ,
@@ -36,5 +37,23 @@ inner join course c on c.id = ccs.course_id and type = 0
 inner join chapter on chapter.id = ccs.chapter_id
 inner join "section" on "section".id = ccs.section_id;
     </select>
+
+    <select  id="hasCourseExist" resultType="int">
+        select count(*) from course where id=#{id}::uuid
+    </select>
+
+    <select  id="getAdminCourseByCourseId" resultMap="CourseResult">
+        SELECT c.id as course_id,c.name as course_name,c.pic_url,c.owner_id,c.introduction as course_introduction,c.start_at, c.end_at,c.status,c."type",c.model_id,
+chapter.id as chapter_id, chapter.name as chapter_name, chapter.introduction as chapter_introduction, chapter."order" as chapter_order ,
+section.id as section_id, section.name as section_name, section.order as section_order from course_chapter_section ccs
+inner join course c on c.id = ccs.course_id and c.id = #{courseId}::uuid
+inner join chapter on chapter.id = ccs.chapter_id
+inner join "section" on "section".id = ccs.section_id;
+    </select>
+
+
+    <insert id = "insertPrepareCourse" useGeneratedKeys="true" keyProperty="id">
+        insert into course(name, pic_url, introduction, start_at, end_at, status, owner_id, type, model_id) values (#{name},#{picUrl},#{introduction},#{startAt},#{endAt},#{status},#{ownerId},#{type},#{modelId});
+    </insert>
 
 </mapper>

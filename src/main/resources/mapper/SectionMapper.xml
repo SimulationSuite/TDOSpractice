@@ -11,4 +11,8 @@
         select count(*) from section where id=#{id}::uuid
     </select>
 
+    <insert id = "insertPrepareSection" useGeneratedKeys="true" keyProperty="id">
+        insert into section(name, "order") values (#{name},#{order});
+    </insert>
+
 </mapper>
