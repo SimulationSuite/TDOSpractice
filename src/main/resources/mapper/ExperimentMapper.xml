@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tdos.tdospractice.mapper.ExperimentMapper">
+
+    <insert id="insert" parameterType="org.tdos.tdospractice.entity.ExperimentEntity" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into
+        experiment(section_id,name,pic_url,end_at,step_url,duration,image_id,category_id,created_at,updated_at)
+        values(#{section_id},#{name},#{pic_url},#{end_at},#{step_url},#{duration},#{image_id},#{category_id},#{created_at},#{updated_at})
+    </insert>
+
+    <select id="findAllByCourseId" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
+        select * from experiment e , course_chapter_section c where e.section_id = c.section_id and c.course_id = #{course_id}
+    </select>
+
+    <select id="findAllByChapterId" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
+        select * from experiment e , course_chapter_section c where e.section_id = c.section_id and c.chapter_id = #{chapter_id}
+    </select>
+
+    <select id="findAllBySectionId" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
+        select * from experiment where section_id = #{section_id}
+    </select>
+
+    <select id="findAllByCategoryId" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
+        select * from experiment where category_id = #{category_id}
+    </select>
+
+    <update id="updateExperiment">
+        update experiment
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="pic_url != null">
+                pic_url = #{pic_url},
+            </if>
+            <if test="end_at != null">
+                end_at = #{end_at},
+            </if>
+            <if test="duration != null">
+                duration = #{duration},
+            </if>
+            <if test="updated_at != null">
+                updated_at = #{updated_at},
+            </if>
+        </set>
+        where id = #{id}::uuid
+    </update>
+
+    <delete id="deleteExperiment">
+        delete from experiment where id = #{id}::uuid
+    </delete>
+
+    <delete id="deleteExperimentList">
+        delete from experiment
+        where id in
+        <foreach collection="list" open="(" separator="," close=")" item="id">
+            #{id}::uuid
+        </foreach>
+    </delete>
+
+</mapper>
