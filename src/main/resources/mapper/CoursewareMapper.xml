@@ -24,10 +24,6 @@
         delete from courseware where id=#{id}::uuid
     </delete>
 
-    <select id="ifSectionCoursewareByCoursewareId"  resultType="int">
-        select count(*) from chapter where id=#{id}::uuid
-    </select>
-
     <update id="modifyCoursewareNameById">
         update courseware set name= #{coursewareName} where id=#{id}::uuid
     </update>
@@ -37,6 +33,10 @@
         VALUES
           (#{name}, #{kind}, #{type}, #{url}) ;
     </insert>
+
+    <select id="ifSectionCourseware"  resultType="int">
+        select count(*) from section_courseware where courseware_id=#{id}
+    </select>
 
     <!-- 自定义高级映射 -->
     <resultMap type="org.tdos.tdospractice.entity.CoursewareEntity" id="courseware">

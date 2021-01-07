@@ -7,7 +7,10 @@ import org.tdos.tdospractice.mapper.CoursewareMapper;
 import org.tdos.tdospractice.service.ClassService;
 import org.tdos.tdospractice.service.CoursewareService;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class CoursewareServiceImpl extends Throwable implements CoursewareService {
@@ -36,14 +39,22 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
     }
 
     @Override
-    public int deleteCoursewareById(String id) {
-        int i = 0;
-        try {
-            i = coursewareMapper.deleteCoursewareById(id);
-        } catch (Exception e) {
-            return i;
+    public Map<Boolean, List<String>> deleteCoursewareById(List<String> id) {
+        Map<Boolean, List<String>> map = new HashMap<>();
+        List<String> sectionCourseware = new ArrayList<String>();
+        id.forEach(x -> {
+            int i = coursewareMapper.ifSectionCourseware(x);
+            if (i == 1){
+                sectionCourseware.add(x);
+            }
+        });
+        if (sectionCourseware.size() > 0){
+            map.put(false, sectionCourseware);
+            return map;
         }
-        return i;
+        id.forEach(x -> coursewareMapper.deleteCoursewareById(x));
+        map.put(true, sectionCourseware);
+        return map;
     }
 
     @Override
@@ -59,17 +70,6 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
             return coursewareEntity;
         }
         return coursewareEntity;
-    }
-
-    @Override
-    public int ifSectionCoursewareByCoursewareId(String id) {
-        int i = 0;
-        try {
-            i = coursewareMapper.ifSectionCoursewareByCoursewareId(id);
-        } catch (Exception e) {
-            return i;
-        }
-        return i;
     }
 
     @Override
