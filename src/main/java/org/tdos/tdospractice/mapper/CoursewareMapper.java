@@ -20,9 +20,9 @@ public interface CoursewareMapper {
 
     int deleteCoursewareById(@Param("id") String id);
 
-    int ifSectionCoursewareByCoursewareId(@Param("id") String id);
-
     int modifyCoursewareNameById(@Param("id") String id, @Param("coursewareName") String coursewareName);
 
     int addCourseware(CoursewareEntity coursewareEntity);
+
+    int ifSectionCourseware(String id);
 }

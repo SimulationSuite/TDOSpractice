@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.tdos.tdospractice.service.CoursewareService;
 import org.tdos.tdospractice.type.Response;
+import org.tdos.tdospractice.body.CoursewareIdList;
 import org.tdos.tdospractice.utils.OnlineStudent;
 
 import static org.tdos.tdospractice.utils.Constants.*;
@@ -56,19 +57,16 @@ public class CoursewareController {
         return Response.success(coursewareService.getCoursewareByCourseId(courseId));
     }
 
-    @GetMapping(value = "/deleteCoursewareById")
-    public Response<Integer> deleteCoursewareById(@RequestParam(value = "id")  String id) {
-        return Response.success(coursewareService.deleteCoursewareById(id));
+    @PostMapping(value = "/deleteCoursewareById")
+    public Response<Map<Boolean, List<String>>> deleteCoursewareById(@RequestBody CoursewareIdList idList) {
+        Map<Boolean, List<String>> map = new HashMap<>();
+        map = coursewareService.deleteCoursewareById(idList.coursewareIdList);
+        return Response.success(map);
     }
 
     @GetMapping(value = "/addCourseware")
     public Response<CoursewareEntity> addCourseware(@RequestParam(value = "name")  String name, @RequestParam(value = "type")  int type, @RequestParam(value = "kind")  int kind, @RequestParam(value = "url")  String url) {
         return Response.success(coursewareService.addCourseware(name, type, kind, url));
-    }
-
-    @GetMapping(value = "/ifSectionCoursewareByCoursewareId")
-    public Response<Integer> ifSectionCoursewareByCoursewareId(@RequestParam(value = "id")  String id) {
-        return Response.success(coursewareService.ifSectionCoursewareByCoursewareId(id));
     }
 
     @GetMapping(value = "/modifyCoursewareNameById")
