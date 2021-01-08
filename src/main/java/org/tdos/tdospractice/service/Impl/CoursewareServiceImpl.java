@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tdos.tdospractice.entity.CoursewareEntity;
 import org.tdos.tdospractice.mapper.CoursewareMapper;
-import org.tdos.tdospractice.service.ClassService;
 import org.tdos.tdospractice.service.CoursewareService;
+import org.tdos.tdospractice.body.Courseware;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,8 +43,7 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
         Map<String, Object> map = new HashMap<>();
         List<String> sectionCourseware = new ArrayList<String>();
         id.forEach(x -> {
-            int i = coursewareMapper.ifSectionCourseware(x);
-            if (i == 1){
+            if (!coursewareMapper.ifSectionCourseware(x)){
                 sectionCourseware.add(x);
             }
         });
@@ -60,12 +59,12 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
     }
 
     @Override
-    public CoursewareEntity addCourseware(String name, int type, int kind, String url) {
+    public CoursewareEntity addCourseware(Courseware courseware) {
         CoursewareEntity coursewareEntity = new CoursewareEntity();
-        coursewareEntity.setName(name);
-        coursewareEntity.setKind(kind);
-        coursewareEntity.setType(type);
-        coursewareEntity.setUrl(url);
+        coursewareEntity.setName(courseware.name);
+        coursewareEntity.setKind(courseware.kind);
+        coursewareEntity.setType(courseware.type);
+        coursewareEntity.setUrl(courseware.url);
         try {
             coursewareMapper.addCourseware(coursewareEntity);
         } catch (Exception e) {
@@ -75,9 +74,9 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
     }
 
     @Override
-    public Boolean modifyCoursewareNameById(String id, String name) {
+    public Boolean modifyCoursewareNameById(Courseware courseware) {
         try {
-            coursewareMapper.modifyCoursewareNameById(id, name);
+            coursewareMapper.modifyCoursewareNameById(courseware.id, courseware.name);
         } catch (Exception e) {
             return false;
         }

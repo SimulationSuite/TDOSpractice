@@ -1,7 +1,7 @@
 package org.tdos.tdospractice.service;
 
 import org.tdos.tdospractice.entity.CoursewareEntity;
-import org.tdos.tdospractice.utils.OnlineStudent;
+import org.tdos.tdospractice.body.Courseware;
 
 import java.util.List;
 import java.util.Map;
@@ -17,8 +17,8 @@ public interface CoursewareService {
 
     Map<String, Object> deleteCoursewareById(List<String> id);
 
-    CoursewareEntity addCourseware(String name, int type, int kind, String url);
+    CoursewareEntity addCourseware(Courseware courseware);
 
-    Boolean modifyCoursewareNameById(String id, String name);
+    Boolean modifyCoursewareNameById(Courseware courseware);
 }
 
