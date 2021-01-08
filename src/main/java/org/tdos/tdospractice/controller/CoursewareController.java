@@ -58,8 +58,8 @@ public class CoursewareController {
     }
 
     @PostMapping(value = "/deleteCoursewareById")
-    public Response<Map<Boolean, List<String>>> deleteCoursewareById(@RequestBody CoursewareIdList idList) {
-        Map<Boolean, List<String>> map = new HashMap<>();
+    public Response<Map<String, Object>> deleteCoursewareById(@RequestBody CoursewareIdList idList) {
+        Map<String, Object> map = new HashMap<>();
         map = coursewareService.deleteCoursewareById(idList.coursewareIdList);
         return Response.success(map);
     }
@@ -70,7 +70,7 @@ public class CoursewareController {
     }
 
     @GetMapping(value = "/modifyCoursewareNameById")
-    public Response<Integer> modifyCoursewareNameById(@RequestParam(value = "id")  String id, @RequestParam(value = "name")  String name) {
+    public Response<Boolean> modifyCoursewareNameById(@RequestParam(value = "id")  String id, @RequestParam(value = "name")  String name) {
         return Response.success(coursewareService.modifyCoursewareNameById(id, name));
     }
 

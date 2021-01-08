@@ -15,10 +15,10 @@ public interface CoursewareService {
 
     List<CoursewareEntity> getCoursewareByCourseId(String courseId);
 
-    Map<Boolean, List<String>> deleteCoursewareById(List<String> id);
+    Map<String, Object> deleteCoursewareById(List<String> id);
 
     CoursewareEntity addCourseware(String name, int type, int kind, String url);
 
-    int modifyCoursewareNameById(String id, String name);
+    Boolean modifyCoursewareNameById(String id, String name);
 }
 

@@ -39,8 +39,8 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
     }
 
     @Override
-    public Map<Boolean, List<String>> deleteCoursewareById(List<String> id) {
-        Map<Boolean, List<String>> map = new HashMap<>();
+    public Map<String, Object> deleteCoursewareById(List<String> id) {
+        Map<String, Object> map = new HashMap<>();
         List<String> sectionCourseware = new ArrayList<String>();
         id.forEach(x -> {
             int i = coursewareMapper.ifSectionCourseware(x);
@@ -49,11 +49,13 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
             }
         });
         if (sectionCourseware.size() > 0){
-            map.put(false, sectionCourseware);
+            map.put("isDelete", false);
+            map.put("notDeleteId", sectionCourseware);
             return map;
         }
         id.forEach(x -> coursewareMapper.deleteCoursewareById(x));
-        map.put(true, sectionCourseware);
+        map.put("isDelete", true);
+        map.put("notDeleteId", sectionCourseware);
         return map;
     }
 
@@ -65,7 +67,7 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
         coursewareEntity.setType(type);
         coursewareEntity.setUrl(url);
         try {
-            int i = coursewareMapper.addCourseware(coursewareEntity);
+            coursewareMapper.addCourseware(coursewareEntity);
         } catch (Exception e) {
             return coursewareEntity;
         }
@@ -73,14 +75,13 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
     }
 
     @Override
-    public int modifyCoursewareNameById(String id, String name) {
-        int i = 0;
+    public Boolean modifyCoursewareNameById(String id, String name) {
         try {
-            i = coursewareMapper.modifyCoursewareNameById(id, name);
+            coursewareMapper.modifyCoursewareNameById(id, name);
         } catch (Exception e) {
-            return i;
+            return false;
         }
-        return i;
+        return true;
     }
 
 }
