@@ -138,6 +138,7 @@ create trigger t_name before update on category for each row execute procedure u
 
 create table if not exists assignment(
     id UUID primary key DEFAULT uuid_generate_v4(),
+    "name" varchar(255) NOT NULL,
     section_id varchar(255) NOT null,
     end_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     qualified_score int4 DEFAULT NULL,
