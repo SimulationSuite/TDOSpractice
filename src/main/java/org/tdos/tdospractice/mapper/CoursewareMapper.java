@@ -24,5 +24,5 @@ public interface CoursewareMapper {
 
     int addCourseware(CoursewareEntity coursewareEntity);
 
-    int ifSectionCourseware(String id);
+    boolean ifSectionCourseware(String id);
 }

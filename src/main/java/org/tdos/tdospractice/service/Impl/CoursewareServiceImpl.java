@@ -43,8 +43,7 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
         Map<String, Object> map = new HashMap<>();
         List<String> sectionCourseware = new ArrayList<String>();
         id.forEach(x -> {
-            int i = coursewareMapper.ifSectionCourseware(x);
-            if (i == 1){
+            if (!coursewareMapper.ifSectionCourseware(x)){
                 sectionCourseware.add(x);
             }
         });
