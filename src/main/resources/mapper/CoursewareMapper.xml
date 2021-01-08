@@ -57,7 +57,7 @@
         insert into courseware (name, kind, type, url) values (#{name}, #{kind}, #{type}, #{url});
     </insert>
 
-    <select id="ifSectionCourseware"  resultType="bool">
+    <select id="ifSectionCourseware"  resultType="Boolean">
         select ci.status = 0
         from section_courseware sc
         inner join course_chapter_section ccs on ccs.section_id = sc.section_id

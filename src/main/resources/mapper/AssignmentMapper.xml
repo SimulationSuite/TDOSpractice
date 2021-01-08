@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tdos.tdospractice.mapper.AssignmentMapper">
+
+    <delete id="deleteAssignmentById">
+        delete from assignment where id=#{id}::uuid;
+    </delete>
+
+    <select id="ifSectionAssignmentByAssignmentId"  resultType="Boolean">
+        select ci.status = 0
+        from assignment a
+        inner join course_chapter_section ccs on ccs.section_id = a.section_id
+        inner join course ci on ci.id = ccs.course_id ::uuid
+        where a.id =#{id}::uuid;
+    </select>
+
+    <update id="modifyAssignmentNameById">
+        update assignment set name = #{name}, end_at = #{endAt}, qualified_score = #{qualifiedScore} where id=#{id}::uuid;
+    </update>
+
+    <insert id="addAssignment" useGeneratedKeys="true" keyProperty="id">
+        insert into assignment (section_id, name, end_at, qualified_score) values (#{sectionId}, #{name}, #{endAt}, #{qualifiedScore});
+    </insert>
+
+</mapper>
