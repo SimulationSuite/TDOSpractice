@@ -19,6 +19,6 @@ public interface CoursewareService {
 
     CoursewareEntity addCourseware(Courseware courseware);
 
-    Boolean modifyCoursewareNameById(String id, String name);
+    Boolean modifyCoursewareNameById(Courseware courseware);
 }
 

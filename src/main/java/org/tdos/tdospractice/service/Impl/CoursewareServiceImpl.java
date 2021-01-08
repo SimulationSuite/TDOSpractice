@@ -74,9 +74,9 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
     }
 
     @Override
-    public Boolean modifyCoursewareNameById(String id, String name) {
+    public Boolean modifyCoursewareNameById(Courseware courseware) {
         try {
-            coursewareMapper.modifyCoursewareNameById(id, name);
+            coursewareMapper.modifyCoursewareNameById(courseware.id, courseware.name);
         } catch (Exception e) {
             return false;
         }

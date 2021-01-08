@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 public class Courseware {
 
+    @JsonProperty("id")
+    public String id;
+
     @JsonProperty("name")
     public String name;
 

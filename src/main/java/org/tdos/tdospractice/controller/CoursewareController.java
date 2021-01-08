@@ -70,8 +70,8 @@ public class CoursewareController {
     }
 
     @PostMapping(value = "/modifyCoursewareNameById")
-    public Response<Boolean> modifyCoursewareNameById(@RequestParam(value = "id")  String id, @RequestParam(value = "name")  String name) {
-        return Response.success(coursewareService.modifyCoursewareNameById(id, name));
+    public Response<Boolean> modifyCoursewareNameById(@RequestBody Courseware courseware) {
+        return Response.success(coursewareService.modifyCoursewareNameById(courseware));
     }
 
 }
