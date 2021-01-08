@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.tdos.tdospractice.service.CoursewareService;
 import org.tdos.tdospractice.type.Response;
 import org.tdos.tdospractice.body.CoursewareIdList;
+import org.tdos.tdospractice.body.Courseware;
 import org.tdos.tdospractice.utils.OnlineStudent;
 
 import static org.tdos.tdospractice.utils.Constants.*;
@@ -59,17 +60,16 @@ public class CoursewareController {
 
     @PostMapping(value = "/deleteCoursewareById")
     public Response<Map<String, Object>> deleteCoursewareById(@RequestBody CoursewareIdList idList) {
-        Map<String, Object> map = new HashMap<>();
-        map = coursewareService.deleteCoursewareById(idList.coursewareIdList);
+        Map<String, Object> map = coursewareService.deleteCoursewareById(idList.coursewareIdList);
         return Response.success(map);
     }
 
-    @GetMapping(value = "/addCourseware")
-    public Response<CoursewareEntity> addCourseware(@RequestParam(value = "name")  String name, @RequestParam(value = "type")  int type, @RequestParam(value = "kind")  int kind, @RequestParam(value = "url")  String url) {
-        return Response.success(coursewareService.addCourseware(name, type, kind, url));
+    @PostMapping(value = "/addCourseware")
+    public Response<CoursewareEntity> addCourseware(@RequestBody Courseware courseware) {
+        return Response.success(coursewareService.addCourseware(courseware));
     }
 
-    @GetMapping(value = "/modifyCoursewareNameById")
+    @PostMapping(value = "/modifyCoursewareNameById")
     public Response<Boolean> modifyCoursewareNameById(@RequestParam(value = "id")  String id, @RequestParam(value = "name")  String name) {
         return Response.success(coursewareService.modifyCoursewareNameById(id, name));
     }
