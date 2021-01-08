@@ -12,10 +12,10 @@ public class Courseware {
     public String name;
 
     @JsonProperty("type")
-    public int type;
+    public Integer type;
 
     @JsonProperty("kind")
-    public int kind;
+    public Integer kind;
 
     @JsonProperty("url")
     public String url;
