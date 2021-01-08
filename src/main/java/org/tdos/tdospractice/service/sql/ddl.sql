@@ -214,6 +214,7 @@ create table if not exists experiment(
     duration int8 DEFAULT 0,
     category_id varchar(255) NOT null,
     "type" int4 default 0,
+    parent_experiment_id varchar(255) DEFAULT null,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
@@ -250,6 +251,7 @@ create table if not exists experiment_report(
     user_id varchar(255) NOT NULL,
     url varchar(255) DEFAULT null,
     score int4 DEFAULT NULL,
+    status int4 default 0,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     CONSTRAINT "experiment_report_pk" PRIMARY KEY ( "experiment_id", "user_id")

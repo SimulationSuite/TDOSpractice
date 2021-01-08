@@ -16,7 +16,7 @@ public class ExperimentController {
     private ExperimentService experimentService;
 
     @PostMapping(value = "/insertExperiment")
-    public Response test(@RequestBody ExperimentEntity experimentEntity) {
+    public Response insertExperiment(@RequestBody ExperimentEntity experimentEntity) {
         try {
             int i = experimentService.insert(experimentEntity);
             if (i == 1)
@@ -65,6 +65,7 @@ public class ExperimentController {
     @PostMapping(value = "/deleteExperiment")
     public Response deleteExperiment(@RequestParam(value = "id") String id) {
         try {
+            ExperimentEntity experimentEntity = experimentService.findByID(id);
             if (experimentService.deleteExperiment(id))
                 return Response.success();
             return Response.error("删除失败");
@@ -73,14 +74,4 @@ public class ExperimentController {
             return Response.error(e.getMessage());
         }
     }
-
-    @PostMapping(value = "/deleteExperimentList")
-    public Response deleteExperimentList(@RequestBody List<String> ids) {
-        try {
-            return Response.success(experimentService.deleteExperimentList(ids));
-        } catch (Exception e) {
-            return Response.error(e.getMessage());
-        }
-    }
-
 }

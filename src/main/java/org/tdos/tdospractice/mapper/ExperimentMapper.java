@@ -20,6 +20,8 @@ public interface ExperimentMapper {
 
     List<ExperimentEntity> findAllByCategoryId(String category_id);
 
+    ExperimentEntity findByID(String id);
+
     boolean updateExperiment(ExperimentEntity experimentEntity);
 
     boolean deleteExperiment(String id);

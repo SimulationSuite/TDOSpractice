@@ -2,6 +2,7 @@ package org.tdos.tdospractice.service;
 
 import org.apache.ibatis.annotations.Param;
 import org.tdos.tdospractice.entity.ExperimentEntity;
+import org.tdos.tdospractice.mapper.ExperimentReportMapper;
 
 import java.util.List;
 
@@ -16,6 +17,8 @@ public interface ExperimentService {
     List<ExperimentEntity> findAllBySectionId(String section_id);
 
     List<ExperimentEntity> findAllByCategoryId(String category_id);
+
+    ExperimentEntity findByID(String id);
 
     boolean updateExperiment(ExperimentEntity experimentEntity);
 

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tdos.tdospractice.entity.ExperimentEntity;
 import org.tdos.tdospractice.mapper.ExperimentMapper;
+import org.tdos.tdospractice.mapper.ExperimentReportMapper;
 import org.tdos.tdospractice.service.ExperimentService;
 
 import java.util.List;
@@ -38,6 +39,11 @@ public class ExperimentServiceImpl implements ExperimentService {
     @Override
     public List<ExperimentEntity> findAllByCategoryId(String category_id) {
         return experimentMapper.findAllByCategoryId(category_id);
+    }
+
+    @Override
+    public ExperimentEntity findByID(String id) {
+        return experimentMapper.findByID(id);
     }
 
     @Override
