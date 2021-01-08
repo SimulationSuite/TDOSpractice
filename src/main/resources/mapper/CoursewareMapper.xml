@@ -46,17 +46,15 @@
     </select>
 
     <delete id="deleteCoursewareById">
-        delete from courseware where id=#{id}::uuid
+        delete from courseware where id=#{id}::uuid;
     </delete>
 
     <update id="modifyCoursewareNameById">
-        update courseware set name= #{coursewareName} where id=#{id}::uuid
+        update courseware set name= #{coursewareName} where id=#{id}::uuid;
     </update>
 
     <insert id="addCourseware" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO courseware (name, kind, type, url)
-        VALUES
-          (#{name}, #{kind}, #{type}, #{url}) ;
+        insert into courseware (name, kind, type, url) values (#{name}, #{kind}, #{type}, #{url});
     </insert>
 
     <select id="ifSectionCourseware"  resultType="bool">
@@ -64,21 +62,7 @@
         from section_courseware sc
         inner join course_chapter_section ccs on ccs.section_id = sc.section_id
         inner join course c on c.id = ccs.course_id ::uuid
-        where courseware_id=#{id}
+        where courseware_id=#{id};
     </select>
-
-    <!-- 自定义高级映射 -->
-    <resultMap type="org.tdos.tdospractice.entity.CoursewareEntity" id="courseware">
-        <!-- 映射主键 -->
-        <id column="id" property="id"/>
-        <!-- 映射其他列 -->
-        <result column="name" property="name"/>
-        <result column="kind" property="kind"/>
-        <result column="type" property="type"/>
-        <result column="url" property="url"/>
-        <result column="category_id" property="categoryId"/>
-        <result column="created_at" property="createdAt"/>
-        <result column="updated_at" property="updatedAt"/>
-    </resultMap>
 
 </mapper>
