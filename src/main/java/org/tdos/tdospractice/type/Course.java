@@ -1,12 +1,11 @@
 package org.tdos.tdospractice.type;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Getter
+
 public class Course {
 
     public String id;

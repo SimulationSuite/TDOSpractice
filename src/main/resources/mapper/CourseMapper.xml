@@ -5,7 +5,7 @@
 <mapper namespace="org.tdos.tdospractice.mapper.CourseMapper">
 
     <resultMap id="CourseResult" type="org.tdos.tdospractice.type.Course">
-        <result column="course_id" property="id"/>
+        <id column="course_id" property="id"/>
         <result column="course_name" property="name"/>
         <result column="pic_url" property="picUrl"/>
         <result column="owner_id" property="ownerId"/>
@@ -16,12 +16,12 @@
         <result column="type" property="type"/>
         <result column="model_id" property="modelId"/>
         <collection property="chapters" ofType="org.tdos.tdospractice.type.Chapter">
-            <result column="chapter_id" property="id"/>
+            <id column="chapter_id" property="id"/>
             <result column="chapter_name" property="name"/>
             <result column="chapter_introduction" property="introduction"/>
             <result column="chapter_order" property="order"/>
             <collection property="sections" ofType="org.tdos.tdospractice.type.Section">
-                <result column="section_id" property="id"/>
+                <id column="section_id" property="id"/>
                 <result column="section_name" property="name"/>
                 <result column="section_order" property="order"/>
             </collection>
@@ -30,10 +30,10 @@
 
 
     <select  id="getAdminCourseList" resultMap="CourseResult">
-        SELECT c.id as course_id,c.name as course_name,c.pic_url,c.owner_id,c.introduction as course_introduction,c.start_at, c.end_at,c.status,c."type",c.model_id,
-chapter.id as chapter_id, chapter.name as chapter_name, chapter.introduction as chapter_introduction, chapter."order" as chapter_order ,
-section.id as section_id, section.name as section_name, section.order as section_order from course_chapter_section ccs
-inner join course c on c.id = ccs.course_id and type = 0
+        SELECT c.id ::"varchar" as course_id,c.name as course_name,c.pic_url,c.owner_id,c.introduction as course_introduction,c.start_at, c.end_at,c.status,c."type",c.model_id,
+chapter.id ::"varchar" as chapter_id, chapter.name as chapter_name, chapter.introduction as chapter_introduction, chapter."order" as chapter_order ,
+section.id ::"varchar" as section_id, section.name as section_name, section."order" as section_order from course_chapter_section ccs
+inner join course c on c.id = ccs.course_id and c.type = 0
 inner join chapter on chapter.id = ccs.chapter_id
 inner join "section" on "section".id = ccs.section_id;
     </select>
@@ -43,9 +43,9 @@ inner join "section" on "section".id = ccs.section_id;
     </select>
 
     <select  id="getAdminCourseByCourseId" resultMap="CourseResult">
-        SELECT c.id as course_id,c.name as course_name,c.pic_url,c.owner_id,c.introduction as course_introduction,c.start_at, c.end_at,c.status,c."type",c.model_id,
-chapter.id as chapter_id, chapter.name as chapter_name, chapter.introduction as chapter_introduction, chapter."order" as chapter_order ,
-section.id as section_id, section.name as section_name, section.order as section_order from course_chapter_section ccs
+        SELECT c.id ::"varchar" as course_id,c.name as course_name,c.pic_url,c.owner_id,c.introduction as course_introduction,c.start_at, c.end_at,c.status,c."type",c.model_id,
+chapter.id ::"varchar" as chapter_id, chapter.name as chapter_name, chapter.introduction as chapter_introduction, chapter."order" as chapter_order ,
+section.id ::"varchar" as section_id, section.name as section_name, section.order as section_order from course_chapter_section ccs
 inner join course c on c.id = ccs.course_id and c.id = #{courseId}::uuid
 inner join chapter on chapter.id = ccs.chapter_id
 inner join "section" on "section".id = ccs.section_id;
@@ -55,5 +55,18 @@ inner join "section" on "section".id = ccs.section_id;
     <insert id = "insertPrepareCourse" useGeneratedKeys="true" keyProperty="id">
         insert into course(name, pic_url, introduction, start_at, end_at, status, owner_id, type, model_id) values (#{name},#{picUrl},#{introduction},#{startAt},#{endAt},#{status},#{ownerId},#{type},#{modelId});
     </insert>
+
+    <select  id="getCourseListById" resultMap="CourseResult">
+        SELECT c.id as course_id,c.name as course_name,c.pic_url,c.owner_id,c.introduction as course_introduction,c.start_at, c.end_at,c.status,c."type",c.model_id,
+chapter.id as chapter_id, chapter.name as chapter_name, chapter.introduction as chapter_introduction, chapter."order" as chapter_order ,
+section.id as section_id, section.name as section_name, section.order as section_order from course_chapter_section ccs
+inner join course c on c.id = ccs.course_id and c.type = 1 and c.owner_id = #{userId}
+inner join chapter on chapter.id = ccs.chapter_id
+inner join "section" on "section".id = ccs.section_id;
+    </select>
+
+    <select  id="findCourseChapterOrder" resultType="int">
+        select max(chapter."order") from chapter inner join course_chapter_section ccs on ccs.chapter_id = chapter.id where course_id= #{courseId}::uuid
+    </select>
 
 </mapper>

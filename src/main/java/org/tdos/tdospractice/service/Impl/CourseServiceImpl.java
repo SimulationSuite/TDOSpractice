@@ -44,7 +44,7 @@ public class CourseServiceImpl implements CourseService {
             });
             x.chapters = x.chapters.stream().sorted(Comparator.comparing(Chapter::getOrder)).collect(Collectors.toList());
         });
-        courses = courses.stream().sorted(Comparator.comparing(Course::getName)).collect(Collectors.toList());
+        courses = courses.stream().sorted(Comparator.comparing(x->x.name)).collect(Collectors.toList());
         return courses;
     }
 
@@ -67,7 +67,7 @@ public class CourseServiceImpl implements CourseService {
         courseMapper.insertPrepareCourse(course);
         List<CourseChapterSectionEntity> list = new ArrayList<>();
         course.chapters.forEach(x -> {
-            chapterMapper.insertPrepareChapter(x);
+            chapterMapper.insertChapter(x);
             x.sections.forEach(section -> {
                 sectionMapper.insertPrepareSection(section);
                 list.add(CourseChapterSectionEntity.builder().courseId(course.id)
@@ -76,14 +76,14 @@ public class CourseServiceImpl implements CourseService {
                         .build());
             });
         });
-        courseChapterSectionMapper.insertCourseChapterSection(list);
+        courseChapterSectionMapper.insertCourseChapterSectionList(list);
         return new Pair<>(true, "");
     }
 
     @Override
     public List<Course> getCourseListById(String userId) {
         List<Course> courses = courseMapper.getCourseListById(userId);
-        courses = courses.stream().sorted(Comparator.comparing(Course::getName)).collect(Collectors.toList());
+        courses = courses.stream().sorted(Comparator.comparing(x->x.name)).collect(Collectors.toList());
         return courses;
     }
 }

@@ -11,7 +11,7 @@
         select count(*) from chapter where id=#{id}::uuid
     </select>
 
-    <insert id = "insertPrepareChapter" useGeneratedKeys="true" keyProperty="id">
+    <insert id = "insertChapter" useGeneratedKeys="true" keyProperty="id">
         insert into chapter(name, introduction, "order") values (#{name},#{introduction},#{order});
     </insert>
 

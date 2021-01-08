@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
 
-    <classPathEntry location="/Users/yongyang/Downloads/postgresql-42.2.12.jar" />
+    <classPathEntry location="C:\Users\Administrator\Downloads\postgresql-42.2.12.jar" />
     <context id="my" targetRuntime="MyBatis3" >
 
         <!--自动实现Serializable接口-->
@@ -17,9 +17,9 @@
 
         <!--数据库基本信息-->
         <jdbcConnection driverClass="org.postgresql.Driver"
-                        connectionURL="jdbc:postgresql://localhost:5432/zhangtong"
-                        userId="yongyang"
-                        password="123456">
+                        connectionURL="jdbc:postgresql://localhost:5432/practice"
+                        userId="postgres"
+                        password="123123liu">
         </jdbcConnection>
 
         <javaTypeResolver>
@@ -32,7 +32,7 @@
 
         <!--生成实体类的位置以及包的名字-->
         <!--同样Mac用户：targetProject 为全路径-->
-        <javaModelGenerator targetPackage="org.tdos.tdospractice.entity" targetProject="/Users/yongyang/work/project/TDOSpractice/src/main/java">
+        <javaModelGenerator targetPackage="org.tdos.tdospractice.entity" targetProject="D:/TDOSpractice/src/main/java">
             <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="false" />
             <!-- 从数据库返回的值被清理前后的空格 -->
@@ -41,7 +41,7 @@
 
         <!--生成映射文件存放位置-->
         <!--同样Mac用户：targetProject 为全路径-->
-        <sqlMapGenerator  targetPackage="mapper" targetProject="/Users/yongyang/work/project/TDOSpractice/src/main/resources">
+        <sqlMapGenerator  targetPackage="mapper" targetProject="D:/TDOSpractice/src/main/resources">
             <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="false"/>
         </sqlMapGenerator>
@@ -54,7 +54,7 @@
         <!--3，XMLMAPPER：会生成Mapper接口，接口完全依赖XML；-->
         <!--注意，如果context是MyBatis3Simple：只支持ANNOTATEDMAPPER和XMLMAPPER-->
         <!--同样Mac用户：targetProject 为全路径-->
-        <javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="org.tdos.tdospractice.mapper" targetProject="/Users/yongyang/work/project/TDOSpractice/src/main/java">
+        <javaClientGenerator type="ANNOTATEDMAPPER" targetPackage="org.tdos.tdospractice.mapper" targetProject="D:/TDOSpractice/src/main/java">
             <!-- enableSubPackages:是否让schema作为包的后缀 -->
             <property name="enableSubPackages" value="false"  />
         </javaClientGenerator>
@@ -62,8 +62,8 @@
         <!-- 配置表信息 -->
         <!-- schema即为数据库名 tableName为对应的数据库表 domainObjectName是要生成的实体类 enable*ByExample
             是否生成 example类 -->
-        <table tableName="image"
-               domainObjectName="Image" enableCountByExample="false"
+        <table tableName="class_course"
+               domainObjectName="ClassCourse" enableCountByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                enableUpdateByExample="false">
             <!-- 生成的bean的属性不采用驼峰-->

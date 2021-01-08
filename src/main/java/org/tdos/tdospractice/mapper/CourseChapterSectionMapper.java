@@ -10,6 +10,8 @@ import java.util.List;
 @Repository
 public interface CourseChapterSectionMapper {
 
-    int insertCourseChapterSection(List<CourseChapterSectionEntity> list);
+    int insertCourseChapterSectionList(List<CourseChapterSectionEntity> list);
+
+    int insertCourseChapterSection(CourseChapterSectionEntity courseChapterSectionEntity);
 
 }
