@@ -69,7 +69,7 @@ public class CourseServiceImpl implements CourseService {
         course.chapters.forEach(x -> {
             chapterMapper.insertChapter(x);
             x.sections.forEach(section -> {
-                sectionMapper.insertPrepareSection(section);
+                sectionMapper.insertSection(section);
                 list.add(CourseChapterSectionEntity.builder().courseId(course.id)
                         .chapterId(x.id)
                         .sectionId(section.id)

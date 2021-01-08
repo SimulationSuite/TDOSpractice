@@ -14,6 +14,6 @@ public interface SectionMapper {
 
     int hasSection(String id);
 
-    int insertPrepareSection(Section section);
+    int insertSection(Section section);
 
 }

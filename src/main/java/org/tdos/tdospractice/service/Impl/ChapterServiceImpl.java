@@ -40,11 +40,15 @@ public class ChapterServiceImpl implements ChapterService {
         if (courseMapper.hasCourseExist(insertChapter.courseId) == 0) {
             return new Pair<>(false, "course is not exist");
         }
-        int order = courseMapper.findCourseChapterOrder(insertChapter.courseId);
+        Integer order = courseMapper.findCourseChapterOrder(insertChapter.courseId);
         Chapter chapter = new Chapter();
         chapter.introduction = insertChapter.introduction;
         chapter.name = insertChapter.chapterName;
-        chapter.order = order + 1;
+        if (order == null){
+            chapter.order = 0;
+        }else{
+            chapter.order = order + 1;
+        }
         chapterMapper.insertChapter(chapter);
         courseChapterSectionMapper.insertCourseChapterSection(CourseChapterSectionEntity.builder()
                 .courseId(insertChapter.courseId)

@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.tdos.tdospractice.body.Chapter;
+import org.tdos.tdospractice.body.InsertChapter;
+import org.tdos.tdospractice.body.InsertSection;
 import org.tdos.tdospractice.body.Section;
 import org.tdos.tdospractice.service.ChapterService;
 import org.tdos.tdospractice.service.SectionService;
@@ -21,6 +23,15 @@ public class SectionController {
     public Response<String> modifySectionNameById(@RequestBody Section section) {
         Pair<Boolean, String> pair = sectionService
                 .modifySectionNameById(section.sectionID, section.sectionName);
+        if (pair.getKey()) {
+            return Response.success(null);
+        }
+        return Response.error(pair.getValue());
+    }
+
+    @PostMapping(value = "/add_section")
+    public Response<String> addSection(@RequestBody InsertSection insertSection) {
+        Pair<Boolean, String> pair = sectionService.addSection(insertSection);
         if (pair.getKey()) {
             return Response.success(null);
         }

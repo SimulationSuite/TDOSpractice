@@ -65,8 +65,12 @@ inner join chapter on chapter.id = ccs.chapter_id
 inner join "section" on "section".id = ccs.section_id;
     </select>
 
-    <select  id="findCourseChapterOrder" resultType="int">
+    <select  id="findCourseChapterOrder" resultType="java.lang.Integer">
         select max(chapter."order") from chapter inner join course_chapter_section ccs on ccs.chapter_id = chapter.id where course_id= #{courseId}::uuid
+    </select>
+
+    <select  id="findCourseChapterSectionOrder" resultType="java.lang.Integer">
+        select max("section"."order") from section inner join course_chapter_section ccs on ccs.section_id = section.id where course_id= #{courseId}::uuid and chapter_id= #{chapterId}::uuid
     </select>
 
 </mapper>

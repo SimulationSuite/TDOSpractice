@@ -20,5 +20,9 @@ public interface CourseMapper {
 
     List<Course> getCourseListById(String userId);
 
-    int findCourseChapterOrder(String courseId);
+    Integer findCourseChapterOrder(String courseId);
+
+    Integer findCourseChapterSectionOrder(String courseId,String chapterId);
+
+
 }
