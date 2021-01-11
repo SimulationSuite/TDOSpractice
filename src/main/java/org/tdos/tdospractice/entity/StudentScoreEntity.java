@@ -14,7 +14,7 @@ public class StudentScoreEntity implements Serializable {
 
     private String id;
 
-    private String sectionId;
+    private String assignmentId;
 
     private String userId;
 

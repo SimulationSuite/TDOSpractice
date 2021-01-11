@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.*;
 import org.tdos.tdospractice.body.AssignmentIdList;
-import org.tdos.tdospractice.body.Courseware;
 import org.tdos.tdospractice.entity.AssignmentEntity;
 import org.tdos.tdospractice.service.ClassService;
 import org.tdos.tdospractice.service.SecurityService;
@@ -26,6 +25,26 @@ public class AssignmentController {
 
     @Autowired
     private SecurityService securityService;
+
+    @GetMapping(value = "/getAssignmentByClassId")
+    public Response<List<AssignmentEntity>> getAssignmentByClassId(@RequestParam(value = "classId") String classId) {
+        return Response.success(assignmentService.getAssignmentByClassId(classId));
+    }
+
+    @GetMapping(value = "/getAssignmentByCourseId")
+    public Response<List<AssignmentEntity>> getAssignmentByCourseId(@RequestParam(value = "courseId") String courseId) {
+        return Response.success(assignmentService.getAssignmentByCourseId(courseId));
+    }
+
+    @GetMapping(value = "/getAssignmentByChapterId")
+    public Response<List<AssignmentEntity>> getAssignmentByChapterId(@RequestParam(value = "chapterId") String chapterId) {
+        return Response.success(assignmentService.getAssignmentByChapterId(chapterId));
+    }
+
+    @GetMapping(value = "/getAssignmentBySectionId")
+    public Response<List<AssignmentEntity>> getAssignmentBySectionId(@RequestParam(value = "sectionId") String sectionId) {
+        return Response.success(assignmentService.getAssignmentBySectionId(sectionId));
+    }
 
     @PostMapping(value = "/deleteAssignmentById")
     public Response<Map<String, Object>> deleteAssignmentById(@RequestBody AssignmentIdList idList) {

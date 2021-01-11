@@ -16,6 +16,26 @@ public class AssignmentServiceImpl implements AssignmentService {
     private AssignmentMapper assignmentMapper;
 
     @Override
+    public List<AssignmentEntity> getAssignmentByClassId(String classId) {
+        return assignmentMapper.getAssignmentByClassId(classId);
+    }
+
+    @Override
+    public List<AssignmentEntity> getAssignmentByCourseId(String courseId) {
+        return assignmentMapper.getAssignmentByCourseId(courseId);
+    }
+
+    @Override
+    public List<AssignmentEntity> getAssignmentByChapterId(String chapterId) {
+        return assignmentMapper.getAssignmentByChapterId(chapterId);
+    }
+
+    @Override
+    public List<AssignmentEntity> getAssignmentBySectionId(String sectionId) {
+        return assignmentMapper.getAssignmentBySectionId(sectionId);
+    }
+
+    @Override
     public Map<String, Object> deleteAssignmentById(List<String> id) {
         Map<String, Object> map = new HashMap<>();
         List<String> sectionAssignment = new ArrayList<>();

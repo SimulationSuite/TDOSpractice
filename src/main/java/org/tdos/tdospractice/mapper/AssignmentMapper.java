@@ -11,6 +11,14 @@ import java.util.List;
 @Repository
 public interface AssignmentMapper {
 
+    List<AssignmentEntity> getAssignmentByClassId(@Param("classId") String classId);
+
+    List<AssignmentEntity> getAssignmentByCourseId(@Param("courseId") String courseId);
+
+    List<AssignmentEntity> getAssignmentByChapterId(@Param("chapterId") String chapterId);
+
+    List<AssignmentEntity> getAssignmentBySectionId(@Param("sectionId") String sectionId);
+
     int deleteAssignmentById(@Param("id") String id);
 
     boolean ifSectionAssignmentByAssignmentId(String id);
