@@ -32,7 +32,7 @@ public class StudentAnswerController {
     }
 
     @PostMapping(value = "/deleteStudentAnswerById")
-    public Response<Map<String, Object>> deleteQuestionBackById(@RequestBody DeleteIdList idList) {
+    public Response<Map<String, Object>> deleteStudentAnswerById(@RequestBody DeleteIdList idList) {
         Map<String, Object> map = studentAnswerService.deleteStudentAnswerById(idList.deleteIdList);
         return Response.success(map);
     }
