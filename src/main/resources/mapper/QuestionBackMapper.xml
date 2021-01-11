@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tdos.tdospractice.mapper.QuestionBackMapper">
+
+    <delete id="deleteQuestionBackById">
+        delete from question_back where id=#{id}::uuid;
+    </delete>
+
+    <select id="ifSectionQuestionBackByQuestionBackId"  resultType="Boolean">
+        select ci.status = 0
+        from question_back_assignment qba
+        inner join assignment a on a.id = qba.assignment_id ::uuid
+        inner join course_chapter_section ccs on ccs.section_id = a.section_id
+        inner join course ci on ci.id = ccs.course_id ::uuid
+        where a.id =#{id}::uuid;
+    </select>
+
+    <update id="modifyQuestionBackNameById">
+        update question_back
+        set type = #{type}, answer = #{answer}, question = #{question}, model_id = #{modelId}, category_id = #{categoryId}
+        where id=#{id}::uuid;
+    </update>
+
+    <insert id="addQuestionBack" useGeneratedKeys="true" keyProperty="id">
+        insert into question_back (type, answer, question, model_id, category_id)
+        values
+        (#{type}, #{answer}, #{question}, #{modelId}, #{categoryId});
+    </insert>
+
+</mapper>
