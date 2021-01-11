@@ -193,13 +193,13 @@ create trigger t_name before update on student_answer for each row execute proce
 
 
 create table if not exists student_score(
-    section_id varchar(255) DEFAULT null,
+    assignment_id varchar(255) DEFAULT null,
     user_id varchar(255) NOT NULL,
     score int4 DEFAULT NULL,
     status int4 DEFAULT 0,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    CONSTRAINT "student_score_pk" PRIMARY KEY ( "section_id", "user_id")
+    CONSTRAINT "student_score_pk" PRIMARY KEY ( "assignment_id", "user_id")
 );
 
 create trigger t_name before update on student_score for each row execute procedure upd_timestamp();
