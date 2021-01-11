@@ -6,7 +6,7 @@ import org.tdos.tdospractice.entity.ExperimentReportEntity;
 import org.tdos.tdospractice.service.ExperimentReportService;
 import org.tdos.tdospractice.type.Response;
 
-@RestController
+//@RestController
 public class ExperimentReportController {
 
     @Autowired

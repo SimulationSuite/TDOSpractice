@@ -1,8 +1,6 @@
 package org.tdos.tdospractice.service;
 
-import org.apache.ibatis.annotations.Param;
 import org.tdos.tdospractice.entity.ExperimentEntity;
-import org.tdos.tdospractice.mapper.ExperimentReportMapper;
 
 import java.util.List;
 
