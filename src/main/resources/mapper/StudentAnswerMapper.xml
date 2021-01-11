@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tdos.tdospractice.mapper.StudentAnswerMapper">
+
+    <select  id="getStudentAnswerBySectionId" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">
+        select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
+        a.created_at as createdAt, a.updated_at as updatedAt, ci.status = 0 as canUpdate
+        from assignment a
+        inner join course_chapter_section ccs on ccs.section_id = a.section_id
+        inner join course ci on ci.id = ccs.course_id ::uuid
+        where a.section_id =#{sectionId};
+    </select>
+
+    <delete id="deleteStudentAnswerById">
+        delete from student_answer where id=#{id}::uuid;
+    </delete>
+
+    <select id="ifSectionStudentAnswerById"  resultType="Boolean">
+        select ci.status = 0
+        from student_answer a
+        inner join course_chapter_section ccs on ccs.section_id = a.section_id
+        inner join course ci on ci.id = ccs.course_id ::uuid
+        where a.id =#{id}::uuid;
+    </select>
+
+    <update id="modifyStudentAnswerById">
+        update student_answer set name = #{name}, end_at = #{endAt}, qualified_score = #{qualifiedScore} where id=#{id}::uuid;
+    </update>
+
+    <insert id="addStudentAnswer" useGeneratedKeys="true" keyProperty="id">
+        insert into student_answer (section_id, name, end_at, qualified_score) values (#{sectionId}, #{name}, #{endAt}, #{qualifiedScore});
+    </insert>
+
+</mapper>
