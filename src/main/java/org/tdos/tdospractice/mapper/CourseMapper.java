@@ -14,9 +14,9 @@ public interface CourseMapper {
 
     int hasCourseExist(String courseId);
 
-    Course getAdminCourseByCourseId(@Param("courseId") String courseId);
+    Course getCourseByCourseId(@Param("courseId") String courseId);
 
-    int insertPrepareCourse(Course course);
+    int insertCourse(Course course);
 
     List<Course> getCourseListById(String userId);
 
@@ -25,4 +25,5 @@ public interface CourseMapper {
     Integer findCourseChapterSectionOrder(String courseId,String chapterId);
 
 
+    int modifyCourseStatus(String courseId);
 }

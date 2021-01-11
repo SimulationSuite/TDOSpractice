@@ -3,6 +3,8 @@ package org.tdos.tdospractice.controller;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.tdos.tdospractice.body.AddCourse;
+import org.tdos.tdospractice.body.ModifyCourseStatus;
 import org.tdos.tdospractice.body.PrepareCourse;
 import org.tdos.tdospractice.service.CourseService;
 import org.tdos.tdospractice.type.Course;
@@ -40,4 +42,18 @@ public class CourseController {
         return Response.success(courseService.getCourseListById(userId));
     }
 
+    // 管理员内置课程
+    @PostMapping(value = "/insert_course")
+    public Response<Course> insertCourse(@RequestBody AddCourse addCourse) {
+        return Response.success(courseService.AddAdminCourse(addCourse));
+    }
+
+    @PostMapping(value = "/modify_course_status")
+    public Response<String> modifyCourseStatus(@RequestBody ModifyCourseStatus modifyCourseStatus) {
+        Pair<Boolean, String> pair =  courseService.modifyCourseStatus(modifyCourseStatus);
+        if (pair.getKey()) {
+            return Response.success(null);
+        }
+        return Response.error(pair.getValue());
+    }
 }

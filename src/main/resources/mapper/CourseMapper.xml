@@ -42,7 +42,7 @@ inner join "section" on "section".id = ccs.section_id;
         select count(*) from course where id=#{id}::uuid
     </select>
 
-    <select  id="getAdminCourseByCourseId" resultMap="CourseResult">
+    <select  id="getCourseByCourseId" resultMap="CourseResult">
         SELECT c.id ::"varchar" as course_id,c.name as course_name,c.pic_url,c.owner_id,c.introduction as course_introduction,c.start_at, c.end_at,c.status,c."type",c.model_id,
 chapter.id ::"varchar" as chapter_id, chapter.name as chapter_name, chapter.introduction as chapter_introduction, chapter."order" as chapter_order ,
 section.id ::"varchar" as section_id, section.name as section_name, section.order as section_order from course_chapter_section ccs
@@ -52,7 +52,7 @@ inner join "section" on "section".id = ccs.section_id;
     </select>
 
 
-    <insert id = "insertPrepareCourse" useGeneratedKeys="true" keyProperty="id">
+    <insert id = "insertCourse" useGeneratedKeys="true" keyProperty="id">
         insert into course(name, pic_url, introduction, start_at, end_at, status, owner_id, type, model_id) values (#{name},#{picUrl},#{introduction},#{startAt},#{endAt},#{status},#{ownerId},#{type},#{modelId});
     </insert>
 
@@ -72,5 +72,9 @@ inner join "section" on "section".id = ccs.section_id;
     <select  id="findCourseChapterSectionOrder" resultType="java.lang.Integer">
         select max("section"."order") from section inner join course_chapter_section ccs on ccs.section_id = section.id where course_id= #{courseId}::uuid and chapter_id= #{chapterId}::uuid
     </select>
+
+    <update  id="modifyCourseStatus">
+        update course set status = 1 where id= #{courseId}::uuid
+    </update>
 
 </mapper>
