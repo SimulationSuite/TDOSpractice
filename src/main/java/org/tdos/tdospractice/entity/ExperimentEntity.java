@@ -29,6 +29,10 @@ public class ExperimentEntity {
 
     private String category_id;
 
+    private int type; //0. 基础实验 1.引用实验
+
+    private String parent_experiment_id;
+
     private LocalDateTime created_at;
 
     private LocalDateTime updated_at;

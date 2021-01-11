@@ -7,24 +7,28 @@
     <insert id="insert" parameterType="org.tdos.tdospractice.entity.ExperimentEntity" useGeneratedKeys="true"
             keyProperty="id">
         insert into
-        experiment(section_id,name,pic_url,end_at,step_url,duration,image_id,category_id,created_at,updated_at)
-        values(#{section_id},#{name},#{pic_url},#{end_at},#{step_url},#{duration},#{image_id},#{category_id},#{created_at},#{updated_at})
+        experiment(section_id,name,pic_url,end_at,step_url,duration,category_id,type,created_at,updated_at)
+        values(#{section_id},#{name},#{pic_url},#{end_at},#{step_url},#{duration},#{category_id},#{type},#{created_at},#{updated_at})
     </insert>
 
     <select id="findAllByCourseId" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
-        select * from experiment e , course_chapter_section c where e.section_id = c.section_id and c.course_id = #{course_id}
+        select * from experiment e , course_chapter_section c where e.section_id = c.section_id and c.course_id = #{course_id} and type = 1
     </select>
 
     <select id="findAllByChapterId" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
-        select * from experiment e , course_chapter_section c where e.section_id = c.section_id and c.chapter_id = #{chapter_id}
+        select * from experiment e , course_chapter_section c where e.section_id = c.section_id and c.chapter_id = #{chapter_id} and type = 1
     </select>
 
     <select id="findAllBySectionId" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
-        select * from experiment where section_id = #{section_id}
+        select * from experiment where section_id = #{section_id} and type = 1
     </select>
 
     <select id="findAllByCategoryId" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
-        select * from experiment where category_id = #{category_id}
+        select * from experiment where category_id = #{category_id} and type = 0
+    </select>
+
+    <select id="findById" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
+        select * from experiment where id = #{id}::uuid
     </select>
 
     <update id="updateExperiment">
