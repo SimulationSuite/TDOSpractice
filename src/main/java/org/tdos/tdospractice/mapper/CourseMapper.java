@@ -24,6 +24,7 @@ public interface CourseMapper {
 
     Integer findCourseChapterSectionOrder(String courseId,String chapterId);
 
-
     int modifyCourseStatus(String courseId);
+
+    List<Course> getCourseList(String userId);
 }

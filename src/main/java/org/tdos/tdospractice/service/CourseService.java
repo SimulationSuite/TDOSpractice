@@ -22,4 +22,8 @@ public interface CourseService {
     Course AddAdminCourse(AddCourse addCourse);
 
     Pair<Boolean, String> modifyCourseStatus(ModifyCourseStatus modifyCourseStatus);
+
+    List<Course> getAdminUnpublishedCourseList(String userId);
+
+    List<Course> getCourseList(String userId, String start, String end);
 }
