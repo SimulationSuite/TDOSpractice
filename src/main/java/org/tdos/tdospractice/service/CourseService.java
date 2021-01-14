@@ -14,7 +14,7 @@ public interface CourseService {
 
     PageInfo<Course> getAdminCourseList(Integer perPage, Integer page);
 
-    List<Course> getAdminCourseListByClassId(String classId);
+    PageInfo<Course> getAdminCourseListByClassId(String classId, Integer perPage, Integer page);
 
     Pair<Boolean, String> prepareCourse(PrepareCourse prepareCourse);
 

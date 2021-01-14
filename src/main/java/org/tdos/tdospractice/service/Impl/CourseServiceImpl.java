@@ -60,10 +60,11 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> getAdminCourseListByClassId(String classId) {
+    public PageInfo<Course> getAdminCourseListByClassId(String classId, Integer perPage, Integer page) {
+        PageHelper.startPage(perPage,page);
         List<String> courseIds = classCourseMapper
                 .findListByClassId(classId).stream().map(ClassCourse::getCourseId).collect(Collectors.toList());
-        return courseMapper.getAdminCourseList().stream().filter(x -> courseIds.contains(x.id)).collect(Collectors.toList());
+        return new PageInfo<>(courseMapper.getAdminCourseList().stream().filter(x -> courseIds.contains(x.id)).collect(Collectors.toList()));
     }
 
     @Override
