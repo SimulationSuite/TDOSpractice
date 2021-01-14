@@ -31,4 +31,6 @@ public interface CourseMapper {
     List<Course> getCourseList(String userId, String start, String end);
 
     List<Course> getAdminUnpublishedCourseList();
+
+    Course getCourseById(String courseId);
 }

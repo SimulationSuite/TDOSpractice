@@ -25,4 +25,6 @@ public interface CourseService {
     PageInfo<Course> getAdminUnpublishedCourseList(String userId, Integer perPage, Integer page);
 
     PageInfo<Course> getCourseList(String userId, String start, String end, Integer perPage, Integer page);
+
+    Course getCourseById(String courseId);
 }

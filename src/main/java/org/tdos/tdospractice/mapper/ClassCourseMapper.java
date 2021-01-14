@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface ClassCourseMapper {
 
+    int insertClassCourse(String courseId, String classId);
 }

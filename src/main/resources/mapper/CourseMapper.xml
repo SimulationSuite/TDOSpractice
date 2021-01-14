@@ -123,4 +123,14 @@ inner join chapter on chapter.id = ccs.chapter_id
 inner join "section" on "section".id = ccs.section_id where cc.class_id = #{classId}
     </select>
 
+    <select  id="getCourseById" resultMap="CourseResult">
+        SELECT c.id ::"varchar" as course_id,c.name as course_name, c.pic_url, c.owner_id, c.introduction as course_introduction, c.start_at, c.end_at, c.status, c."type", c.model_id,
+chapter.id ::"varchar" as chapter_id, chapter.name as chapter_name, chapter.introduction as chapter_introduction, chapter."order" as chapter_order ,
+section.id ::"varchar" as section_id, section.name as section_name, section."order" as section_order
+from course_chapter_section ccs
+inner join course c on c.id = ccs.course_id
+inner join chapter on chapter.id = ccs.chapter_id
+inner join "section" on "section".id = ccs.section_id where ccs.course_id = #{courseId} :: uuid
+    </select>
+
 </mapper>

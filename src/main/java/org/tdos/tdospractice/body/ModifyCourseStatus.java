@@ -14,4 +14,7 @@ public class ModifyCourseStatus {
 
     public String end;
 
+    @JsonProperty("class_id")
+    public String classId;
+
 }

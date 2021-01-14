@@ -3,6 +3,7 @@ package org.tdos.tdospractice.controller;
 import com.github.pagehelper.PageInfo;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 import org.tdos.tdospractice.body.AddCourse;
 import org.tdos.tdospractice.body.ModifyCourseStatus;
@@ -20,14 +21,14 @@ public class CourseController {
     // 老师获取管理员内置的课程
     @GetMapping(value = "/get_admin_course_list")
     public Response<PageInfo<Course>> getAdminCourseList(@RequestParam(value = "per_page") Integer perPage,
-                                                     @RequestParam(value = "page") Integer page) {
+                                                         @RequestParam(value = "page") Integer page) {
         return Response.success(courseService.getAdminCourseList(page, perPage));
     }
 
     @GetMapping(value = "/get_admin_course_list_by_class_id")
     public Response<PageInfo<Course>> getAdminCourseList(@RequestParam(value = "class_id") String classId,
-                                                     @RequestParam(value = "per_page") Integer perPage,
-                                                     @RequestParam(value = "page") Integer page) {
+                                                         @RequestParam(value = "per_page") Integer perPage,
+                                                         @RequestParam(value = "page") Integer page) {
         return Response.success(courseService.getAdminCourseListByClassId(classId, page, perPage));
     }
 
@@ -44,12 +45,12 @@ public class CourseController {
     // 老师查询自己所有的课程
     @GetMapping(value = "/get_course_list_by_user_id")
     public Response<PageInfo<Course>> getCourseListById(@RequestParam(value = "user_id") String userId,
-                                                    @RequestParam(value = "per_page") Integer perPage,
-                                                    @RequestParam(value = "page") Integer page) {
+                                                        @RequestParam(value = "per_page") Integer perPage,
+                                                        @RequestParam(value = "page") Integer page) {
         return Response.success(courseService.getCourseListById(userId, page, perPage));
     }
 
-    // 管理员内置课程
+    // 管理员添加内置课程
     @PostMapping(value = "/insert_course")
     public Response<Course> insertCourse(@RequestBody AddCourse addCourse) {
         return Response.success(courseService.AddAdminCourse(addCourse));
@@ -68,8 +69,8 @@ public class CourseController {
     // 获取管理员未发布的课程
     @GetMapping(value = "/get_admin_unpublished_course_list")
     public Response<PageInfo<Course>> getAdminUnpublishedCourseList(@RequestParam(value = "user_id") String userId,
-                                                                @RequestParam(value = "per_page") Integer perPage,
-                                                                @RequestParam(value = "page") Integer page) {
+                                                                    @RequestParam(value = "per_page") Integer perPage,
+                                                                    @RequestParam(value = "page") Integer page) {
         return Response.success(courseService.getAdminUnpublishedCourseList(userId, page, perPage));
     }
 
@@ -79,11 +80,15 @@ public class CourseController {
                                                     @RequestParam(value = "start", required = false) String start,
                                                     @RequestParam(value = "end", required = false) String end,
                                                     @RequestParam(value = "per_page") Integer perPage,
-                                                    @RequestParam(value = "page") Integer page){
+                                                    @RequestParam(value = "page") Integer page) {
 
-        PageInfo<Course> courses = courseService.getCourseList(userId, start, end,perPage,page);
+        PageInfo<Course> courses = courseService.getCourseList(userId, start, end, perPage, page);
         return Response.success(courses);
     }
 
+    @GetMapping(value = "/get_course_by_id")
+    public Response<Course> getCourseById(@RequestParam(value = "course_id") String courseId) {
+        return Response.success(courseService.getCourseById(courseId));
+    }
 
 }
