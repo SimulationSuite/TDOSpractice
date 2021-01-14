@@ -3,7 +3,6 @@ package org.tdos.tdospractice.controller;
 import com.github.pagehelper.PageInfo;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.tdos.tdospractice.body.AddCourse;
 import org.tdos.tdospractice.body.ModifyCourseStatus;
@@ -18,6 +17,7 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
+    // 老师获取管理员内置的课程
     @GetMapping(value = "/get_admin_course_list")
     public Response<PageInfo<Course>> getAdminCourseList(@RequestParam(value = "per_page") Integer perPage,
                                                      @RequestParam(value = "page") Integer page) {
@@ -31,6 +31,7 @@ public class CourseController {
         return Response.success(courseService.getAdminCourseListByClassId(classId, page, perPage));
     }
 
+    // 老师备课
     @PostMapping(value = "/prepare_course")
     public Response<String> prepareCourse(@RequestBody PrepareCourse prepareCourse) {
         Pair<Boolean, String> pair = courseService.prepareCourse(prepareCourse);
@@ -40,6 +41,7 @@ public class CourseController {
         return Response.error(pair.getValue());
     }
 
+    // 老师查询自己所有的课程
     @GetMapping(value = "/get_course_list_by_user_id")
     public Response<PageInfo<Course>> getCourseListById(@RequestParam(value = "user_id") String userId,
                                                     @RequestParam(value = "per_page") Integer perPage,

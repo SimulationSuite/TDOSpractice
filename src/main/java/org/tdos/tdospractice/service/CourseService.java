@@ -8,8 +8,6 @@ import org.tdos.tdospractice.body.ModifyCourseStatus;
 import org.tdos.tdospractice.body.PrepareCourse;
 import org.tdos.tdospractice.type.Course;
 
-import java.util.List;
-
 public interface CourseService {
 
     PageInfo<Course> getAdminCourseList(Integer perPage, Integer page);

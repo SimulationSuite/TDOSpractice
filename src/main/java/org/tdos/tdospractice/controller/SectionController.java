@@ -5,11 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.tdos.tdospractice.body.Chapter;
-import org.tdos.tdospractice.body.InsertChapter;
 import org.tdos.tdospractice.body.InsertSection;
 import org.tdos.tdospractice.body.Section;
-import org.tdos.tdospractice.service.ChapterService;
 import org.tdos.tdospractice.service.SectionService;
 import org.tdos.tdospractice.type.Response;
 

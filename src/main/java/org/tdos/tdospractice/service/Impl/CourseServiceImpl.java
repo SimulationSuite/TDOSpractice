@@ -5,12 +5,9 @@ import com.github.pagehelper.PageInfo;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.tdos.tdospractice.body.AddCourse;
 import org.tdos.tdospractice.body.ModifyCourseStatus;
 import org.tdos.tdospractice.body.PrepareCourse;
-import org.tdos.tdospractice.entity.ClassCourse;
 import org.tdos.tdospractice.entity.CourseChapterSectionEntity;
 import org.tdos.tdospractice.mapper.*;
 import org.tdos.tdospractice.service.CourseService;
@@ -18,10 +15,6 @@ import org.tdos.tdospractice.type.Chapter;
 import org.tdos.tdospractice.type.Course;
 import org.tdos.tdospractice.type.Section;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
-import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -47,7 +40,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public PageInfo<Course> getAdminCourseList(Integer perPage, Integer page) {
-        PageHelper.startPage(perPage,page);
+        PageHelper.startPage(page,perPage);
         List<Course> courses = courseMapper.getAdminCourseList();
         courses.forEach(x -> {
             x.chapters.forEach(s -> {
@@ -55,16 +48,14 @@ public class CourseServiceImpl implements CourseService {
             });
             x.chapters = x.chapters.stream().sorted(Comparator.comparing(Chapter::getOrder)).collect(Collectors.toList());
         });
-        courses = courses.stream().filter(x -> x.status == 1).sorted(Comparator.comparing(x -> x.name)).collect(Collectors.toList());
+        courses = courses.stream().sorted(Comparator.comparing(x -> x.name)).collect(Collectors.toList());
         return new PageInfo<>(courses);
     }
 
     @Override
     public PageInfo<Course> getAdminCourseListByClassId(String classId, Integer perPage, Integer page) {
-        PageHelper.startPage(perPage,page);
-        List<String> courseIds = classCourseMapper
-                .findListByClassId(classId).stream().map(ClassCourse::getCourseId).collect(Collectors.toList());
-        return new PageInfo<>(courseMapper.getAdminCourseList().stream().filter(x -> courseIds.contains(x.id)).collect(Collectors.toList()));
+        PageHelper.startPage(page,perPage);
+        return new PageInfo<>(courseMapper.getAdminCourseListByClassId(classId));
     }
 
     @Override
@@ -78,14 +69,15 @@ public class CourseServiceImpl implements CourseService {
         }
         course.ownerId = prepareCourse.user_id;
         course.type = 1;
+        course.status = 0;
         course.modelId = course.id;
         writeCourse(course);
         return new Pair<>(true, "");
     }
 
     @Override
-    public PageInfo<Course> getCourseListById(String userId,Integer perPage, Integer page) {
-        PageHelper.startPage(perPage,page);
+    public PageInfo<Course> getCourseListById(String userId, Integer perPage, Integer page) {
+        PageHelper.startPage(page,perPage);
         List<Course> courses = courseMapper.getCourseListById(userId);
         courses = courses.stream().sorted(Comparator.comparing(x -> x.name)).collect(Collectors.toList());
         return new PageInfo<>(courses);
@@ -124,14 +116,14 @@ public class CourseServiceImpl implements CourseService {
         if (!course.ownerId.equals(modifyCourseStatus.userId)) {
             return new Pair<>(false, "course is not belong to userId: " + modifyCourseStatus.userId);
         }
-        courseMapper.modifyCourseStatus(modifyCourseStatus.courseId);
+        courseMapper.modifyCourseStatus(modifyCourseStatus.courseId, modifyCourseStatus.start, modifyCourseStatus.end);
         return new Pair<>(true, "");
     }
 
     @Override
-    public PageInfo<Course> getAdminUnpublishedCourseList(String userId,Integer perPage, Integer page) {
-        PageHelper.startPage(perPage,page);
-        List<Course> courses = courseMapper.getAdminCourseList();
+    public PageInfo<Course> getAdminUnpublishedCourseList(String userId, Integer perPage, Integer page) {
+        PageHelper.startPage(page,perPage);
+        List<Course> courses = courseMapper.getAdminUnpublishedCourseList();
         courses.forEach(x -> {
             x.chapters.forEach(s -> {
                 s.sections = s.sections.stream().sorted(Comparator.comparing(Section::getOrder)).collect(Collectors.toList());
@@ -164,9 +156,9 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public PageInfo<Course> getCourseList(String userId, String start, String end,Integer perPage,Integer page) {
-        PageHelper.startPage(perPage,page);
-        List<Course> list = courseMapper.getCourseList(userId,start,end);
+    public PageInfo<Course> getCourseList(String userId, String start, String end, Integer perPage, Integer page) {
+        PageHelper.startPage(page,perPage);
+        List<Course> list = courseMapper.getCourseList(userId, start, end);
         return new PageInfo<>(list);
     }
 
