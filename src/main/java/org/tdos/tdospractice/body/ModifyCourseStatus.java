@@ -10,4 +10,8 @@ public class ModifyCourseStatus {
     @JsonProperty("course_id")
     public String courseId;
 
+    public String start;
+
+    public String end;
+
 }

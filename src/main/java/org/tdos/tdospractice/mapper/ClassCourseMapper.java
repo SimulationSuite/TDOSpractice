@@ -11,6 +11,4 @@ import java.util.List;
 @Repository
 public interface ClassCourseMapper {
 
-    List<ClassCourse> findListByClassId(@Param("classId") String classId);
-
 }

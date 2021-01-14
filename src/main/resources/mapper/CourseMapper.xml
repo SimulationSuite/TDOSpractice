@@ -34,7 +34,16 @@
         SELECT c.id ::"varchar" as course_id,c.name as course_name,c.pic_url,c.owner_id,c.introduction as course_introduction,c.start_at, c.end_at,c.status,c."type",c.model_id,
 chapter.id ::"varchar" as chapter_id, chapter.name as chapter_name, chapter.introduction as chapter_introduction, chapter."order" as chapter_order ,
 section.id ::"varchar" as section_id, section.name as section_name, section."order" as section_order from course_chapter_section ccs
-inner join course c on c.id = ccs.course_id and c.type = 0
+inner join course c on c.id = ccs.course_id and c.type = 0 and c.status = 1
+inner join chapter on chapter.id = ccs.chapter_id
+inner join "section" on "section".id = ccs.section_id
+    </select>
+
+    <select  id="getAdminUnpublishedCourseList" resultMap="CourseResult">
+        SELECT c.id ::"varchar" as course_id,c.name as course_name,c.pic_url,c.owner_id,c.introduction as course_introduction,c.start_at, c.end_at,c.status,c."type",c.model_id,
+chapter.id ::"varchar" as chapter_id, chapter.name as chapter_name, chapter.introduction as chapter_introduction, chapter."order" as chapter_order ,
+section.id ::"varchar" as section_id, section.name as section_name, section."order" as section_order from course_chapter_section ccs
+inner join course c on c.id = ccs.course_id and c.type = 0 and c.status = 0
 inner join chapter on chapter.id = ccs.chapter_id
 inner join "section" on "section".id = ccs.section_id
     </select>
@@ -75,7 +84,14 @@ inner join "section" on "section".id = ccs.section_id
     </select>
 
     <update  id="modifyCourseStatus">
-        update course set status = 1 where id= #{courseId}::uuid
+        update course set status = 1
+        <if test="start != null">
+            , start_at = #{start} :: timestamp
+        </if>
+        <if test="end != null">
+            , end_at = #{end} :: timestamp
+        </if>
+        where id= #{courseId}::uuid
     </update>
 
     <select  id="getCourseList" resultMap="CourseResult">
@@ -93,6 +109,18 @@ inner join chapter on chapter.id = ccs.chapter_id
 inner join "section" on "section".id = ccs.section_id
 inner join class_course cc on cc.course_id = ccs.course_id :: varchar
 inner join "sim_user" on sim_user.class_id = cc.class_id and sim_user."id" = #{userId}
+    </select>
+
+
+    <select  id="getAdminCourseListByClassId" resultMap="CourseResult">
+        SELECT c.id ::"varchar" as course_id,c.name as course_name, c.pic_url, c.owner_id, c.introduction as course_introduction, c.start_at, c.end_at, c.status, c."type", c.model_id,
+chapter.id ::"varchar" as chapter_id, chapter.name as chapter_name, chapter.introduction as chapter_introduction, chapter."order" as chapter_order ,
+section.id ::"varchar" as section_id, section.name as section_name, section."order" as section_order
+from class_course cc
+inner join course_chapter_section ccs on cc.course_id = css.course_id
+inner join course c on c.id = ccs.course_id and c.type = 1 and c.status = 1
+inner join chapter on chapter.id = ccs.chapter_id
+inner join "section" on "section".id = ccs.section_id where cc.class_id = #{classId}
     </select>
 
 </mapper>

@@ -10,6 +10,8 @@ import java.util.List;
 @Repository
 public interface CourseMapper {
 
+    List<Course> getAdminCourseListByClassId(String classId);
+
     List<Course> getAdminCourseList();
 
     int hasCourseExist(String courseId);
@@ -24,7 +26,9 @@ public interface CourseMapper {
 
     Integer findCourseChapterSectionOrder(String courseId, String chapterId);
 
-    int modifyCourseStatus(String courseId);
+    int modifyCourseStatus(String courseId,String start,String end);
 
     List<Course> getCourseList(String userId, String start, String end);
+
+    List<Course> getAdminUnpublishedCourseList();
 }
