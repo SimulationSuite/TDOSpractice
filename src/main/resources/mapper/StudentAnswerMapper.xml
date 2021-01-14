@@ -6,7 +6,8 @@
 
     <select  id="getStudentAnswerBySectionId" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">
         select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
-        a.created_at as createdAt, a.updated_at as updatedAt, ci.status = 0 as canUpdate
+        a.created_at as createdAt, a.
+         as updatedAt, ci.status = 0 as canUpdate
         from assignment a
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
         inner join course ci on ci.id = ccs.course_id ::uuid

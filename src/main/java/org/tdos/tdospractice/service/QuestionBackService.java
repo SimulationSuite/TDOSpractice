@@ -15,4 +15,6 @@ public interface QuestionBackService {
 
     Boolean modifyQuestionBackById(QuestionBack questionBack);
 
+    QuestionBackEntity getStudentAnswerByAssignment(String assignmentId);
+
 }

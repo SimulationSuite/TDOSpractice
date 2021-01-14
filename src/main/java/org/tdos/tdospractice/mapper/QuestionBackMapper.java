@@ -19,4 +19,6 @@ public interface QuestionBackMapper {
 
     int addQuestionBack(QuestionBackEntity questionBack);
 
+    QuestionBackEntity getStudentAnswerByAssignment(String assignmentId);
+
 }
