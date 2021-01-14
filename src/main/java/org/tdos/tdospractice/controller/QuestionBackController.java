@@ -20,11 +20,10 @@ public class QuestionBackController {
     @Autowired
     private QuestionBackService questionBackService;
 
-    @Autowired
-    private ClassService classService;
-
-    @Autowired
-    private SecurityService securityService;
+    @GetMapping(value = "/getStudentAnswerByAssignment")
+    public Response<QuestionBackEntity> getStudentAnswerByAssignment(@RequestParam(value = "assignmentId") String assignmentId) {
+        return Response.success(questionBackService.getStudentAnswerByAssignment(assignmentId));
+    }
 
     @PostMapping(value = "/deleteQuestionBackById")
     public Response<Map<String, Object>> deleteQuestionBackById(@RequestBody DeleteIdList idList) {

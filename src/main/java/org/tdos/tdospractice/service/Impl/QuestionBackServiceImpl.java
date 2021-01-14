@@ -68,4 +68,13 @@ public class QuestionBackServiceImpl implements QuestionBackService {
         return true;
     }
 
+    @Override
+    public QuestionBackEntity getStudentAnswerByAssignment(String assignmentId) {
+        try {
+            return questionBackMapper.getStudentAnswerByAssignment(assignmentId);
+        } catch (Exception e) {
+            return new QuestionBackEntity();
+        }
+    }
+
 }
