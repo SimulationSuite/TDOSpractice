@@ -1,30 +1,16 @@
 package org.tdos.tdospractice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
-
-import org.springframework.util.StringUtils;
+import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
-import org.tdos.tdospractice.config.TDOSSessionListener;
 import org.tdos.tdospractice.entity.CoursewareEntity;
-import org.tdos.tdospractice.service.ClassService;
-import org.tdos.tdospractice.service.SecurityService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.tdos.tdospractice.service.CoursewareService;
 import org.tdos.tdospractice.type.Response;
 import org.tdos.tdospractice.body.CoursewareIdList;
 import org.tdos.tdospractice.body.Courseware;
-import org.tdos.tdospractice.utils.OnlineStudent;
-
-import static org.tdos.tdospractice.utils.Constants.*;
-
-import javax.servlet.http.HttpSession;
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toCollection;
 
 @RestController
 public class CoursewareController {
@@ -32,30 +18,32 @@ public class CoursewareController {
     @Autowired
     private CoursewareService coursewareService;
 
-    @Autowired
-    private ClassService classService;
-
-    @Autowired
-    private SecurityService securityService;
-
     @GetMapping(value = "/getCoursewareByClassId")
-    public Response<List<CoursewareEntity>> getCoursewareByClassId(@RequestParam(value = "classId") String classId) {
-        return Response.success(coursewareService.getCoursewareByClassId(classId));
+    public Response<PageInfo<CoursewareEntity>> getCoursewareByClassId(@RequestParam(value = "classId") String classId,
+                                                                       @RequestParam(value = "perPage") Integer perPage,
+                                                                       @RequestParam(value = "page") Integer page) {
+        return Response.success(coursewareService.getCoursewareByClassId(classId, perPage, page));
     }
 
     @GetMapping(value = "/getCoursewareBySectionId")
-    public Response<List<CoursewareEntity>> getCoursewareBySectionId(@RequestParam(value = "sectionId") String sectionId) {
-        return Response.success(coursewareService.getCoursewareBySectionId(sectionId));
+    public Response<PageInfo<CoursewareEntity>> getCoursewareBySectionId(@RequestParam(value = "sectionId") String sectionId,
+                                                                         @RequestParam(value = "perPage") Integer perPage,
+                                                                         @RequestParam(value = "page") Integer page) {
+        return Response.success(coursewareService.getCoursewareBySectionId(sectionId, perPage, page));
     }
 
     @GetMapping(value = "/getCoursewareByChapterId")
-    public Response<List<CoursewareEntity>> getCoursewareByChapterId(@RequestParam(value = "chapterId") String chapterId) {
-        return Response.success(coursewareService.getCoursewareByChapterId(chapterId));
+    public Response<PageInfo<CoursewareEntity>> getCoursewareByChapterId(@RequestParam(value = "chapterId") String chapterId,
+                                                                         @RequestParam(value = "perPage") Integer perPage,
+                                                                         @RequestParam(value = "page") Integer page) {
+        return Response.success(coursewareService.getCoursewareByChapterId(chapterId, perPage, page));
     }
 
     @GetMapping(value = "/getCoursewareByCourseId")
-    public Response<List<CoursewareEntity>> getCoursewareByCourseId(@RequestParam(value = "courseId") String courseId) {
-        return Response.success(coursewareService.getCoursewareByCourseId(courseId));
+    public Response<PageInfo<CoursewareEntity>> getCoursewareByCourseId(@RequestParam(value = "courseId") String courseId,
+                                                                        @RequestParam(value = "perPage") Integer perPage,
+                                                                        @RequestParam(value = "page") Integer page) {
+        return Response.success(coursewareService.getCoursewareByCourseId(courseId, perPage, page));
     }
 
     @PostMapping(value = "/deleteCoursewareById")

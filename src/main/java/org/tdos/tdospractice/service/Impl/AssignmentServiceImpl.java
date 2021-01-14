@@ -8,7 +8,6 @@ import org.tdos.tdospractice.body.Assignment;
 import org.tdos.tdospractice.entity.AssignmentEntity;
 import org.tdos.tdospractice.mapper.AssignmentMapper;
 import org.tdos.tdospractice.service.AssignmentService;
-import org.tdos.tdospractice.type.Course;
 
 import java.util.*;
 
@@ -20,28 +19,28 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     @Override
     public PageInfo<AssignmentEntity> getAssignmentByClassId(String classId, Integer perPage,Integer page) {
-        PageHelper.startPage(perPage,page);
+        PageHelper.startPage(page, perPage);
         List<AssignmentEntity> list = assignmentMapper.getAssignmentByClassId(classId);
         return new PageInfo<>(list);
     }
 
     @Override
     public PageInfo<AssignmentEntity> getAssignmentByCourseId(String courseId, Integer perPage,Integer page) {
-        PageHelper.startPage(perPage,page);
+        PageHelper.startPage(page, perPage);
         List<AssignmentEntity> list = assignmentMapper.getAssignmentByCourseId(courseId);
         return new PageInfo<>(list);
     }
 
     @Override
     public PageInfo<AssignmentEntity> getAssignmentByChapterId(String chapterId, Integer perPage,Integer page) {
-        PageHelper.startPage(perPage,page);
+        PageHelper.startPage(page, perPage);
         List<AssignmentEntity> list = assignmentMapper.getAssignmentByChapterId(chapterId);
         return new PageInfo<>(list);
     }
 
     @Override
     public PageInfo<AssignmentEntity> getAssignmentBySectionId(String sectionId, Integer perPage,Integer page) {
-        PageHelper.startPage(perPage,page);
+        PageHelper.startPage(page, perPage);
         List<AssignmentEntity> list = assignmentMapper.getAssignmentBySectionId(sectionId);
         return new PageInfo<>(list);
     }

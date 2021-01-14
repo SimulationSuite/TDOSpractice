@@ -11,7 +11,7 @@
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
         inner join course ci on ci.id = ccs.course_id ::uuid
         inner join class_course cc on cc.course_id ::uuid = ci.id
-        where cc.class_id = #{ClassId};
+        where cc.class_id = #{ClassId}
     </select>
 
     <select  id="getAssignmentByCourseId" resultType="org.tdos.tdospractice.entity.AssignmentEntity">
@@ -20,7 +20,7 @@
         from assignment a
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
         inner join course ci on ci.id = ccs.course_id ::uuid
-        where ccs.course_id =#{CourseId};
+        where ccs.course_id =#{CourseId}
     </select>
 
     <select  id="getAssignmentByChapterId" resultType="org.tdos.tdospractice.entity.AssignmentEntity">
@@ -29,7 +29,7 @@
         from assignment a
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
         inner join course ci on ci.id = ccs.course_id ::uuid
-        where ccs.chapter_id =#{ChapterId};
+        where ccs.chapter_id =#{ChapterId}
     </select>
 
     <select  id="getAssignmentBySectionId" resultType="org.tdos.tdospractice.entity.AssignmentEntity">
@@ -38,7 +38,7 @@
         from assignment a
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
         inner join course ci on ci.id = ccs.course_id ::uuid
-        where a.section_id =#{sectionId};
+        where a.section_id =#{sectionId}
     </select>
 
     <delete id="deleteAssignmentById">
