@@ -1,5 +1,6 @@
 package org.tdos.tdospractice.controller;
 
+import com.github.pagehelper.PageInfo;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,7 +11,6 @@ import org.tdos.tdospractice.body.PrepareCourse;
 import org.tdos.tdospractice.service.CourseService;
 import org.tdos.tdospractice.type.Course;
 import org.tdos.tdospractice.type.Response;
-import org.tdos.tdospractice.utils.PageTool;
 
 @RestController
 public class CourseController {
@@ -19,9 +19,9 @@ public class CourseController {
     private CourseService courseService;
 
     @GetMapping(value = "/get_admin_course_list")
-    public Response<Page<Course>> getAdminCourseList(@RequestParam(value = "per_page") Integer perPage,
+    public Response<PageInfo<Course>> getAdminCourseList(@RequestParam(value = "per_page") Integer perPage,
                                                      @RequestParam(value = "page") Integer page) {
-        return Response.success(PageTool.getPageList(courseService.getAdminCourseList(), page, perPage));
+        return Response.success(courseService.getAdminCourseList(page, perPage));
     }
 
     @GetMapping(value = "/get_admin_course_list_by_class_id")
@@ -41,10 +41,10 @@ public class CourseController {
     }
 
     @GetMapping(value = "/get_course_list_by_user_id")
-    public Response<Page<Course>> getCourseListById(@RequestParam(value = "user_id") String userId,
+    public Response<PageInfo<Course>> getCourseListById(@RequestParam(value = "user_id") String userId,
                                                     @RequestParam(value = "per_page") Integer perPage,
                                                     @RequestParam(value = "page") Integer page) {
-        return Response.success(PageTool.getPageList(courseService.getCourseListById(userId), page, perPage));
+        return Response.success(courseService.getCourseListById(userId, page, perPage));
     }
 
     // 管理员内置课程
@@ -65,20 +65,22 @@ public class CourseController {
 
     // 获取管理员未发布的课程
     @GetMapping(value = "/get_admin_unpublished_course_list")
-    public Response<Page<Course>> getAdminUnpublishedCourseList(@RequestParam(value = "user_id") String userId,
+    public Response<PageInfo<Course>> getAdminUnpublishedCourseList(@RequestParam(value = "user_id") String userId,
                                                                 @RequestParam(value = "per_page") Integer perPage,
                                                                 @RequestParam(value = "page") Integer page) {
-        return Response.success(PageTool.getPageList(courseService.getAdminUnpublishedCourseList(userId), page, perPage));
+        return Response.success(courseService.getAdminUnpublishedCourseList(userId, page, perPage));
     }
 
     // 学生端查询课程
     @GetMapping(value = "/get_course_list")
-    public Response<Page<Course>> getCourseList(@RequestParam(value = "user_id") String userId,
-                                                @RequestParam(value = "start", required = false) String start,
-                                                @RequestParam(value = "end", required = false) String end,
-                                                @RequestParam(value = "per_page") Integer perPage,
-                                                @RequestParam(value = "page") Integer page){
-        return Response.success(PageTool.getPageList(courseService.getCourseList(userId, start, end), page, perPage));
+    public Response<PageInfo<Course>> getCourseList(@RequestParam(value = "user_id") String userId,
+                                                    @RequestParam(value = "start", required = false) String start,
+                                                    @RequestParam(value = "end", required = false) String end,
+                                                    @RequestParam(value = "per_page") Integer perPage,
+                                                    @RequestParam(value = "page") Integer page){
+
+        PageInfo<Course> courses = courseService.getCourseList(userId, start, end,perPage,page);
+        return Response.success(courses);
     }
 
 

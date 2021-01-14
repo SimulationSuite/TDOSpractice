@@ -36,7 +36,7 @@ chapter.id ::"varchar" as chapter_id, chapter.name as chapter_name, chapter.intr
 section.id ::"varchar" as section_id, section.name as section_name, section."order" as section_order from course_chapter_section ccs
 inner join course c on c.id = ccs.course_id and c.type = 0
 inner join chapter on chapter.id = ccs.chapter_id
-inner join "section" on "section".id = ccs.section_id;
+inner join "section" on "section".id = ccs.section_id
     </select>
 
     <select  id="hasCourseExist" resultType="int">
@@ -63,7 +63,7 @@ chapter.id as chapter_id, chapter.name as chapter_name, chapter.introduction as 
 section.id as section_id, section.name as section_name, section.order as section_order from course_chapter_section ccs
 inner join course c on c.id = ccs.course_id and c.type = 1 and c.owner_id = #{userId}
 inner join chapter on chapter.id = ccs.chapter_id
-inner join "section" on "section".id = ccs.section_id;
+inner join "section" on "section".id = ccs.section_id
     </select>
 
     <select  id="findCourseChapterOrder" resultType="java.lang.Integer">
@@ -83,6 +83,12 @@ inner join "section" on "section".id = ccs.section_id;
 chapter.id as chapter_id, chapter.name as chapter_name, chapter.introduction as chapter_introduction, chapter."order" as chapter_order ,
 section.id as section_id, section.name as section_name, section.order as section_order from course_chapter_section ccs
 inner join course c on c.id = ccs.course_id and c.type = 1 and c.status = 1
+        <if test="start != null">
+            AND c.start_at &gt;= #{start} :: timestamp
+        </if>
+        <if test="end != null">
+            AND c.end_at &lt;= #{end} :: timestamp
+        </if>
 inner join chapter on chapter.id = ccs.chapter_id
 inner join "section" on "section".id = ccs.section_id
 inner join class_course cc on cc.course_id = ccs.course_id :: varchar

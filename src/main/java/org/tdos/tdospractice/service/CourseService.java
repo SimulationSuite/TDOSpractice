@@ -1,6 +1,7 @@
 package org.tdos.tdospractice.service;
 
 
+import com.github.pagehelper.PageInfo;
 import javafx.util.Pair;
 import org.tdos.tdospractice.body.AddCourse;
 import org.tdos.tdospractice.body.ModifyCourseStatus;
@@ -11,19 +12,19 @@ import java.util.List;
 
 public interface CourseService {
 
-    List<Course> getAdminCourseList();
+    PageInfo<Course> getAdminCourseList(Integer perPage, Integer page);
 
     List<Course> getAdminCourseListByClassId(String classId);
 
     Pair<Boolean, String> prepareCourse(PrepareCourse prepareCourse);
 
-    List<Course> getCourseListById(String userId);
+    PageInfo<Course> getCourseListById(String userId, Integer perPage, Integer page);
 
     Course AddAdminCourse(AddCourse addCourse);
 
     Pair<Boolean, String> modifyCourseStatus(ModifyCourseStatus modifyCourseStatus);
 
-    List<Course> getAdminUnpublishedCourseList(String userId);
+    PageInfo<Course> getAdminUnpublishedCourseList(String userId, Integer perPage, Integer page);
 
-    List<Course> getCourseList(String userId, String start, String end);
+    PageInfo<Course> getCourseList(String userId, String start, String end, Integer perPage, Integer page);
 }

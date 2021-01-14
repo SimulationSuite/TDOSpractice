@@ -22,9 +22,9 @@ public interface CourseMapper {
 
     Integer findCourseChapterOrder(String courseId);
 
-    Integer findCourseChapterSectionOrder(String courseId,String chapterId);
+    Integer findCourseChapterSectionOrder(String courseId, String chapterId);
 
     int modifyCourseStatus(String courseId);
 
-    List<Course> getCourseList(String userId);
+    List<Course> getCourseList(String userId, String start, String end);
 }

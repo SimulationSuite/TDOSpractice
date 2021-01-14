@@ -1,5 +1,7 @@
 package org.tdos.tdospractice.service.Impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,7 +46,8 @@ public class CourseServiceImpl implements CourseService {
     private CourseChapterSectionMapper courseChapterSectionMapper;
 
     @Override
-    public List<Course> getAdminCourseList() {
+    public PageInfo<Course> getAdminCourseList(Integer perPage, Integer page) {
+        PageHelper.startPage(perPage,page);
         List<Course> courses = courseMapper.getAdminCourseList();
         courses.forEach(x -> {
             x.chapters.forEach(s -> {
@@ -53,7 +56,7 @@ public class CourseServiceImpl implements CourseService {
             x.chapters = x.chapters.stream().sorted(Comparator.comparing(Chapter::getOrder)).collect(Collectors.toList());
         });
         courses = courses.stream().filter(x -> x.status == 1).sorted(Comparator.comparing(x -> x.name)).collect(Collectors.toList());
-        return courses;
+        return new PageInfo<>(courses);
     }
 
     @Override
@@ -80,10 +83,11 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> getCourseListById(String userId) {
+    public PageInfo<Course> getCourseListById(String userId,Integer perPage, Integer page) {
+        PageHelper.startPage(perPage,page);
         List<Course> courses = courseMapper.getCourseListById(userId);
         courses = courses.stream().sorted(Comparator.comparing(x -> x.name)).collect(Collectors.toList());
-        return courses;
+        return new PageInfo<>(courses);
     }
 
     @Override
@@ -124,7 +128,8 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> getAdminUnpublishedCourseList(String userId) {
+    public PageInfo<Course> getAdminUnpublishedCourseList(String userId,Integer perPage, Integer page) {
+        PageHelper.startPage(perPage,page);
         List<Course> courses = courseMapper.getAdminCourseList();
         courses.forEach(x -> {
             x.chapters.forEach(s -> {
@@ -133,7 +138,7 @@ public class CourseServiceImpl implements CourseService {
             x.chapters = x.chapters.stream().sorted(Comparator.comparing(Chapter::getOrder)).collect(Collectors.toList());
         });
         courses = courses.stream().filter(x -> x.status == 0 && x.ownerId.equals(userId)).sorted(Comparator.comparing(x -> x.name)).collect(Collectors.toList());
-        return courses;
+        return new PageInfo<>(courses);
     }
 
     private Course writeCourse(Course course) {
@@ -158,34 +163,10 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> getCourseList(String userId, String start, String end) {
-        List<Course> list = courseMapper.getCourseList(userId).stream()
-                .filter(x->x.startAt != null)
-                .filter(x->x.endAt != null)
-                .filter(x -> x.endAt.isAfter(LocalDateTime.now())).collect(Collectors.toList());
-        if (!ObjectUtils.isEmpty(start)) {
-            DateTimeFormatter df = new DateTimeFormatterBuilder()
-                    .appendPattern("yyyy-MM-dd HH:mm:ss")
-                    .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
-                    .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
-                    .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
-                    .parseDefaulting(ChronoField.MILLI_OF_SECOND, 0)
-                    .toFormatter();
-            LocalDateTime startDate = LocalDateTime.parse(start, df);
-            list = list.stream().filter(x -> x.startAt.isAfter(startDate)).collect(Collectors.toList());
-        }
-        if (!ObjectUtils.isEmpty(end)) {
-            DateTimeFormatter df = new DateTimeFormatterBuilder()
-                    .appendPattern("yyyy-MM-dd HH:mm:ss")
-                    .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
-                    .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
-                    .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
-                    .parseDefaulting(ChronoField.MILLI_OF_SECOND, 0)
-                    .toFormatter();
-            LocalDateTime endDate = LocalDateTime.parse(end, df);
-            list = list.stream().filter(x -> x.endAt.isBefore(endDate)).collect(Collectors.toList());
-        }
-        return list;
+    public PageInfo<Course> getCourseList(String userId, String start, String end,Integer perPage,Integer page) {
+        PageHelper.startPage(perPage,page);
+        List<Course> list = courseMapper.getCourseList(userId,start,end);
+        return new PageInfo<>(list);
     }
 
 }
