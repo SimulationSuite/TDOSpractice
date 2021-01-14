@@ -1,5 +1,7 @@
 package org.tdos.tdospractice.service.Impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tdos.tdospractice.entity.CoursewareEntity;
@@ -19,23 +21,31 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
     private CoursewareMapper coursewareMapper;
 
     @Override
-    public List<CoursewareEntity> getCoursewareByClassId(String classId) {
-        return coursewareMapper.getCoursewareByClassId(classId);
+    public PageInfo<CoursewareEntity> getCoursewareByClassId(String classId, Integer perPage,Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<CoursewareEntity> list = coursewareMapper.getCoursewareByClassId(classId);
+        return new PageInfo<>(list);
     }
 
     @Override
-    public List<CoursewareEntity> getCoursewareBySectionId(String sectionId) {
-        return coursewareMapper.getCoursewareBySectionId(sectionId);
+    public PageInfo<CoursewareEntity> getCoursewareBySectionId(String sectionId, Integer perPage,Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<CoursewareEntity> list = coursewareMapper.getCoursewareBySectionId(sectionId);
+        return new PageInfo<>(list);
     }
 
     @Override
-    public List<CoursewareEntity> getCoursewareByChapterId(String chapterId) {
-        return coursewareMapper.getCoursewareByChapterId(chapterId);
+    public PageInfo<CoursewareEntity> getCoursewareByChapterId(String chapterId, Integer perPage,Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<CoursewareEntity> list = coursewareMapper.getCoursewareByChapterId(chapterId);
+        return new PageInfo<>(list);
     }
 
     @Override
-    public List<CoursewareEntity> getCoursewareByCourseId(String courseId) {
-        return coursewareMapper.getCoursewareByCourseId(courseId);
+    public PageInfo<CoursewareEntity> getCoursewareByCourseId(String courseId, Integer perPage,Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<CoursewareEntity> list = coursewareMapper.getCoursewareByCourseId(courseId);
+        return new PageInfo<>(list);
     }
 
     @Override

@@ -12,7 +12,7 @@
         inner join section_courseware sc on sc.section_id = ccs.section_id
         inner join courseware c on c.id = sc.courseware_id ::uuid
         inner join course ci on ci.id = ccs.course_id ::uuid
-        where cc.class_id =#{classId};
+        where cc.class_id =#{classId}
     </select>
 
     <select  id="getCoursewareBySectionId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
@@ -22,7 +22,7 @@
         inner join section_courseware sc on sc.section_id = ccs.section_id
         inner join courseware c on c.id = sc.courseware_id ::uuid
         inner join course ci on ci.id = ccs.course_id ::uuid
-        where ccs.section_id =#{sectionId};
+        where ccs.section_id =#{sectionId}
     </select>
 
     <select  id="getCoursewareByChapterId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
@@ -32,7 +32,7 @@
         inner join section_courseware sc on sc.section_id = ccs.section_id
         inner join courseware c on c.id = sc.courseware_id ::uuid
         inner join course ci on ci.id = ccs.course_id ::uuid
-        where ccs.chapter_id =#{chapterId};
+        where ccs.chapter_id =#{chapterId}
     </select>
 
     <select  id="getCoursewareByCourseId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
@@ -42,7 +42,7 @@
         inner join section_courseware sc on sc.section_id = ccs.section_id
         inner join courseware c on c.id = sc.courseware_id ::uuid
         inner join course ci on ci.id = ccs.course_id ::uuid
-        where sc.section_id =#{courseId};
+        where sc.section_id =#{courseId}
     </select>
 
     <delete id="deleteCoursewareById">
