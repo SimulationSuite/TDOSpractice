@@ -1,11 +1,14 @@
 package org.tdos.tdospractice.service.Impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tdos.tdospractice.body.Assignment;
 import org.tdos.tdospractice.entity.AssignmentEntity;
 import org.tdos.tdospractice.mapper.AssignmentMapper;
 import org.tdos.tdospractice.service.AssignmentService;
+import org.tdos.tdospractice.type.Course;
 
 import java.util.*;
 
@@ -16,23 +19,31 @@ public class AssignmentServiceImpl implements AssignmentService {
     private AssignmentMapper assignmentMapper;
 
     @Override
-    public List<AssignmentEntity> getAssignmentByClassId(String classId) {
-        return assignmentMapper.getAssignmentByClassId(classId);
+    public PageInfo<AssignmentEntity> getAssignmentByClassId(String classId, Integer perPage,Integer page) {
+        PageHelper.startPage(perPage,page);
+        List<AssignmentEntity> list = assignmentMapper.getAssignmentByClassId(classId);
+        return new PageInfo<>(list);
     }
 
     @Override
-    public List<AssignmentEntity> getAssignmentByCourseId(String courseId) {
-        return assignmentMapper.getAssignmentByCourseId(courseId);
+    public PageInfo<AssignmentEntity> getAssignmentByCourseId(String courseId, Integer perPage,Integer page) {
+        PageHelper.startPage(perPage,page);
+        List<AssignmentEntity> list = assignmentMapper.getAssignmentByCourseId(courseId);
+        return new PageInfo<>(list);
     }
 
     @Override
-    public List<AssignmentEntity> getAssignmentByChapterId(String chapterId) {
-        return assignmentMapper.getAssignmentByChapterId(chapterId);
+    public PageInfo<AssignmentEntity> getAssignmentByChapterId(String chapterId, Integer perPage,Integer page) {
+        PageHelper.startPage(perPage,page);
+        List<AssignmentEntity> list = assignmentMapper.getAssignmentByChapterId(chapterId);
+        return new PageInfo<>(list);
     }
 
     @Override
-    public List<AssignmentEntity> getAssignmentBySectionId(String sectionId) {
-        return assignmentMapper.getAssignmentBySectionId(sectionId);
+    public PageInfo<AssignmentEntity> getAssignmentBySectionId(String sectionId, Integer perPage,Integer page) {
+        PageHelper.startPage(perPage,page);
+        List<AssignmentEntity> list = assignmentMapper.getAssignmentBySectionId(sectionId);
+        return new PageInfo<>(list);
     }
 
     @Override

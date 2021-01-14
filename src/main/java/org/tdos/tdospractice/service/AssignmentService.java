@@ -1,5 +1,6 @@
 package org.tdos.tdospractice.service;
 
+import com.github.pagehelper.PageInfo;
 import javafx.util.Pair;
 import org.tdos.tdospractice.body.Assignment;
 import org.tdos.tdospractice.entity.AssignmentEntity;
@@ -10,13 +11,13 @@ import java.util.Map;
 
 public interface AssignmentService {
 
-    List<AssignmentEntity> getAssignmentByClassId(String classId);
+    PageInfo<AssignmentEntity> getAssignmentByClassId(String classId, Integer perPage,Integer page);
 
-    List<AssignmentEntity> getAssignmentByCourseId(String courseId);
+    PageInfo<AssignmentEntity> getAssignmentByCourseId(String courseId, Integer perPage,Integer page);
 
-    List<AssignmentEntity> getAssignmentByChapterId(String chapterId);
+    PageInfo<AssignmentEntity> getAssignmentByChapterId(String chapterId, Integer perPage,Integer page);
 
-    List<AssignmentEntity> getAssignmentBySectionId(String sectionId);
+    PageInfo<AssignmentEntity> getAssignmentBySectionId(String sectionId, Integer perPage,Integer page);
 
     Map<String, Object> deleteAssignmentById(List<String> id);
 
