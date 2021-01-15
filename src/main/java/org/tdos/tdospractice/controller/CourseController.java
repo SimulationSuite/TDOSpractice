@@ -21,8 +21,9 @@ public class CourseController {
     // 老师获取管理员内置的课程
     @GetMapping(value = "/get_admin_course_list")
     public Response<PageInfo<Course>> getAdminCourseList(@RequestParam(value = "per_page") Integer perPage,
-                                                         @RequestParam(value = "page") Integer page) {
-        return Response.success(courseService.getAdminCourseList(perPage, page));
+                                                         @RequestParam(value = "page") Integer page,
+                                                         @RequestParam(value = "name", required = false) String name) {
+        return Response.success(courseService.getAdminCourseList(perPage, page,name));
     }
 
     @GetMapping(value = "/get_admin_course_list_by_class_id")

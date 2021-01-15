@@ -38,6 +38,9 @@ section.id ::"varchar" as section_id, section.name as section_name, section."ord
 from course_chapter_section ccs
 left join class_course cc on cc.course_id::uuid = ccs.course_id
 inner join course c on c.id = ccs.course_id and c.type = 0 and c.status = 1
+<if test="name != null">
+    and c.name like  concat('%',#{name},'%')
+</if>
 inner join chapter on chapter.id = ccs.chapter_id
 inner join "section" on "section".id = ccs.section_id
     </select>

@@ -45,16 +45,15 @@ public class CourseServiceImpl implements CourseService {
     private ClassMapper classMapper;
 
     @Override
-    public PageInfo<Course> getAdminCourseList(Integer perPage, Integer page) {
+    public PageInfo<Course> getAdminCourseList(Integer perPage, Integer page,String name) {
         PageHelper.startPage(page, perPage);
-        List<Course> courses = courseMapper.getAdminCourseList();
+        List<Course> courses = courseMapper.getAdminCourseList(name);
         courses.forEach(x -> {
             x.chapters.forEach(s -> {
                 s.sections = s.sections.stream().sorted(Comparator.comparing(Section::getOrder)).collect(Collectors.toList());
             });
             x.chapters = x.chapters.stream().sorted(Comparator.comparing(Chapter::getOrder)).collect(Collectors.toList());
         });
-        courses = courses.stream().sorted(Comparator.comparing(x -> x.name)).collect(Collectors.toList());
         List<ClassNumber> classNumbers = classMapper.findClassNumber();
         courses.forEach(x -> classNumbers.forEach(classNumber -> {
             if (x.classId.equals(classNumber.classId)) {

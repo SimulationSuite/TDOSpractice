@@ -12,7 +12,7 @@ public interface CourseMapper {
 
     List<Course> getAdminCourseListByClassId(String classId);
 
-    List<Course> getAdminCourseList();
+    List<Course> getAdminCourseList(@Param("name") String name);
 
     int hasCourseExist(String courseId);
 

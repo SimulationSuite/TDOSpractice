@@ -10,7 +10,7 @@ import org.tdos.tdospractice.type.Course;
 
 public interface CourseService {
 
-    PageInfo<Course> getAdminCourseList(Integer perPage, Integer page);
+    PageInfo<Course> getAdminCourseList(Integer perPage, Integer page, String name);
 
     PageInfo<Course> getAdminCourseListByClassId(String classId, Integer perPage, Integer page);
 
