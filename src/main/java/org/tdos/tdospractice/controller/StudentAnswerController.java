@@ -1,7 +1,7 @@
 package org.tdos.tdospractice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
+import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 import org.tdos.tdospractice.body.DeleteIdList;
 import org.tdos.tdospractice.entity.StudentAnswerEntity;
@@ -20,15 +20,25 @@ public class StudentAnswerController {
     @Autowired
     private StudentAnswerService studentAnswerService;
 
-    @Autowired
-    private ClassService classService;
+    @GetMapping(value = "/getStudentAnswerByCourseId")
+    public Response<PageInfo<StudentAnswerEntity>> getStudentAnswerByCourseId(@RequestParam(value = "courseId") String courseId,
+                                                                              @RequestParam(value = "perPage") Integer perPage,
+                                                                              @RequestParam(value = "page") Integer page) {
+        return Response.success(studentAnswerService.getStudentAnswerBySectionId(courseId, perPage, page));
+    }
 
-    @Autowired
-    private SecurityService securityService;
+    @GetMapping(value = "/getStudentAnswerByChapterId")
+    public Response<PageInfo<StudentAnswerEntity>> getStudentAnswerByChapterId(@RequestParam(value = "chapterId") String chapterId,
+                                                                               @RequestParam(value = "perPage") Integer perPage,
+                                                                               @RequestParam(value = "page") Integer page) {
+        return Response.success(studentAnswerService.getStudentAnswerBySectionId(chapterId, perPage, page));
+    }
 
     @GetMapping(value = "/getStudentAnswerBySectionId")
-    public Response<List<StudentAnswerEntity>> getStudentAnswerBySectionId(@RequestParam(value = "sectionId") String sectionId) {
-        return Response.success(studentAnswerService.getStudentAnswerBySectionId(sectionId));
+    public Response<PageInfo<StudentAnswerEntity>> getStudentAnswerBySectionId(@RequestParam(value = "sectionId") String sectionId,
+                                                                               @RequestParam(value = "perPage") Integer perPage,
+                                                                               @RequestParam(value = "page") Integer page) {
+        return Response.success(studentAnswerService.getStudentAnswerBySectionId(sectionId, perPage, page));
     }
 
     @PostMapping(value = "/deleteStudentAnswerById")

@@ -11,6 +11,10 @@ import java.util.List;
 @Repository
 public interface StudentAnswerMapper {
 
+    List<StudentAnswerEntity> getStudentAnswerByCourseId(@Param("courseId") String courseId);
+
+    List<StudentAnswerEntity> getStudentAnswerByChapterId(@Param("chapterId") String chapterId);
+
     List<StudentAnswerEntity> getStudentAnswerBySectionId(@Param("sectionId") String sectionId);
 
     int deleteStudentAnswerById(@Param("id") String id);

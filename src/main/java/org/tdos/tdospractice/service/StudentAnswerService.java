@@ -1,6 +1,6 @@
 package org.tdos.tdospractice.service;
 
-import javafx.util.Pair;
+import com.github.pagehelper.PageInfo;
 import org.tdos.tdospractice.body.StudentAnswer;
 import org.tdos.tdospractice.entity.StudentAnswerEntity;
 
@@ -9,7 +9,11 @@ import java.util.Map;
 
 public interface StudentAnswerService {
 
-    List<StudentAnswerEntity> getStudentAnswerBySectionId(String sectionId);
+    PageInfo<StudentAnswerEntity> getStudentAnswerByCourseId(String courseId, Integer perPage, Integer page);
+
+    PageInfo<StudentAnswerEntity> getStudentAnswerByChapterId(String chapterId, Integer perPage, Integer page);
+
+    PageInfo<StudentAnswerEntity> getStudentAnswerBySectionId(String sectionId, Integer perPage, Integer page);
 
     Map<String, Object> deleteStudentAnswerById(List<String> id);
 
