@@ -47,8 +47,9 @@ public class CourseController {
     @GetMapping(value = "/get_course_list_by_user_id")
     public Response<PageInfo<Course>> getCourseListById(@RequestParam(value = "user_id") String userId,
                                                         @RequestParam(value = "per_page") Integer perPage,
-                                                        @RequestParam(value = "page") Integer page) {
-        return Response.success(courseService.getCourseListById(userId, perPage, page));
+                                                        @RequestParam(value = "page") Integer page,
+                                                        @RequestParam(value = "name", required = false) String name) {
+        return Response.success(courseService.getCourseListById(userId, perPage, page,name));
     }
 
     // 管理员添加内置课程

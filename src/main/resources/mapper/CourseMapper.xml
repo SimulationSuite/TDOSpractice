@@ -83,6 +83,9 @@ section.id as section_id, section.name as section_name, section.order as section
 from course_chapter_section ccs
 left join class_course cc on cc.course_id::uuid = ccs.course_id
 inner join course c on c.id = ccs.course_id and c.type = 1 and c.owner_id = #{userId}
+<if test="name != null">
+    and c.name like  concat('%',#{name},'%')
+</if>
 inner join chapter on chapter.id = ccs.chapter_id
 inner join "section" on "section".id = ccs.section_id order by c.created_at desc
     </select>

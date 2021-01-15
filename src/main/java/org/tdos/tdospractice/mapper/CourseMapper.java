@@ -20,7 +20,7 @@ public interface CourseMapper {
 
     int insertCourse(Course course);
 
-    List<Course> getCourseListById(String userId);
+    List<Course> getCourseListById(String userId,@Param("name") String name);
 
     Integer findCourseChapterOrder(String courseId);
 

@@ -99,9 +99,9 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public PageInfo<Course> getCourseListById(String userId, Integer perPage, Integer page) {
+    public PageInfo<Course> getCourseListById(String userId, Integer perPage, Integer page,String name) {
         PageHelper.startPage(page, perPage);
-        List<Course> courses = courseMapper.getCourseListById(userId);
+        List<Course> courses = courseMapper.getCourseListById(userId,name);
         List<ClassNumber> classNumbers = classMapper.findClassNumber();
         courses.forEach(x -> classNumbers.forEach(classNumber -> {
             if (!ObjectUtils.isEmpty(x.classId) && x.classId.equals(classNumber.classId)) {
