@@ -36,4 +36,8 @@ public class Course {
     @JsonProperty("model_id")
     public String modelId;
 
+    public Integer numbers;
+
+    public String classId;
+
 }

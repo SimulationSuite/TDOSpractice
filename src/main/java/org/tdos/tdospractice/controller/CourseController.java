@@ -22,14 +22,14 @@ public class CourseController {
     @GetMapping(value = "/get_admin_course_list")
     public Response<PageInfo<Course>> getAdminCourseList(@RequestParam(value = "per_page") Integer perPage,
                                                          @RequestParam(value = "page") Integer page) {
-        return Response.success(courseService.getAdminCourseList(page, perPage));
+        return Response.success(courseService.getAdminCourseList(perPage, page));
     }
 
     @GetMapping(value = "/get_admin_course_list_by_class_id")
     public Response<PageInfo<Course>> getAdminCourseList(@RequestParam(value = "class_id") String classId,
                                                          @RequestParam(value = "per_page") Integer perPage,
                                                          @RequestParam(value = "page") Integer page) {
-        return Response.success(courseService.getAdminCourseListByClassId(classId, page, perPage));
+        return Response.success(courseService.getAdminCourseListByClassId(classId, perPage, page));
     }
 
     // 老师备课
@@ -47,7 +47,7 @@ public class CourseController {
     public Response<PageInfo<Course>> getCourseListById(@RequestParam(value = "user_id") String userId,
                                                         @RequestParam(value = "per_page") Integer perPage,
                                                         @RequestParam(value = "page") Integer page) {
-        return Response.success(courseService.getCourseListById(userId, page, perPage));
+        return Response.success(courseService.getCourseListById(userId, perPage, page));
     }
 
     // 管理员添加内置课程
@@ -71,7 +71,7 @@ public class CourseController {
     public Response<PageInfo<Course>> getAdminUnpublishedCourseList(@RequestParam(value = "user_id") String userId,
                                                                     @RequestParam(value = "per_page") Integer perPage,
                                                                     @RequestParam(value = "page") Integer page) {
-        return Response.success(courseService.getAdminUnpublishedCourseList(userId, page, perPage));
+        return Response.success(courseService.getAdminUnpublishedCourseList(userId, perPage, page));
     }
 
     // 学生端查询课程
