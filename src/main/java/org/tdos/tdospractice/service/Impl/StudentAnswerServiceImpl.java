@@ -1,8 +1,9 @@
 package org.tdos.tdospractice.service.Impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.tdos.tdospractice.body.Assignment;
 import org.tdos.tdospractice.body.StudentAnswer;
 import org.tdos.tdospractice.entity.StudentAnswerEntity;
 import org.tdos.tdospractice.mapper.StudentAnswerMapper;
@@ -17,8 +18,24 @@ public class StudentAnswerServiceImpl implements StudentAnswerService {
     private StudentAnswerMapper studentAnswerMapper;
 
     @Override
-    public List<StudentAnswerEntity> getStudentAnswerBySectionId(String sectionId) {
-        return studentAnswerMapper.getStudentAnswerBySectionId(sectionId);
+    public PageInfo<StudentAnswerEntity> getStudentAnswerByCourseId(String sectionId, Integer perPage,Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<StudentAnswerEntity> list = studentAnswerMapper.getStudentAnswerBySectionId(sectionId);
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public PageInfo<StudentAnswerEntity> getStudentAnswerByChapterId(String sectionId, Integer perPage,Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<StudentAnswerEntity> list = studentAnswerMapper.getStudentAnswerBySectionId(sectionId);
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public PageInfo<StudentAnswerEntity> getStudentAnswerBySectionId(String sectionId, Integer perPage,Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<StudentAnswerEntity> list = studentAnswerMapper.getStudentAnswerBySectionId(sectionId);
+        return new PageInfo<>(list);
     }
 
     @Override
