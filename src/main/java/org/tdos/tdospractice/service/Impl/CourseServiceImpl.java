@@ -56,7 +56,7 @@ public class CourseServiceImpl implements CourseService {
         });
         List<ClassNumber> classNumbers = classMapper.findClassNumber();
         courses.forEach(x -> classNumbers.forEach(classNumber -> {
-            if (x.classId.equals(classNumber.classId)) {
+            if (!ObjectUtils.isEmpty(x.classId) && x.classId.equals(classNumber.classId)) {
                 x.numbers = classNumber.numbers;
             }
         }));
@@ -69,7 +69,7 @@ public class CourseServiceImpl implements CourseService {
         List<Course> list = courseMapper.getAdminCourseListByClassId(classId);
         List<ClassNumber> classNumbers = classMapper.findClassNumber();
         list.forEach(x -> classNumbers.forEach(classNumber -> {
-            if (x.classId.equals(classNumber.classId)) {
+            if (!ObjectUtils.isEmpty(x.classId) && x.classId.equals(classNumber.classId)) {
                 x.numbers = classNumber.numbers;
             }
         }));
@@ -164,7 +164,7 @@ public class CourseServiceImpl implements CourseService {
         courses = courses.stream().filter(x -> x.status == 0 && x.ownerId.equals(userId)).sorted(Comparator.comparing(x -> x.name)).collect(Collectors.toList());
         List<ClassNumber> classNumbers = classMapper.findClassNumber();
         courses.forEach(x -> classNumbers.forEach(classNumber -> {
-            if (x.classId.equals(classNumber.classId)) {
+            if (!ObjectUtils.isEmpty(x.classId) && x.classId.equals(classNumber.classId)) {
                 x.numbers = classNumber.numbers;
             }
         }));
@@ -198,7 +198,7 @@ public class CourseServiceImpl implements CourseService {
         List<Course> list = courseMapper.getCourseList(userId, start, end);
         List<ClassNumber> classNumbers = classMapper.findClassNumber();
         list.forEach(x -> classNumbers.forEach(classNumber -> {
-            if (x.classId.equals(classNumber.classId)) {
+            if (!ObjectUtils.isEmpty(x.classId) && x.classId.equals(classNumber.classId)) {
                 x.numbers = classNumber.numbers;
             }
         }));
