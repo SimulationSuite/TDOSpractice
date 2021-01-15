@@ -17,7 +17,7 @@ public class ClassEntity {
     private String grade;
 
     private String major;
-
+    
     private String department;
 
     private LocalDateTime createdAt;

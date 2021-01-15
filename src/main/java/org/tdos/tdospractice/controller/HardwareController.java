@@ -2,6 +2,7 @@ package org.tdos.tdospractice.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.tdos.tdospractice.type.Response;
 import oshi.SystemInfo;
 import oshi.hardware.CentralProcessor;
 import oshi.hardware.GlobalMemory;
@@ -15,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 public class HardwareController {
     // 获取服务器硬件信息
     @GetMapping("/hardware")
-    public Object hardware() throws InterruptedException {
+    public Response<Map<String, Object>> hardware() throws InterruptedException {
         Map<String, Object> map = new HashMap<>();
         SystemInfo systemInfo = new SystemInfo();
         GlobalMemory memory = systemInfo.getHardware().getMemory();
@@ -39,6 +40,8 @@ public class HardwareController {
         long totalCpu = user + nice + cSys + idle + iowait + irq + softirq + steal;
         map.put("cpu_use",new DecimalFormat("#.##%").format(1.0 - (idle * 1.0 / totalCpu)));
         map.put("memory_use",new DecimalFormat("#.##%").format((totalByte-acaliableByte)*1.0/totalByte));
-        return map;
+        map.put("cpu_user_utilization", new DecimalFormat("#.##%").format(user * 1.0 / totalCpu)); // cpu用户使用率
+        map.put("cpu_user_current_waiting_utilization", new DecimalFormat("#.##%").format(iowait * 1.0 / totalCpu)); // cpu当前等待率
+        return Response.success(map);
     }
 }

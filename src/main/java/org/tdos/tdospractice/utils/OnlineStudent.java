@@ -17,6 +17,6 @@ public class OnlineStudent {
     @JsonProperty("grade_name")
     public String gradeName;
 
-    public int type;  // 0 学生 1 老师
+    public int type;  // 0 管理员 1 老师 2 学生
 
 }

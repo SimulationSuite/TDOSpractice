@@ -9,7 +9,7 @@ import org.tdos.tdospractice.type.Response;
 //@RestController
 public class ExperimentReportController {
 
-    @Autowired
+
     private ExperimentReportService experimentReportService;
 
     @PostMapping(value = "/insertExperimentRepor")
