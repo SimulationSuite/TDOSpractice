@@ -11,6 +11,19 @@
         select * from class where id = #{id}::uuid;
     </select>
 
+    <select id="findClassByClassesId" resultMap="class">
+        select * from class where id = #{id}::uuid;
+    </select>
+
+    <select id="findClassByClasses" resultMap="class">
+        select * from class where name = #{name};
+    </select>
+
+    <insert id="insertClassByUser" useGeneratedKeys="true" keyProperty="id">
+      insert into class(name,grade,major,department)
+      values (#{name},#{grade},#{major},#{department})
+    </insert>
+
     <!-- 自定义高级映射 -->
     <resultMap type="org.tdos.tdospractice.entity.ClassEntity" id="class">
         <!-- 映射主键 -->

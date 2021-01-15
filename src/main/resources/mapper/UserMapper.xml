@@ -12,16 +12,38 @@
     </select>
 
     <select id="findUserById" resultMap="user">
-        select * from sim_user where id = #{id};
+        select * from sim_user where id = #{id}
+    </select>
+
+    <select id="findAllUserByRoleId" resultType="int">
+        select count(*) from sim_user where role_id = #{role_id} and classid;
     </select>
 
     <select id="findAllByRoleID" resultMap="user">
-        select * from sim_user where role_id = #{role_id};
+        select * from sim_user where role_id = #{role_id}
+    </select>
+
+    <select id="findAllByRoleIDAndClasses" resultMap="user">
+        select  * from sim_user where role_id = #{role_id} and class_id = #{class_id}
     </select>
 
     <delete id="deleteUserById">
         delete from sim_user where id=#{id}
     </delete>
+
+    <update id="updateUserById">
+        update sim_user SET name=#{name},gender=#{gender},
+        phone=#{phone},identification_number=#{identificationNumber} where id=#{id}
+    </update>
+
+    <update id="updatePasswordById">
+        update sim_user SET password=#{password} where id=#{id}
+    </update>
+
+    <insert id="insertUserById">
+      insert into sim_user(id,name,gender,password,role_id,class_id,phone,identification_number)
+      values (#{id},#{name},#{gender},#{password},#{roleId},#{classId},#{phone},#{identificationNumber})
+    </insert>
 
     <!-- 自定义高级映射 -->
     <resultMap type="org.tdos.tdospractice.entity.UserEntity" id="user">
@@ -35,4 +57,5 @@
         <result column="created_at" property="createdAt"/>
         <result column="updated_at" property="updatedAt"/>
     </resultMap>
+
 </mapper>
