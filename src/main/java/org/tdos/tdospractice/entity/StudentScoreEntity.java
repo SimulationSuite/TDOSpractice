@@ -12,8 +12,6 @@ import java.time.LocalDateTime;
 @Builder
 public class StudentScoreEntity implements Serializable {
 
-    private String id;
-
     private String assignmentId;
 
     private String userId;
