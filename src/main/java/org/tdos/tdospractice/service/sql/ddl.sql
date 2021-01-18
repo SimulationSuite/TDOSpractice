@@ -260,12 +260,12 @@ create table if not exists experiment_report(
 create trigger t_name before update on experiment_report for each row execute procedure upd_timestamp();
 
 create table if not exists courseware_remark(
-    courseware_id varchar(255) NOT NULL,
+    courseware_id UUID NOT NULL,
     user_id varchar(255) NOT NULL,
     title varchar(255) DEFAULT null,
-    content varchar(255) DEFAULT null,
+    content varchar(255) DEFAULT NULL,
     "type" int4 DEFAULT 0,
-    remark_page int4 DEFAULT 0,
+    remark_page int4 DEFAULT NULL,
     remark_at TIMESTAMP(0)  without time zone default null,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),

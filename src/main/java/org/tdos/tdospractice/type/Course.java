@@ -1,6 +1,5 @@
 package org.tdos.tdospractice.type;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDateTime;
@@ -39,5 +38,11 @@ public class Course {
     public Integer numbers;
 
     public String classId;
+
+    @JsonProperty("chapter_number")
+    public int chapterNumber;
+
+    @JsonProperty("section_number")
+    public int sectionNumber;
 
 }

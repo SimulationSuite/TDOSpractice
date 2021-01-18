@@ -45,13 +45,11 @@ public class CourseServiceImpl implements CourseService {
     private ClassMapper classMapper;
 
     @Override
-    public PageInfo<Course> getAdminCourseList(Integer perPage, Integer page,String name) {
+    public PageInfo<Course> getAdminCourseList(Integer perPage, Integer page, String name) {
         PageHelper.startPage(page, perPage);
         List<Course> courses = courseMapper.getAdminCourseList(name);
         courses.forEach(x -> {
-            x.chapters.forEach(s -> {
-                s.sections = s.sections.stream().sorted(Comparator.comparing(Section::getOrder)).collect(Collectors.toList());
-            });
+            x.chapters.forEach(s -> s.sections = s.sections.stream().sorted(Comparator.comparing(Section::getOrder)).collect(Collectors.toList()));
             x.chapters = x.chapters.stream().sorted(Comparator.comparing(Chapter::getOrder)).collect(Collectors.toList());
         });
         List<ClassNumber> classNumbers = classMapper.findClassNumber();
@@ -60,6 +58,10 @@ public class CourseServiceImpl implements CourseService {
                 x.numbers = classNumber.numbers;
             }
         }));
+        courses.forEach(c -> {
+            c.chapterNumber = c.chapters.size();
+            c.sectionNumber = c.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
+        });
         return new PageInfo<>(courses);
     }
 
@@ -73,6 +75,10 @@ public class CourseServiceImpl implements CourseService {
                 x.numbers = classNumber.numbers;
             }
         }));
+        list.forEach(c -> {
+            c.chapterNumber = c.chapters.size();
+            c.sectionNumber = c.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
+        });
         return new PageInfo<>(list);
     }
 
@@ -82,7 +88,7 @@ public class CourseServiceImpl implements CourseService {
             return new Pair<>(false, "course is not exist");
         }
         Course course = courseMapper.getCourseByCourseId(prepareCourse.courseId);
-        if (course == null || ObjectUtils.isEmpty(course.id)){
+        if (course == null || ObjectUtils.isEmpty(course.id)) {
             return new Pair<>(false, "select course is not exist");
         }
         if (course.type == 1) {
@@ -99,15 +105,19 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public PageInfo<Course> getCourseListById(String userId, Integer perPage, Integer page,String name) {
+    public PageInfo<Course> getCourseListById(String userId, Integer perPage, Integer page, String name) {
         PageHelper.startPage(page, perPage);
-        List<Course> courses = courseMapper.getCourseListById(userId,name);
+        List<Course> courses = courseMapper.getCourseListById(userId, name);
         List<ClassNumber> classNumbers = classMapper.findClassNumber();
         courses.forEach(x -> classNumbers.forEach(classNumber -> {
             if (!ObjectUtils.isEmpty(x.classId) && x.classId.equals(classNumber.classId)) {
                 x.numbers = classNumber.numbers;
             }
         }));
+        courses.forEach(c -> {
+            c.chapterNumber = c.chapters.size();
+            c.sectionNumber = c.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
+        });
         return new PageInfo<>(courses);
     }
 
@@ -168,6 +178,10 @@ public class CourseServiceImpl implements CourseService {
                 x.numbers = classNumber.numbers;
             }
         }));
+        courses.forEach(c -> {
+            c.chapterNumber = c.chapters.size();
+            c.sectionNumber = c.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
+        });
         return new PageInfo<>(courses);
     }
 
@@ -202,6 +216,10 @@ public class CourseServiceImpl implements CourseService {
                 x.numbers = classNumber.numbers;
             }
         }));
+        list.forEach(c -> {
+            c.chapterNumber = c.chapters.size();
+            c.sectionNumber = c.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
+        });
         return new PageInfo<>(list);
     }
 
@@ -214,6 +232,8 @@ public class CourseServiceImpl implements CourseService {
                 course.numbers = classNumber.numbers;
             }
         });
+        course.chapterNumber = course.chapters.size();
+        course.sectionNumber = course.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
         return course;
     }
 
