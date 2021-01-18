@@ -52,7 +52,7 @@ WHERE
 	courseware_remark.user_id = #{userId}
 	AND courseware_remark.courseware_id IN
     <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
-        #{courseId}
+        #{courseId}::uuid
     </foreach>
 ORDER BY
 	courseware_remark.created_at DESC
