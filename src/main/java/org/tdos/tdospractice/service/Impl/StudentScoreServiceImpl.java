@@ -59,7 +59,6 @@ public class StudentScoreServiceImpl implements StudentScoreService {
     public Boolean modifyStudentScoreById(StudentScore studentScore) {
         try {
             StudentScoreEntity studentScoreEntity = new StudentScoreEntity();
-            studentScoreEntity.setId(studentScore.id);
             studentScoreEntity.setAssignmentId(studentScore.assignmentId);
             studentScoreEntity.setUserId(studentScore.userId);
             studentScoreEntity.setScore(studentScore.score);

@@ -34,10 +34,11 @@
 
     <select id="ifSectionStudentAnswerById"  resultType="Boolean">
         select ci.status = 0
-        from student_answer a
+        from student_answer sa
+        inner join assignment a on a.id = sa.assignment_id ::uuid
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
         inner join course ci on ci.id = ccs.course_id ::uuid
-        where a.id =#{id}::uuid;
+        where sa.id =#{id}::uuid;
     </select>
 
     <update id="modifyStudentAnswerById">

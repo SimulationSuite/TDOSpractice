@@ -5,7 +5,7 @@
 <mapper namespace="org.tdos.tdospractice.mapper.StudentScoreMapper">
 
     <select  id="getStudentScoreAll" resultType="org.tdos.tdospractice.entity.StudentScoreEntity">
-        select ss.id, ss.assignment_id as assignmentId, ss.user_id as userId, ss.score, ss.status,
+        select ss.assignment_id as assignmentId, ss.user_id as userId, ss.score, ss.status,
         a.created_at as createdAt, a.updated_at as updatedAt
         from student_score ss
         inner join assignment a on a.id = ss.assignment_id
@@ -13,7 +13,7 @@
     </select>
 
     <select  id="getStudentScoreBySectionId" resultType="org.tdos.tdospractice.entity.StudentScoreEntity">
-        select ss.id, ss.assignment_id as assignmentId, ss.user_id as userId, ss.score, ss.status,
+        select ss.assignment_id as assignmentId, ss.user_id as userId, ss.score, ss.status,
         a.created_at as createdAt, a.updated_at as updatedAt
         from student_score ss
         inner join assignment a on a.id = ss.assignment_id
@@ -21,7 +21,7 @@
     </select>
 
     <delete id="deleteStudentScoreById">
-        delete from student_score where id=#{id}::uuid;
+        delete from student_score where assignment_id = #{assignmentId} and user_id = #{userId};
     </delete>
 
     <select id="ifSectionStudentScoreById"  resultType="Boolean">
@@ -29,11 +29,12 @@
         from student_answer a
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
         inner join course ci on ci.id = ccs.course_id ::uuid
-        where a.id =#{id}::uuid;
+        where assignment_id = #{assignmentId} and user_id = #{userId};
     </select>
 
     <update id="modifyStudentScoreById">
-        update student_score set assignment_id = #{assignmentId}, user_id = #{userId}, score = #{score}, status = #{status} where id=#{id}::uuid;
+        update student_score set score = #{score}, status = #{status}
+        where assignment_id = #{assignmentId} and user_id = #{userId};
     </update>
 
     <insert id="addStudentScore" useGeneratedKeys="true" keyProperty="id">
