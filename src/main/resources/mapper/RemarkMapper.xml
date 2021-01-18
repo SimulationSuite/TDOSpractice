@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tdos.tdospractice.mapper.RemarkMapper">
+
+    <resultMap id="CoursewareRemark" type="org.tdos.tdospractice.type.CoursewareRemark">
+        <result column="name" property="coursewareName"/>
+        <result column="title" property="title"/>
+        <result column="content" property="content"/>
+        <result column="type" property="type"/>
+        <result column="remark_page" property="remarkPage"/>
+        <result column="remark_at" property="remarkAt"/>
+        <result column="created_at" property="createdAt"/>
+    </resultMap>
+
+    <insert id="uploadRemark" useGeneratedKeys="true" keyProperty="id">
+        insert into courseware_remark
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="remark.coursewareId != null">courseware_id,</if>
+            <if test="remark.userId != null">user_id,</if>
+            <if test="remark.title != null">title,</if>
+            <if test="remark.content != null">content,</if>
+            <if test="remark.type != null">"type",</if>
+            <if test="remark.remarkPage != null">remark_page,</if>
+            <if test="remark.RemarkAt != null">remark_at,</if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="remark.coursewareId != null">#{remark.coursewareId}::uuid,</if>
+            <if test="remark.userId != null">#{remark.userId},</if>
+            <if test="remark.title != null">#{remark.title},</if>
+            <if test="remark.content != null">#{remark.content},</if>
+            <if test="remark.type != null">#{remark.type},</if>
+            <if test="remark.remarkPage != null">#{remark.remarkPage},</if>
+            <if test="remark.RemarkAt != null">#{remark.RemarkAt},</if>
+        </trim>
+    </insert>
+
+    <select  id="getCoursewareRemarkList" resultMap="CoursewareRemark">
+        SELECT
+	courseware.NAME,
+	courseware_remark.title,
+	courseware_remark."content",
+	courseware_remark."type",
+	courseware_remark."remark_page",
+	courseware_remark."remark_at",
+	courseware_remark."created_at"
+FROM
+	courseware_remark
+	INNER JOIN courseware ON courseware_remark.courseware_id = courseware."id"
+WHERE
+	courseware_remark.user_id = #{userId}
+	AND courseware_remark.courseware_id IN
+    <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
+        #{courseId}
+    </foreach>
+ORDER BY
+	courseware_remark.created_at DESC
+    </select>
+
+
+</mapper>

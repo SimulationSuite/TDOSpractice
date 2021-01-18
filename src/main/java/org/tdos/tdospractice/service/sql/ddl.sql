@@ -260,16 +260,16 @@ create table if not exists experiment_report(
 create trigger t_name before update on experiment_report for each row execute procedure upd_timestamp();
 
 create table if not exists courseware_remark(
+    id UUID primary key DEFAULT uuid_generate_v4(),
     courseware_id UUID NOT NULL,
     user_id varchar(255) NOT NULL,
     title varchar(255) DEFAULT null,
     content varchar(255) DEFAULT NULL,
     "type" int4 DEFAULT 0,
     remark_page int4 DEFAULT NULL,
-    remark_at TIMESTAMP(0)  without time zone default null,
+    remark_at int8  DEFAULT NUll,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    CONSTRAINT "courseware_remark_pk" PRIMARY KEY ( "courseware_id", "user_id")
+    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
 
 create trigger t_name before update on courseware_remark for each row execute procedure upd_timestamp();
