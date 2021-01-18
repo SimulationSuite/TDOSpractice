@@ -64,7 +64,7 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
         }
         id.forEach(x -> coursewareMapper.deleteCoursewareById(x));
         map.put("isDelete", true);
-        map.put("notDeleteId", sectionCourseware);
+        map.put("deleteId", sectionCourseware);
         return map;
     }
 
@@ -84,13 +84,17 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
     }
 
     @Override
-    public Boolean modifyCoursewareNameById(Courseware courseware) {
+    public Map<String, Object> modifyCoursewareNameById(Courseware courseware) {
+        Map<String, Object> map = new HashMap<>();
         try {
             coursewareMapper.modifyCoursewareNameById(courseware.id, courseware.name);
         } catch (Exception e) {
-            return false;
+            map.put("isModify", false);
+            map.put("reason", e);
+            return map;
         }
-        return true;
+        map.put("isModify", true);
+        return map;
     }
 
 }

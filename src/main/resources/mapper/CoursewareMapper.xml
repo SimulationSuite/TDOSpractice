@@ -65,4 +65,8 @@
         where courseware_id=#{id};
     </select>
 
+    <select id="hasSectionCoursewareId"  resultType="int">
+        select count(*) from courseware where id=#{id}::uuid
+    </select>
+
 </mapper>

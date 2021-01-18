@@ -58,7 +58,7 @@ public class CoursewareController {
     }
 
     @PostMapping(value = "/modifyCoursewareNameById")
-    public Response<Boolean> modifyCoursewareNameById(@RequestBody Courseware courseware) {
+    public Response<Map<String, Object>> modifyCoursewareNameById(@RequestBody Courseware courseware) {
         return Response.success(coursewareService.modifyCoursewareNameById(courseware));
     }
 

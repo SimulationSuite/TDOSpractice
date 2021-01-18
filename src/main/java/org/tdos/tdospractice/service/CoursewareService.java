@@ -20,6 +20,6 @@ public interface CoursewareService {
 
     CoursewareEntity addCourseware(Courseware courseware);
 
-    Boolean modifyCoursewareNameById(Courseware courseware);
+    Map<String, Object> modifyCoursewareNameById(Courseware courseware);
 }
 
