@@ -228,7 +228,7 @@ public class CourseServiceImpl implements CourseService {
         Course course = courseMapper.getCourseById(courseId);
         List<ClassNumber> classNumbers = classMapper.findClassNumber();
         classNumbers.forEach(classNumber -> {
-            if (course.classId.equals(classNumber.classId)) {
+            if (!ObjectUtils.isEmpty(course.classId) && course.classId.equals(classNumber.classId)) {
                 course.numbers = classNumber.numbers;
             }
         });

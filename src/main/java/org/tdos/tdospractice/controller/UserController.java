@@ -64,6 +64,7 @@ public class UserController {
             return Response.error("用户名或密码错误");
         }map.put("user_id",user.getId());
         map.put("role_id",user.getRoleID());
+        map.put("user_name",user.getName());
         session.setAttribute("user_id",user.getId());
         return Response.success(map);
     }
