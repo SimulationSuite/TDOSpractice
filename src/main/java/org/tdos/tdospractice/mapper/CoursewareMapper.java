@@ -26,5 +26,7 @@ public interface CoursewareMapper {
 
     boolean ifSectionCourseware(String id);
 
+    boolean ifSectionCoursewarePub(String id);
+
     int hasSectionCoursewareId(String id);
 }

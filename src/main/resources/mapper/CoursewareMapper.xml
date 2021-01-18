@@ -58,11 +58,17 @@
     </insert>
 
     <select id="ifSectionCourseware"  resultType="Boolean">
+        select case when count(*) = 1 then true else false end
+        from section_courseware sc
+        where sc.courseware_id=#{id};
+    </select>
+
+    <select id="ifSectionCoursewarePub"  resultType="Boolean">
         select c.status = 0
         from section_courseware sc
         inner join course_chapter_section ccs on ccs.section_id = sc.section_id
         inner join course c on c.id = ccs.course_id ::uuid
-        where courseware_id=#{id};
+        where sc.courseware_id=#{id};
     </select>
 
     <select id="hasSectionCoursewareId"  resultType="int">
