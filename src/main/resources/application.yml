@@ -32,3 +32,15 @@ sim:
     algorithm: 'rs256'
     private-key: ''
 
+kvm:
+  docker:
+    start-port: 10000
+    count: 500
+    server-info:
+      - 'node1@tcp://192.168.1.54:2375'
+      - 'node2@tcp://192.168.1.31:2375'
+    cert-path:
+      - "F://certs"
+      - "F://certs//31"
+
+

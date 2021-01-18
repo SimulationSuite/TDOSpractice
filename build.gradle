@@ -58,6 +58,8 @@ dependencies {
     // https://mvnrepository.com/artifact/com.github.oshi/oshi-core
     compile group: 'com.github.oshi', name: 'oshi-core', version: '5.3.7'
     compile group: 'org.mybatis.generator', name: 'mybatis-generator-core', version:'1.3.2'
+    compile group: 'com.google.guava', name: 'guava', version: '30.1-jre'
+    compile group: 'com.github.docker-java', name: 'docker-java', version: '3.2.7'
 
     compile 'com.github.pagehelper:pagehelper:4.2.1'
     compile group: 'net.sourceforge.jexcelapi', name: 'jxl', version: '2.6.12'
@@ -74,6 +76,7 @@ test {
 configurations {
     mybatisGenerator
 }
+
 // mybatis-generator.xml 配置路径
 //这里会遇到个问题：MyBatis Generator 通过xml生成，有日志但是没有生成文件成功的问题，
 //原因：mac下是找不到 ./src 路径的，需要全路径，如下配置。windows则为src/main/resources/generator.xml
