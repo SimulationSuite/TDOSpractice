@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.tdos.tdospractice.entity.CoursewareEntity;
+import org.tdos.tdospractice.entity.SectionCoursewareEntity;
 
 import java.util.List;
 
@@ -27,6 +28,8 @@ public interface CoursewareMapper {
     boolean ifSectionCourseware(String id);
 
     boolean ifSectionCoursewarePub(String id);
+
+    int addSectionCourseware(SectionCoursewareEntity sectionCoursewareEntity);
 
     int hasSectionCoursewareId(String id);
 }

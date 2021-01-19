@@ -5,9 +5,11 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tdos.tdospractice.entity.CoursewareEntity;
+import org.tdos.tdospractice.entity.SectionCoursewareEntity;
 import org.tdos.tdospractice.mapper.CoursewareMapper;
 import org.tdos.tdospractice.service.CoursewareService;
 import org.tdos.tdospractice.body.Courseware;
+import org.tdos.tdospractice.body.SectionCourseware;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -83,6 +85,19 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
             return coursewareEntity;
         }
         return coursewareEntity;
+    }
+
+    @Override
+    public SectionCoursewareEntity addSectionCourseware(SectionCourseware sectionCourseware) {
+        SectionCoursewareEntity sectionCoursewareEntity = new SectionCoursewareEntity();
+        sectionCoursewareEntity.setSectionId(sectionCourseware.sectionId);
+        sectionCoursewareEntity.setCoursewareId(sectionCourseware.coursewareId);
+        try {
+            coursewareMapper.addSectionCourseware(sectionCoursewareEntity);
+        } catch (Exception e) {
+            return sectionCoursewareEntity;
+        }
+        return sectionCoursewareEntity;
     }
 
     @Override

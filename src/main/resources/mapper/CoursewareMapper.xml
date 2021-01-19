@@ -75,4 +75,8 @@
         select count(*) from courseware where id=#{id}::uuid
     </select>
 
+    <insert id="addSectionCourseware" useGeneratedKeys="true" keyProperty="id">
+        insert into section_courseware (section_id, courseware_id) values (#{sectionId}, #{coursewareId});
+    </insert>
+
 </mapper>
