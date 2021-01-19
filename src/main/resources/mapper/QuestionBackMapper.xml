@@ -37,4 +37,10 @@
         (#{type}, #{answer}, #{question}, #{modelId}, #{categoryId});
     </insert>
 
+    <insert id="addQuestionBackAssignment" useGeneratedKeys="true" keyProperty="id">
+        insert into QuestionBackAssignment (assignment_id, question_id)
+        values
+        (#{assignmentId}, #{questionId});
+    </insert>
+    
 </mapper>
