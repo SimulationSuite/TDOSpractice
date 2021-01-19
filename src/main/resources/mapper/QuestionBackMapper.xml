@@ -20,8 +20,8 @@
         select ci.status = 0
         from question_back_assignment qba
         inner join assignment a on a.id = qba.assignment_id ::uuid
-        inner join course_chapter_section ccs on ccs.section_id = a.section_id
-        inner join course ci on ci.id = ccs.course_id ::uuid
+        inner join course_chapter_section ccs on ccs.section_id = a.section_id ::uuid
+        inner join course ci on ci.id = ccs.course_id
         where a.id =#{id}::uuid;
     </select>
 
@@ -35,6 +35,12 @@
         insert into question_back (type, answer, question, model_id, category_id)
         values
         (#{type}, #{answer}, #{question}, #{modelId}, #{categoryId});
+    </insert>
+
+    <insert id="addQuestionBackAssignment" useGeneratedKeys="true" keyProperty="id">
+        insert into QuestionBackAssignment (assignment_id, question_id)
+        values
+        (#{assignmentId}, #{questionId});
     </insert>
 
 </mapper>

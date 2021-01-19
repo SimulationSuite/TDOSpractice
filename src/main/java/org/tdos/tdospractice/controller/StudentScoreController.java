@@ -47,5 +47,10 @@ public class StudentScoreController {
         return Response.success(studentScoreService.modifyStudentScoreById(studentScore));
     }
 
+    @GetMapping(value = "/getStudentScoreAll")
+    public Response<List<StudentScoreEntity>> getStudentScoreAll() {
+        return Response.success(studentScoreService.getStudentScoreAll());
+    }
+
 }
 

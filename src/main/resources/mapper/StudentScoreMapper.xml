@@ -6,15 +6,13 @@
 
     <select  id="getStudentScoreAll" resultType="org.tdos.tdospractice.entity.StudentScoreEntity">
         select ss.assignment_id as assignmentId, ss.user_id as userId, ss.score, ss.status,
-        a.created_at as createdAt, a.updated_at as updatedAt
-        from student_score ss
-        inner join assignment a on a.id = ss.assignment_id
-        where a.section_id =#{sectionId};
+        ss.created_at as createdAt, ss.updated_at as updatedAt
+        from student_score ss;
     </select>
 
     <select  id="getStudentScoreBySectionId" resultType="org.tdos.tdospractice.entity.StudentScoreEntity">
         select ss.assignment_id as assignmentId, ss.user_id as userId, ss.score, ss.status,
-        a.created_at as createdAt, a.updated_at as updatedAt
+        ss.created_at as createdAt, ss.updated_at as updatedAt
         from student_score ss
         inner join assignment a on a.id = ss.assignment_id
         where a.section_id =#{sectionId};
@@ -26,10 +24,11 @@
 
     <select id="ifSectionStudentScoreById"  resultType="Boolean">
         select ci.status = 0
-        from student_answer a
-        inner join course_chapter_section ccs on ccs.section_id = a.section_id
-        inner join course ci on ci.id = ccs.course_id ::uuid
-        where assignment_id = #{assignmentId} and user_id = #{userId};
+        from student_score ss
+        inner join assignment a on a.id = ss.assignment_id::uuid
+        inner join course_chapter_section ccs on ccs.section_id = a.section_id::uuid
+        inner join course ci on ci.id = ccs.course_id
+        where ss.assignment_id = #{assignmentId} and ss.user_id = #{userId};
     </select>
 
     <update id="modifyStudentScoreById">

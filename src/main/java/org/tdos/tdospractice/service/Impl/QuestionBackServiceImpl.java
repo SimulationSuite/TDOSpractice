@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tdos.tdospractice.body.QuestionBack;;
 import org.tdos.tdospractice.entity.QuestionBackEntity;
+import org.tdos.tdospractice.body.QuestionBackAssignment;;
+import org.tdos.tdospractice.entity.QuestionBackAssignmentEntity;
 import org.tdos.tdospractice.mapper.QuestionBackMapper;
 import org.tdos.tdospractice.service.QuestionBackService;
 
@@ -75,6 +77,19 @@ public class QuestionBackServiceImpl implements QuestionBackService {
         } catch (Exception e) {
             return new QuestionBackEntity();
         }
+    }
+
+    @Override
+    public QuestionBackAssignmentEntity addQuestionBackAssignment(QuestionBackAssignment questionBackAssignment) {
+        QuestionBackAssignmentEntity questionBackAssignmentEntity = new QuestionBackAssignmentEntity();
+        questionBackAssignmentEntity.setAssignmentId(questionBackAssignment.assignmentId);
+        questionBackAssignmentEntity.setQuestionId(questionBackAssignment.questionId);
+        try {
+            questionBackMapper.addQuestionBackAssignment(questionBackAssignmentEntity);
+        } catch (Exception e) {
+            return questionBackAssignmentEntity;
+        }
+        return questionBackAssignmentEntity;
     }
 
 }

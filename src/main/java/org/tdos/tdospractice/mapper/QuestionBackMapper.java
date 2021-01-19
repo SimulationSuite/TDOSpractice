@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.tdos.tdospractice.entity.QuestionBackEntity;
+import org.tdos.tdospractice.entity.QuestionBackAssignmentEntity;
 
 import java.util.List;
 
@@ -20,5 +21,7 @@ public interface QuestionBackMapper {
     int addQuestionBack(QuestionBackEntity questionBack);
 
     QuestionBackEntity getStudentAnswerByAssignment(String assignmentId);
+
+    QuestionBackAssignmentEntity addQuestionBackAssignment(QuestionBackAssignmentEntity questionBackAssignment);
 
 }

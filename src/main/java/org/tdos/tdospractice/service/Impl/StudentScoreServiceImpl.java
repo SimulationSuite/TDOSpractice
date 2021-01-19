@@ -70,4 +70,9 @@ public class StudentScoreServiceImpl implements StudentScoreService {
         return true;
     }
 
+    @Override
+    public List<StudentScoreEntity> getStudentScoreAll() {
+        return studentScoreMapper.getStudentScoreAll();
+    }
+
 }

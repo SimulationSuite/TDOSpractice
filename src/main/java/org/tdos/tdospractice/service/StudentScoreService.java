@@ -17,4 +17,6 @@ public interface StudentScoreService {
 
     Boolean modifyStudentScoreById(StudentScore studentScore);
 
+    List<StudentScoreEntity> getStudentScoreAll();
+
 }

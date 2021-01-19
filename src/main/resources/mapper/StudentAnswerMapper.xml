@@ -8,24 +8,24 @@
         select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
         a.created_at as createdAt, a.updated_at as updatedAt
         from assignment a
-        inner join course_chapter_section ccs on ccs.section_id = a.section_id
-        where ccs.course_id =#{courseId};
+        inner join course_chapter_section ccs on ccs.section_id = a.section_id::uuid
+        where ccs.course_id =#{courseId}::uuid;
     </select>
 
     <select  id="getStudentAnswerByChapterId" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">
         select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
         a.created_at as createdAt, a.updated_at as updatedAt
         from assignment a
-        inner join course_chapter_section ccs on ccs.section_id = a.section_id
-        where ccs.chapter_id =#{chapterId};
+        inner join course_chapter_section ccs on ccs.section_id = a.section_id::uuid
+        where ccs.chapter_id =#{chapterId}::uuid;
     </select>
 
     <select  id="getStudentAnswerBySectionId" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">
         select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
         a.created_at as createdAt, a.updated_at as updatedAt
         from assignment a
-        inner join course_chapter_section ccs on ccs.section_id = a.section_id
-        where a.section_id =#{sectionId};
+        inner join course_chapter_section ccs on ccs.section_id = a.section_id::uuid
+        where a.section_id =#{sectionId}::uuid;
     </select>
 
     <delete id="deleteStudentAnswerById">
@@ -36,8 +36,8 @@
         select ci.status = 0
         from student_answer sa
         inner join assignment a on a.id = sa.assignment_id ::uuid
-        inner join course_chapter_section ccs on ccs.section_id = a.section_id
-        inner join course ci on ci.id = ccs.course_id ::uuid
+        inner join course_chapter_section ccs on ccs.section_id = a.section_id::uuid
+        inner join course ci on ci.id = ccs.course_id
         where sa.id =#{id}::uuid;
     </select>
 
