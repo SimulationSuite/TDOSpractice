@@ -21,4 +21,6 @@ public interface StudentScoreMapper {
 
     int addStudentScore(StudentScoreEntity studentScore);
 
+    List<StudentScoreEntity> getStudentScoreAll();
+
 }
