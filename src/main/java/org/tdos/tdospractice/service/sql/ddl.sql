@@ -168,6 +168,7 @@ create table if not exists question_back_assignment(
     assignment_id varchar(255) NOT NULL,
     question_id varchar(255) NOT NULL,
     "order" int4 NOT NULL,
+    score int4 DEFAULT NULL,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     CONSTRAINT "question_back_assignment_pk" PRIMARY KEY ( "assignment_id", "question_id")
