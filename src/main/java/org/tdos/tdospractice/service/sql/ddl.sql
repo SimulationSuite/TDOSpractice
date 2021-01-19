@@ -173,6 +173,14 @@ create table if not exists question_back_assignment(
     CONSTRAINT "question_back_assignment_pk" PRIMARY KEY ( "assignment_id", "question_id")
 );
 
+CREATE SEQUENCE question_back_assignment_order_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+alter table question_back_assignment alter column "order" set default nextval('question_back_assignment_order_seq');
+
 create trigger t_name before update on question_back_assignment for each row execute procedure upd_timestamp();
 
 create table if not exists student_answer(
