@@ -9,15 +9,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Builder
-public class QuestionBackAssignmentEntity {
+public class ChapterSectionCoursewareEntity {
 
-    private String assignmentId;
+    private String relativeId;
 
-    private String questionId;
+    private String coursewareId;
 
-    private int order;
-
-    private Integer score;
+    private int type;
 
     private LocalDateTime createdAt;
 

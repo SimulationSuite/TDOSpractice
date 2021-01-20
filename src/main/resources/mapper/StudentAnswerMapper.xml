@@ -5,26 +5,28 @@
 <mapper namespace="org.tdos.tdospractice.mapper.StudentAnswerMapper">
 
     <select  id="getStudentAnswerByCourseId" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">
-        select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
-        a.created_at as createdAt, a.updated_at as updatedAt
-        from assignment a
+        select sa.id, sa.question_id as questionId, sa.assignment_id as assignmentId, sa.user_id as userId,
+        sa.answer, sa.score, sa.created_at as createdAt, sa.updated_at as updatedAt
+        from student_answer sa
+        inner join assignment a on a.id = sa.assignment_id::uuid
         inner join course_chapter_section ccs on ccs.section_id = a.section_id::uuid
         where ccs.course_id =#{courseId}::uuid;
     </select>
 
     <select  id="getStudentAnswerByChapterId" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">
-        select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
-        a.created_at as createdAt, a.updated_at as updatedAt
-        from assignment a
+        select sa.id, sa.question_id as questionId, sa.assignment_id as assignmentId, sa.user_id as userId,
+        sa.answer, sa.score, sa.created_at as createdAt, sa.updated_at as updatedAt
+        from student_answer sa
+        inner join assignment a on a.id = sa.assignment_id::uuid
         inner join course_chapter_section ccs on ccs.section_id = a.section_id::uuid
         where ccs.chapter_id =#{chapterId}::uuid;
     </select>
 
     <select  id="getStudentAnswerBySectionId" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">
-        select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
-        a.created_at as createdAt, a.updated_at as updatedAt
-        from assignment a
-        inner join course_chapter_section ccs on ccs.section_id = a.section_id::uuid
+        select sa.id, sa.question_id as questionId, sa.assignment_id as assignmentId, sa.user_id as userId,
+        sa.answer, sa.score, sa.created_at as createdAt, sa.updated_at as updatedAt
+        from student_answer sa
+        inner join assignment a on a.id = sa.assignment_id::uuid
         where a.section_id =#{sectionId}::uuid;
     </select>
 
@@ -42,11 +44,27 @@
     </select>
 
     <update id="modifyStudentAnswerById">
-        update student_answer set name = #{name}, end_at = #{endAt}, qualified_score = #{qualifiedScore} where id=#{id}::uuid;
+        update student_answer set answer = #{answer}, score = #{score} where id=#{id}::uuid;
     </update>
 
     <insert id="addStudentAnswer" useGeneratedKeys="true" keyProperty="id">
-        insert into student_answer (section_id, name, end_at, qualified_score) values (#{sectionId}, #{name}, #{endAt}, #{qualifiedScore});
+        insert into student_answer (uestion_id, assignment_id, user_id, answer, score)
+        values
+        (#{questionId}, #{assignmentId}, #{userId}, #{answer}, #{score});
+    </insert>
+
+    <insert id="addStudentAnswerList" parameterType="java.util.List">
+        insert into student_answer (question_id, assignment_id, user_id, answer, score)
+        values
+        <foreach collection="studentAnswerList" item="item" separator=",">
+            (
+            #{item.questionId},
+            #{item.assignmentId},
+            #{item.userId},
+            #{item.answer},
+            #{item.score}
+            )
+        </foreach>
     </insert>
 
 </mapper>

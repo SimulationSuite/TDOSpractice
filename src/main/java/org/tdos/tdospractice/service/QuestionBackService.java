@@ -21,4 +21,6 @@ public interface QuestionBackService {
 
     QuestionBackAssignmentEntity addQuestionBackAssignment(QuestionBackAssignment questionBackAssignment);
 
+    List<QuestionBackAssignmentEntity> addQuestionBackAssignmentList(List<QuestionBackAssignment> questionBackAssignmentList);
+
 }

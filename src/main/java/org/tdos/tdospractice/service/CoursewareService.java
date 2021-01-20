@@ -3,13 +3,15 @@ package org.tdos.tdospractice.service;
 import com.github.pagehelper.PageInfo;
 import org.tdos.tdospractice.entity.CoursewareEntity;
 import org.tdos.tdospractice.body.Courseware;
-import org.tdos.tdospractice.entity.SectionCoursewareEntity;
-import org.tdos.tdospractice.body.SectionCourseware;
+import org.tdos.tdospractice.entity.ChapterSectionCoursewareEntity;
+import org.tdos.tdospractice.body.ChapterSectionCourseware;
 
 import java.util.List;
 import java.util.Map;
 
 public interface CoursewareService {
+    PageInfo<CoursewareEntity> getCoursewareAll(Integer perPage, Integer page);
+
     PageInfo<CoursewareEntity> getCoursewareByClassId(String classId, Integer perPage, Integer page);
 
     PageInfo<CoursewareEntity> getCoursewareBySectionId(String sectionId, Integer perPage,Integer page);
@@ -24,6 +26,6 @@ public interface CoursewareService {
 
     Map<String, Object> modifyCoursewareNameById(Courseware courseware);
 
-    SectionCoursewareEntity addSectionCourseware(SectionCourseware sectionCourseware);
+    ChapterSectionCoursewareEntity addChapterSectionCourseware(ChapterSectionCourseware chapterSectionCourseware);
 }
 

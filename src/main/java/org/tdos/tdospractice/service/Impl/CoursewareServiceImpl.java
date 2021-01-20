@@ -5,11 +5,11 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tdos.tdospractice.entity.CoursewareEntity;
-import org.tdos.tdospractice.entity.SectionCoursewareEntity;
+import org.tdos.tdospractice.entity.ChapterSectionCoursewareEntity;
 import org.tdos.tdospractice.mapper.CoursewareMapper;
 import org.tdos.tdospractice.service.CoursewareService;
 import org.tdos.tdospractice.body.Courseware;
-import org.tdos.tdospractice.body.SectionCourseware;
+import org.tdos.tdospractice.body.ChapterSectionCourseware;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +21,13 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
 
     @Autowired
     private CoursewareMapper coursewareMapper;
+
+    @Override
+    public PageInfo<CoursewareEntity> getCoursewareAll(Integer perPage,Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<CoursewareEntity> list = coursewareMapper.getCoursewareAll();
+        return new PageInfo<>(list);
+    }
 
     @Override
     public PageInfo<CoursewareEntity> getCoursewareByClassId(String classId, Integer perPage,Integer page) {
@@ -88,16 +95,17 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
     }
 
     @Override
-    public SectionCoursewareEntity addSectionCourseware(SectionCourseware sectionCourseware) {
-        SectionCoursewareEntity sectionCoursewareEntity = new SectionCoursewareEntity();
-        sectionCoursewareEntity.setSectionId(sectionCourseware.sectionId);
-        sectionCoursewareEntity.setCoursewareId(sectionCourseware.coursewareId);
+    public ChapterSectionCoursewareEntity addChapterSectionCourseware(ChapterSectionCourseware sectionCourseware) {
+        ChapterSectionCoursewareEntity chapterSectionCoursewareEntity = new ChapterSectionCoursewareEntity();
+        chapterSectionCoursewareEntity.setRelativeId(sectionCourseware.relativeId);
+        chapterSectionCoursewareEntity.setCoursewareId(sectionCourseware.coursewareId);
+        chapterSectionCoursewareEntity.setType(sectionCourseware.type);
         try {
-            coursewareMapper.addSectionCourseware(sectionCoursewareEntity);
+            coursewareMapper.addChapterSectionCourseware(chapterSectionCoursewareEntity);
         } catch (Exception e) {
-            return sectionCoursewareEntity;
+            return chapterSectionCoursewareEntity;
         }
-        return sectionCoursewareEntity;
+        return chapterSectionCoursewareEntity;
     }
 
     @Override

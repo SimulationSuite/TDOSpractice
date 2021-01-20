@@ -5,12 +5,15 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.tdos.tdospractice.entity.CoursewareEntity;
 import org.tdos.tdospractice.entity.SectionCoursewareEntity;
+import org.tdos.tdospractice.entity.ChapterSectionCoursewareEntity;
 
 import java.util.List;
 
 @Mapper
 @Repository
 public interface CoursewareMapper {
+    List<CoursewareEntity> getCoursewareAll();
+
     List<CoursewareEntity> getCoursewareByClassId(@Param("classId") String classId);
 
     List<CoursewareEntity> getCoursewareBySectionId(@Param("sectionId") String sectionId);
@@ -29,7 +32,7 @@ public interface CoursewareMapper {
 
     boolean ifSectionCoursewarePub(String id);
 
-    int addSectionCourseware(SectionCoursewareEntity sectionCoursewareEntity);
+    int addChapterSectionCourseware(ChapterSectionCoursewareEntity chapterSectionCoursewareEntity);
 
     int hasSectionCoursewareId(String id);
 }
