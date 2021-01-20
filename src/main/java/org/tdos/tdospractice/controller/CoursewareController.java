@@ -20,6 +20,12 @@ public class CoursewareController {
     @Autowired
     private CoursewareService coursewareService;
 
+    @GetMapping(value = "/getCoursewareAll")
+    public Response<PageInfo<CoursewareEntity>> getCoursewareAll(@RequestParam(value = "perPage") Integer perPage,
+                                                                 @RequestParam(value = "page") Integer page) {
+        return Response.success(coursewareService.getCoursewareAll(perPage, page));
+    }
+
     @GetMapping(value = "/getCoursewareByClassId")
     public Response<PageInfo<CoursewareEntity>> getCoursewareByClassId(@RequestParam(value = "classId") String classId,
                                                                        @RequestParam(value = "perPage") Integer perPage,

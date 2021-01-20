@@ -12,6 +12,8 @@ import java.util.List;
 @Mapper
 @Repository
 public interface CoursewareMapper {
+    List<CoursewareEntity> getCoursewareAll();
+
     List<CoursewareEntity> getCoursewareByClassId(@Param("classId") String classId);
 
     List<CoursewareEntity> getCoursewareBySectionId(@Param("sectionId") String sectionId);
