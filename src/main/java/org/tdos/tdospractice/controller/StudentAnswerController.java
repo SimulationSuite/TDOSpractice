@@ -5,12 +5,11 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 import org.tdos.tdospractice.body.DeleteIdList;
 import org.tdos.tdospractice.entity.StudentAnswerEntity;
-import org.tdos.tdospractice.service.ClassService;
-import org.tdos.tdospractice.service.SecurityService;
 import org.springframework.web.bind.annotation.RestController;
 import org.tdos.tdospractice.service.StudentAnswerService;
 import org.tdos.tdospractice.type.Response;
 import org.tdos.tdospractice.body.StudentAnswer;
+import org.tdos.tdospractice.body.StudentAnswerList;
 
 import java.util.*;
 
@@ -55,6 +54,11 @@ public class StudentAnswerController {
     @PostMapping(value = "/modifyStudentAnswerById")
     public Response<Boolean> modifyStudentAnswerById(@RequestBody StudentAnswer studentAnswer) {
         return Response.success(studentAnswerService.modifyStudentAnswerById(studentAnswer));
+    }
+
+    @PostMapping(value = "/addStudentAnswerList")
+    public Response<List<StudentAnswerEntity>> addStudentAnswerList(@RequestBody StudentAnswerList studentAnswerList) {
+        return Response.success(studentAnswerService.addStudentAnswerList(studentAnswerList.studentAnswerList));
     }
 
 }

@@ -91,4 +91,26 @@ public class StudentAnswerServiceImpl implements StudentAnswerService {
         return true;
     }
 
+    @Override
+    public List<StudentAnswerEntity> addStudentAnswerList(List<StudentAnswer> studentAnswerList) {
+        List<StudentAnswerEntity> studentAnswerEntityList = new ArrayList<StudentAnswerEntity>();
+        studentAnswerList.forEach(x -> {
+            StudentAnswerEntity studentAnswerEntity = new StudentAnswerEntity();
+            studentAnswerEntity.setQuestionId(x.questionId);
+            studentAnswerEntity.setAssignmentId(x.assignmentId);
+            studentAnswerEntity.setUserId(x.userId);
+            studentAnswerEntity.setAnswer(x.answer);
+            studentAnswerEntity.setScore(x.score);
+            studentAnswerEntityList.add(studentAnswerEntity);
+        });
+
+        try {
+            studentAnswerMapper.addStudentAnswerList(studentAnswerEntityList);
+        } catch (Exception e) {
+            System.out.println(e);
+            return studentAnswerEntityList;
+        }
+        return studentAnswerEntityList;
+    }
+
 }

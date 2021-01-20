@@ -21,4 +21,6 @@ public interface StudentAnswerService {
 
     Boolean modifyStudentAnswerById(StudentAnswer studentAnswer);
 
+    List<StudentAnswerEntity> addStudentAnswerList(List<StudentAnswer> studentAnswerList);
+
 }

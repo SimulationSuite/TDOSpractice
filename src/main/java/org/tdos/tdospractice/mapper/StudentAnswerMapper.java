@@ -25,4 +25,6 @@ public interface StudentAnswerMapper {
 
     int addStudentAnswer(StudentAnswerEntity studentAnswer);
 
+    int addStudentAnswerList(@Param("studentAnswerList") List<StudentAnswerEntity> studentAnswerList);
+
 }
