@@ -1,6 +1,6 @@
 package org.tdos.tdospractice.body;
 
-public class AddSections {
+public class AddSmallSection {
 
     public String id;
 

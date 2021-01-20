@@ -13,10 +13,7 @@ import org.tdos.tdospractice.body.PrepareCourse;
 import org.tdos.tdospractice.entity.CourseChapterSectionEntity;
 import org.tdos.tdospractice.mapper.*;
 import org.tdos.tdospractice.service.CourseService;
-import org.tdos.tdospractice.type.Chapter;
-import org.tdos.tdospractice.type.ClassNumber;
-import org.tdos.tdospractice.type.Course;
-import org.tdos.tdospractice.type.Section;
+import org.tdos.tdospractice.type.*;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -43,6 +40,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private ClassMapper classMapper;
+
+    @Autowired
+    private SmallSectionMapper smallSectionMapper;
 
     @Override
     public PageInfo<Course> getAdminCourseList(Integer perPage, Integer page, String name) {
@@ -137,11 +137,16 @@ public class CourseServiceImpl implements CourseService {
                 Section section = new Section();
                 section.name = y.name;
                 section.order = y.order;
+                section.smallSections = y.smallSections.stream().map(z->{
+                    SmallSection smallSection = new SmallSection();
+                    smallSection.name = z.name;
+                    smallSection.order = z.order;
+                    return smallSection;
+                }).collect(Collectors.toList());
                 return section;
             }).collect(Collectors.toList());
             return chapter;
         }).collect(Collectors.toList());
-
         return writeCourse(course);
     }
 
@@ -192,15 +197,21 @@ public class CourseServiceImpl implements CourseService {
             chapterMapper.insertChapter(x);
             x.sections.forEach(section -> {
                 sectionMapper.insertSection(section);
-                list.add(CourseChapterSectionEntity.builder().courseId(course.id)
-                        .chapterId(x.id)
-                        .sectionId(section.id)
-                        .build());
+                section.smallSections.forEach(smallSection -> {
+                    smallSectionMapper.insertSmallSection(smallSection);
+                    list.add(CourseChapterSectionEntity.builder().courseId(course.id)
+                            .chapterId(x.id)
+                            .sectionId(section.id)
+                            .smallSectionId(smallSection.id)
+                            .build());
+                });
+
             });
         });
         courseChapterSectionMapper.insertCourseChapterSectionList(list);
-        course.chapters.forEach(s -> {
-            s.sections = s.sections.stream().sorted(Comparator.comparing(Section::getOrder)).collect(Collectors.toList());
+        course.chapters.forEach(c -> {
+            c.sections = c.sections.stream().sorted(Comparator.comparing(Section::getOrder)).collect(Collectors.toList());
+            c.sections.forEach(section -> section.smallSections = section.smallSections.stream().sorted(Comparator.comparing(SmallSection::getOrder)).collect(Collectors.toList()));
         });
         course.chapters = course.chapters.stream().sorted(Comparator.comparing(Chapter::getOrder)).collect(Collectors.toList());
         return course;

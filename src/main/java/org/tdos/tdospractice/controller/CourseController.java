@@ -3,7 +3,6 @@ package org.tdos.tdospractice.controller;
 import com.github.pagehelper.PageInfo;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 import org.tdos.tdospractice.body.AddCourse;
 import org.tdos.tdospractice.body.ModifyCourseStatus;
@@ -92,5 +91,6 @@ public class CourseController {
     public Response<Course> getCourseById(@RequestParam(value = "course_id") String courseId) {
         return Response.success(courseService.getCourseById(courseId));
     }
+
 
 }

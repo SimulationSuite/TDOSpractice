@@ -4,18 +4,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-public class AddChapter {
+public class AddSection {
 
     public String id;
 
     public String name;
 
-    @JsonProperty("introduction")
-    public String introduction;
-
     public int order;
 
-    public List<AddSection> sections;
-
+    @JsonProperty("small_sections")
+    public List<AddSmallSection> smallSections;
 
 }

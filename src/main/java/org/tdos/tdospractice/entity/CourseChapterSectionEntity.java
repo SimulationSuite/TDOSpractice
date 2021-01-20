@@ -13,6 +13,8 @@ public class CourseChapterSectionEntity {
 
     private String sectionId;
 
+    private String smallSectionId;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

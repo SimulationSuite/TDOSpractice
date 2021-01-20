@@ -5,22 +5,24 @@
 <mapper namespace="org.tdos.tdospractice.mapper.CourseChapterSectionMapper">
 
     <insert id="insertCourseChapterSectionList" parameterType="java.util.List" useGeneratedKeys="false">
-        insert into course_chapter_section(course_id, chapter_id, section_id) values
+        insert into course_chapter_section(course_id, chapter_id, section_id, small_section_id) values
         <foreach collection="list" item="item" index="index" separator=",">
             (
             #{item.courseId}::uuid,
             #{item.chapterId}::uuid,
-            #{item.sectionId}::uuid
+            #{item.sectionId}::uuid,
+            #{item.smallSectionId}::uuid
             )
         </foreach>
     </insert>
 
     <insert id="insertCourseChapterSection" useGeneratedKeys="false">
-        insert into course_chapter_section(course_id, chapter_id, section_id) values
+        insert into course_chapter_section(course_id, chapter_id, section_id, small_section_id) values
             (
             #{courseId}::uuid,
             #{chapterId}::uuid,
-            #{sectionId}::uuid
+            #{sectionId}::uuid,
+             #{item.smallSectionId}::uuid
             );
     </insert>
 

@@ -47,13 +47,22 @@ create table if not exists class_course(
 
 create trigger t_name before update on class_course for each row execute procedure upd_timestamp();
 
+create table if not exists small_section(
+    id UUID primary key DEFAULT uuid_generate_v4(),
+    "name" varchar(255) not null,
+    "order" int4 NOT NULL,
+    created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
+    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
+);
+
 create table if not exists course_chapter_section(
     course_id UUID NOT NULL,
     chapter_id UUID NOT NULL,
     section_id UUID NOT NULL,
+    small_section_id UUID NOT NULL,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    CONSTRAINT "course_chapter_section_pk" PRIMARY KEY ( "course_id", "chapter_id", "section_id")
+    CONSTRAINT "course_chapter_section_pk" PRIMARY KEY ( "course_id", "chapter_id", "section_id", "small_section_id")
 );
 
 create trigger t_name before update on course_chapter_section for each row execute procedure upd_timestamp();
@@ -100,12 +109,13 @@ create table if not exists section(
 
 create trigger t_name before update on section for each row execute procedure upd_timestamp();
 
-create table if not exists section_courseware(
-    section_id varchar(255) NOT NULL,
+create table if not exists chapter_section_courseware(
+    relative_id varchar(255) NOT NULL,
     courseware_id varchar(255) NOT NULL,
+    "type" int4 default 0,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    CONSTRAINT "section_courseware_pk" PRIMARY KEY ( "section_id", "courseware_id")
+    CONSTRAINT "chapter_section_courseware_pk" PRIMARY KEY ( "relative_id", "courseware_id")
 );
 
 create trigger t_name before update on section_courseware for each row execute procedure upd_timestamp();
