@@ -17,6 +17,8 @@ public class QuestionBackAssignmentEntity {
 
     private int order;
 
+    private Integer score;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

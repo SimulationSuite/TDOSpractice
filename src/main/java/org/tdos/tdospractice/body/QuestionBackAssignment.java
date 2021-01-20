@@ -10,4 +10,7 @@ public class QuestionBackAssignment {
     @JsonProperty("question_id")
     public String questionId;
 
+    @JsonProperty("score")
+    public Integer score;
+
 }

@@ -84,12 +84,31 @@ public class QuestionBackServiceImpl implements QuestionBackService {
         QuestionBackAssignmentEntity questionBackAssignmentEntity = new QuestionBackAssignmentEntity();
         questionBackAssignmentEntity.setAssignmentId(questionBackAssignment.assignmentId);
         questionBackAssignmentEntity.setQuestionId(questionBackAssignment.questionId);
+        questionBackAssignmentEntity.setScore(questionBackAssignment.score);
         try {
             questionBackMapper.addQuestionBackAssignment(questionBackAssignmentEntity);
         } catch (Exception e) {
             return questionBackAssignmentEntity;
         }
         return questionBackAssignmentEntity;
+    }
+
+    @Override
+    public List<QuestionBackAssignmentEntity> addQuestionBackAssignmentList(List<QuestionBackAssignment> questionBackAssignmentList) {
+        List<QuestionBackAssignmentEntity> questionBackAssignmentEntityList = new ArrayList<QuestionBackAssignmentEntity>();
+        questionBackAssignmentList.forEach(x -> {
+            QuestionBackAssignmentEntity questionBackAssignmentEntity = new QuestionBackAssignmentEntity();
+            questionBackAssignmentEntity.setAssignmentId(x.assignmentId);
+            questionBackAssignmentEntity.setQuestionId(x.questionId);
+            questionBackAssignmentEntity.setScore(x.score);
+            questionBackAssignmentEntityList.add(questionBackAssignmentEntity);
+        });
+        try {
+            questionBackMapper.addQuestionBackAssignmentList(questionBackAssignmentEntityList);
+        } catch (Exception e) {
+            return questionBackAssignmentEntityList;
+        }
+        return questionBackAssignmentEntityList;
     }
 
 }

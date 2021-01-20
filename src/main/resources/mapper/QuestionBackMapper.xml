@@ -38,9 +38,21 @@
     </insert>
 
     <insert id="addQuestionBackAssignment" useGeneratedKeys="true" keyProperty="id">
-        insert into QuestionBackAssignment (assignment_id, question_id)
+        insert into QuestionBackAssignment (assignment_id, question_id, score)
         values
-        (#{assignmentId}, #{questionId});
+        (#{assignmentId}, #{questionId}, #{score});
+    </insert>
+
+    <insert id="addQuestionBackAssignmentList" parameterType="java.util.List">
+        insert into QuestionBackAssignment (assignment_id, question_id, score)
+        values
+        <foreach collection="questionBackAssignmentList" item="item" separator=",">
+            (
+            #{item.assignmentId},
+            #{item.questionId},
+            #{item.score}
+            )
+        </foreach>
     </insert>
 
 </mapper>

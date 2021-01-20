@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.*;
 import org.tdos.tdospractice.body.DeleteIdList;
+import org.tdos.tdospractice.entity.QuestionBackAssignmentEntity;
 import org.tdos.tdospractice.entity.QuestionBackEntity;
 import org.tdos.tdospractice.service.ClassService;
 import org.tdos.tdospractice.service.SecurityService;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.tdos.tdospractice.service.QuestionBackService;
 import org.tdos.tdospractice.type.Response;
 import org.tdos.tdospractice.body.QuestionBack;
+import org.tdos.tdospractice.body.QuestionBackAssignment;
+import org.tdos.tdospractice.body.QuestionBackAssignmentList;
 
 import java.util.*;
 
@@ -39,6 +42,11 @@ public class QuestionBackController {
     @PostMapping(value = "/modifyQuestionBackById")
     public Response<Boolean> modifyQuestionBackById(@RequestBody QuestionBack qestionBack) {
         return Response.success(questionBackService.modifyQuestionBackById(qestionBack));
+    }
+
+    @PostMapping(value = "/addQuestionBackAssignmentList")
+    public Response<List<QuestionBackAssignmentEntity>> addQuestionBackAssignmentList(@RequestBody QuestionBackAssignmentList questionBackAssignmentList) {
+        return Response.success(questionBackService.addQuestionBackAssignmentList(questionBackAssignmentList.questionBackAssignmentList));
     }
 
 }
