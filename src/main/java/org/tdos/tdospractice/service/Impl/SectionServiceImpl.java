@@ -27,6 +27,8 @@ public class SectionServiceImpl implements SectionService {
     @Autowired
     private CourseChapterSectionMapper courseChapterSectionMapper;
 
+    private static final String EMPTY_UUID = "fb0a1080-b11e-427c-8567-56ca6105ea07";
+
     @Override
     public Pair<Boolean, String> modifySectionNameById(String id, String sectionName) {
         if (sectionMapper.hasSection(id) > 0) {
@@ -58,6 +60,7 @@ public class SectionServiceImpl implements SectionService {
                 .courseId(insertSection.courseId)
                 .chapterId(insertSection.chapterId)
                 .sectionId(section.id)
+                .smallSectionId(EMPTY_UUID)
                 .build());
         return new Pair<>(true, "");
     }

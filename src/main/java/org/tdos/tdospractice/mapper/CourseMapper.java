@@ -26,11 +26,13 @@ public interface CourseMapper {
 
     Integer findCourseChapterSectionOrder(String courseId, String chapterId);
 
+    Integer findSmallSectionOrder(String sectionId);
+
     int modifyCourseStatus(String courseId,String start,String end);
 
     List<Course> getCourseList(String userId, String start, String end);
 
-    List<Course> getAdminUnpublishedCourseList();
+    List<Course> getAdminUnpublishedCourseList(String userId,String name);
 
     Course getCourseById(String courseId);
 }

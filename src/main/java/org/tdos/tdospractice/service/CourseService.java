@@ -22,7 +22,7 @@ public interface CourseService {
 
     Pair<Boolean, String> modifyCourseStatus(ModifyCourseStatus modifyCourseStatus);
 
-    PageInfo<Course> getAdminUnpublishedCourseList(String userId, Integer perPage, Integer page);
+    PageInfo<Course> getAdminUnpublishedCourseList(String userId, Integer perPage, Integer page, String name);
 
     PageInfo<Course> getCourseList(String userId, String start, String end, Integer perPage, Integer page);
 

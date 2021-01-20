@@ -54,6 +54,7 @@ public class ChapterServiceImpl implements ChapterService {
                 .courseId(insertChapter.courseId)
                 .chapterId(chapter.id)
                 .sectionId(EMPTY_UUID)
+                .smallSectionId(EMPTY_UUID)
                 .build());
         return new Pair<>(true, "");
     }

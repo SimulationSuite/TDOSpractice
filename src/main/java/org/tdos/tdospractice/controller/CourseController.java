@@ -71,8 +71,9 @@ public class CourseController {
     @GetMapping(value = "/get_admin_unpublished_course_list")
     public Response<PageInfo<Course>> getAdminUnpublishedCourseList(@RequestParam(value = "user_id") String userId,
                                                                     @RequestParam(value = "per_page") Integer perPage,
-                                                                    @RequestParam(value = "page") Integer page) {
-        return Response.success(courseService.getAdminUnpublishedCourseList(userId, perPage, page));
+                                                                    @RequestParam(value = "page") Integer page,
+                                                                    @RequestParam(value = "name", required = false) String name) {
+        return Response.success(courseService.getAdminUnpublishedCourseList(userId, perPage, page, name));
     }
 
     // 学生端查询课程

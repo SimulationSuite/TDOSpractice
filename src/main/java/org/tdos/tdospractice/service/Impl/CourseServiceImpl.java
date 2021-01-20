@@ -137,7 +137,7 @@ public class CourseServiceImpl implements CourseService {
                 Section section = new Section();
                 section.name = y.name;
                 section.order = y.order;
-                section.smallSections = y.smallSections.stream().map(z->{
+                section.smallSections = y.smallSections.stream().map(z -> {
                     SmallSection smallSection = new SmallSection();
                     smallSection.name = z.name;
                     smallSection.order = z.order;
@@ -167,16 +167,16 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public PageInfo<Course> getAdminUnpublishedCourseList(String userId, Integer perPage, Integer page) {
+    public PageInfo<Course> getAdminUnpublishedCourseList(String userId, Integer perPage, Integer page, String name) {
         PageHelper.startPage(page, perPage);
-        List<Course> courses = courseMapper.getAdminUnpublishedCourseList();
+        List<Course> courses = courseMapper.getAdminUnpublishedCourseList(userId, name);
         courses.forEach(x -> {
             x.chapters.forEach(s -> {
                 s.sections = s.sections.stream().sorted(Comparator.comparing(Section::getOrder)).collect(Collectors.toList());
             });
             x.chapters = x.chapters.stream().sorted(Comparator.comparing(Chapter::getOrder)).collect(Collectors.toList());
         });
-        courses = courses.stream().filter(x -> x.status == 0 && x.ownerId.equals(userId)).sorted(Comparator.comparing(x -> x.name)).collect(Collectors.toList());
+        courses = courses.stream().sorted(Comparator.comparing(x -> x.name)).collect(Collectors.toList());
         List<ClassNumber> classNumbers = classMapper.findClassNumber();
         courses.forEach(x -> classNumbers.forEach(classNumber -> {
             if (!ObjectUtils.isEmpty(x.classId) && x.classId.equals(classNumber.classId)) {

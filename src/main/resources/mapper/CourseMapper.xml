@@ -56,7 +56,10 @@ chapter.id ::"varchar" as chapter_id, chapter.name as chapter_name, chapter.intr
 section.id ::"varchar" as section_id, section.name as section_name, section."order" as section_order
 from course_chapter_section ccs
 left join class_course cc on cc.course_id::uuid = ccs.course_id
-inner join course c on c.id = ccs.course_id and c.type = 0 and c.status = 0
+inner join course c on c.id = ccs.course_id and c.type = 0 and c.status = 0 and c.owner_id = #{userId}
+<if test="name != null">
+    and c.name like  concat('%',#{name},'%')
+</if>
 inner join chapter on chapter.id = ccs.chapter_id
 inner join "section" on "section".id = ccs.section_id
     </select>
@@ -103,6 +106,10 @@ inner join "section" on "section".id = ccs.section_id order by c.created_at desc
 
     <select  id="findCourseChapterSectionOrder" resultType="java.lang.Integer">
         select max("section"."order") from section inner join course_chapter_section ccs on ccs.section_id = section.id where course_id= #{courseId}::uuid and chapter_id= #{chapterId}::uuid
+    </select>
+
+    <select  id="findSmallSectionOrder" resultType="java.lang.Integer">
+        select max("small_section"."order") from small_section inner join course_chapter_section ccs on ccs.small_section_id = small_section.id and ccs.section_id= #{sectionId}::uuid
     </select>
 
     <update  id="modifyCourseStatus">

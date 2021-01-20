@@ -22,7 +22,7 @@
             #{courseId}::uuid,
             #{chapterId}::uuid,
             #{sectionId}::uuid,
-             #{item.smallSectionId}::uuid
+            #{smallSectionId}::uuid
             );
     </insert>
 
