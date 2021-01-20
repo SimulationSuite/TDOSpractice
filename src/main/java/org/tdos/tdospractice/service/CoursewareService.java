@@ -3,8 +3,8 @@ package org.tdos.tdospractice.service;
 import com.github.pagehelper.PageInfo;
 import org.tdos.tdospractice.entity.CoursewareEntity;
 import org.tdos.tdospractice.body.Courseware;
-import org.tdos.tdospractice.entity.SectionCoursewareEntity;
-import org.tdos.tdospractice.body.SectionCourseware;
+import org.tdos.tdospractice.entity.ChapterSectionCoursewareEntity;
+import org.tdos.tdospractice.body.ChapterSectionCourseware;
 
 import java.util.List;
 import java.util.Map;
@@ -24,6 +24,6 @@ public interface CoursewareService {
 
     Map<String, Object> modifyCoursewareNameById(Courseware courseware);
 
-    SectionCoursewareEntity addSectionCourseware(SectionCourseware sectionCourseware);
+    ChapterSectionCoursewareEntity addChapterSectionCourseware(ChapterSectionCourseware chapterSectionCourseware);
 }
 

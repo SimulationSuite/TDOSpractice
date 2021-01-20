@@ -4,14 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 import org.tdos.tdospractice.entity.CoursewareEntity;
-import org.tdos.tdospractice.entity.SectionCoursewareEntity;
+import org.tdos.tdospractice.entity.ChapterSectionCoursewareEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.tdos.tdospractice.service.CoursewareService;
 import org.tdos.tdospractice.type.Response;
 import org.tdos.tdospractice.body.CoursewareIdList;
 import org.tdos.tdospractice.body.Courseware;
-import org.tdos.tdospractice.body.SectionCourseware;
+import org.tdos.tdospractice.body.ChapterSectionCourseware;
 import java.util.*;
 
 @RestController
@@ -64,9 +64,9 @@ public class CoursewareController {
         return Response.success(coursewareService.modifyCoursewareNameById(courseware));
     }
 
-    @PostMapping(value = "/addSectionCourseware")
-    public Response<SectionCoursewareEntity> addSectionCourseware(@RequestBody SectionCourseware sectionCourseware) {
-        return Response.success(coursewareService.addSectionCourseware(sectionCourseware));
+    @PostMapping(value = "/addChapterSectionCourseware")
+    public Response<ChapterSectionCoursewareEntity> addChapterSectionCourseware(@RequestBody ChapterSectionCourseware chapterSectionCourseware) {
+        return Response.success(coursewareService.addChapterSectionCourseware(chapterSectionCourseware));
     }
 
 }
