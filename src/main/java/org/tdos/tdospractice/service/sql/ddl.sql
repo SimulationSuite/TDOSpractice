@@ -118,7 +118,9 @@ create table if not exists chapter_section_courseware(
     CONSTRAINT "chapter_section_courseware_pk" PRIMARY KEY ( "relative_id", "courseware_id")
 );
 
-create trigger t_name before update on section_courseware for each row execute procedure upd_timestamp();
+comment on column chapter_section_courseware."type" is '0 是章ID 1是节ID';
+
+create trigger t_name before update on chapter_section_courseware for each row execute procedure upd_timestamp();
 
 create table if not exists courseware(
     id UUID primary key DEFAULT uuid_generate_v4(),
@@ -225,7 +227,6 @@ create trigger t_name before update on student_score for each row execute proced
 
 create table if not exists experiment(
     id UUID primary key DEFAULT uuid_generate_v4(),
-    section_id varchar(255) DEFAULT null,
     "name" varchar(255) NOT NULL,
     pic_url varchar(255) DEFAULT null,
     end_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
@@ -240,6 +241,18 @@ create table if not exists experiment(
 
 create trigger t_name before update on experiment for each row execute procedure upd_timestamp();
 
+create table if not exists chapter_section_experiment(
+    relative_id varchar(255) NOT NULL,
+    experiment_id varchar(255) NOT NULL,
+    "type" int4 default 0,
+    created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
+    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
+    CONSTRAINT "chapter_section_courseware_pk" PRIMARY KEY ( "relative_id", "experiment_id")
+);
+
+comment on column chapter_section_experiment."type" is '0 是章ID 1是节ID';
+
+create trigger t_name before update on chapter_section_experiment for each row execute procedure upd_timestamp();
 
 create table if not exists experiment_image(
     experiment_id UUID NOT NULL,
