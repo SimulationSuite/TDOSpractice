@@ -247,7 +247,7 @@ create table if not exists chapter_section_experiment(
     "type" int4 default 0,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    CONSTRAINT "chapter_section_courseware_pk" PRIMARY KEY ( "relative_id", "experiment_id")
+    CONSTRAINT "chapter_section_experiment_pk" PRIMARY KEY ( "relative_id", "experiment_id")
 );
 
 comment on column chapter_section_experiment."type" is '0 是章ID 1是节ID';
