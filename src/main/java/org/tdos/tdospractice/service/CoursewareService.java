@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface CoursewareService {
-    PageInfo<CoursewareEntity> getCoursewareAll(Integer perPage, Integer page);
+    PageInfo<CoursewareEntity> getCoursewareAll(String name, Integer kind, Integer type, Integer perPage, Integer page);
 
     PageInfo<CoursewareEntity> getCoursewareByClassId(String classId, Integer perPage, Integer page);
 
