@@ -27,4 +27,6 @@ public interface CourseService {
     PageInfo<Course> getCourseList(String userId, String start, String end, Integer perPage, Integer page);
 
     Course getCourseById(String courseId);
+
+    PageInfo<Course> getExpiredList(Integer perPage, Integer page);
 }

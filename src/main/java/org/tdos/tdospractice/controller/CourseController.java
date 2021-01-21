@@ -22,7 +22,7 @@ public class CourseController {
     public Response<PageInfo<Course>> getAdminCourseList(@RequestParam(value = "per_page") Integer perPage,
                                                          @RequestParam(value = "page") Integer page,
                                                          @RequestParam(value = "name", required = false) String name) {
-        return Response.success(courseService.getAdminCourseList(perPage, page,name));
+        return Response.success(courseService.getAdminCourseList(perPage, page, name));
     }
 
     @GetMapping(value = "/get_admin_course_list_by_class_id")
@@ -48,7 +48,7 @@ public class CourseController {
                                                         @RequestParam(value = "per_page") Integer perPage,
                                                         @RequestParam(value = "page") Integer page,
                                                         @RequestParam(value = "name", required = false) String name) {
-        return Response.success(courseService.getCourseListById(userId, perPage, page,name));
+        return Response.success(courseService.getCourseListById(userId, perPage, page, name));
     }
 
     // 管理员添加内置课程
@@ -74,6 +74,12 @@ public class CourseController {
                                                                     @RequestParam(value = "page") Integer page,
                                                                     @RequestParam(value = "name", required = false) String name) {
         return Response.success(courseService.getAdminUnpublishedCourseList(userId, perPage, page, name));
+    }
+
+    @GetMapping(value = "/get_expired_course_list")
+    public Response<PageInfo<Course>> getExpiredList(@RequestParam(value = "per_page") Integer perPage,
+                                                     @RequestParam(value = "page") Integer page) {
+        return Response.success(courseService.getExpiredList(perPage, page));
     }
 
     // 学生端查询课程
