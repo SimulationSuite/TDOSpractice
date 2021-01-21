@@ -208,12 +208,14 @@ public class CourseServiceImpl implements CourseService {
 
             });
         });
-        courseChapterSectionMapper.insertCourseChapterSectionList(list);
-        course.chapters.forEach(c -> {
-            c.sections = c.sections.stream().sorted(Comparator.comparing(Section::getOrder)).collect(Collectors.toList());
-            c.sections.forEach(section -> section.smallSections = section.smallSections.stream().sorted(Comparator.comparing(SmallSection::getOrder)).collect(Collectors.toList()));
-        });
-        course.chapters = course.chapters.stream().sorted(Comparator.comparing(Chapter::getOrder)).collect(Collectors.toList());
+        if (list.size() > 0) {
+            courseChapterSectionMapper.insertCourseChapterSectionList(list);
+            course.chapters.forEach(c -> {
+                c.sections = c.sections.stream().sorted(Comparator.comparing(Section::getOrder)).collect(Collectors.toList());
+                c.sections.forEach(section -> section.smallSections = section.smallSections.stream().sorted(Comparator.comparing(SmallSection::getOrder)).collect(Collectors.toList()));
+            });
+            course.chapters = course.chapters.stream().sorted(Comparator.comparing(Chapter::getOrder)).collect(Collectors.toList());
+        }
         return course;
     }
 
