@@ -250,4 +250,21 @@ public class CourseServiceImpl implements CourseService {
         return course;
     }
 
+    @Override
+    public PageInfo<Course> getExpiredList(Integer perPage, Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<Course> list =  courseMapper.getExpiredList();
+        List<ClassNumber> classNumbers = classMapper.findClassNumber();
+        list.forEach(x -> classNumbers.forEach(classNumber -> {
+            if (!ObjectUtils.isEmpty(x.classId) && x.classId.equals(classNumber.classId)) {
+                x.numbers = classNumber.numbers;
+            }
+        }));
+        list.forEach(c -> {
+            c.chapterNumber = c.chapters.size();
+            c.sectionNumber = c.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
+        });
+        return new PageInfo<>(list);
+    }
+
 }

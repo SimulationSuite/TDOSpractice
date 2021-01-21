@@ -35,4 +35,6 @@ public interface CourseMapper {
     List<Course> getAdminUnpublishedCourseList(String userId,String name);
 
     Course getCourseById(String courseId);
+
+    List<Course> getExpiredList();
 }
