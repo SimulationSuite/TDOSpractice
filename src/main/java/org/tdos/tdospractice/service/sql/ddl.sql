@@ -255,8 +255,8 @@ comment on column chapter_section_experiment."type" is '0 是章ID 1是节ID';
 create trigger t_name before update on chapter_section_experiment for each row execute procedure upd_timestamp();
 
 create table if not exists experiment_image(
-    experiment_id UUID NOT NULL,
-    image_id UUID NOT NULL,
+    experiment_id UUID references "experiment"("id") on delete cascade NOT NULL,
+    image_id UUID references "image"("id") on delete cascade NOT NULL,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     CONSTRAINT "experiment_image_pk" PRIMARY KEY ( "experiment_id", "image_id")
@@ -267,6 +267,7 @@ create trigger t_name before update on experiment_image for each row execute pro
 create table if not exists image(
     id UUID primary key DEFAULT uuid_generate_v4(),
     "name" varchar(255) NOT NULL,
+    "imageid" varchar(255) NOT NULL,
     "size" int8 DEFAULT 0,
     introduction text not null,
     kind int4 DEFAULT 0,
