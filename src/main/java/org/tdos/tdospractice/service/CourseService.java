@@ -21,12 +21,12 @@ public interface CourseService {
     Course AddAdminCourse(AddCourse addCourse);
 
     Pair<Boolean, String> modifyCourseStatus(ModifyCourseStatus modifyCourseStatus);
-
+    // 1
     PageInfo<Course> getAdminUnpublishedCourseList(String userId, Integer perPage, Integer page, String name);
 
     PageInfo<Course> getCourseList(String userId, String start, String end, Integer perPage, Integer page);
 
     Course getCourseById(String courseId);
-
+    // 1
     PageInfo<Course> getExpiredList(Integer perPage, Integer page);
 }

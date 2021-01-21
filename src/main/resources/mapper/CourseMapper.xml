@@ -163,32 +163,114 @@ inner join "section" on "section".id = ccs.section_id order by c.created_at desc
     </update>
 
     <select  id="getCourseList" resultMap="CourseResult">
-        SELECT c.id as course_id,c.name as course_name,c.pic_url,c.owner_id,c.introduction as course_introduction,c.start_at, c.end_at,c.status,c."type",c.model_id,cc.class_id,
-chapter.id as chapter_id, chapter.name as chapter_name, chapter.introduction as chapter_introduction, chapter."order" as chapter_order ,
-section.id as section_id, section.name as section_name, section.order as section_order
-from course_chapter_section ccs
-inner join course c on c.id = ccs.course_id and c.type = 1 and c.status = 1
-        <if test="start != null">
+        SELECT
+        c.id AS course_id,
+        c.NAME AS course_name,
+        c.pic_url,
+        c.owner_id,
+        c.introduction AS course_introduction,
+        c.start_at,
+        c.end_at,
+        c.STATUS,
+        c."type",
+        c.model_id
+        FROM
+        course c
+        Where c.type = 1
+        AND c.STATUS = 1
+        <if test = "start != null" >
             AND c.start_at &gt;= #{start} :: timestamp
         </if>
-        <if test="end != null">
+        <if test = "end != null" >
             AND c.end_at &lt;= #{end} :: timestamp
         </if>
-inner join chapter on chapter.id = ccs.chapter_id
-inner join "section" on "section".id = ccs.section_id
-inner join class_course cc on cc.course_id = ccs.course_id :: varchar
-inner join "sim_user" on sim_user.class_id = cc.class_id and sim_user."id" = #{userId}
+        INNER JOIN class_course cc ON cc.course_id = ccs.course_id ::VARCHAR
+        INNER JOIN "sim_user" ON sim_user.class_id = cc.class_id
+        AND sim_user."id" = #{userId}
+    </select>
+
+    <select  id="getCourseListPerfect" resultMap="CourseResult">
+        SELECT
+        c.id AS course_id,
+        c.NAME AS course_name,
+        c.pic_url,
+        c.owner_id,
+        c.introduction AS course_introduction,
+        c.start_at,
+        c.end_at,
+        c.STATUS,
+        c."type",
+        c.model_id,
+        cc.class_id,
+        chapter.id AS chapter_id,
+        chapter.NAME AS chapter_name,
+        chapter.introduction AS chapter_introduction,
+        chapter."order" AS chapter_order,
+        section.id AS section_id,
+        section.NAME AS section_name,
+        section.ORDER AS section_order
+        FROM
+        course c
+        INNER JOIN course_chapter_section ccs ON  ccs.course_id = c.id
+        INNER JOIN chapter ON chapter.id = ccs.chapter_id
+        INNER JOIN "section" ON "section".id = ccs.section_id
+        INNER JOIN class_course cc ON cc.course_id = ccs.course_id ::VARCHAR
+        INNER JOIN "sim_user" ON sim_user.class_id = cc.class_id
+        WHERE
+        c.id  IN
+        <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
+            #{courseId}::uuid
+        </foreach>
     </select>
 
     <select  id="getExpiredList" resultMap="CourseResult">
-        SELECT c.id as course_id,c.name as course_name,c.pic_url,c.owner_id,c.introduction as course_introduction,c.start_at, c.end_at,c.status,c."type",c.model_id,
-        chapter.id as chapter_id, chapter.name as chapter_name, chapter.introduction as chapter_introduction, chapter."order" as chapter_order ,
-        section.id as section_id, section.name as section_name, section.order as section_order
-        from course_chapter_section ccs
-        inner join course c on c.id = ccs.course_id and c.type = 1 and c.status = 1
-        AND c.end_at &lt; now() :: timestamp
-        inner join chapter on chapter.id = ccs.chapter_id
-        inner join "section" on "section".id = ccs.section_id
+     SELECT
+	c.id AS course_id,
+	c.NAME AS course_name,
+	c.pic_url,
+	c.owner_id,
+	c.introduction AS course_introduction,
+	c.start_at,
+	c.end_at,
+	c.STATUS,
+	c."type",
+	c.model_id
+FROM
+    course c
+	WHERE c.type = 1
+	AND c.STATUS = 1
+	AND c.end_at &lt; now( ) ::TIMESTAMP
+    </select>
+
+    <select  id="getExpiredListPerfect" resultMap="CourseResult">
+        SELECT
+	c.id AS course_id,
+	c.NAME AS course_name,
+	c.pic_url,
+	c.owner_id,
+	c.introduction AS course_introduction,
+	c.start_at,
+	c.end_at,
+	c.STATUS,
+	c."type",
+	c.model_id,
+	chapter.id AS chapter_id,
+	chapter.NAME AS chapter_name,
+	chapter.introduction AS chapter_introduction,
+	chapter."order" AS chapter_order,
+	section.id AS section_id,
+	section.NAME AS section_name,
+	section.ORDER AS section_order
+FROM
+    course c
+	INNER JOIN course_chapter_section ccs ON  ccs.course_id = c.id
+INNER JOIN chapter ON chapter.id = ccs.chapter_id
+INNER JOIN "section" ON "section".id = ccs.section_id
+ WHERE
+    c.id  IN
+<foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
+    #{courseId}::uuid
+</foreach>
     </select>
 
 

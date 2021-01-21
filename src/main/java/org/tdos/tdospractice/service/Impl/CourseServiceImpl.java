@@ -224,6 +224,7 @@ public class CourseServiceImpl implements CourseService {
     public PageInfo<Course> getCourseList(String userId, String start, String end, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
         List<Course> list = courseMapper.getCourseList(userId, start, end);
+        list = courseMapper.getCourseListPerfect(list.stream().map(x->x.id).collect(Collectors.toList()));
         List<ClassNumber> classNumbers = classMapper.findClassNumber();
         list.forEach(x -> classNumbers.forEach(classNumber -> {
             if (!ObjectUtils.isEmpty(x.classId) && x.classId.equals(classNumber.classId)) {
@@ -255,6 +256,7 @@ public class CourseServiceImpl implements CourseService {
     public PageInfo<Course> getExpiredList(Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
         List<Course> list =  courseMapper.getExpiredList();
+        list = courseMapper.getExpiredListPerfect(list.stream().map(x->x.id).collect(Collectors.toList()));
         List<ClassNumber> classNumbers = classMapper.findClassNumber();
         list.forEach(x -> classNumbers.forEach(classNumber -> {
             if (!ObjectUtils.isEmpty(x.classId) && x.classId.equals(classNumber.classId)) {

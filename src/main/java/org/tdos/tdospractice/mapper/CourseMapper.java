@@ -32,6 +32,8 @@ public interface CourseMapper {
 
     List<Course> getCourseList(String userId, String start, String end);
 
+    List<Course> getCourseListPerfect(@Param("courseIds") List<String> courseIds);
+
     List<Course> getAdminUnpublishedCourseList(String userId,String name);
 
     List<Course> getAdminUnpublishedCourseListPerfect(@Param("courseIds") List<String> courseIds);
@@ -39,4 +41,6 @@ public interface CourseMapper {
     Course getCourseById(String courseId);
 
     List<Course> getExpiredList();
+
+    List<Course> getExpiredListPerfect(@Param("courseIds") List<String> courseIds);
 }
