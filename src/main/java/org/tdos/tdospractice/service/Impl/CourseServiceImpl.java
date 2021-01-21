@@ -48,6 +48,7 @@ public class CourseServiceImpl implements CourseService {
     public PageInfo<Course> getAdminCourseList(Integer perPage, Integer page, String name) {
         PageHelper.startPage(page, perPage);
         List<Course> courses = courseMapper.getAdminCourseList(name);
+        courses = courseMapper.getAdminCourseListPerfect(courses.stream().map(x->x.id).collect(Collectors.toList()));
         courses.forEach(x -> {
             x.chapters.forEach(s -> s.sections = s.sections.stream().sorted(Comparator.comparing(Section::getOrder)).collect(Collectors.toList()));
             x.chapters = x.chapters.stream().sorted(Comparator.comparing(Chapter::getOrder)).collect(Collectors.toList());
@@ -108,6 +109,7 @@ public class CourseServiceImpl implements CourseService {
     public PageInfo<Course> getCourseListById(String userId, Integer perPage, Integer page, String name) {
         PageHelper.startPage(page, perPage);
         List<Course> courses = courseMapper.getCourseListById(userId, name);
+        courses = courseMapper.getCourseListByIdPerfect(courses.stream().map(x->x.id).collect(Collectors.toList()));
         List<ClassNumber> classNumbers = classMapper.findClassNumber();
         courses.forEach(x -> classNumbers.forEach(classNumber -> {
             if (!ObjectUtils.isEmpty(x.classId) && x.classId.equals(classNumber.classId)) {

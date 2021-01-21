@@ -10,6 +10,7 @@ import org.tdos.tdospractice.type.Course;
 
 public interface CourseService {
 
+    // 1
     PageInfo<Course> getAdminCourseList(Integer perPage, Integer page, String name);
 
     PageInfo<Course> getAdminCourseListByClassId(String classId, Integer perPage, Integer page);
@@ -23,7 +24,7 @@ public interface CourseService {
     Pair<Boolean, String> modifyCourseStatus(ModifyCourseStatus modifyCourseStatus);
     // 1
     PageInfo<Course> getAdminUnpublishedCourseList(String userId, Integer perPage, Integer page, String name);
-
+    // 1
     PageInfo<Course> getCourseList(String userId, String start, String end, Integer perPage, Integer page);
 
     Course getCourseById(String courseId);

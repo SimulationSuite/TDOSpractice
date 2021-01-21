@@ -14,6 +14,8 @@ public interface CourseMapper {
 
     List<Course> getAdminCourseList(@Param("name") String name);
 
+    List<Course> getAdminCourseListPerfect(@Param("courseIds") List<String> courseIds);
+
     int hasCourseExist(String courseId);
 
     Course getCourseByCourseId(@Param("courseId") String courseId);
@@ -21,6 +23,8 @@ public interface CourseMapper {
     int insertCourse(Course course);
 
     List<Course> getCourseListById(String userId,@Param("name") String name);
+
+    List<Course> getCourseListByIdPerfect(@Param("courseIds") List<String> courseIds);
 
     Integer findCourseChapterOrder(String courseId);
 
