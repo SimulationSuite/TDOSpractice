@@ -168,8 +168,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public PageInfo<Course> getAdminUnpublishedCourseList(String userId, Integer perPage, Integer page, String name) {
-        PageHelper.startPage(page, perPage);
+        PageHelper.startPage(page, perPage,true,true);
         List<Course> courses = courseMapper.getAdminUnpublishedCourseList(userId, name);
+        courses = courseMapper.getAdminUnpublishedCourseListPerfect(courses.stream().map(x->x.id).collect(Collectors.toList()));
         courses.forEach(x -> {
             x.chapters.forEach(s -> {
                 s.sections = s.sections.stream().sorted(Comparator.comparing(Section::getOrder)).collect(Collectors.toList());
