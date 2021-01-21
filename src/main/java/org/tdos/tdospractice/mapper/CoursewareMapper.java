@@ -12,7 +12,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface CoursewareMapper {
-    List<CoursewareEntity> getCoursewareAll();
+    List<CoursewareEntity> getCoursewareAll(@Param("name") String name, @Param("classId") Integer kind, @Param("classId") Integer type);
 
     List<CoursewareEntity> getCoursewareByClassId(@Param("classId") String classId);
 

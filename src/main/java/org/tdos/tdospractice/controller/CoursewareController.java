@@ -21,9 +21,12 @@ public class CoursewareController {
     private CoursewareService coursewareService;
 
     @GetMapping(value = "/getCoursewareAll")
-    public Response<PageInfo<CoursewareEntity>> getCoursewareAll(@RequestParam(value = "perPage") Integer perPage,
+    public Response<PageInfo<CoursewareEntity>> getCoursewareAll(@RequestParam(value = "name") String name,
+                                                                 @RequestParam(value = "kind") Integer kind,
+                                                                 @RequestParam(value = "type") Integer type,
+                                                                 @RequestParam(value = "perPage") Integer perPage,
                                                                  @RequestParam(value = "page") Integer page) {
-        return Response.success(coursewareService.getCoursewareAll(perPage, page));
+        return Response.success(coursewareService.getCoursewareAll(name, kind, type, perPage, page));
     }
 
     @GetMapping(value = "/getCoursewareByClassId")
