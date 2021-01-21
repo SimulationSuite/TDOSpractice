@@ -358,14 +358,55 @@ INNER JOIN "section" ON "section".id = ccs.section_id
 
 
     <select  id="getAdminCourseListByClassId" resultMap="CourseResult">
-        SELECT c.id ::"varchar" as course_id,c.name as course_name, c.pic_url, c.owner_id, c.introduction as course_introduction, c.start_at, c.end_at, c.status, c."type", c.model_id,cc.class_id,
-chapter.id ::"varchar" as chapter_id, chapter.name as chapter_name, chapter.introduction as chapter_introduction, chapter."order" as chapter_order ,
-section.id ::"varchar" as section_id, section.name as section_name, section."order" as section_order
-from course_chapter_section ccs
-left join class_course cc on cc.course_id::uuid = ccs.course_id
-inner join course c on c.id = ccs.course_id and c.type = 1 and c.status = 1
-inner join chapter on chapter.id = ccs.chapter_id
-inner join "section" on "section".id = ccs.section_id where cc.class_id = #{classId}
+SELECT
+	c.id :: "varchar" AS course_id,
+	c.NAME AS course_name,
+	c.pic_url,
+	c.owner_id,
+	c.introduction AS course_introduction,
+	c.start_at,
+	c.end_at,
+	c.STATUS,
+	c."type",
+	c.model_id
+FROM course c
+	LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
+and 
+	cc.class_id = #{classId}
+Where c.type = 1
+	AND c.STATUS = 1
+    </select>
+
+    <select  id="getAdminCourseListByClassIdPerfect" resultMap="CourseResult">
+SELECT
+	c.id :: "varchar" AS course_id,
+	c.NAME AS course_name,
+	c.pic_url,
+	c.owner_id,
+	c.introduction AS course_introduction,
+	c.start_at,
+	c.end_at,
+	c.STATUS,
+	c."type",
+	c.model_id,
+	cc.class_id,
+	chapter.id :: "varchar" AS chapter_id,
+	chapter.NAME AS chapter_name,
+	chapter.introduction AS chapter_introduction,
+	chapter."order" AS chapter_order,
+	section.id :: "varchar" AS section_id,
+	section.NAME AS section_name,
+	section."order" AS section_order
+FROM course c
+	LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
+	INNER JOIN course_chapter_section ccs ON c.id = ccs.course_id
+	INNER JOIN chapter ON chapter.id = ccs.chapter_id
+	INNER JOIN "section" ON "section".id = ccs.section_id
+WHERE
+    c.id  IN
+<foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
+    #{courseId}::uuid
+</foreach>
     </select>
 
     <select  id="getCourseById" resultMap="CourseResult">

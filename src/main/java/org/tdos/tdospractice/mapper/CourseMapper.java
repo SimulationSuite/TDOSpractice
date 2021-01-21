@@ -12,6 +12,8 @@ public interface CourseMapper {
 
     List<Course> getAdminCourseListByClassId(String classId);
 
+    List<Course> getAdminCourseListByClassIdPerfect(@Param("courseIds") List<String> courseIds);
+
     List<Course> getAdminCourseList(@Param("name") String name);
 
     List<Course> getAdminCourseListPerfect(@Param("courseIds") List<String> courseIds);
