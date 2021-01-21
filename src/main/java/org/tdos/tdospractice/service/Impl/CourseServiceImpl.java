@@ -168,8 +168,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public PageInfo<Course> getAdminUnpublishedCourseList(String userId, Integer perPage, Integer page, String name) {
-        PageHelper.startPage(page, perPage);
+        PageHelper.startPage(page, perPage,true,true);
         List<Course> courses = courseMapper.getAdminUnpublishedCourseList(userId, name);
+        courses = courseMapper.getAdminUnpublishedCourseListPerfect(courses.stream().map(x->x.id).collect(Collectors.toList()));
         courses.forEach(x -> {
             x.chapters.forEach(s -> {
                 s.sections = s.sections.stream().sorted(Comparator.comparing(Section::getOrder)).collect(Collectors.toList());
@@ -223,6 +224,7 @@ public class CourseServiceImpl implements CourseService {
     public PageInfo<Course> getCourseList(String userId, String start, String end, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
         List<Course> list = courseMapper.getCourseList(userId, start, end);
+        list = courseMapper.getCourseListPerfect(list.stream().map(x->x.id).collect(Collectors.toList()));
         List<ClassNumber> classNumbers = classMapper.findClassNumber();
         list.forEach(x -> classNumbers.forEach(classNumber -> {
             if (!ObjectUtils.isEmpty(x.classId) && x.classId.equals(classNumber.classId)) {
@@ -248,6 +250,24 @@ public class CourseServiceImpl implements CourseService {
         course.chapterNumber = course.chapters.size();
         course.sectionNumber = course.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
         return course;
+    }
+
+    @Override
+    public PageInfo<Course> getExpiredList(Integer perPage, Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<Course> list =  courseMapper.getExpiredList();
+        list = courseMapper.getExpiredListPerfect(list.stream().map(x->x.id).collect(Collectors.toList()));
+        List<ClassNumber> classNumbers = classMapper.findClassNumber();
+        list.forEach(x -> classNumbers.forEach(classNumber -> {
+            if (!ObjectUtils.isEmpty(x.classId) && x.classId.equals(classNumber.classId)) {
+                x.numbers = classNumber.numbers;
+            }
+        }));
+        list.forEach(c -> {
+            c.chapterNumber = c.chapters.size();
+            c.sectionNumber = c.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
+        });
+        return new PageInfo<>(list);
     }
 
 }

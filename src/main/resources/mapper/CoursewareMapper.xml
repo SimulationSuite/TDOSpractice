@@ -7,6 +7,16 @@
     <select  id="getCoursewareAll" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
         select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId, c.created_at as createdAt, c.updated_at as updatedAt
         from courseware c
+        where c.id is not null
+        <if test="name != null" >
+            and c.name like  concat('%',#{name},'%')
+        </if>
+        <if test="kind != null" >
+            and c.kind = #{kind}
+        </if>
+        <if test="type != null" >
+            and c.type = #{type}
+        </if>
     </select>
 
     <select  id="getCoursewareByClassId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">

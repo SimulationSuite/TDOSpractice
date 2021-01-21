@@ -3,9 +3,7 @@ package org.tdos.tdospractice.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-import org.tdos.tdospractice.entity.CourseChapterSectionEntity;
 import org.tdos.tdospractice.type.Chapter;
-import org.tdos.tdospractice.type.Course;
 
 @Mapper
 @Repository
