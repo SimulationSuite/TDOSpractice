@@ -462,7 +462,7 @@ FROM
 	LEFT JOIN "section" ON "section".id = ccs.section_id
 	LEFT JOIN "small_section" ON "small_section".id = ccs.small_section_id
 WHERE
-	ccs.course_id = #{courseId} :: uuid
+    c.id = #{courseId} :: uuid
     </select>
 
 </mapper>
