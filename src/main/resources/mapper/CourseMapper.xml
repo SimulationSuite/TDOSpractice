@@ -78,9 +78,9 @@
         section."order" AS section_order
         FROM course c
         LEFT JOIN class_course cc ON c.id = cc.course_id::uuid
-        INNER JOIN course_chapter_section ccs ON  ccs.course_id = c.id
-        INNER JOIN chapter ON chapter.id = ccs.chapter_id
-        INNER JOIN "section" ON "section".id = ccs.section_id
+        LEFT JOIN course_chapter_section ccs ON  ccs.course_id = c.id
+        LEFT JOIN chapter ON chapter.id = ccs.chapter_id
+        LEFT JOIN "section" ON "section".id = ccs.section_id
         WHERE
         c.id  IN
         <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
@@ -130,10 +130,10 @@
         section.NAME AS section_name,
         section."order" AS section_order
         FROM course c
-        INNER JOIN course_chapter_section ccs on ccs.course_id = c.id
+        LEFT JOIN course_chapter_section ccs on ccs.course_id = c.id
         LEFT JOIN class_course cc ON cc.course_id :: uuid = ccs.course_id
-        INNER JOIN chapter ON chapter.id = ccs.chapter_id
-        INNER JOIN "section" ON "section".id = ccs.section_id
+        LEFT JOIN chapter ON chapter.id = ccs.chapter_id
+        LEFT JOIN "section" ON "section".id = ccs.section_id
         WHERE
         c.id  IN
         <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
@@ -146,16 +146,36 @@
     </select>
 
     <select  id="getCourseByCourseId" resultMap="CourseResult">
-        SELECT c.id ::"varchar" as course_id,c.name as course_name,c.pic_url,c.owner_id,c.introduction as course_introduction,c.start_at, c.end_at,c.status,c."type",c.model_id,cc.class_id,
-chapter.id ::"varchar" as chapter_id, chapter.name as chapter_name, chapter.introduction as chapter_introduction, chapter."order" as chapter_order ,
-section.id ::"varchar" as section_id, section.name as section_name, section.order as section_order,
-small_section.id ::"varchar" as small_section_id, small_section.name as small_section_name, small_section.order as small_section_order
-from course_chapter_section ccs
-left join class_course cc on cc.course_id::uuid = ccs.course_id
-inner join course c on c.id = ccs.course_id and c.id = #{courseId}::uuid
-inner join chapter on chapter.id = ccs.chapter_id
-inner join "section" on "section".id = ccs.section_id
-inner join "small_section" on "small_section".id = ccs.small_section_id
+SELECT
+	c.id :: "varchar" AS course_id,
+	c.NAME AS course_name,
+	c.pic_url,
+	c.owner_id,
+	c.introduction AS course_introduction,
+	c.start_at,
+	c.end_at,
+	c.STATUS,
+	c."type",
+	c.model_id,
+	cc.class_id,
+	chapter.id :: "varchar" AS chapter_id,
+	chapter.NAME AS chapter_name,
+	chapter.introduction AS chapter_introduction,
+	chapter."order" AS chapter_order,
+	section.id :: "varchar" AS section_id,
+	section.NAME AS section_name,
+	section.ORDER AS section_order,
+	small_section.id :: "varchar" AS small_section_id,
+	small_section.NAME AS small_section_name,
+	small_section.ORDER AS small_section_order
+FROM
+	course c
+	LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
+	LEFT JOIN course_chapter_section ccs ON  ccs.course_id  = c.id
+	LEFT JOIN chapter ON chapter.id = ccs.chapter_id
+	LEFT JOIN "section" ON "section".id = ccs.section_id
+	LEFT JOIN "small_section" ON "small_section".id = ccs.small_section_id
+	WHERE c.id = #{courseId}::uuid
     </select>
 
 
@@ -208,9 +228,9 @@ inner join "small_section" on "small_section".id = ccs.small_section_id
         FROM
         course c
         LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
-        INNER JOIN course_chapter_section ccs ON  ccs.course_id = c.id
-        INNER JOIN chapter ON chapter.id = ccs.chapter_id
-        INNER JOIN "section" ON "section".id = ccs.section_id
+        LEFT JOIN course_chapter_section ccs ON  ccs.course_id = c.id
+        LEFT JOIN chapter ON chapter.id = ccs.chapter_id
+        LEFT JOIN "section" ON "section".id = ccs.section_id
         WHERE
         c.id  IN
         <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
@@ -292,11 +312,10 @@ inner join "small_section" on "small_section".id = ccs.small_section_id
         section.ORDER AS section_order
         FROM
         course c
-        INNER JOIN course_chapter_section ccs ON  ccs.course_id = c.id
-        INNER JOIN chapter ON chapter.id = ccs.chapter_id
-        INNER JOIN "section" ON "section".id = ccs.section_id
-        INNER JOIN class_course cc ON cc.course_id = ccs.course_id ::VARCHAR
-        INNER JOIN "sim_user" ON sim_user.class_id = cc.class_id
+        LEFT JOIN course_chapter_section ccs ON  ccs.course_id = c.id
+        LEFT JOIN chapter ON chapter.id = ccs.chapter_id
+        LEFT JOIN "section" ON "section".id = ccs.section_id
+        LEFT JOIN class_course cc ON cc.course_id = ccs.course_id ::VARCHAR
         WHERE
         c.id  IN
         <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
@@ -347,9 +366,9 @@ FROM
 	section.ORDER AS section_order
 FROM
     course c
-	INNER JOIN course_chapter_section ccs ON  ccs.course_id = c.id
-INNER JOIN chapter ON chapter.id = ccs.chapter_id
-INNER JOIN "section" ON "section".id = ccs.section_id
+        LEFT JOIN course_chapter_section ccs ON  ccs.course_id = c.id
+        LEFT JOIN chapter ON chapter.id = ccs.chapter_id
+        LEFT JOIN "section" ON "section".id = ccs.section_id
  WHERE
     c.id  IN
 <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
@@ -402,9 +421,9 @@ SELECT
 	section."order" AS section_order
 FROM course c
 	LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
-	INNER JOIN course_chapter_section ccs ON c.id = ccs.course_id
-	INNER JOIN chapter ON chapter.id = ccs.chapter_id
-	INNER JOIN "section" ON "section".id = ccs.section_id
+    LEFT JOIN course_chapter_section ccs ON c.id = ccs.course_id
+    LEFT JOIN chapter ON chapter.id = ccs.chapter_id
+    LEFT JOIN "section" ON "section".id = ccs.section_id
 WHERE
     c.id  IN
 <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
@@ -413,16 +432,37 @@ WHERE
     </select>
 
     <select  id="getCourseById" resultMap="CourseResult">
-        SELECT c.id ::"varchar" as course_id,c.name as course_name, c.pic_url, c.owner_id, c.introduction as course_introduction, c.start_at, c.end_at, c.status, c."type", c.model_id,cc.class_id,
-chapter.id ::"varchar" as chapter_id, chapter.name as chapter_name, chapter.introduction as chapter_introduction, chapter."order" as chapter_order ,
-section.id ::"varchar" as section_id, section.name as section_name, section."order" as section_order,
-small_section.id ::"varchar" as small_section_id, small_section.name as small_section_name, small_section.order as small_section_order
-from course_chapter_section ccs
-left join class_course cc on cc.course_id::uuid = ccs.course_id
-inner join course c on c.id = ccs.course_id
-inner join chapter on chapter.id = ccs.chapter_id
-inner join "section" on "section".id = ccs.section_id
-inner join "small_section" on "small_section".id = ccs.small_section_id where ccs.course_id = #{courseId} :: uuid
+SELECT
+	c.id :: "varchar" AS course_id,
+	c.NAME AS course_name,
+	c.pic_url,
+	c.owner_id,
+	c.introduction AS course_introduction,
+	c.start_at,
+	c.end_at,
+	c.STATUS,
+	c."type",
+	c.model_id,
+	cc.class_id,
+	chapter.id :: "varchar" AS chapter_id,
+	chapter.NAME AS chapter_name,
+	chapter.introduction AS chapter_introduction,
+	chapter."order" AS chapter_order,
+	section.id :: "varchar" AS section_id,
+	section.NAME AS section_name,
+	section."order" AS section_order,
+	small_section.id :: "varchar" AS small_section_id,
+	small_section.NAME AS small_section_name,
+	small_section.ORDER AS small_section_order
+FROM
+	course c
+	LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
+	LEFT JOIN course_chapter_section ccs ON ccs.course_id = c.id
+	LEFT JOIN chapter ON chapter.id = ccs.chapter_id
+	LEFT JOIN "section" ON "section".id = ccs.section_id
+	LEFT JOIN "small_section" ON "small_section".id = ccs.small_section_id
+WHERE
+	ccs.course_id = #{courseId} :: uuid
     </select>
 
 </mapper>
