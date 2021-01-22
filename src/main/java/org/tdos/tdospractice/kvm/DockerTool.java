@@ -18,11 +18,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static com.github.dockerjava.api.model.Capability.SYS_ADMIN;
 
-@Slf4j(topic = "kvm-docker")
+@Slf4j(topic = "Kvm-Docker")
 @Data
 @NoArgsConstructor
 public class DockerTool implements CommonTool {
@@ -34,6 +34,8 @@ public class DockerTool implements CommonTool {
     private int order;
 
     private Ports portBindings;
+
+    private List<Image> imageList;
 
     private final String downloadPath = "/root/Download/";
 
@@ -47,6 +49,7 @@ public class DockerTool implements CommonTool {
         this.serverName = serverName;
         this.order = order;
         initClient(certsPath, serverURL);
+        this.imageList = dockerClient.listImagesCmd().withShowAll(true).exec();
     }
 
     private void initClient(String certsPath, String serverURL) {
@@ -57,7 +60,7 @@ public class DockerTool implements CommonTool {
                 .withDockerConfig(certsPath)
                 .build();
         this.dockerClient = DockerClientBuilder.getInstance(config).build();
-        log.info("Connected successful " +this.serverName +" , Docker host is " + serverURL);
+        log.info("Connected successful " + this.serverName + " , Docker host is " + serverURL);
     }
 
     public List<ContainerVO> getAllContainers() {
@@ -83,20 +86,49 @@ public class DockerTool implements CommonTool {
         return ContainerVO.parse(container, containerInfo, this.order);
     }
 
-    //asyn
     @SneakyThrows
     public void pull(String imagesName) {
         if (isExistImages(imagesName)) {
-            dockerClient.pullImageCmd(imagesName).start().awaitCompletion(30, TimeUnit.SECONDS);
+            dockerClient.pullImageCmd(imagesName).start().awaitCompletion();
+            Image newig = findImageList(imagesName);
+            if (newig == null) {
+                throw new RuntimeException(imagesName + " pull exception error");
+            }
+            imageList.add(newig);
         }
     }
 
-    private boolean isExistImages(String imagesName) {
-        List<Image> images = dockerClient.listImagesCmd().withImageNameFilter(imagesName).exec();
-        if (images.isEmpty()) {
-            return true;
+    public Image findImageList(String imagesName) {
+        List<Image> list = dockerClient.listImagesCmd().withShowAll(true).exec();
+        for (Image i : list) {
+            if (i.getRepoTags()[0].equals(imagesName)) {
+                return i;
+            }
         }
-        return false;
+        return null;
+    }
+
+    private boolean isExistImages(String imagesName) {
+        for (Image i : imageList) {
+            if (i.getRepoTags()[0].equals(imagesName)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public List<String> getImageNames(List<String> imagesID) {
+        return imageList.stream().filter(i -> imagesID.contains(i.getId()))
+                .map(s -> s.getRepoTags()[0]).collect(Collectors.toList());
+    }
+
+    public void removeImage(String imageID) {
+        dockerClient.removeImageCmd(imageID).exec();
+        for (int x = 0; x < imageList.size(); x++) {
+            if (imageList.get(x).getId().equals(imageID)) {
+                imageList.remove(x);
+            }
+        }
     }
 
     /**

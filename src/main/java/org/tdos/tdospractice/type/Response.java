@@ -49,11 +49,15 @@ public class Response<T> {
         return new Response<>(code.code, null, reason);
     }
 
+    public static <T> Response<T> error() {
+        return new Response<>(Code.INTERNAL_ERROR.code, null, Code.INTERNAL_ERROR.message);
+    }
+
     public static <T> Response<T> error(String reason) {
         return new Response<>(Code.INTERNAL_ERROR.code, null, reason);
     }
 
-    public static <T> Response<T> error(Code code, String reason,T data) {
+    public static <T> Response<T> error(Code code, String reason, T data) {
         return new Response<>(code.code, data, reason);
     }
 

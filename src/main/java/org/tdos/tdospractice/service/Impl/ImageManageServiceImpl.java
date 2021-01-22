@@ -1,0 +1,79 @@
+package org.tdos.tdospractice.service.Impl;
+
+import com.github.pagehelper.PageHelper;
+import lombok.SneakyThrows;
+import org.apache.activemq.command.ActiveMQQueue;
+import org.apache.commons.codec.binary.Hex;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsMessagingTemplate;
+import org.springframework.stereotype.Service;
+import org.tdos.tdospractice.entity.ImageEntity;
+import org.tdos.tdospractice.kvm.KvmManager;
+import org.tdos.tdospractice.mapper.ImageMapper;
+import org.tdos.tdospractice.service.ImageManageService;
+import org.tdos.tdospractice.utils.JsonUtils;
+
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class ImageManageServiceImpl implements ImageManageService {
+
+    @Autowired
+    private ImageMapper imageMapper;
+
+    @Autowired
+    private JmsMessagingTemplate jmsMessagingTemplate;
+
+    @Autowired
+    private ActiveMQQueue imageQueue;
+
+    @Autowired
+    private KvmManager kvmManager;
+
+    private final JsonUtils jsonUtils = new JsonUtils();
+
+    @Override
+    public List<ImageEntity> getImageList(int kind, String imageName, int page, int perPage) {
+        PageHelper.startPage(page, perPage);
+        List<ImageEntity> list = imageMapper.findImageByKindAndName(kind, imageName);
+        return list;
+    }
+
+    @Override
+    public List<Map<String, Object>> getImagequoteList(int kind, String imageNmae, int page, int perPage) {
+        PageHelper.startPage(page, perPage);
+        List<Map<String, Object>> objectMap = imageMapper.findImagequoteByKindAndName(kind, imageNmae);
+        return objectMap;
+    }
+
+    @SneakyThrows
+    @Override
+    public int addImage(String imageName, String introduction) {
+        int count = imageMapper.findImageByName(imageName);
+        if (count > 0) {
+            return -1;
+        }
+        ImageEntity imageEntity = ImageEntity.builder()
+                .imageName(imageName).introduction(introduction)
+                .type(0).kind(0).build();
+        String message = Hex.encodeHexString(jsonUtils.encode(imageEntity));
+        jmsMessagingTemplate.convertAndSend(this.imageQueue, message);
+        return 0;
+    }
+
+    @Override
+    public int deleteImages(List<String> imagesID) {
+        List<String> getlist = imageMapper.findExperimentImageByImageids(imagesID);
+        if (getlist.size() > 0) {
+            return -1;
+        }
+        if (kvmManager.isQuoteContainer(imagesID)) {
+            return -1;
+        }
+        imageMapper.deleteImages(imagesID);
+        kvmManager.removeImages(imagesID);
+        return 0;
+    }
+
+}
