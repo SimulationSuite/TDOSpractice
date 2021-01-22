@@ -321,6 +321,9 @@ FROM
 	WHERE c.type = 1
 	AND c.STATUS = 1
 	AND c.end_at &lt; now( ) ::TIMESTAMP
+    <if  test = "name != null" >
+        AND c.NAME LIKE concat('%',#{name},'%')
+    </if>
     </select>
 
     <select  id="getExpiredListPerfect" resultMap="CourseResult">
@@ -371,7 +374,7 @@ SELECT
 	c.model_id
 FROM course c
 	LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
-and 
+and
 	cc.class_id = #{classId}
 Where c.type = 1
 	AND c.STATUS = 1

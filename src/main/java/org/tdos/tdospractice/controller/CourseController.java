@@ -78,8 +78,9 @@ public class CourseController {
 
     @GetMapping(value = "/get_expired_course_list")
     public Response<PageInfo<Course>> getExpiredList(@RequestParam(value = "per_page") Integer perPage,
-                                                     @RequestParam(value = "page") Integer page) {
-        return Response.success(courseService.getExpiredList(perPage, page));
+                                                     @RequestParam(value = "page") Integer page,
+                                                     @RequestParam(value = "name", required = false) String name) {
+        return Response.success(courseService.getExpiredList(perPage, page, name));
     }
 
     // 学生端查询课程

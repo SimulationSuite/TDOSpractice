@@ -46,7 +46,7 @@ public interface CourseMapper {
 
     Course getCourseById(String courseId);
 
-    List<Course> getExpiredList();
+    List<Course> getExpiredList(@Param("name") String name);
 
     List<Course> getExpiredListPerfect(@Param("courseIds") List<String> courseIds);
 }
