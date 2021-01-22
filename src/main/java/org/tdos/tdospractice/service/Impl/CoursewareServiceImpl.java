@@ -70,7 +70,8 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
         });
         if (sectionCourseware.size() > 0){
             map.put("isDelete", false);
-            map.put("notDeleteId", sectionCourseware);
+            map.put("canNotDeleteId", sectionCourseware);
+            map.put("reason", "课件已关联到章节。");
             return map;
         }
         id.forEach(x -> {

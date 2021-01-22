@@ -27,6 +27,4 @@ public class CoursewareEntity {
 
     private LocalDateTime updatedAt;
 
-    private Boolean canUpdate;
-
 }
