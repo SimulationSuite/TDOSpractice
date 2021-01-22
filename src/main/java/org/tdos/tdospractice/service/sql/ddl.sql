@@ -128,6 +128,8 @@ create table if not exists courseware(
     kind int4 default 0,
     "type" int4 default 0,
     "url" varchar(255) DEFAULT NULL,
+    duration int8 DEFAULT NULL,
+    "size" int8 DEFAULT 0,
     category_id varchar(255),
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
