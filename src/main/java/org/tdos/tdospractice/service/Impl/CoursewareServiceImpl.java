@@ -90,6 +90,8 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
         coursewareEntity.setKind(courseware.kind);
         coursewareEntity.setType(courseware.type);
         coursewareEntity.setUrl(courseware.url);
+        coursewareEntity.setDuration(courseware.duration);
+        coursewareEntity.setSize(courseware.size);
         try {
             coursewareMapper.addCourseware(coursewareEntity);
         } catch (Exception e) {
