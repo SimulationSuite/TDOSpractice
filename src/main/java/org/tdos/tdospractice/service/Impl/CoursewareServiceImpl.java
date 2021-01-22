@@ -73,7 +73,10 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
             map.put("notDeleteId", sectionCourseware);
             return map;
         }
-        id.forEach(x -> coursewareMapper.deleteCoursewareById(x));
+        id.forEach(x -> {
+            coursewareMapper.deleteChapterSectionCourseById(x);
+            coursewareMapper.deleteCoursewareById(x);
+        });
         map.put("isDelete", true);
         map.put("deleteId", sectionCourseware);
         return map;

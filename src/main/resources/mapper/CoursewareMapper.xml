@@ -85,6 +85,10 @@
         delete from courseware where id=#{id}::uuid;
     </delete>
 
+    <delete id="deleteChapterSectionCourseById">
+        delete from chapter_section_courseware where courseware_id=#{id};
+    </delete>
+
     <update id="modifyCoursewareNameById">
         update courseware set name= #{coursewareName} where id=#{id}::uuid;
     </update>
@@ -95,16 +99,22 @@
 
     <select id="ifSectionCourseware"  resultType="Boolean">
         select case when count(*) = 1 then true else false end
-        from section_courseware sc
-        where sc.courseware_id=#{id};
+        from chapter_section_courseware csc
+        where csc.courseware_id=#{id};
     </select>
 
     <select id="ifSectionCoursewarePub"  resultType="Boolean">
-        select c.status = 0
-        from section_courseware sc
-        inner join course_chapter_section ccs on ccs.section_id = sc.section_id ::uuid
+        select distinct c.status = 0
+        from chapter_section_courseware csc
+        inner join course_chapter_section ccs on ccs.section_id = csc.relative_id ::uuid
         inner join course c on c.id = ccs.course_id
-        where sc.courseware_id=#{id};
+        where csc.courseware_id=#{id} and csc.type = 0
+        union all
+        select distinct c.status = 0
+        from chapter_section_courseware csc
+        inner join course_chapter_section ccs on ccs.chapter_id = csc.relative_id ::uuid
+        inner join course c on c.id = ccs.course_id
+        where csc.courseware_id=#{id} and csc.type = 1;
     </select>
 
     <select id="hasSectionCoursewareId"  resultType="int">
