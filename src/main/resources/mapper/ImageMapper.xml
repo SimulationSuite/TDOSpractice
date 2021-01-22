@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tdos.tdospractice.mapper.ImageMapper">
+
+    <resultMap type="org.tdos.tdospractice.entity.ImageEntity" id="ImageMap">
+        <id column="id" property="Id"/>
+        <result column="name" property="imageName"/>
+        <result column="imageid" property="imageId"/>
+        <result column="size" property="size"/>
+        <result column="introduction" property="introduction"/>
+        <result column="kind" property="kind"/>
+        <result column="type" property="type"/>
+        <result column="parent_image_id" property="parentImageId"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+    </resultMap>
+
+    <select id="findImageByKindAndName" resultMap="ImageMap">
+        select * from image i
+        <where>
+            <if test="kind >= 0">
+                and i.kind = #{kind}
+            </if>
+            <if test="imageName != null and imageName != ''">
+                and i.name like concat('%',#{imageName},'%')
+            </if>
+        </where>
+        order by i.created_at desc
+    </select>
+
+    <select id="findImageByName" resultType="java.lang.Integer" parameterType="java.lang.String">
+        select count(*) from image i where i.name= #{imageName}
+    </select>
+
+    <select id="findImagequoteByKindAndName" resultType="java.util.HashMap">
+        select m.*,cs.quoteCount from image m
+        left join
+        (select i.id,count(e.experiment_id) as quoteCount from image i
+        left join experiment_image e on i.id=e.image_id
+        group by i.id ) as cs on m.id=cs.id
+        <where>
+            <if test="kind >= 0">
+                and m.kind = #{kind}
+            </if>
+            <if test="imageName != null and imageName != ''">
+                and m.name like concat('%',#{imageName},'%')
+            </if>
+        </where>
+        order by m.created_at desc
+    </select>
+
+    <select id="findExperimentImageByImageids" resultType="java.lang.String" parameterType="java.lang.String">
+        select e.image_id from experiment_image e
+        where e.image_id in (
+        select i.id from image i
+        where i.imageid in
+        <foreach collection="imageids" open="(" separator="," close=")" item="item">
+            #{item}
+        </foreach>
+        ) group by e.image_id
+    </select>
+
+    <insert id="addImage" parameterType="org.tdos.tdospractice.entity.ImageEntity" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into image (name,imageid,size,introduction,kind,type,parent_image_id) values (#{imageName},#{imageId},#{size},#{introduction},#{kind},#{type},#{parentImageId})
+    </insert>
+
+    <delete id="deleteImages" parameterType="java.lang.String">
+        delete from image i
+        where i.imageid in
+        <foreach collection="imagesID" open="(" separator="," close=")" item="item">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

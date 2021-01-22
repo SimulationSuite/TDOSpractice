@@ -1,11 +1,15 @@
 package org.tdos.tdospractice.kvm;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.model.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -17,9 +21,11 @@ public class KvmManager {
 
     public Map<String, ContainerVO> ContainersMap;
 
+    private final Executor executor = Executors.newCachedThreadPool();
+
     private List<DockerTool> dockerTools;
 
-    private ReadWriteLock rwLock = new ReentrantReadWriteLock();
+    private ReadWriteLock rwLock;
 
     private Random random = new Random();
 
@@ -28,6 +34,7 @@ public class KvmManager {
     private KvmConfiguration.Docker docker;
 
     private void dockerInit() {
+        this.rwLock = new ReentrantReadWriteLock();
         this.ContainersMap = new HashMap<>();
         this.dockerTools = new ArrayList<>();
         this.docker = kvmConfiguration.getDocker();
@@ -95,7 +102,13 @@ public class KvmManager {
             Collections.sort(clist);
             return clist;
         } finally {
-            rwLock.readLock().unlock();
+            try {
+                rwLock.readLock().unlock();
+            } catch (Exception e) {
+                e.printStackTrace();
+                rwLock.readLock().unlock();
+            }
+
         }
     }
 
@@ -138,9 +151,31 @@ public class KvmManager {
         }
     }
 
+    public void pullImages(String imagesName) {
+        List<CompletableFuture<Void>> list = new ArrayList<>();
+        dockerTools.forEach(d -> {
+            list.add(CompletableFuture.runAsync(() -> {
+                d.pull(imagesName);
+            }, executor));
+        });
+        CompletableFuture.allOf(list.toArray(new CompletableFuture[]{})).join();
+    }
+
+    public int getToolSize() {
+        return dockerTools.size();
+    }
+
+    public List<Image> getImageInfo(String imagesName) {
+        List<Image> list = new ArrayList<>();
+        dockerTools.forEach(d -> {
+            list.add(d.findImageList(imagesName));
+        });
+        return list;
+    }
+
     private void removeLockContainersMap(ContainerVO containerVO) {
         try {
-            rwLock.writeLock();
+            rwLock.writeLock().lock();
             ContainersMap.remove(containerVO.getContainername());
         } finally {
             rwLock.writeLock().unlock();
@@ -149,7 +184,7 @@ public class KvmManager {
 
     private void putLockContainersMap(ContainerVO containerVO) {
         try {
-            rwLock.writeLock();
+            rwLock.writeLock().lock();
             ContainersMap.put(containerVO.getContainername(), containerVO);
         } finally {
             rwLock.writeLock().unlock();
@@ -158,7 +193,7 @@ public class KvmManager {
 
     private ContainerVO findContainer(String containerName) {
         try {
-            rwLock.readLock();
+            rwLock.readLock().lock();
             if (ContainersMap.containsKey(containerName)) {
                 for (Map.Entry<String, ContainerVO> c : ContainersMap.entrySet()) {
                     if (c.equals(containerName)) {
@@ -180,8 +215,28 @@ public class KvmManager {
         return random.nextInt(dockerTools.size());
     }
 
+    public List<ContainerVO> getAll() {
+        rwLock.readLock().lock();
+        try {
+            List<ContainerVO> list = new ArrayList<>(ContainersMap.values());
+            return list;
+        } finally {
+            rwLock.readLock().unlock();
+        }
+    }
+
     @PostConstruct
     public void init() {
         dockerInit();
+    }
+
+    public boolean isQuoteContainer(List<String> imagesID) {
+        return getAll().stream().anyMatch(s -> imagesID.contains(s.getImageID()));
+    }
+
+    public void removeImages(List<String> imagesID) {
+        dockerTools.forEach(d -> {
+            imagesID.forEach(d::removeImage);
+        });
     }
 }
