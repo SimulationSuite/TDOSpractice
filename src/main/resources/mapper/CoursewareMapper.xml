@@ -79,7 +79,9 @@
     </update>
 
     <insert id="addCourseware" useGeneratedKeys="true" keyProperty="id">
-        insert into courseware (name, kind, type, url) values (#{name}, #{kind}, #{type}, #{url});
+        insert into courseware (name, kind, type, url, duration, size)
+        values
+        (#{name}, #{kind}, #{type}, #{url}, #{duration}, #{size});
     </insert>
 
     <select id="ifSectionCourseware"  resultType="Boolean">
@@ -107,9 +109,9 @@
     </select>
 
     <insert id="addChapterSectionCourseware" useGeneratedKeys="true" keyProperty="id">
-        insert into section_courseware (relative_id, courseware_id, type, duration, size)
+        insert into section_courseware (relative_id, courseware_id, type)
         values
-        (#{relativeId}, #{coursewareId}, #{type}, #{duration}, #{size});
+        (#{relativeId}, #{coursewareId}, #{type});
     </insert>
 
 </mapper>
