@@ -21,6 +21,10 @@ public class CoursewareEntity {
 
     private String url;
 
+    private Integer duration;
+
+    private int size;
+
     private String categoryId;
 
     private LocalDateTime createdAt;

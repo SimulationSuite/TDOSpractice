@@ -20,4 +20,10 @@ public class Courseware {
     @JsonProperty("url")
     public String url;
 
+    @JsonProperty("duration")
+    public Integer duration;
+
+    @JsonProperty("size")
+    public Integer size;
+
 }

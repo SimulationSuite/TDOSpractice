@@ -5,7 +5,8 @@
 <mapper namespace="org.tdos.tdospractice.mapper.CoursewareMapper">
 
     <select  id="getCoursewareAll" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
-        select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId, c.created_at as createdAt, c.updated_at as updatedAt
+        select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId,
+        c.duration, c.size, c.created_at as createdAt, c.updated_at as updatedAt
         from courseware c
         where c.id is not null
         <if test="name != null" >
@@ -21,7 +22,7 @@
 
     <select  id="getCoursewareByClassId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
         select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId,
-        c.created_at as createdAt, c.updated_at as updatedAt
+        c.duration, c.size, c.created_at as createdAt, c.updated_at as updatedAt
         from chapter_section_courseware csc
         inner join courseware c on c.id = csc.courseware_id::uuid
         where cc.class_id =#{classId} and csc.type = 0
@@ -35,7 +36,7 @@
 
     <select  id="getCoursewareBySectionId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
         select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId,
-        c.created_at as createdAt, c.updated_at as updatedAt
+        c.duration, c.size, c.created_at as createdAt, c.updated_at as updatedAt
         from chapter_section_courseware csc
         inner join courseware c on c.id = csc.courseware_id::uuid
         where ccs.section_id =#{sectionId} ::uuid and csc.type = 0
@@ -43,7 +44,7 @@
 
     <select  id="getCoursewareByChapterId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
         select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId,
-        c.created_at as createdAt, c.updated_at as updatedAt
+        c.duration, c.size, c.created_at as createdAt, c.updated_at as updatedAt
         from chapter_section_courseware csc
         inner join courseware c on c.id = csc.courseware_id::uuid
         where ccs.chapter_id =#{chapterId} ::uuid and csc.type = 1
@@ -51,14 +52,14 @@
 
     <select  id="getCoursewareByCourseId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
         select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId,
-        c.created_at as createdAt, c.updated_at as updatedAt
+        c.duration, c.size, c.created_at as createdAt, c.updated_at as updatedAt
         from chapter_section_courseware csc
         inner join courseware c on c.id = csc.courseware_id::uuid
         inner join course_chapter_section ccs on ccs.section_id = csc.relative_id ::uuid
         where ccs.course_id =#{courseId} and csc.type = 0
         union all
         select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId,
-        c.created_at as createdAt, c.updated_at as updatedAt
+        c.duration, c.size, c.created_at as createdAt, c.updated_at as updatedAt
         from chapter_section_courseware csc
         inner join courseware c on c.id = csc.courseware_id::uuid
         inner join course_chapter_section ccs on ccs.chapter_id = csc.relative_id ::uuid
@@ -106,9 +107,9 @@
     </select>
 
     <insert id="addChapterSectionCourseware" useGeneratedKeys="true" keyProperty="id">
-        insert into section_courseware (relative_id, courseware_id, type)
+        insert into section_courseware (relative_id, courseware_id, type, duration, size)
         values
-        (#{relativeId}, #{coursewareId}, #{type});
+        (#{relativeId}, #{coursewareId}, #{type}, #{duration}, #{size});
     </insert>
 
 </mapper>
