@@ -20,64 +20,48 @@
     </select>
 
     <select  id="getCoursewareByClassId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
-        select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId, c.created_at as createdAt, c.updated_at as updatedAt,
-        ci.status = 0 as canUpdate
+        select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId,
+        c.created_at as createdAt, c.updated_at as updatedAt
         from chapter_section_courseware csc
         inner join courseware c on c.id = csc.courseware_id::uuid
-        inner join course_chapter_section ccs on ccs.section_id = csc.relative_id ::uuid
-        inner join course ci on ci.id = ccs.course_id
-        inner join class_course cc on cc.course_id ::uuid = ccs.course_id
         where cc.class_id =#{classId} and csc.type = 0
         union all
-        select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId, c.created_at as createdAt, c.updated_at as updatedAt,
-        ci.status = 0 as canUpdate
+        select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId,
+        c.created_at as createdAt, c.updated_at as updatedAt
         from chapter_section_courseware csc
         inner join courseware c on c.id = csc.courseware_id::uuid
-        inner join course_chapter_section ccs on ccs.chapter_id = csc.relative_id ::uuid
-        inner join course ci on ci.id = ccs.course_id
-        inner join class_course cc on cc.course_id ::uuid = ccs.course_id
         where cc.class_id =#{classId} and csc.type = 1
     </select>
 
     <select  id="getCoursewareBySectionId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
-        select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId, c.created_at as createdAt, c.updated_at as updatedAt,
-        ci.status = 0 as canUpdate
+        select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId,
+        c.created_at as createdAt, c.updated_at as updatedAt
         from chapter_section_courseware csc
         inner join courseware c on c.id = csc.courseware_id::uuid
-        inner join course_chapter_section ccs on ccs.section_id = csc.relative_id ::uuid
-        inner join course ci on ci.id = ccs.course_id
-        inner join class_course cc on cc.course_id ::uuid = ccs.course_id
         where ccs.section_id =#{sectionId} ::uuid and csc.type = 0
     </select>
 
     <select  id="getCoursewareByChapterId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
-        select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId, c.created_at as createdAt, c.updated_at as updatedAt,
-        ci.status = 0 as canUpdate
+        select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId,
+        c.created_at as createdAt, c.updated_at as updatedAt
         from chapter_section_courseware csc
         inner join courseware c on c.id = csc.courseware_id::uuid
-        inner join course_chapter_section ccs on ccs.chapter_id = csc.relative_id ::uuid
-        inner join course ci on ci.id = ccs.course_id
-        inner join class_course cc on cc.course_id ::uuid = ccs.course_id
         where ccs.chapter_id =#{chapterId} ::uuid and csc.type = 1
     </select>
 
     <select  id="getCoursewareByCourseId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
-        select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId, c.created_at as createdAt, c.updated_at as updatedAt,
-        ci.status = 0 as canUpdate
+        select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId,
+        c.created_at as createdAt, c.updated_at as updatedAt
         from chapter_section_courseware csc
         inner join courseware c on c.id = csc.courseware_id::uuid
         inner join course_chapter_section ccs on ccs.section_id = csc.relative_id ::uuid
-        inner join course ci on ci.id = ccs.course_id
-        inner join class_course cc on cc.course_id ::uuid = ccs.course_id
         where ccs.course_id =#{courseId} and csc.type = 0
         union all
-        select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId, c.created_at as createdAt, c.updated_at as updatedAt,
-        ci.status = 0 as canUpdate
+        select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId,
+        c.created_at as createdAt, c.updated_at as updatedAt
         from chapter_section_courseware csc
         inner join courseware c on c.id = csc.courseware_id::uuid
         inner join course_chapter_section ccs on ccs.chapter_id = csc.relative_id ::uuid
-        inner join course ci on ci.id = ccs.course_id
-        inner join class_course cc on cc.course_id ::uuid = ccs.course_id
         where ccs.course_id =#{courseId} and csc.type = 1
     </select>
 
