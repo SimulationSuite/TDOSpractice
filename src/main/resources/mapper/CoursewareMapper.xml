@@ -24,46 +24,35 @@
         select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId,
         c.duration, c.size, c.created_at as createdAt, c.updated_at as updatedAt
         from chapter_section_courseware csc
-        inner join courseware c on c.id = csc.courseware_id::uuid
-        where cc.class_id =#{classId} and csc.type = 0
-        union all
-        select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId,
-        c.created_at as createdAt, c.updated_at as updatedAt
-        from chapter_section_courseware csc
-        inner join courseware c on c.id = csc.courseware_id::uuid
-        where cc.class_id =#{classId} and csc.type = 1
+        inner join courseware c on c.id = csc.courseware_id
+        inner join course_chapter_section ccs on (ccs.section_id = csc.section_id or ccs.chapter_id = csc.chapter_id)
+        inner join class_course cc on cc.course_id = ccs.course_id
+        where cc.class_id =#{classId} ::uuid
     </select>
 
     <select  id="getCoursewareBySectionId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
         select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId,
         c.duration, c.size, c.created_at as createdAt, c.updated_at as updatedAt
         from chapter_section_courseware csc
-        inner join courseware c on c.id = csc.courseware_id::uuid
-        where ccs.section_id =#{sectionId} ::uuid and csc.type = 0
+        inner join courseware c on c.id = csc.courseware_id
+        where csc.section_id =#{sectionId} ::uuid
     </select>
 
     <select  id="getCoursewareByChapterId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
         select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId,
         c.duration, c.size, c.created_at as createdAt, c.updated_at as updatedAt
         from chapter_section_courseware csc
-        inner join courseware c on c.id = csc.courseware_id::uuid
-        where ccs.chapter_id =#{chapterId} ::uuid and csc.type = 1
+        inner join courseware c on c.id = csc.courseware_id
+        where csc.chapter_id =#{chapterId} ::uuid
     </select>
 
     <select  id="getCoursewareByCourseId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
         select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId,
         c.duration, c.size, c.created_at as createdAt, c.updated_at as updatedAt
         from chapter_section_courseware csc
-        inner join courseware c on c.id = csc.courseware_id::uuid
-        inner join course_chapter_section ccs on ccs.section_id = csc.relative_id ::uuid
-        where ccs.course_id =#{courseId} and csc.type = 0
-        union all
-        select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId,
-        c.duration, c.size, c.created_at as createdAt, c.updated_at as updatedAt
-        from chapter_section_courseware csc
-        inner join courseware c on c.id = csc.courseware_id::uuid
-        inner join course_chapter_section ccs on ccs.chapter_id = csc.relative_id ::uuid
-        where ccs.course_id =#{courseId} and csc.type = 1
+        inner join courseware c on c.id = csc.courseware_id
+        inner join course_chapter_section ccs on (ccs.section_id = csc.section_id or ccs.chapter_id = csc.chapter_id)
+        where ccs.course_id =#{courseId} ::uuid
     </select>
 
     <delete id="deleteCoursewareById">
@@ -71,7 +60,7 @@
     </delete>
 
     <delete id="deleteChapterSectionCourseById">
-        delete from chapter_section_courseware where courseware_id=#{id};
+        delete from chapter_section_courseware where courseware_id=#{id}::uuid;
     </delete>
 
     <update id="modifyCoursewareNameById">
@@ -87,21 +76,15 @@
     <select id="ifSectionCourseware"  resultType="Boolean">
         select case when count(*) = 1 then true else false end
         from chapter_section_courseware csc
-        where csc.courseware_id=#{id};
+        where csc.courseware_id=#{id} ::uuid
     </select>
 
     <select id="ifSectionCoursewarePub"  resultType="Boolean">
         select distinct c.status = 0
         from chapter_section_courseware csc
-        inner join course_chapter_section ccs on ccs.section_id = csc.relative_id ::uuid
+        inner join course_chapter_section ccs on (ccs.section_id = csc.section_id or ccs.chapter_id = csc.chapter_id)
         inner join course c on c.id = ccs.course_id
-        where csc.courseware_id=#{id} and csc.type = 0
-        union all
-        select distinct c.status = 0
-        from chapter_section_courseware csc
-        inner join course_chapter_section ccs on ccs.chapter_id = csc.relative_id ::uuid
-        inner join course c on c.id = ccs.course_id
-        where csc.courseware_id=#{id} and csc.type = 1;
+        where csc.courseware_id=#{id} ::uuid
     </select>
 
     <select id="hasSectionCoursewareId"  resultType="int">
@@ -109,9 +92,9 @@
     </select>
 
     <insert id="addChapterSectionCourseware" useGeneratedKeys="true" keyProperty="id">
-        insert into section_courseware (relative_id, courseware_id, type)
+        insert into section_courseware (section_id, chapter_id, courseware_id, type)
         values
-        (#{relativeId}, #{coursewareId}, #{type});
+        (#{sectionId}, #{chapterId}, #{coursewareId}, #{type});
     </insert>
 
 </mapper>

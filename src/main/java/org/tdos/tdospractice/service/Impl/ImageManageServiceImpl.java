@@ -1,6 +1,7 @@
 package org.tdos.tdospractice.service.Impl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.SneakyThrows;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.commons.codec.binary.Hex;
@@ -34,17 +35,17 @@ public class ImageManageServiceImpl implements ImageManageService {
     private final JsonUtils jsonUtils = new JsonUtils();
 
     @Override
-    public List<ImageEntity> getImageList(int kind, String imageName, int page, int perPage) {
+    public PageInfo<ImageEntity> getImageList(int kind, String imageName, int page, int perPage) {
         PageHelper.startPage(page, perPage);
         List<ImageEntity> list = imageMapper.findImageByKindAndName(kind, imageName);
-        return list;
+        return new PageInfo<>(list);
     }
 
     @Override
-    public List<Map<String, Object>> getImagequoteList(int kind, String imageNmae, int page, int perPage) {
+    public PageInfo<Map<String, Object>> getImagequoteList(int kind, String imageNmae, int page, int perPage) {
         PageHelper.startPage(page, perPage);
         List<Map<String, Object>> objectMap = imageMapper.findImagequoteByKindAndName(kind, imageNmae);
-        return objectMap;
+        return new PageInfo<>(objectMap);
     }
 
     @SneakyThrows

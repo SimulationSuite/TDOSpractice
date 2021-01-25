@@ -1,5 +1,6 @@
 package org.tdos.tdospractice.controller;
 
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,13 +20,13 @@ public class ImageManageController {
     private ImageManageService imageManageService;
 
     @GetMapping(value = "/getImageList")
-    public Response<List<ImageEntity>> getImageList(@RequestParam(value = "kind") int kind, @RequestParam(value = "imageName") String imageName,
-                                                    @RequestParam(value = "page") int page, @RequestParam(value = "perPage") int perPage) {
+    public Response<PageInfo<ImageEntity>> getImageList(@RequestParam(value = "kind") int kind, @RequestParam(value = "imageName") String imageName,
+                                                        @RequestParam(value = "page") int page, @RequestParam(value = "perPage") int perPage) {
         return Response.success(imageManageService.getImageList(kind, imageName, page, perPage));
     }
 
     @GetMapping(value = "/getImagequoteList")
-    public Response<List<Map<String, Object>>> getImagequoteList(@RequestParam(value = "kind") int kind, @RequestParam(value = "imageName") String imageName,
+    public Response<PageInfo<Map<String, Object>>> getImagequoteList(@RequestParam(value = "kind") int kind, @RequestParam(value = "imageName") String imageName,
                                                                  @RequestParam(value = "page") int page, @RequestParam(value = "perPage") int perPage) {
         return Response.success(imageManageService.getImagequoteList(kind, imageName, page, perPage));
     }
