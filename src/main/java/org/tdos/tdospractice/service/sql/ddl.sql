@@ -1,4 +1,12 @@
-
+create or replace function upd_timestamp() returns trigger as
+$$
+begin
+ new.updated_at= current_timestamp;
+ return new;
+end
+$$
+language plpgsql;
+create extension "uuid-ossp";
 
 create table if not exists sim_user(
     id varchar(255) NOT NULL,
