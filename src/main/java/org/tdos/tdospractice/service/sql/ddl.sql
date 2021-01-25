@@ -18,6 +18,9 @@ create table if not exists class(
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
 
+INSERT INTO "public"."class"("id", "name", "grade", "major", "department") VALUES ('fb0a1080-b11e-427c-8567-56ca6105ea07', '空班级', '', '', '');
+
+
 create trigger t_name before update on class for each row execute procedure upd_timestamp();
 
 create table if not exists sim_user(
