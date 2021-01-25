@@ -3,6 +3,7 @@ package org.tdos.tdospractice.service.Impl;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.tdos.tdospractice.body.DeleteSmallSection;
 import org.tdos.tdospractice.body.InsertSmallSection;
 import org.tdos.tdospractice.entity.CourseChapterSectionEntity;
 import org.tdos.tdospractice.mapper.*;
@@ -30,9 +31,9 @@ public class SmallSectionServiceImpl implements SmallSectionService {
 
 
     @Override
-    public Pair<Boolean, String> modifySmallSectionNameById(String sectionID, String smallSectionName) {
-        if (smallSectionMapper.hasSmallSection(sectionID) > 0) {
-            smallSectionMapper.modifySmallSectionNameById(sectionID, smallSectionName);
+    public Pair<Boolean, String> modifySmallSectionNameById(String smallSectionID, String smallSectionName) {
+        if (smallSectionMapper.hasSmallSection(smallSectionID) > 0) {
+            smallSectionMapper.modifySmallSectionNameById(smallSectionID, smallSectionName);
             return new Pair<>(true, "");
         } else {
             return new Pair<>(false, "chapter id is not exist");
@@ -65,6 +66,15 @@ public class SmallSectionServiceImpl implements SmallSectionService {
                 .sectionId(insertSmallSection.sectionId)
                 .smallSectionId(smallSection.id)
                 .build());
+        return new Pair<>(true, "");
+    }
+
+    @Override
+    public Pair<Boolean, String> removeSmallSection(DeleteSmallSection deleteSmallSection) {
+        if (smallSectionMapper.hasSmallSection(deleteSmallSection.smallSectionId) == 0) {
+            return new Pair<>(false, "small section is not exist");
+        }
+        smallSectionMapper.removeSmallSection(deleteSmallSection.smallSectionId);
         return new Pair<>(true, "");
     }
 }

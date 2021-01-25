@@ -294,6 +294,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Course AddAdminCourseCompleted(AddCourseCompleted addCourseCompleted) {
         Course course = courseMapper.getCourseById(addCourseCompleted.courseId);
+        course.chapters.forEach(chapter -> chapterMapper.removeChapter(chapter.id));
         course.chapters = addCourseCompleted.chapters.stream().map(x -> {
             Chapter chapter = new Chapter();
             chapter.name = x.name;

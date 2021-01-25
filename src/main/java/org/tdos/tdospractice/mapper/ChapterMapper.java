@@ -14,4 +14,8 @@ public interface ChapterMapper {
     int hasChapter(String id);
 
     int insertChapter(Chapter chapter);
+
+    Chapter getChapter(String chapterId);
+
+    int removeChapter(String chapterId);
 }

@@ -2,10 +2,13 @@ package org.tdos.tdospractice.controller;
 
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.tdos.tdospractice.body.Chapter;
+import org.tdos.tdospractice.body.DeleteChapter;
+import org.tdos.tdospractice.body.DeleteSection;
 import org.tdos.tdospractice.body.InsertChapter;
 import org.tdos.tdospractice.service.ChapterService;
 import org.tdos.tdospractice.type.Response;
@@ -29,6 +32,15 @@ public class ChapterController {
     @PostMapping(value = "/add_chapter")
     public Response<String> addChapter(@RequestBody InsertChapter insertChapter) {
         Pair<Boolean, String> pair = chapterService.addChapter(insertChapter);
+        if (pair.getKey()) {
+            return Response.success(null);
+        }
+        return Response.error(pair.getValue());
+    }
+
+    @DeleteMapping(value = "/remove_chapter")
+    public Response<String> removeChapter(@RequestBody DeleteChapter deleteChapter) {
+        Pair<Boolean, String> pair = chapterService.removeChapter(deleteChapter);
         if (pair.getKey()) {
             return Response.success(null);
         }

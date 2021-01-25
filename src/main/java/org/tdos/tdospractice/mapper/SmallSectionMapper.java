@@ -16,4 +16,5 @@ public interface SmallSectionMapper {
 
     int insertSmallSection(SmallSection smallSection);
 
+    int removeSmallSection(@Param("smallSectionId") String smallSectionId);
 }

@@ -3,13 +3,16 @@ package org.tdos.tdospractice.service.Impl;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.tdos.tdospractice.body.DeleteChapter;
 import org.tdos.tdospractice.body.InsertChapter;
 import org.tdos.tdospractice.entity.CourseChapterSectionEntity;
 import org.tdos.tdospractice.mapper.ChapterMapper;
 import org.tdos.tdospractice.mapper.CourseChapterSectionMapper;
 import org.tdos.tdospractice.mapper.CourseMapper;
+import org.tdos.tdospractice.mapper.SectionMapper;
 import org.tdos.tdospractice.service.ChapterService;
 import org.tdos.tdospractice.type.Chapter;
+import org.tdos.tdospractice.type.Section;
 
 @Service
 public class ChapterServiceImpl implements ChapterService {
@@ -22,6 +25,9 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Autowired
     private CourseChapterSectionMapper courseChapterSectionMapper;
+
+    @Autowired
+    private SectionMapper sectionMapper;
 
     private static final String EMPTY_UUID = "fb0a1080-b11e-427c-8567-56ca6105ea07";
 
@@ -55,6 +61,17 @@ public class ChapterServiceImpl implements ChapterService {
                 .sectionId(EMPTY_UUID)
                 .smallSectionId(EMPTY_UUID)
                 .build());
+        return new Pair<>(true, "");
+    }
+
+    @Override
+    public Pair<Boolean, String> removeChapter(DeleteChapter deleteChapter) {
+        if (chapterMapper.hasChapter(deleteChapter.chapterId) == 0) {
+            return new Pair<>(false, "chapter is not exist");
+        }
+        Chapter chapter = chapterMapper.getChapter(deleteChapter.chapterId);
+        chapter.sections.forEach(x-> sectionMapper.removeSection(x.id));
+        chapterMapper.removeChapter(deleteChapter.chapterId);
         return new Pair<>(true, "");
     }
 

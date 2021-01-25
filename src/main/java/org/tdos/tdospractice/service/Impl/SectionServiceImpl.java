@@ -3,20 +3,24 @@ package org.tdos.tdospractice.service.Impl;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.tdos.tdospractice.body.DeleteSection;
 import org.tdos.tdospractice.body.InsertSection;
 import org.tdos.tdospractice.entity.CourseChapterSectionEntity;
-import org.tdos.tdospractice.mapper.ChapterMapper;
-import org.tdos.tdospractice.mapper.CourseChapterSectionMapper;
-import org.tdos.tdospractice.mapper.CourseMapper;
-import org.tdos.tdospractice.mapper.SectionMapper;
+import org.tdos.tdospractice.mapper.*;
 import org.tdos.tdospractice.service.SectionService;
 import org.tdos.tdospractice.type.Section;
+import org.tdos.tdospractice.type.SmallSection;
+
+import java.util.List;
 
 @Service
 public class SectionServiceImpl implements SectionService {
 
     @Autowired
     private SectionMapper sectionMapper;
+
+    @Autowired
+    private SmallSectionMapper smallSectionMapper;
 
     @Autowired
     private ChapterMapper chapterMapper;
@@ -62,6 +66,17 @@ public class SectionServiceImpl implements SectionService {
                 .sectionId(section.id)
                 .smallSectionId(EMPTY_UUID)
                 .build());
+        return new Pair<>(true, "");
+    }
+
+    @Override
+    public Pair<Boolean, String> removeSection(DeleteSection deleteSection) {
+        if (sectionMapper.hasSection(deleteSection.sectionId) == 0) {
+            return new Pair<>(false, "section is not exist");
+        }
+        Section section = sectionMapper.getSection(deleteSection.sectionId);
+        section.smallSections.forEach(x-> smallSectionMapper.removeSmallSection(x.id));
+        sectionMapper.removeSection(deleteSection.sectionId);
         return new Pair<>(true, "");
     }
 

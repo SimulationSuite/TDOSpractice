@@ -15,4 +15,7 @@
         insert into small_section(name, "order") values (#{name},#{order});
     </insert>
 
+    <delete id="removeSmallSection">
+        delete from small_section where id = #{smallSectionId}::uuid
+    </delete>
 </mapper>

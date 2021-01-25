@@ -3,6 +3,18 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tdos.tdospractice.mapper.SectionMapper">
+
+    <resultMap id="SectionResult" type="org.tdos.tdospractice.type.Section">
+                <id column="section_id" property="id"/>
+                <result column="section_name" property="name"/>
+                <result column="section_order" property="order"/>
+                <collection property="smallSections" ofType="org.tdos.tdospractice.type.SmallSection">
+                    <id column="small_section_id" property="id"/>
+                    <result column="small_section_name" property="name"/>
+                    <result column="small_section_order" property="order"/>
+                </collection>
+    </resultMap>
+
     <update id="modifySectionNameById">
         update section set "name"= #{sectionName} where id=#{id}::uuid
     </update>
@@ -14,5 +26,23 @@
     <insert id = "insertSection" useGeneratedKeys="true" keyProperty="id">
         insert into section(name, "order") values (#{name},#{order});
     </insert>
+
+    <delete id="removeSection">
+        delete from section where id = #{sectionId}::uuid
+    </delete>
+
+    <select id="getSection" resultMap="SectionResult">
+SELECT
+	section.id :: "varchar" AS section_id,
+	section.NAME AS section_name,
+	section.ORDER AS section_order,
+	small_section.id :: "varchar" AS small_section_id,
+	small_section.NAME AS small_section_name,
+	small_section.ORDER AS small_section_order
+FROM "section"
+	LEFT JOIN course_chapter_section ccs ON  ccs.section_id = "section".id
+	LEFT JOIN "small_section" ON  "small_section".id = ccs.small_section_id
+	WHERE "section".id = #{sectionId}::uuid
+    </select>
 
 </mapper>

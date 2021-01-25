@@ -5,6 +5,9 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.tdos.tdospractice.type.Chapter;
 import org.tdos.tdospractice.type.Section;
+import org.tdos.tdospractice.type.SmallSection;
+
+import java.util.List;
 
 @Mapper
 @Repository
@@ -16,4 +19,7 @@ public interface SectionMapper {
 
     int insertSection(Section section);
 
+    Section getSection(String sectionId);
+
+    int removeSection(String sectionId);
 }

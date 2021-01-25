@@ -3,6 +3,23 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tdos.tdospractice.mapper.ChapterMapper">
+
+    <resultMap id="ChapterResult" type="org.tdos.tdospractice.type.Chapter">
+            <id column="chapter_id" property="id"/>
+            <result column="chapter_name" property="name"/>
+            <result column="chapter_order" property="order"/>
+            <collection property="sections" ofType="org.tdos.tdospractice.type.Section">
+                <id column="section_id" property="id"/>
+                <result column="section_name" property="name"/>
+                <result column="section_order" property="order"/>
+                <collection property="smallSections" ofType="org.tdos.tdospractice.type.SmallSection">
+                    <id column="small_section_id" property="id"/>
+                    <result column="small_section_name" property="name"/>
+                    <result column="small_section_order" property="order"/>
+                </collection>
+            </collection>
+    </resultMap>
+
     <update id="modifyChapterNameById">
         update chapter set "name"= #{chapterName} where id=#{id}::uuid
     </update>
@@ -14,5 +31,27 @@
     <insert id = "insertChapter" useGeneratedKeys="true" keyProperty="id">
         insert into chapter(name, "order") values (#{name}, #{order});
     </insert>
+
+    <delete id="removeChapter">
+        delete from chapter where id = #{chapterId}::uuid
+    </delete>
+
+    <select id="getChapter" resultMap="ChapterResult">
+        SELECT
+	chapter.id :: "varchar" AS chapter_id,
+	chapter.NAME AS chapter_name,
+	chapter."order" AS chapter_order,
+	section.id :: "varchar" AS section_id,
+	section.NAME AS section_name,
+	section.ORDER AS section_order,
+	small_section.id :: "varchar" AS small_section_id,
+	small_section.NAME AS small_section_name,
+	small_section.ORDER AS small_section_order
+FROM "chapter"
+	LEFT JOIN course_chapter_section ccs ON  ccs.chapter_id = "chapter".id
+	LEFT JOIN "section" ON "section".id = ccs.section_id
+	LEFT JOIN "small_section" ON  "small_section".id = ccs.small_section_id
+	WHERE "chapter".id = #{chapterId}::uuid
+    </select>
 
 </mapper>
