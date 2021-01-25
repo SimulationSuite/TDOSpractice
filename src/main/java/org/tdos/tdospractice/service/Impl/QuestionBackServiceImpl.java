@@ -1,10 +1,13 @@
 package org.tdos.tdospractice.service.Impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.tdos.tdospractice.body.QuestionBack;;
+import org.tdos.tdospractice.body.QuestionBack;
+import org.tdos.tdospractice.entity.CoursewareEntity;
 import org.tdos.tdospractice.entity.QuestionBackEntity;
-import org.tdos.tdospractice.body.QuestionBackAssignment;;
+import org.tdos.tdospractice.body.QuestionBackAssignment;
 import org.tdos.tdospractice.entity.QuestionBackAssignmentEntity;
 import org.tdos.tdospractice.mapper.QuestionBackMapper;
 import org.tdos.tdospractice.service.QuestionBackService;
@@ -17,6 +20,13 @@ public class QuestionBackServiceImpl implements QuestionBackService {
 
     @Autowired
     private QuestionBackMapper questionBackMapper;
+
+    @Override
+    public PageInfo<QuestionBackEntity> getQuestionBackAll(Integer type, String content, String categoryId, Integer perPage, Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<QuestionBackEntity> list = questionBackMapper.getStudentAnswerAll(type, categoryId, content);
+        return new PageInfo<>(list);
+    }
 
     @Override
     public Map<String, Object> deleteQuestionBackById(List<String> id) {
@@ -42,8 +52,10 @@ public class QuestionBackServiceImpl implements QuestionBackService {
     public QuestionBackEntity addQuestionBack(QuestionBack questionBack) {
         QuestionBackEntity questionBackEntity = new QuestionBackEntity();
         questionBackEntity.setType(questionBack.type);
+        questionBackEntity.setContent(questionBack.content);
+        questionBackEntity.setChoice(questionBack.choice);
         questionBackEntity.setAnswer(questionBack.answer);
-        questionBackEntity.setQuestion(questionBack.question);
+        questionBackEntity.setPicUrl(questionBack.picUrl);
         questionBackEntity.setModelId(questionBack.modelId);
         questionBackEntity.setCategoryId(questionBack.categoryId);
         try {
@@ -60,8 +72,10 @@ public class QuestionBackServiceImpl implements QuestionBackService {
             QuestionBackEntity questionBackEntity = new QuestionBackEntity();
             questionBackEntity.setId(questionBack.id);
             questionBackEntity.setType(questionBack.type);
+            questionBackEntity.setContent(questionBack.content);
+            questionBackEntity.setChoice(questionBack.choice);
             questionBackEntity.setAnswer(questionBack.answer);
-            questionBackEntity.setQuestion(questionBack.question);
+            questionBackEntity.setPicUrl(questionBack.picUrl);
             questionBackEntity.setModelId(questionBack.modelId);
             questionBackEntity.setCategoryId(questionBack.categoryId);
             questionBackMapper.modifyQuestionBackNameById(questionBackEntity);

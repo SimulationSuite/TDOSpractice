@@ -16,9 +16,13 @@ public class QuestionBackEntity {
 
     private int type;
 
+    private String content;
+
+    private String choice;
+
     private String answer;
 
-    private String question;
+    private String picUrl;
 
     private String modelId;
 
