@@ -1,13 +1,4 @@
-create or replace function upd_timestamp() returns trigger as
-$$
-begin
- new.updated_at= current_timestamp;
- return new;
-end
-$$
-language plpgsql;
 
-create extension "uuid-ossp";
 
 create table if not exists sim_user(
     id varchar(255) NOT NULL,
@@ -37,36 +28,6 @@ create table if not exists class(
 
 create trigger t_name before update on class for each row execute procedure upd_timestamp();
 
-create table if not exists class_course(
-    class_id UUID references "class"("id") on delete cascade NOT NULL,
-    course_id UUID references "course"("id") on delete cascade NOT NULL,
-    created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    CONSTRAINT "class_course_pk" PRIMARY KEY ( "class_id", "course_id" )
-);
-
-create trigger t_name before update on class_course for each row execute procedure upd_timestamp();
-
-
-
-INSERT INTO "chapter"("id", "name", "order") VALUES ('fb0a1080-b11e-427c-8567-56ca6105ea07', '空章', -1);
-INSERT INTO "section"("id", "name", "order") VALUES ('fb0a1080-b11e-427c-8567-56ca6105ea07', '空节', -1);
-INSERT INTO "small_section"("id", "name", "order") VALUES ('fb0a1080-b11e-427c-8567-56ca6105ea07', '空小节', -1);
-
-
-create table if not exists course_chapter_section(
-    course_id UUID references "course"("id") on delete cascade NOT NULL,
-    chapter_id UUID references "chapter"("id") on delete cascade NOT NULL,
-    section_id UUID references "section"("id") on delete cascade NOT NULL,
-    small_section_id UUID references "small_section"("id") on delete cascade NOT NULL,
-    created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    CONSTRAINT "course_chapter_section_pk" PRIMARY KEY ( "course_id", "chapter_id", "section_id", "small_section_id")
-);
-
-create trigger t_name before update on course_chapter_section for each row execute procedure upd_timestamp();
-
-
 create table if not exists course(
     id UUID primary key DEFAULT uuid_generate_v4(),
     "name" varchar(255) not null,
@@ -86,6 +47,23 @@ create index if not exists course_owner_id_index
     on course (owner_id);
 
 create trigger t_name before update on course for each row execute procedure upd_timestamp();
+
+
+
+create table if not exists class_course(
+    class_id UUID references "class"("id") on delete cascade NOT NULL,
+    course_id UUID references "course"("id") on delete cascade NOT NULL,
+    created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
+    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
+    CONSTRAINT "class_course_pk" PRIMARY KEY ( "class_id", "course_id" )
+);
+
+create trigger t_name before update on class_course for each row execute procedure upd_timestamp();
+
+
+
+
+
 
 create table if not exists chapter(
     id UUID primary key DEFAULT uuid_generate_v4(),
@@ -117,16 +95,21 @@ create table if not exists small_section(
 
 create trigger t_name before update on small_section for each row execute procedure upd_timestamp();
 
-create table if not exists chapter_section_courseware(
-    id UUID primary key DEFAULT uuid_generate_v4(),
+INSERT INTO "chapter"("id", "name", "order") VALUES ('fb0a1080-b11e-427c-8567-56ca6105ea07', '空章', -1);
+INSERT INTO "section"("id", "name", "order") VALUES ('fb0a1080-b11e-427c-8567-56ca6105ea07', '空节', -1);
+INSERT INTO "small_section"("id", "name", "order") VALUES ('fb0a1080-b11e-427c-8567-56ca6105ea07', '空小节', -1);
+
+create table if not exists course_chapter_section(
+    course_id UUID references "course"("id") on delete cascade NOT NULL,
     chapter_id UUID references "chapter"("id") on delete cascade NOT NULL,
     section_id UUID references "section"("id") on delete cascade NOT NULL,
-    courseware_id UUID references "courseware"("id") on delete cascade NOT NULL,
+    small_section_id UUID references "small_section"("id") on delete cascade NOT NULL,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
+    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
+    CONSTRAINT "course_chapter_section_pk" PRIMARY KEY ( "course_id", "chapter_id", "section_id", "small_section_id")
 );
 
-create trigger t_name before update on chapter_section_courseware for each row execute procedure upd_timestamp();
+create trigger t_name before update on course_chapter_section for each row execute procedure upd_timestamp();
 
 create table if not exists courseware(
     id UUID primary key DEFAULT uuid_generate_v4(),
@@ -145,6 +128,18 @@ create index if not exists courseware_name_index
     on courseware ("name");
 
 create trigger t_name before update on courseware for each row execute procedure upd_timestamp();
+
+create table if not exists chapter_section_courseware(
+    id UUID primary key DEFAULT uuid_generate_v4(),
+    chapter_id UUID references "chapter"("id") on delete cascade NOT NULL,
+    section_id UUID references "section"("id") on delete cascade NOT NULL,
+    courseware_id UUID references "courseware"("id") on delete cascade NOT NULL,
+    created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
+    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
+);
+
+create trigger t_name before update on chapter_section_courseware for each row execute procedure upd_timestamp();
+
 
 create table if not exists category(
     id UUID primary key DEFAULT uuid_generate_v4(),
@@ -174,7 +169,6 @@ create trigger t_name before update on assignment for each row execute procedure
 create table if not exists question_back(
     id UUID primary key DEFAULT uuid_generate_v4(),
     "type" int4 DEFAULT 0,
-    title text,
     answer text,
     question text,
     model_id varchar(255) DEFAULT null,
@@ -254,23 +248,11 @@ create table if not exists chapter_section_experiment(
     id UUID primary key DEFAULT uuid_generate_v4(),
     chapter_id UUID references "chapter"("id") on delete cascade NOT NULL,
     section_id UUID references "section"("id") on delete cascade NOT NULL,
-    experiment_id references "experiment"("id") on delete cascade NOT NULL,
+    experiment_id UUID references "experiment"("id") on delete cascade NOT NULL,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
 
-comment on column chapter_section_experiment."type" is '0 是章ID 1是节ID';
-
 create trigger t_name before update on chapter_section_experiment for each row execute procedure upd_timestamp();
-
-create table if not exists experiment_image(
-    experiment_id UUID references "experiment"("id") on delete cascade NOT NULL,
-    image_id UUID references "image"("id") on delete cascade NOT NULL,
-    created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    CONSTRAINT "experiment_image_pk" PRIMARY KEY ( "experiment_id", "image_id")
-);
-
-create trigger t_name before update on experiment_image for each row execute procedure upd_timestamp();
 
 create table if not exists image(
     id UUID primary key DEFAULT uuid_generate_v4(),
@@ -286,6 +268,17 @@ create table if not exists image(
 );
 
 create trigger t_name before update on image for each row execute procedure upd_timestamp();
+
+create table if not exists experiment_image(
+    experiment_id UUID references "experiment"("id") on delete cascade NOT NULL,
+    image_id UUID references "image"("id") on delete cascade NOT NULL,
+    created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
+    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
+    CONSTRAINT "experiment_image_pk" PRIMARY KEY ( "experiment_id", "image_id")
+);
+
+create trigger t_name before update on experiment_image for each row execute procedure upd_timestamp();
+
 
 create table if not exists experiment_report(
     experiment_id UUID references "experiment"("id") on delete cascade NOT NULL,
