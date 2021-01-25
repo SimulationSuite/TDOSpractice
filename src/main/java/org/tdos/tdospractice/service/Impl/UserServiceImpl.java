@@ -153,22 +153,12 @@ public class UserServiceImpl extends Throwable implements UserService{
         if (owner == null) {
             return new Pair<>(false, "jwt user_id is exist");
         }
-        int role;
-        switch (owner.getRoleID()) {
-            case 0:
-                role = 1;
-                break;
-            case 1:
-                role = 2;
-                break;
-            default:
-                return new Pair<>(false, "jwt user_id cannot have power");
-        }
+        int role = 0;
         UserEntity user = userMapper.findUserById(modifyUser.useID);
         if (user == null) {
             return new Pair<>(false, "user_id is not exist");
         }
-        if (user.getRoleID() != role) {
+        if (owner.getRoleID() != role) {
             return new Pair<>(false, "jwt user_id cannot have power");
         }
         userMapper.updateUserById(modifyUser.useID, modifyUser.name, modifyUser.gender, modifyUser.phone, modifyUser.identificationNumber);

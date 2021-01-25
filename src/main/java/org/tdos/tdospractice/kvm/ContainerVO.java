@@ -24,7 +24,7 @@ public class ContainerVO implements Comparable<ContainerVO> {
 
     private String containerID;
 
-    private String imageName;
+    private String imageID;
 
     private List<ContainerPorts> ports;
 
@@ -54,7 +54,7 @@ public class ContainerVO implements Comparable<ContainerVO> {
         return ContainerVO.builder()
                 .containerID(containerInfo.getId())
                 .containername(containerInfo.getName())
-                .imageName(container.getImage())
+                .imageID(container.getImageId())
                 .ports(ports)
                 .status(parseState(containerInfo.getState().getStatus()))
                 .nodeOrder(order)
