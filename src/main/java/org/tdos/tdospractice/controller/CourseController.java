@@ -5,6 +5,7 @@ import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.tdos.tdospractice.body.AddCourse;
+import org.tdos.tdospractice.body.AddCourseCompleted;
 import org.tdos.tdospractice.body.ModifyCourseStatus;
 import org.tdos.tdospractice.body.PrepareCourse;
 import org.tdos.tdospractice.service.CourseService;
@@ -55,6 +56,12 @@ public class CourseController {
     @PostMapping(value = "/insert_course")
     public Response<Course> insertCourse(@RequestBody AddCourse addCourse) {
         return Response.success(courseService.AddAdminCourse(addCourse));
+    }
+
+    // 管理员添加内置课程
+    @PostMapping(value = "/insert_course_completed")
+    public Response<Course> insertCourseCompleted(@RequestBody AddCourseCompleted addCourseCompleted) {
+        return Response.success(courseService.AddAdminCourseCompleted(addCourseCompleted));
     }
 
     // 发布课程

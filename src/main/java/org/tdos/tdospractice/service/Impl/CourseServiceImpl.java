@@ -2,12 +2,12 @@ package org.tdos.tdospractice.service.Impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import io.netty.util.internal.ObjectUtil;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.tdos.tdospractice.body.AddCourse;
+import org.tdos.tdospractice.body.AddCourseCompleted;
 import org.tdos.tdospractice.body.ModifyCourseStatus;
 import org.tdos.tdospractice.body.PrepareCourse;
 import org.tdos.tdospractice.entity.CourseChapterSectionEntity;
@@ -49,7 +49,7 @@ public class CourseServiceImpl implements CourseService {
         PageHelper.startPage(page, perPage);
         PageInfo<Course> pageInfo = new PageInfo<>(courseMapper.getAdminCourseList(name));
         if (pageInfo.getList().size() > 0) {
-           List<Course> courses = courseMapper.getAdminCourseListPerfect(pageInfo.getList().stream().map(x -> x.id).collect(Collectors.toList()));
+            List<Course> courses = courseMapper.getAdminCourseListPerfect(pageInfo.getList().stream().map(x -> x.id).collect(Collectors.toList()));
             courses.forEach(x -> {
                 x.chapters.forEach(s -> s.sections = s.sections.stream().sorted(Comparator.comparing(Section::getOrder)).collect(Collectors.toList()));
                 x.chapters = x.chapters.stream().sorted(Comparator.comparing(Chapter::getOrder)).collect(Collectors.toList());
@@ -290,6 +290,54 @@ public class CourseServiceImpl implements CourseService {
             pageInfo.setList(list);
         }
         return pageInfo;
+    }
+
+    @Override
+    public Course AddAdminCourseCompleted(AddCourseCompleted addCourseCompleted) {
+        Course course = courseMapper.getCourseById(addCourseCompleted.courseId);
+        course.chapters = addCourseCompleted.chapters.stream().map(x -> {
+            Chapter chapter = new Chapter();
+            chapter.introduction = x.introduction;
+            chapter.name = x.name;
+            chapter.order = x.order;
+            chapter.sections = x.sections.stream().map(y -> {
+                Section section = new Section();
+                section.name = y.name;
+                section.order = y.order;
+                section.smallSections = y.smallSections.stream().map(z -> {
+                    SmallSection smallSection = new SmallSection();
+                    smallSection.name = z.name;
+                    smallSection.order = z.order;
+                    return smallSection;
+                }).collect(Collectors.toList());
+                return section;
+            }).collect(Collectors.toList());
+            return chapter;
+        }).collect(Collectors.toList());
+        List<CourseChapterSectionEntity> list = new ArrayList<>();
+        course.chapters.forEach(x -> {
+            chapterMapper.insertChapter(x);
+            x.sections.forEach(section -> {
+                sectionMapper.insertSection(section);
+                section.smallSections.forEach(smallSection -> {
+                    smallSectionMapper.insertSmallSection(smallSection);
+                    list.add(CourseChapterSectionEntity.builder().courseId(course.id)
+                            .chapterId(x.id)
+                            .sectionId(section.id)
+                            .smallSectionId(smallSection.id)
+                            .build());
+                });
+            });
+        });
+        if (list.size() > 0) {
+            courseChapterSectionMapper.insertCourseChapterSectionList(list);
+            course.chapters.forEach(c -> {
+                c.sections = c.sections.stream().sorted(Comparator.comparing(Section::getOrder)).collect(Collectors.toList());
+                c.sections.forEach(section -> section.smallSections = section.smallSections.stream().sorted(Comparator.comparing(SmallSection::getOrder)).collect(Collectors.toList()));
+            });
+            course.chapters = course.chapters.stream().sorted(Comparator.comparing(Chapter::getOrder)).collect(Collectors.toList());
+        }
+        return course;
     }
 
 }
