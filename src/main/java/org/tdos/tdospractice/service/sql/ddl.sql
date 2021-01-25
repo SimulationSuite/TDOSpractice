@@ -38,8 +38,8 @@ create table if not exists class(
 create trigger t_name before update on class for each row execute procedure upd_timestamp();
 
 create table if not exists class_course(
-    class_id varchar(255) NOT NULL,
-    course_id varchar(255) NOT NULL,
+    class_id UUID references "class"("id") on delete cascade NOT NULL,
+    course_id UUID references "course"("id") on delete cascade NOT NULL,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     CONSTRAINT "class_course_pk" PRIMARY KEY ( "class_id", "course_id" )
@@ -47,19 +47,18 @@ create table if not exists class_course(
 
 create trigger t_name before update on class_course for each row execute procedure upd_timestamp();
 
-create table if not exists small_section(
-    id UUID primary key DEFAULT uuid_generate_v4(),
-    "name" varchar(255) not null,
-    "order" int4 NOT NULL,
-    created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
-);
+
+
+INSERT INTO "chapter"("id", "name", "order") VALUES ('fb0a1080-b11e-427c-8567-56ca6105ea07', '空章', -1);
+INSERT INTO "section"("id", "name", "order") VALUES ('fb0a1080-b11e-427c-8567-56ca6105ea07', '空节', -1);
+INSERT INTO "small_section"("id", "name", "order") VALUES ('fb0a1080-b11e-427c-8567-56ca6105ea07', '空小节', -1);
+
 
 create table if not exists course_chapter_section(
-    course_id UUID NOT NULL,
-    chapter_id UUID NOT NULL,
-    section_id UUID NOT NULL,
-    small_section_id UUID NOT NULL,
+    course_id UUID references "course"("id") on delete cascade NOT NULL,
+    chapter_id UUID references "chapter"("id") on delete cascade NOT NULL,
+    section_id UUID references "section"("id") on delete cascade NOT NULL,
+    small_section_id UUID references "small_section"("id") on delete cascade NOT NULL,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     CONSTRAINT "course_chapter_section_pk" PRIMARY KEY ( "course_id", "chapter_id", "section_id", "small_section_id")
@@ -91,7 +90,6 @@ create trigger t_name before update on course for each row execute procedure upd
 create table if not exists chapter(
     id UUID primary key DEFAULT uuid_generate_v4(),
     "name" varchar(255) not null,
-    introduction text not null,
     "order" int4 NOT NULL,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
@@ -109,16 +107,24 @@ create table if not exists section(
 
 create trigger t_name before update on section for each row execute procedure upd_timestamp();
 
-create table if not exists chapter_section_courseware(
-    relative_id varchar(255) NOT NULL,
-    courseware_id varchar(255) NOT NULL,
-    "type" int4 default 0,
+create table if not exists small_section(
+    id UUID primary key DEFAULT uuid_generate_v4(),
+    "name" varchar(255) not null,
+    "order" int4 NOT NULL,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    CONSTRAINT "chapter_section_courseware_pk" PRIMARY KEY ( "relative_id", "courseware_id")
+    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
 
-comment on column chapter_section_courseware."type" is '0 是章ID 1是节ID';
+create trigger t_name before update on small_section for each row execute procedure upd_timestamp();
+
+create table if not exists chapter_section_courseware(
+    id UUID primary key DEFAULT uuid_generate_v4(),
+    chapter_id UUID references "chapter"("id") on delete cascade NOT NULL,
+    section_id UUID references "section"("id") on delete cascade NOT NULL,
+    courseware_id UUID references "courseware"("id") on delete cascade NOT NULL,
+    created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
+    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
+);
 
 create trigger t_name before update on chapter_section_courseware for each row execute procedure upd_timestamp();
 
@@ -153,7 +159,7 @@ create trigger t_name before update on category for each row execute procedure u
 create table if not exists assignment(
     id UUID primary key DEFAULT uuid_generate_v4(),
     "name" varchar(255) NOT NULL,
-    section_id varchar(255) NOT null,
+    section_id UUID references "section"("id") NOT NULL,
     end_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     qualified_score int4 DEFAULT NULL,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
@@ -168,6 +174,7 @@ create trigger t_name before update on assignment for each row execute procedure
 create table if not exists question_back(
     id UUID primary key DEFAULT uuid_generate_v4(),
     "type" int4 DEFAULT 0,
+    title text,
     answer text,
     question text,
     model_id varchar(255) DEFAULT null,
@@ -179,8 +186,8 @@ create table if not exists question_back(
 create trigger t_name before update on question_back for each row execute procedure upd_timestamp();
 
 create table if not exists question_back_assignment(
-    assignment_id varchar(255) NOT NULL,
-    question_id varchar(255) NOT NULL,
+    assignment_id UUID references "assignment"("id") on delete cascade NOT NULL,
+    question_id UUID references "question_back"("id") on delete cascade NOT NULL,
     "order" int4 NOT NULL,
     score int4 DEFAULT NULL,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
@@ -200,8 +207,8 @@ create trigger t_name before update on question_back_assignment for each row exe
 
 create table if not exists student_answer(
     id UUID primary key DEFAULT uuid_generate_v4(),
-    question_id varchar(255) DEFAULT null,
-    assignment_id varchar(255) NOT NULL,
+    question_id UUID references "question_back"("id") NOT NULL,
+    assignment_id UUID references "assignment"("id") NOT NULL,
     user_id varchar(255) not null,
     answer text,
     score int4 DEFAULT NULL,
@@ -216,7 +223,7 @@ create trigger t_name before update on student_answer for each row execute proce
 
 
 create table if not exists student_score(
-    assignment_id varchar(255) DEFAULT null,
+    assignment_id UUID references "assignment"("id") DEFAULT NULL,
     user_id varchar(255) NOT NULL,
     score int4 DEFAULT NULL,
     status int4 DEFAULT 0,
@@ -244,12 +251,11 @@ create table if not exists experiment(
 create trigger t_name before update on experiment for each row execute procedure upd_timestamp();
 
 create table if not exists chapter_section_experiment(
-    relative_id varchar(255) NOT NULL,
-    experiment_id varchar(255) NOT NULL,
-    "type" int4 default 0,
-    created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    CONSTRAINT "chapter_section_experiment_pk" PRIMARY KEY ( "relative_id", "experiment_id")
+    id UUID primary key DEFAULT uuid_generate_v4(),
+    chapter_id UUID references "chapter"("id") on delete cascade NOT NULL,
+    section_id UUID references "section"("id") on delete cascade NOT NULL,
+    experiment_id references "experiment"("id") on delete cascade NOT NULL,
+    created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
 
 comment on column chapter_section_experiment."type" is '0 是章ID 1是节ID';
@@ -282,7 +288,7 @@ create table if not exists image(
 create trigger t_name before update on image for each row execute procedure upd_timestamp();
 
 create table if not exists experiment_report(
-    experiment_id varchar(255) NOT NULL,
+    experiment_id UUID references "experiment"("id") on delete cascade NOT NULL,
     user_id varchar(255) NOT NULL,
     url varchar(255) DEFAULT null,
     score int4 DEFAULT NULL,
@@ -296,7 +302,7 @@ create trigger t_name before update on experiment_report for each row execute pr
 
 create table if not exists courseware_remark(
     id UUID primary key DEFAULT uuid_generate_v4(),
-    courseware_id UUID NOT NULL,
+    courseware_id UUID  references "courseware"("id") on delete cascade NOT NULL,
     user_id varchar(255) NOT NULL,
     title varchar(255) DEFAULT null,
     content varchar(255) DEFAULT NULL,
