@@ -11,7 +11,9 @@ import java.time.LocalDateTime;
 @Builder
 public class ChapterSectionCoursewareEntity {
 
-    private String relativeId;
+    private String ChapterId;
+
+    private String sectionId;
 
     private String coursewareId;
 

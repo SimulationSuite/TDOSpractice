@@ -103,7 +103,8 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
     @Override
     public ChapterSectionCoursewareEntity addChapterSectionCourseware(ChapterSectionCourseware sectionCourseware) {
         ChapterSectionCoursewareEntity chapterSectionCoursewareEntity = new ChapterSectionCoursewareEntity();
-        chapterSectionCoursewareEntity.setRelativeId(sectionCourseware.relativeId);
+        chapterSectionCoursewareEntity.setChapterId(sectionCourseware.chapterId);
+        chapterSectionCoursewareEntity.setSectionId(sectionCourseware.sectionId);
         chapterSectionCoursewareEntity.setCoursewareId(sectionCourseware.coursewareId);
         chapterSectionCoursewareEntity.setType(sectionCourseware.type);
         try {
