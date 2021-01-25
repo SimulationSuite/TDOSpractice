@@ -6,39 +6,36 @@
 
     <select  id="getAssignmentByClassId" resultType="org.tdos.tdospractice.entity.AssignmentEntity">
         select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
-        a.created_at as createdAt, a.updated_at as updatedAt, ci.status = 0 as canUpdate
+        a.created_at as createdAt, a.updated_at as updatedAt
         from assignment a
-        inner join course_chapter_section ccs on ccs.section_id = a.section_id::uuid
+        inner join course_chapter_section ccs on ccs.section_id = a.section_id
         inner join course ci on ci.id = ccs.course_id
-        inner join class_course cc on cc.course_id ::uuid = ci.id
-        where cc.class_id = #{ClassId}
+        inner join class_course cc on cc.course_id = ci.id
+        where cc.class_id = #{ClassId} ::uuid
     </select>
 
     <select  id="getAssignmentByCourseId" resultType="org.tdos.tdospractice.entity.AssignmentEntity">
         select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
-        a.created_at as createdAt, a.updated_at as updatedAt, ci.status = 0 as canUpdate
+        a.created_at as createdAt, a.updated_at as updatedAt
         from assignment a
-        inner join course_chapter_section ccs on ccs.section_id = a.section_id::uuid
+        inner join course_chapter_section ccs on ccs.section_id = a.section_id
         inner join course ci on ci.id = ccs.course_id
         where ccs.course_id =#{CourseId} ::uuid
     </select>
 
     <select  id="getAssignmentByChapterId" resultType="org.tdos.tdospractice.entity.AssignmentEntity">
         select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
-        a.created_at as createdAt, a.updated_at as updatedAt, ci.status = 0 as canUpdate
+        a.created_at as createdAt, a.updated_at as updatedAt
         from assignment a
-        inner join course_chapter_section ccs on ccs.section_id = a.section_id ::uuid
-        inner join course ci on ci.id = ccs.course_id
+        inner join course_chapter_section ccs on ccs.section_id = a.section_id
         where ccs.chapter_id =#{ChapterId} ::uuid
     </select>
 
     <select  id="getAssignmentBySectionId" resultType="org.tdos.tdospractice.entity.AssignmentEntity">
         select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
-        a.created_at as createdAt, a.updated_at as updatedAt, ci.status = 0 as canUpdate
+        a.created_at as createdAt, a.updated_at as updatedAt
         from assignment a
-        inner join course_chapter_section ccs on ccs.section_id = a.section_id ::uuid
-        inner join course ci on ci.id = ccs.course_id
-        where a.section_id =#{sectionId}
+        where a.section_id =#{sectionId} ::uuid
     </select>
 
     <delete id="deleteAssignmentById">
