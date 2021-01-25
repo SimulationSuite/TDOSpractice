@@ -42,7 +42,6 @@ public class ChapterServiceImpl implements ChapterService {
         }
         Integer order = courseMapper.findCourseChapterOrder(insertChapter.courseId);
         Chapter chapter = new Chapter();
-        chapter.introduction = insertChapter.introduction;
         chapter.name = insertChapter.chapterName;
         if (order == null){
             chapter.order = 0;
