@@ -1,5 +1,6 @@
 package org.tdos.tdospractice.controller;
 
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,15 @@ public class QuestionBackController {
 
     @Autowired
     private QuestionBackService questionBackService;
+
+    @GetMapping(value = "/getQuestionBackAll")
+    public Response<PageInfo<QuestionBackEntity>> getQuestionBackAll(@RequestParam(value = "type", required = false) Integer type,
+                                                                     @RequestParam(value = "content", required = false) String content,
+                                                                     @RequestParam(value = "category_id", required = false) String categoryId,
+                                                                     @RequestParam(value = "perPage") Integer perPage,
+                                                                     @RequestParam(value = "page") Integer page) {
+        return Response.success(questionBackService.getQuestionBackAll(type, content, categoryId, perPage, page));
+    }
 
     @GetMapping(value = "/getStudentAnswerByAssignment")
     public Response<QuestionBackEntity> getStudentAnswerByAssignment(@RequestParam(value = "assignmentId") String assignmentId) {
