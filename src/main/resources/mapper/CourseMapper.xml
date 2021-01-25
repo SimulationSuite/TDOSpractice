@@ -20,7 +20,6 @@
         <collection property="chapters" ofType="org.tdos.tdospractice.type.Chapter">
             <id column="chapter_id" property="id"/>
             <result column="chapter_name" property="name"/>
-            <result column="chapter_introduction" property="introduction"/>
             <result column="chapter_order" property="order"/>
             <collection property="sections" ofType="org.tdos.tdospractice.type.Section">
                 <id column="section_id" property="id"/>
@@ -71,7 +70,6 @@
         cc.class_id,
         chapter.id :: "varchar" AS chapter_id,
         chapter.NAME AS chapter_name,
-        chapter.introduction AS chapter_introduction,
         chapter."order" AS chapter_order,
         section.id :: "varchar" AS section_id,
         section.NAME AS section_name,
@@ -124,7 +122,6 @@
         cc.class_id,
         chapter.id :: "varchar" AS chapter_id,
         chapter.NAME AS chapter_name,
-        chapter.introduction AS chapter_introduction,
         chapter."order" AS chapter_order,
         section.id :: "varchar" AS section_id,
         section.NAME AS section_name,
@@ -160,7 +157,6 @@ SELECT
 	cc.class_id,
 	chapter.id :: "varchar" AS chapter_id,
 	chapter.NAME AS chapter_name,
-	chapter.introduction AS chapter_introduction,
 	chapter."order" AS chapter_order,
 	section.id :: "varchar" AS section_id,
 	section.NAME AS section_name,
@@ -220,7 +216,6 @@ FROM
         cc.class_id,
         chapter.id AS chapter_id,
         chapter.NAME AS chapter_name,
-        chapter.introduction AS chapter_introduction,
         chapter."order" AS chapter_order,
         section.id AS section_id,
         section.NAME AS section_name,
@@ -277,6 +272,9 @@ FROM
         c.model_id
         FROM
         course c
+        INNER JOIN class_course cc ON cc.course_id = c.id
+        INNER JOIN "sim_user" ON sim_user.class_id = cc.class_id
+        AND sim_user."id" = #{userId}
         Where c.type = 1
         AND c.STATUS = 1
         <if test = "start != null" >
@@ -285,9 +283,6 @@ FROM
         <if test = "end != null" >
             AND c.end_at &lt;= #{end} :: timestamp
         </if>
-        INNER JOIN class_course cc ON cc.course_id = ccs.course_id ::VARCHAR
-        INNER JOIN "sim_user" ON sim_user.class_id = cc.class_id
-        AND sim_user."id" = #{userId}
     </select>
 
     <select  id="getCourseListPerfect" resultMap="CourseResult">
@@ -305,7 +300,6 @@ FROM
         cc.class_id,
         chapter.id AS chapter_id,
         chapter.NAME AS chapter_name,
-        chapter.introduction AS chapter_introduction,
         chapter."order" AS chapter_order,
         section.id AS section_id,
         section.NAME AS section_name,
@@ -315,7 +309,7 @@ FROM
         LEFT JOIN course_chapter_section ccs ON  ccs.course_id = c.id
         LEFT JOIN chapter ON chapter.id = ccs.chapter_id
         LEFT JOIN "section" ON "section".id = ccs.section_id
-        LEFT JOIN class_course cc ON cc.course_id = ccs.course_id ::VARCHAR
+        LEFT JOIN class_course cc ON cc.course_id = ccs.course_id
         WHERE
         c.id  IN
         <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
@@ -359,7 +353,6 @@ FROM
 	c.model_id,
 	chapter.id AS chapter_id,
 	chapter.NAME AS chapter_name,
-	chapter.introduction AS chapter_introduction,
 	chapter."order" AS chapter_order,
 	section.id AS section_id,
 	section.NAME AS section_name,
@@ -414,7 +407,6 @@ SELECT
 	cc.class_id,
 	chapter.id :: "varchar" AS chapter_id,
 	chapter.NAME AS chapter_name,
-	chapter.introduction AS chapter_introduction,
 	chapter."order" AS chapter_order,
 	section.id :: "varchar" AS section_id,
 	section.NAME AS section_name,
@@ -446,7 +438,6 @@ SELECT
 	cc.class_id,
 	chapter.id :: "varchar" AS chapter_id,
 	chapter.NAME AS chapter_name,
-	chapter.introduction AS chapter_introduction,
 	chapter."order" AS chapter_order,
 	section.id :: "varchar" AS section_id,
 	section.NAME AS section_name,

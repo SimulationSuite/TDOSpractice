@@ -18,8 +18,8 @@
     <insert id="insertClassCourse" useGeneratedKeys="false">
         insert into class_course(course_id, class_id) values
             (
-            #{courseId},
-            #{classId}
+            #{courseId}::uuid,
+            #{classId}::uuid
             ) on conflict(course_id, class_id)
             DO UPDATE SET updated_at = now() at time zone 'utc';
     </insert>
