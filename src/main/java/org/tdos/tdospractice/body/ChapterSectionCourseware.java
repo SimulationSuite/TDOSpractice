@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ChapterSectionCourseware {
 
-    @JsonProperty("relative_id")
-    public String relativeId;
+    @JsonProperty("chapter_id")
+    public String chapterId;
+
+    @JsonProperty("section_id")
+    public String sectionId;
 
     @JsonProperty("courseware_id")
     public String coursewareId;

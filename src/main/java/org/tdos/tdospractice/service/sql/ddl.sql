@@ -8,22 +8,6 @@ $$
 language plpgsql;
 create extension "uuid-ossp";
 
-create table if not exists sim_user(
-    id varchar(255) NOT NULL,
-    "name" varchar(255) not null,
-    gender int4 default 0,
-    password varchar(255) not null,
-    role_id int4 default 0,
-    class_id varchar(255) default null,
-    phone varchar(255) not null,
-    identification_number varchar(255) not null,
-    created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    CONSTRAINT "sim_user_pkey" PRIMARY KEY ( "id" )
-);
-
-create trigger t_name before update on sim_user for each row execute procedure upd_timestamp();
-
 create table if not exists class(
     id UUID primary key DEFAULT uuid_generate_v4(),
     "name" varchar(255) not null,
@@ -35,6 +19,22 @@ create table if not exists class(
 );
 
 create trigger t_name before update on class for each row execute procedure upd_timestamp();
+
+create table if not exists sim_user(
+    id varchar(255) NOT NULL,
+    "name" varchar(255) not null,
+    gender int4 default 0,
+    password varchar(255) not null,
+    role_id int4 default 0,
+    class_id UUID references "class"("id") default null,
+    phone varchar(255) not null,
+    identification_number varchar(255) not null,
+    created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
+    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
+    CONSTRAINT "sim_user_pkey" PRIMARY KEY ( "id" )
+);
+
+create trigger t_name before update on sim_user for each row execute procedure upd_timestamp();
 
 create table if not exists course(
     id UUID primary key DEFAULT uuid_generate_v4(),

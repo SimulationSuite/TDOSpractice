@@ -143,7 +143,6 @@ public class CourseServiceImpl implements CourseService {
         course.introduction = addCourse.introduction;
         course.chapters = addCourse.chapters.stream().map(x -> {
             Chapter chapter = new Chapter();
-            chapter.introduction = x.introduction;
             chapter.name = x.name;
             chapter.order = x.order;
             chapter.sections = x.sections.stream().map(y -> {
@@ -297,7 +296,6 @@ public class CourseServiceImpl implements CourseService {
         Course course = courseMapper.getCourseById(addCourseCompleted.courseId);
         course.chapters = addCourseCompleted.chapters.stream().map(x -> {
             Chapter chapter = new Chapter();
-            chapter.introduction = x.introduction;
             chapter.name = x.name;
             chapter.order = x.order;
             chapter.sections = x.sections.stream().map(y -> {
