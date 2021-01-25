@@ -169,8 +169,10 @@ create trigger t_name before update on assignment for each row execute procedure
 create table if not exists question_back(
     id UUID primary key DEFAULT uuid_generate_v4(),
     "type" int4 DEFAULT 0,
+    content text,
+    choice text,
     answer text,
-    question text,
+    pic_url varchar(255),
     model_id varchar(255) DEFAULT null,
     category_id varchar(255),
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
