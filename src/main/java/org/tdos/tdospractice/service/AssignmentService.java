@@ -12,7 +12,7 @@ import java.util.Map;
 
 public interface AssignmentService {
 
-    PageInfo<StudentAnswerEntity> getAssignmentAll(String classId,String courseId,String chapterId, String sectionId, String userId, Integer status,String name, Integer perPage, Integer page);
+    PageInfo<StudentAnswerEntity> getAssignmentAll(String classId,String courseId,String chapterId, String sectionId, Integer status,String name, Integer perPage, Integer page);
 
     PageInfo<AssignmentEntity> getAssignmentByClassId(String classId, Integer perPage,Integer page);
 

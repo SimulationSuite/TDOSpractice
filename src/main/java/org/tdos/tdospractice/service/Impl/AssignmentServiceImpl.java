@@ -19,9 +19,9 @@ public class AssignmentServiceImpl implements AssignmentService {
     private AssignmentMapper assignmentMapper;
 
     @Override
-    public PageInfo<StudentAnswerEntity> getAssignmentAll(String classId,String courseId,String chapterId, String sectionId, String userId, Integer status,String name, Integer perPage, Integer page) {
+    public PageInfo<StudentAnswerEntity> getAssignmentAll(String classId,String courseId,String chapterId, String sectionId, Integer status,String name, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        List<StudentAnswerEntity> list = assignmentMapper.getAssignmentAll(classId, courseId, chapterId, sectionId, userId, status, name);
+        List<StudentAnswerEntity> list = assignmentMapper.getAssignmentAll(classId, courseId, chapterId, sectionId, status, name);
         return new PageInfo<>(list);
     }
 
