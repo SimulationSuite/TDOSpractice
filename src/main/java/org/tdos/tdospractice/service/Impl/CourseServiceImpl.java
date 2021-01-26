@@ -6,14 +6,14 @@ import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import org.tdos.tdospractice.body.AddCourse;
-import org.tdos.tdospractice.body.AddCourseCompleted;
-import org.tdos.tdospractice.body.ModifyCourseStatus;
-import org.tdos.tdospractice.body.PrepareCourse;
+import org.tdos.tdospractice.body.*;
 import org.tdos.tdospractice.entity.CourseChapterSectionEntity;
 import org.tdos.tdospractice.mapper.*;
 import org.tdos.tdospractice.service.CourseService;
 import org.tdos.tdospractice.type.*;
+import org.tdos.tdospractice.type.Chapter;
+import org.tdos.tdospractice.type.Section;
+import org.tdos.tdospractice.type.SmallSection;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -337,6 +337,47 @@ public class CourseServiceImpl implements CourseService {
             course.chapters = course.chapters.stream().sorted(Comparator.comparing(Chapter::getOrder)).collect(Collectors.toList());
         }
         return course;
+    }
+
+    @Override
+    public Pair<Boolean, String> insertCourseChapterCompleted(AddChapterCompleted addChapterCompleted) {
+        Course course = courseMapper.getCourseById(addChapterCompleted.courseId);
+        if (course.chapters.stream().map(Chapter::getId)
+                .collect(Collectors.toList()).contains(addChapterCompleted.chapter.id)) {
+            chapterMapper.removeChapter(addChapterCompleted.chapter.id);
+        }
+        Chapter chapter = new Chapter();
+        chapter.name = addChapterCompleted.chapter.name;
+        chapter.order = addChapterCompleted.chapter.order;
+        chapter.sections = addChapterCompleted.chapter.sections.stream().map(y -> {
+            Section section = new Section();
+            section.name = y.name;
+            section.order = y.order;
+            section.smallSections = y.smallSections.stream().map(z -> {
+                SmallSection smallSection = new SmallSection();
+                smallSection.name = z.name;
+                smallSection.order = z.order;
+                return smallSection;
+            }).collect(Collectors.toList());
+            return section;
+        }).collect(Collectors.toList());
+        chapterMapper.insertChapter(chapter);
+        List<CourseChapterSectionEntity> list = new ArrayList<>();
+        chapter.sections.forEach(section -> {
+            sectionMapper.insertSection(section);
+            section.smallSections.forEach(smallSection -> {
+                smallSectionMapper.insertSmallSection(smallSection);
+                list.add(CourseChapterSectionEntity.builder().courseId(course.id)
+                        .chapterId(chapter.id)
+                        .sectionId(section.id)
+                        .smallSectionId(smallSection.id)
+                        .build());
+            });
+        });
+        if (list.size() > 0) {
+            courseChapterSectionMapper.insertCourseChapterSectionList(list);
+        }
+        return new Pair<>(true, "");
     }
 
 }
