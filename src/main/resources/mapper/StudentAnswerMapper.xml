@@ -4,13 +4,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tdos.tdospractice.mapper.StudentAnswerMapper">
 
+    <select  id="getStudentAnswerByAssignmentUserId" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">
+        select sa.id, sa.question_id as questionId, sa.assignment_id as assignmentId, sa.user_id as userId,
+        sa.answer, sa.score, sa.created_at as createdAt, sa.updated_at as updatedAt
+        from student_answer sa
+        where sa.user_id = #{userId} and sa.assignment_id = #{assignmentId}::uuid;
+    </select>
+
     <select  id="getStudentAnswerByCourseId" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">
         select sa.id, sa.question_id as questionId, sa.assignment_id as assignmentId, sa.user_id as userId,
         sa.answer, sa.score, sa.created_at as createdAt, sa.updated_at as updatedAt
         from student_answer sa
         inner join assignment a on a.id = sa.assignment_id::uuid
-        inner join course_chapter_section ccs on ccs.section_id = a.section_id::uuid
-        where ccs.course_id =#{courseId}::uuid;
+        inner join course_chapter_section ccs on ccs.section_id = a.section_id
+        where ccs.course_id =#{courseId};
     </select>
 
     <select  id="getStudentAnswerByChapterId" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">
@@ -18,8 +25,8 @@
         sa.answer, sa.score, sa.created_at as createdAt, sa.updated_at as updatedAt
         from student_answer sa
         inner join assignment a on a.id = sa.assignment_id::uuid
-        inner join course_chapter_section ccs on ccs.section_id = a.section_id::uuid
-        where ccs.chapter_id =#{chapterId}::uuid;
+        inner join course_chapter_section ccs on ccs.section_id = a.section_id
+        where ccs.chapter_id =#{chapterId};
     </select>
 
     <select  id="getStudentAnswerBySectionId" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">
@@ -27,7 +34,7 @@
         sa.answer, sa.score, sa.created_at as createdAt, sa.updated_at as updatedAt
         from student_answer sa
         inner join assignment a on a.id = sa.assignment_id::uuid
-        where a.section_id =#{sectionId}::uuid;
+        where a.section_id =#{sectionId};
     </select>
 
     <delete id="deleteStudentAnswerById">
