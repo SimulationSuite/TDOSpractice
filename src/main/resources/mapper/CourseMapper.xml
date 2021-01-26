@@ -385,9 +385,9 @@ SELECT
 	c."type",
 	c.model_id
 FROM course c
-	LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
+	LEFT JOIN class_course cc ON cc.course_id = c.id
 and
-	cc.class_id = #{classId}
+	cc.class_id = #{classId}::uuid
 Where c.type = 1
 	AND c.STATUS = 1
     </select>
