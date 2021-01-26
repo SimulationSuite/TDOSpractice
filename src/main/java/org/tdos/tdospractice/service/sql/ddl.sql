@@ -244,7 +244,7 @@ create table if not exists experiment(
     "name" varchar(255) NOT NULL,
     pic_url varchar(255) DEFAULT null,
     end_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    step_url varchar(255) DEFAULT null,
+    step text DEFAULT null,
     duration int8 DEFAULT 0,
     category_id varchar(255) NOT null,
     "type" int4 default 0,
@@ -294,7 +294,7 @@ create trigger t_name before update on experiment_image for each row execute pro
 create table if not exists experiment_report(
     experiment_id UUID references "experiment"("id") on delete cascade NOT NULL,
     user_id varchar(255) NOT NULL,
-    url varchar(255) DEFAULT null,
+    info text DEFAULT null,
     score int4 DEFAULT NULL,
     status int4 default 0,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
