@@ -249,6 +249,7 @@ create table if not exists experiment(
     category_id varchar(255) NOT null,
     "type" int4 default 0,
     parent_experiment_id varchar(255) DEFAULT null,
+    introduce varchar(255) DEFAULT null,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
@@ -257,7 +258,6 @@ create trigger t_name before update on experiment for each row execute procedure
 
 create table if not exists chapter_section_experiment(
     id UUID primary key DEFAULT uuid_generate_v4(),
-    chapter_id UUID references "chapter"("id") on delete cascade NOT NULL,
     section_id UUID references "section"("id") on delete cascade NOT NULL,
     experiment_id UUID references "experiment"("id") on delete cascade NOT NULL,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
