@@ -4,10 +4,7 @@ import com.github.pagehelper.PageInfo;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.tdos.tdospractice.body.AddCourse;
-import org.tdos.tdospractice.body.AddCourseCompleted;
-import org.tdos.tdospractice.body.ModifyCourseStatus;
-import org.tdos.tdospractice.body.PrepareCourse;
+import org.tdos.tdospractice.body.*;
 import org.tdos.tdospractice.service.CourseService;
 import org.tdos.tdospractice.type.Course;
 import org.tdos.tdospractice.type.Response;
@@ -58,10 +55,20 @@ public class CourseController {
         return Response.success(courseService.AddAdminCourse(addCourse));
     }
 
-    // 管理员添加内置课程
+    // 管理员完善课程
     @PostMapping(value = "/insert_course_completed")
     public Response<Course> insertCourseCompleted(@RequestBody AddCourseCompleted addCourseCompleted) {
         return Response.success(courseService.AddAdminCourseCompleted(addCourseCompleted));
+    }
+
+    // 管理员完善课程
+    @PostMapping(value = "/insert_course_chapter_completed")
+    public Response<Course> insertCourseChapterCompleted(@RequestBody AddChapterCompleted addChapterCompleted) {
+        Pair<Boolean, String> pair = courseService.insertCourseChapterCompleted(addChapterCompleted);
+        if (pair.getKey()) {
+            return Response.success(null);
+        }
+        return Response.error(pair.getValue());
     }
 
     // 发布课程
