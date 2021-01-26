@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 import org.tdos.tdospractice.body.DeleteIdList;
+import org.tdos.tdospractice.entity.QuestionBackEntity;
 import org.tdos.tdospractice.entity.StudentAnswerEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.tdos.tdospractice.service.StudentAnswerService;
@@ -20,10 +21,10 @@ public class StudentAnswerController {
     private StudentAnswerService studentAnswerService;
 
     @GetMapping(value = "/getStudentAnswerByAssignmentUserId")
-    public Response<PageInfo<StudentAnswerEntity>> getStudentAnswerByAssignmentUserId(@RequestParam(value = "userId") String userId,
-                                                                                      @RequestParam(value = "assignmentId") String assignmentId,
-                                                                                      @RequestParam(value = "perPage") Integer perPage,
-                                                                                      @RequestParam(value = "page") Integer page) {
+    public Response<PageInfo<QuestionBackEntity>> getStudentAnswerByAssignmentUserId(@RequestParam(value = "userId") String userId,
+                                                                                     @RequestParam(value = "assignmentId") String assignmentId,
+                                                                                     @RequestParam(value = "perPage") Integer perPage,
+                                                                                     @RequestParam(value = "page") Integer page) {
         return Response.success(studentAnswerService.getStudentAnswerByAssignmentUserId(userId, assignmentId, perPage, page));
     }
 
