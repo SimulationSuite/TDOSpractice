@@ -18,6 +18,9 @@
         <if test="type != null" >
             and c.type = #{type}
         </if>
+        <if test="categoryId != null and categoryId != ''" >
+            and c.category_id = #{categoryId}
+        </if>
     </select>
 
     <select  id="getCoursewareByClassId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">

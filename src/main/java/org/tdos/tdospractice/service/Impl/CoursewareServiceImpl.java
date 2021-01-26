@@ -23,9 +23,9 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
     private CoursewareMapper coursewareMapper;
 
     @Override
-    public PageInfo<CoursewareEntity> getCoursewareAll(String name, Integer kind, Integer type, Integer perPage,Integer page) {
+    public PageInfo<CoursewareEntity> getCoursewareAll(String name, Integer kind, Integer type, String categoryId, Integer perPage,Integer page) {
         PageHelper.startPage(page, perPage);
-        List<CoursewareEntity> list = coursewareMapper.getCoursewareAll(name, kind, type);
+        List<CoursewareEntity> list = coursewareMapper.getCoursewareAll(name, kind, type, categoryId);
         return new PageInfo<>(list);
     }
 
@@ -63,7 +63,7 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
         List<String> sectionCourseware = new ArrayList<String>();
         id.forEach(x -> {
             if (coursewareMapper.ifSectionCourseware(x)){
-                if(coursewareMapper.ifSectionCoursewarePub(x)){
+                if(!coursewareMapper.ifSectionCoursewarePub(x)){
                     sectionCourseware.add(x);
                 }
             }

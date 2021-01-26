@@ -5,11 +5,14 @@ import javafx.util.Pair;
 import org.tdos.tdospractice.body.Assignment;
 import org.tdos.tdospractice.entity.AssignmentEntity;
 import org.tdos.tdospractice.entity.CoursewareEntity;
+import org.tdos.tdospractice.entity.StudentAnswerEntity;
 
 import java.util.List;
 import java.util.Map;
 
 public interface AssignmentService {
+
+    PageInfo<StudentAnswerEntity> getAssignmentAll(String classId,String courseId,String chapterId, String sectionId, Integer status,String name, Integer perPage, Integer page);
 
     PageInfo<AssignmentEntity> getAssignmentByClassId(String classId, Integer perPage,Integer page);
 

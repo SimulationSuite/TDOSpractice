@@ -16,11 +16,13 @@ public interface QuestionBackMapper {
 
     boolean ifSectionQuestionBackByQuestionBackId(String id);
 
+    boolean ifExistId(String id);
+
     int modifyQuestionBackNameById(QuestionBackEntity questionBack);
 
     int addQuestionBack(QuestionBackEntity questionBack);
 
-    List<QuestionBackEntity> getStudentAnswerAll(@Param("type") Integer type, @Param("categoryId") String categoryId, @Param("content") String content);
+    List<QuestionBackEntity> getQuestionBackAll(@Param("type") Integer type, @Param("categoryId") String categoryId, @Param("content") String content);
 
     QuestionBackEntity getStudentAnswerByAssignment(String assignmentId);
 
