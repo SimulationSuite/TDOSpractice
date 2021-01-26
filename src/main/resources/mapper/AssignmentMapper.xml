@@ -3,6 +3,38 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tdos.tdospractice.mapper.AssignmentMapper">
+    <select  id="getAssignmentAll" resultType="org.tdos.tdospractice.entity.AssignmentEntity">
+        select sa.user_id as userId, su.name, sa.status, sa.committed_at as committedAt
+        from student_answer sa
+        inner join assignment a on a.id = sa.assignment_id
+        inner join sim_user su on su.id = sa.user_id
+        inner join course_chapter_section ccs on ccs.section_id = a.section_id
+        inner join course ci on ci.id = ccs.course_id
+        inner join class_course cc on cc.course_id = ci.id
+        where sa.id is not null
+        <if test="classId != null" >
+            and cc.class_id = #{classId} ::uuid
+        </if>
+        <if test="courseId != null" >
+            and ccs.course_id = #{courseId} ::uuid
+        </if>
+        <if test="chapterId != null" >
+            and ccs.chapter_id = #{chapterId} ::uuid
+        </if>
+        <if test="sectionId != null" >
+            and ccs.section_id = #{sectionId} ::uuid
+        </if>
+        <if test="userId != null" >
+            and sa.user_id = userId
+        </if>
+        <if test="status != null" >
+            and sa.status = #{status}
+        </if>
+        <if test="name != null" >
+            and su.name like concat('%',#{name},'%')
+        </if>
+        group by sa.user_id, sa.assignment_id, sa.status, sa.committed_at, su.name
+    </select>
 
     <select  id="getAssignmentByClassId" resultType="org.tdos.tdospractice.entity.AssignmentEntity">
         select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,

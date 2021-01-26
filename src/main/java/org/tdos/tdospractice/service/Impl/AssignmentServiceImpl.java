@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tdos.tdospractice.body.Assignment;
 import org.tdos.tdospractice.entity.AssignmentEntity;
+import org.tdos.tdospractice.entity.StudentAnswerEntity;
 import org.tdos.tdospractice.mapper.AssignmentMapper;
 import org.tdos.tdospractice.service.AssignmentService;
 
@@ -16,6 +17,13 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     @Autowired
     private AssignmentMapper assignmentMapper;
+
+    @Override
+    public PageInfo<StudentAnswerEntity> getAssignmentAll(String classId,String courseId,String chapterId, String sectionId, String userId, Integer status,String name, Integer perPage, Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<StudentAnswerEntity> list = assignmentMapper.getAssignmentAll(classId, courseId, chapterId, sectionId, userId, status, name);
+        return new PageInfo<>(list);
+    }
 
     @Override
     public PageInfo<AssignmentEntity> getAssignmentByClassId(String classId, Integer perPage,Integer page) {
