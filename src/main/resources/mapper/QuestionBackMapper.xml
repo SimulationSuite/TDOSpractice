@@ -31,14 +31,19 @@
     <delete id="deleteQuestionBackById">
         delete from question_back where id=#{id}::uuid;
     </delete>
+    <select id="ifExistId"  resultType="Boolean">
+        select case when count(*) > 1 then true else false end
+        from question_back_assignment qba
+        where qba.question_id =#{id}::uuid;
+    </select>
 
-    <select id="ifSectionQuestionBackByQuestionBackId"  resultType="Boolean">
-        select ci.status = 0
+    <select id="ifSectionQuestionBackByQuestionBackId">
+        select distinct ci.status = 0
         from question_back_assignment qba
         inner join assignment a on a.id = qba.assignment_id
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
         inner join course ci on ci.id = ccs.course_id
-        where a.id =#{id}::uuid;
+        where qba.question_id =#{id}::uuid;
     </select>
 
     <update id="modifyQuestionBackNameById">

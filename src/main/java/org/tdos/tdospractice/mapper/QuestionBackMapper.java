@@ -16,6 +16,8 @@ public interface QuestionBackMapper {
 
     boolean ifSectionQuestionBackByQuestionBackId(String id);
 
+    boolean ifExistId(String id);
+
     int modifyQuestionBackNameById(QuestionBackEntity questionBack);
 
     int addQuestionBack(QuestionBackEntity questionBack);

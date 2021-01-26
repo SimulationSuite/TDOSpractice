@@ -63,7 +63,7 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
         List<String> sectionCourseware = new ArrayList<String>();
         id.forEach(x -> {
             if (coursewareMapper.ifSectionCourseware(x)){
-                if(coursewareMapper.ifSectionCoursewarePub(x)){
+                if(!coursewareMapper.ifSectionCoursewarePub(x)){
                     sectionCourseware.add(x);
                 }
             }
