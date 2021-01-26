@@ -72,10 +72,6 @@ create table if not exists class_course(
 create trigger t_name before update on class_course for each row execute procedure upd_timestamp();
 
 
-
-
-
-
 create table if not exists chapter(
     id UUID primary key DEFAULT uuid_generate_v4(),
     "name" varchar(255) not null,
@@ -219,6 +215,8 @@ create table if not exists student_answer(
     user_id varchar(255) not null,
     answer text,
     score int4 DEFAULT NULL,
+    status int4 default 0,
+    committed_at TIMESTAMP(0)  without time zone,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
