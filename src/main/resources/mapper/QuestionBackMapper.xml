@@ -15,7 +15,7 @@
         <if test="type != null" >
             and qb.type = #{type}
         </if>
-        <if test="categoryId != null" >
+        <if test="categoryId != null and categoryId != ''" >
             and qb.category_id = #{categoryId}
         </if>
     </select>
