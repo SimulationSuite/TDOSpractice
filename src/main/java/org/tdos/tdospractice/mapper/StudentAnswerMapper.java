@@ -3,6 +3,7 @@ package org.tdos.tdospractice.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+import org.tdos.tdospractice.entity.QuestionBackEntity;
 import org.tdos.tdospractice.entity.StudentAnswerEntity;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 @Repository
 public interface StudentAnswerMapper {
 
-    List<StudentAnswerEntity> getStudentAnswerByAssignmentUserId(@Param("userId") String userId, @Param("assignmentId") String assignmentId);
+    List<QuestionBackEntity> getStudentAnswerByAssignmentUserId(@Param("userId") String userId, @Param("assignmentId") String assignmentId);
 
     List<StudentAnswerEntity> getStudentAnswerByCourseId(@Param("courseId") String courseId);
 

@@ -32,4 +32,6 @@ public class QuestionBackEntity {
 
     private LocalDateTime updatedAt;
 
+    private String studentAnswer;
+
 }
