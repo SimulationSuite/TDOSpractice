@@ -24,7 +24,7 @@ public class QuestionBackServiceImpl implements QuestionBackService {
     @Override
     public PageInfo<QuestionBackEntity> getQuestionBackAll(Integer type, String content, String categoryId, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        List<QuestionBackEntity> list = questionBackMapper.getStudentAnswerAll(type, categoryId, content);
+        List<QuestionBackEntity> list = questionBackMapper.getQuestionBackAll(type, categoryId, content);
         return new PageInfo<>(list);
     }
 

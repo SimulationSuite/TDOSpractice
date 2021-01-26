@@ -20,7 +20,7 @@ public interface QuestionBackMapper {
 
     int addQuestionBack(QuestionBackEntity questionBack);
 
-    List<QuestionBackEntity> getStudentAnswerAll(@Param("type") Integer type, @Param("categoryId") String categoryId, @Param("content") String content);
+    List<QuestionBackEntity> getQuestionBackAll(@Param("type") Integer type, @Param("categoryId") String categoryId, @Param("content") String content);
 
     QuestionBackEntity getStudentAnswerByAssignment(String assignmentId);
 
