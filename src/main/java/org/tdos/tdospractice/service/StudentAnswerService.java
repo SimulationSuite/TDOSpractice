@@ -9,6 +9,8 @@ import java.util.Map;
 
 public interface StudentAnswerService {
 
+    PageInfo<StudentAnswerEntity> getStudentAnswerByAssignmentUserId(String userId, String assignmentId, Integer perPage, Integer page);
+
     PageInfo<StudentAnswerEntity> getStudentAnswerByCourseId(String courseId, Integer perPage, Integer page);
 
     PageInfo<StudentAnswerEntity> getStudentAnswerByChapterId(String chapterId, Integer perPage, Integer page);

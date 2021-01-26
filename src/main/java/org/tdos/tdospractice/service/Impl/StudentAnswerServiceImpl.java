@@ -18,6 +18,13 @@ public class StudentAnswerServiceImpl implements StudentAnswerService {
     private StudentAnswerMapper studentAnswerMapper;
 
     @Override
+    public PageInfo<StudentAnswerEntity> getStudentAnswerByAssignmentUserId(String userId, String assignmentId, Integer perPage,Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<StudentAnswerEntity> list = studentAnswerMapper.getStudentAnswerByAssignmentUserId(userId, assignmentId);
+        return new PageInfo<>(list);
+    }
+
+    @Override
     public PageInfo<StudentAnswerEntity> getStudentAnswerByCourseId(String sectionId, Integer perPage,Integer page) {
         PageHelper.startPage(page, perPage);
         List<StudentAnswerEntity> list = studentAnswerMapper.getStudentAnswerBySectionId(sectionId);

@@ -11,6 +11,8 @@ import java.util.List;
 @Repository
 public interface StudentAnswerMapper {
 
+    List<StudentAnswerEntity> getStudentAnswerByAssignmentUserId(@Param("userId") String userId, @Param("assignmentId") String assignmentId);
+
     List<StudentAnswerEntity> getStudentAnswerByCourseId(@Param("courseId") String courseId);
 
     List<StudentAnswerEntity> getStudentAnswerByChapterId(@Param("chapterId") String chapterId);

@@ -19,6 +19,14 @@ public class StudentAnswerController {
     @Autowired
     private StudentAnswerService studentAnswerService;
 
+    @GetMapping(value = "/getStudentAnswerByAssignmentUserId")
+    public Response<PageInfo<StudentAnswerEntity>> getStudentAnswerByAssignmentUserId(@RequestParam(value = "userId") String userId,
+                                                                                      @RequestParam(value = "assignmentId") String assignmentId,
+                                                                                      @RequestParam(value = "perPage") Integer perPage,
+                                                                                      @RequestParam(value = "page") Integer page) {
+        return Response.success(studentAnswerService.getStudentAnswerByAssignmentUserId(userId, assignmentId, perPage, page));
+    }
+
     @GetMapping(value = "/getStudentAnswerByCourseId")
     public Response<PageInfo<StudentAnswerEntity>> getStudentAnswerByCourseId(@RequestParam(value = "courseId") String courseId,
                                                                               @RequestParam(value = "perPage") Integer perPage,
