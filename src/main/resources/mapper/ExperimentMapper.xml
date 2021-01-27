@@ -19,7 +19,7 @@
             #{id}
         </foreach>
         <if test="name!=null and name!=''">
-            AND name like %#{name}%
+            AND name like concat('%',#{name},'%')
         </if>
     </select>
 
