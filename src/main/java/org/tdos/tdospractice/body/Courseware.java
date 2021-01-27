@@ -26,4 +26,7 @@ public class Courseware {
     @JsonProperty("size")
     public Integer size;
 
+    @JsonProperty("category_id")
+    public String categoryId;
+
 }

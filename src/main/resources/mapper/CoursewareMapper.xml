@@ -71,9 +71,9 @@
     </update>
 
     <insert id="addCourseware" useGeneratedKeys="true" keyProperty="id">
-        insert into courseware (name, kind, type, url, duration, size)
+        insert into courseware (name, kind, type, url, duration, size, category_id)
         values
-        (#{name}, #{kind}, #{type}, #{url}, #{duration}, #{size});
+        (#{name}, #{kind}, #{type}, #{url}, #{duration}, #{size}, #{categoryId});
     </insert>
 
     <select id="ifSectionCourseware"  resultType="Boolean">
