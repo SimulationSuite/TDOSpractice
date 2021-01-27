@@ -247,8 +247,6 @@ create table if not exists experiment(
     step text DEFAULT null,
     duration int8 DEFAULT 0,
     category_id varchar(255) NOT null,
-    "type" int4 default 0,
-    parent_experiment_id varchar(255) DEFAULT null,
     introduce varchar(255) DEFAULT null,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')

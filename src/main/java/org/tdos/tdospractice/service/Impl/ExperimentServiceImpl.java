@@ -21,6 +21,11 @@ public class ExperimentServiceImpl implements ExperimentService {
     }
 
     @Override
+    public List<ExperimentEntity> findExperiment(List<String> category_ids,String name) {
+        return experimentMapper.findExperiment(category_ids,name);
+    }
+
+    @Override
     public List<ExperimentEntity> findAllByCourseId(String course_Id) {
         return experimentMapper.findAllByCourseId(course_Id);
     }
