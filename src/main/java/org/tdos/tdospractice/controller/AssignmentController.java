@@ -7,6 +7,7 @@ import org.tdos.tdospractice.body.AssignmentIdList;
 import org.tdos.tdospractice.entity.AssignmentEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.tdos.tdospractice.service.AssignmentService;
+import org.tdos.tdospractice.type.AssignmentStatistics;
 import org.tdos.tdospractice.type.Response;
 import org.tdos.tdospractice.body.Assignment;
 import org.tdos.tdospractice.type.StudentAssignment;
@@ -18,6 +19,11 @@ public class AssignmentController {
 
     @Autowired
     private AssignmentService assignmentService;
+
+    @GetMapping(value = "/getAssignmentStatisticsBySectionId")
+    public Response<AssignmentStatistics> getAssignmentStatisticsBySectionId(@RequestParam(value = "sectionId") String sectionId) {
+        return Response.success(assignmentService.getAssignmentStatisticsBySectionId(sectionId));
+    }
 
     @GetMapping(value = "/getAssignmentAll")
     public Response<PageInfo<StudentAssignment>> getAssignmentAll(@RequestParam(value = "classId",required = false) String classId,

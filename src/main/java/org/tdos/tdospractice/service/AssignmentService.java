@@ -3,12 +3,15 @@ package org.tdos.tdospractice.service;
 import com.github.pagehelper.PageInfo;
 import org.tdos.tdospractice.body.Assignment;
 import org.tdos.tdospractice.entity.AssignmentEntity;
+import org.tdos.tdospractice.type.AssignmentStatistics;
 import org.tdos.tdospractice.type.StudentAssignment;
 
 import java.util.List;
 import java.util.Map;
 
 public interface AssignmentService {
+
+    AssignmentStatistics getAssignmentStatisticsBySectionId(String sectionId);
 
     PageInfo<StudentAssignment> getAssignmentAll(String classId,String courseId,String chapterId, String sectionId, Integer status,String name, Integer perPage, Integer page);
 

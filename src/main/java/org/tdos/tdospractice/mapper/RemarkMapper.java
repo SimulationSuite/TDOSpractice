@@ -14,6 +14,6 @@ public interface RemarkMapper {
 
     int uploadRemark(@Param("remark") Remark remark);
 
-    List<CoursewareRemark> getCoursewareRemarkList(String userId,@Param("courseIds") List<String> courseIds);
+    List<CoursewareRemark> getCoursewareRemarkList(String userId, @Param("coursewareId") String coursewareId);
 
 }

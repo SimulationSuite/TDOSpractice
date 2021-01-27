@@ -47,15 +47,9 @@
 	courseware_remark."created_at"
 FROM
 	courseware_remark
-	INNER JOIN courseware ON courseware_remark.courseware_id = courseware."id"
+	INNER JOIN courseware ON courseware_remark.courseware_id = courseware."id" and courseware."id" = #{coursewareId}::uuid
 WHERE
 	courseware_remark.user_id = #{userId}
-	AND courseware_remark.courseware_id IN
-    <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
-        #{courseId}::uuid
-    </foreach>
-ORDER BY
-	courseware_remark.created_at DESC
     </select>
 
 

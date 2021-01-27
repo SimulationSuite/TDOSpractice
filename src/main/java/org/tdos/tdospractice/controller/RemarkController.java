@@ -25,11 +25,11 @@ public class RemarkController {
     }
 
     @GetMapping(value = "/get_courseware_remark_list")
-    public Response<PageInfo<CoursewareRemark>> getCoursewareRemarkList(@RequestParam(value = "section_id") String sectionId,
+    public Response<PageInfo<CoursewareRemark>> getCoursewareRemarkList(@RequestParam(value = "courseware_id") String coursewareId,
                                                                         @RequestParam(value = "user_id") String userId,
                                                                         @RequestParam(value = "per_page") Integer perPage,
                                                                         @RequestParam(value = "page") Integer page) {
-        return Response.success(remarkService.getCoursewareRemarkList(userId, sectionId, perPage, page));
+        return Response.success(remarkService.getCoursewareRemarkList(userId, coursewareId, perPage, page));
     }
 
 

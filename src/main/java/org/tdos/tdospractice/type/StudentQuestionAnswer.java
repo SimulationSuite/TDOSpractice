@@ -29,4 +29,6 @@ public class StudentQuestionAnswer {
 
     private int score;
 
+    private int totalScore;
+
 }
