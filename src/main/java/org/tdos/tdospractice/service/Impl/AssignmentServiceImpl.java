@@ -9,6 +9,8 @@ import org.tdos.tdospractice.entity.AssignmentEntity;
 import org.tdos.tdospractice.entity.StudentAnswerEntity;
 import org.tdos.tdospractice.mapper.AssignmentMapper;
 import org.tdos.tdospractice.service.AssignmentService;
+import org.tdos.tdospractice.type.AssignmentStatistics;
+import org.tdos.tdospractice.type.StudentAssignment;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,9 +22,22 @@ public class AssignmentServiceImpl implements AssignmentService {
     private AssignmentMapper assignmentMapper;
 
     @Override
-    public PageInfo<StudentAnswerEntity> getAssignmentAll(String classId,String courseId,String chapterId, String sectionId, Integer status,String name, Integer perPage, Integer page) {
+    public AssignmentStatistics getAssignmentStatisticsBySectionId(String sectionId) {
+        AssignmentStatistics assignmentStatistics = new AssignmentStatistics();
+        List<StudentAnswerEntity> allStudentAssignmentList = assignmentMapper.getAllStudentAssignmentBySectionId(sectionId);
+        List<StudentAnswerEntity> subStudentAssignmentList = assignmentMapper.getSubStudentAssignmentBySectionId(sectionId);
+        assignmentStatistics.total = (int) allStudentAssignmentList.stream().count();
+        assignmentStatistics.committed = (int) subStudentAssignmentList.stream().count();
+        assignmentStatistics.uncommitted = assignmentStatistics.total - assignmentStatistics.committed;
+        allStudentAssignmentList.removeAll(subStudentAssignmentList);
+        assignmentStatistics.uncommittedList = allStudentAssignmentList;
+        return assignmentStatistics;
+    }
+
+    @Override
+    public PageInfo<StudentAssignment> getAssignmentAll(String classId, String courseId, String chapterId, String sectionId, Integer status, String name, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        List<StudentAnswerEntity> list = assignmentMapper.getAssignmentAll(classId, courseId, chapterId, sectionId, name);
+        List<StudentAssignment> list = assignmentMapper.getAssignmentAll(classId, courseId, chapterId, sectionId, name);
         if(status != null)
         {
             list = list.stream().filter(x -> x.getStatus() == status).collect(Collectors.toList());

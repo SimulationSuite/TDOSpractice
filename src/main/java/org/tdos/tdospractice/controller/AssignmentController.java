@@ -6,10 +6,11 @@ import org.springframework.web.bind.annotation.*;
 import org.tdos.tdospractice.body.AssignmentIdList;
 import org.tdos.tdospractice.entity.AssignmentEntity;
 import org.springframework.web.bind.annotation.RestController;
-import org.tdos.tdospractice.entity.StudentAnswerEntity;
 import org.tdos.tdospractice.service.AssignmentService;
+import org.tdos.tdospractice.type.AssignmentStatistics;
 import org.tdos.tdospractice.type.Response;
 import org.tdos.tdospractice.body.Assignment;
+import org.tdos.tdospractice.type.StudentAssignment;
 
 import java.util.*;
 
@@ -19,15 +20,20 @@ public class AssignmentController {
     @Autowired
     private AssignmentService assignmentService;
 
+    @GetMapping(value = "/getAssignmentStatisticsBySectionId")
+    public Response<AssignmentStatistics> getAssignmentStatisticsBySectionId(@RequestParam(value = "sectionId") String sectionId) {
+        return Response.success(assignmentService.getAssignmentStatisticsBySectionId(sectionId));
+    }
+
     @GetMapping(value = "/getAssignmentAll")
-    public Response<PageInfo<StudentAnswerEntity>> getAssignmentAll(@RequestParam(value = "classId",required = false) String classId,
-                                                                    @RequestParam(value = "courseId",required = false) String courseId,
-                                                                    @RequestParam(value = "chapterId",required = false) String chapterId,
-                                                                    @RequestParam(value = "sectionId",required = false) String sectionId,
-                                                                    @RequestParam(value = "status",required = false) Integer status,
-                                                                    @RequestParam(value = "name",required = false) String name,
-                                                                    @RequestParam(value = "perPage") Integer perPage,
-                                                                    @RequestParam(value = "page") Integer page) {
+    public Response<PageInfo<StudentAssignment>> getAssignmentAll(@RequestParam(value = "classId",required = false) String classId,
+                                                                  @RequestParam(value = "courseId",required = false) String courseId,
+                                                                  @RequestParam(value = "chapterId",required = false) String chapterId,
+                                                                  @RequestParam(value = "sectionId",required = false) String sectionId,
+                                                                  @RequestParam(value = "status",required = false) Integer status,
+                                                                  @RequestParam(value = "name",required = false) String name,
+                                                                  @RequestParam(value = "perPage") Integer perPage,
+                                                                  @RequestParam(value = "page") Integer page) {
         return Response.success(assignmentService.getAssignmentAll(classId, courseId, chapterId, sectionId, status, name, perPage, page));
     }
 

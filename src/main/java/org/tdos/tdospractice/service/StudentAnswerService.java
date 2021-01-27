@@ -2,15 +2,15 @@ package org.tdos.tdospractice.service;
 
 import com.github.pagehelper.PageInfo;
 import org.tdos.tdospractice.body.StudentAnswer;
-import org.tdos.tdospractice.entity.QuestionBackEntity;
 import org.tdos.tdospractice.entity.StudentAnswerEntity;
+import org.tdos.tdospractice.type.StudentQuestionAnswer;
 
 import java.util.List;
 import java.util.Map;
 
 public interface StudentAnswerService {
 
-    PageInfo<QuestionBackEntity> getStudentAnswerByAssignmentUserId(String userId, String assignmentId, Integer perPage, Integer page);
+    PageInfo<StudentQuestionAnswer> getStudentAnswerByAssignmentUserId(String userId, String assignmentId, Integer perPage, Integer page);
 
     PageInfo<StudentAnswerEntity> getStudentAnswerByCourseId(String courseId, Integer perPage, Integer page);
 

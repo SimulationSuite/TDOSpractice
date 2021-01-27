@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.*;
 import org.tdos.tdospractice.body.DeleteIdList;
+import org.tdos.tdospractice.body.StudentAnswerList;
+import org.tdos.tdospractice.body.StudentScoreList;
 import org.tdos.tdospractice.entity.StudentScoreEntity;
 import org.tdos.tdospractice.service.ClassService;
 import org.tdos.tdospractice.service.SecurityService;
@@ -38,8 +40,8 @@ public class StudentScoreController {
     }
 
     @PostMapping(value = "/addStudentScore")
-    public Response<StudentScoreEntity> addStudentScore(@RequestBody StudentScore studentScore) {
-        return Response.success(studentScoreService.addStudentScore(studentScore));
+    public Response<StudentScoreEntity> addStudentScore(@RequestBody StudentScoreList studentScoreList) {
+        return Response.success(studentScoreService.addStudentScore(studentScoreList.studentScoreList));
     }
 
     @PostMapping(value = "/modifyStudentScoreById")
