@@ -6,7 +6,7 @@
 
     <select  id="getStudentAnswerByAssignmentUserId" resultType="org.tdos.tdospractice.type.StudentQuestionAnswer">
         select qb.id, qb.type, qb.content, qb.choice, qb.answer, qb.pic_url as picUrl, qb.model_id as modelId,
-        qb.category_id as categoryId, sa.answer as studentAnswer, qba.score
+        qb.category_id as categoryId, sa.answer as studentAnswer, qba.score, sa.score as totalScore
         from student_answer sa
         inner join question_back qb on qb.id = sa.question_id
         inner join question_back_assignment qba on qba.question_id = sa.question_id and qba.assignment_id = sa.assignment_id
