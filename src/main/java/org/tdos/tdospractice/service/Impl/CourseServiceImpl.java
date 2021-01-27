@@ -44,6 +44,8 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     private SmallSectionMapper smallSectionMapper;
 
+    private static final String EMPTY_UUID = "fb0a1080-b11e-427c-8567-56ca6105ea07";
+
     @Override
     public PageInfo<Course> getAdminCourseList(Integer perPage, Integer page, String name) {
         PageHelper.startPage(page, perPage);
@@ -363,17 +365,35 @@ public class CourseServiceImpl implements CourseService {
         }).collect(Collectors.toList());
         chapterMapper.insertChapter(chapter);
         List<CourseChapterSectionEntity> list = new ArrayList<>();
-        chapter.sections.forEach(section -> {
-            sectionMapper.insertSection(section);
-            section.smallSections.forEach(smallSection -> {
-                smallSectionMapper.insertSmallSection(smallSection);
-                list.add(CourseChapterSectionEntity.builder().courseId(course.id)
-                        .chapterId(chapter.id)
-                        .sectionId(section.id)
-                        .smallSectionId(smallSection.id)
-                        .build());
+        if (chapter.sections.size() > 0) {
+            chapter.sections.forEach(section -> {
+                sectionMapper.insertSection(section);
+                if (section.smallSections.size() != 0) {
+                    section.smallSections.forEach(smallSection -> {
+                        smallSectionMapper.insertSmallSection(smallSection);
+                        list.add(CourseChapterSectionEntity.builder().courseId(course.id)
+                                .chapterId(chapter.id)
+                                .sectionId(section.id)
+                                .smallSectionId(smallSection.id)
+                                .build());
+                    });
+
+                } else {
+                    list.add(CourseChapterSectionEntity.builder().courseId(course.id)
+                            .chapterId(chapter.id)
+                            .sectionId(section.id)
+                            .smallSectionId(EMPTY_UUID)
+                            .build());
+                }
+
             });
-        });
+        } else {
+            list.add(CourseChapterSectionEntity.builder().courseId(course.id)
+                    .chapterId(chapter.id)
+                    .sectionId(EMPTY_UUID)
+                    .smallSectionId(EMPTY_UUID)
+                    .build());
+        }
         if (list.size() > 0) {
             courseChapterSectionMapper.insertCourseChapterSectionList(list);
         }
