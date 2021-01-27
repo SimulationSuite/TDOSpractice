@@ -47,11 +47,9 @@ public class RemarkServiceImpl implements RemarkService {
     }
 
     @Override
-    public PageInfo<CoursewareRemark> getCoursewareRemarkList(String userId, String sectionId,Integer perPage, Integer page) {
-        List<String> courseIds = coursewareMapper.getCoursewareBySectionId(sectionId).stream()
-                .map(CoursewareEntity::getId).collect(Collectors.toList());
+    public PageInfo<CoursewareRemark> getCoursewareRemarkList(String userId, String coursewareId, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        List<CoursewareRemark> list = remarkMapper.getCoursewareRemarkList(userId, courseIds);
+        List<CoursewareRemark> list = remarkMapper.getCoursewareRemarkList(userId, coursewareId);
         return new PageInfo<>(list);
     }
 
