@@ -75,4 +75,10 @@
         </foreach>
     </insert>
 
+    <update id="modifyStudentAnswerScore">
+        update student_answer
+        set score = #{score}
+        where question_id=#{questionId}::uuid and assignment_id = #{assignmentId}::uuid and user_id = #{userId}::uuid;
+    </update>
+
 </mapper>

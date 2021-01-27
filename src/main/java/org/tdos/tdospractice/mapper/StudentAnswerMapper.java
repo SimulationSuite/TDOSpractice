@@ -30,4 +30,6 @@ public interface StudentAnswerMapper {
 
     int addStudentAnswerList(@Param("studentAnswerList") List<StudentAnswerEntity> studentAnswerList);
 
+    int modifyStudentAnswerScore(@Param("score") int score, @Param("questionId") String questionId,@Param("assignmentId") String assignmentId,@Param("userId") String userId);
+
 }
