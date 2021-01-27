@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface AssignmentMapper {
 
-    List<StudentAnswerEntity> getAssignmentAll(@Param("classId") String classId, @Param("courseId") String courseId, @Param("chapterId") String chapterId, @Param("sectionId") String sectionId, @Param("status") Integer status, @Param("name") String name);
+    List<StudentAnswerEntity> getAssignmentAll(@Param("classId") String classId, @Param("courseId") String courseId, @Param("chapterId") String chapterId, @Param("sectionId") String sectionId, @Param("name") String name);
 
     List<AssignmentEntity> getAssignmentByClassId(@Param("classId") String classId);
 

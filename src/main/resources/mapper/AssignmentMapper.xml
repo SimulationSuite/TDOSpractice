@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tdos.tdospractice.mapper.AssignmentMapper">
     <select  id="getAssignmentAll" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">
-        select sa.user_id as userId, su.name, case when ss.status is null then 0 else ss.status end as status,
+        select sa.assignment_id as assignmentId, sa.user_id as userId, su.name, case when ss.status is null then 0 else ss.status end as status,
         sa.committed_at as committedAt
         from student_answer sa
         inner join assignment a on a.id = sa.assignment_id
@@ -25,9 +25,6 @@
         </if>
         <if test="sectionId != null and sectionId != ''" >
             and ccs.section_id = #{sectionId} ::uuid
-        </if>
-        <if test="status != null" >
-            and ss.status = #{status}
         </if>
         <if test="name != null" >
             and (su.name like concat('%',#{name},'%') or sa.user_id like concat('%',#{name},'%'))
