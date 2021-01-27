@@ -9,6 +9,7 @@ import org.tdos.tdospractice.entity.AssignmentEntity;
 import org.tdos.tdospractice.entity.StudentAnswerEntity;
 import org.tdos.tdospractice.mapper.AssignmentMapper;
 import org.tdos.tdospractice.service.AssignmentService;
+import org.tdos.tdospractice.type.StudentAssignment;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,9 +21,9 @@ public class AssignmentServiceImpl implements AssignmentService {
     private AssignmentMapper assignmentMapper;
 
     @Override
-    public PageInfo<StudentAnswerEntity> getAssignmentAll(String classId,String courseId,String chapterId, String sectionId, Integer status,String name, Integer perPage, Integer page) {
+    public PageInfo<StudentAssignment> getAssignmentAll(String classId, String courseId, String chapterId, String sectionId, Integer status, String name, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        List<StudentAnswerEntity> list = assignmentMapper.getAssignmentAll(classId, courseId, chapterId, sectionId, name);
+        List<StudentAssignment> list = assignmentMapper.getAssignmentAll(classId, courseId, chapterId, sectionId, name);
         if(status != null)
         {
             list = list.stream().filter(x -> x.getStatus() == status).collect(Collectors.toList());

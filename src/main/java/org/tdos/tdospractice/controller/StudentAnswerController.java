@@ -11,6 +11,7 @@ import org.tdos.tdospractice.service.StudentAnswerService;
 import org.tdos.tdospractice.type.Response;
 import org.tdos.tdospractice.body.StudentAnswer;
 import org.tdos.tdospractice.body.StudentAnswerList;
+import org.tdos.tdospractice.type.StudentQuestionAnswer;
 
 import java.util.*;
 
@@ -21,10 +22,10 @@ public class StudentAnswerController {
     private StudentAnswerService studentAnswerService;
 
     @GetMapping(value = "/getStudentAnswerByAssignmentUserId")
-    public Response<PageInfo<QuestionBackEntity>> getStudentAnswerByAssignmentUserId(@RequestParam(value = "userId") String userId,
-                                                                                     @RequestParam(value = "assignmentId") String assignmentId,
-                                                                                     @RequestParam(value = "perPage") Integer perPage,
-                                                                                     @RequestParam(value = "page") Integer page) {
+    public Response<PageInfo<StudentQuestionAnswer>> getStudentAnswerByAssignmentUserId(@RequestParam(value = "userId") String userId,
+                                                                                        @RequestParam(value = "assignmentId") String assignmentId,
+                                                                                        @RequestParam(value = "perPage") Integer perPage,
+                                                                                        @RequestParam(value = "page") Integer page) {
         return Response.success(studentAnswerService.getStudentAnswerByAssignmentUserId(userId, assignmentId, perPage, page));
     }
 

@@ -3,9 +3,10 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tdos.tdospractice.mapper.AssignmentMapper">
-    <select  id="getAssignmentAll" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">
-        select sa.assignment_id as assignmentId, sa.user_id as userId, su.name, case when ss.status is null then 0 else ss.status end as status,
-        sa.committed_at as committedAt
+    <select  id="getAssignmentAll" resultType="org.tdos.tdospractice.type.StudentAssignment">
+        select sa.assignment_id as assignmentId, sa.user_id as userId, su.name as userName,
+        case when ss.status is null then 0 else ss.status end as status,
+        sa.committed_at as committedAt, a.name as assignmentName
         from student_answer sa
         inner join assignment a on a.id = sa.assignment_id
         inner join sim_user su on su.id = sa.user_id
@@ -29,7 +30,26 @@
         <if test="name != null" >
             and (su.name like concat('%',#{name},'%') or sa.user_id like concat('%',#{name},'%'))
         </if>
-        group by sa.user_id, sa.assignment_id, ss.status, sa.committed_at, su.name
+        group by sa.user_id, sa.assignment_id, ss.status, sa.committed_at, su.name, a.name
+    </select>
+
+    <select  id="getAllStudentAssignmentBySectionId" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">
+        select su.id as userId, su.name
+        from assignment a
+        inner join course_chapter_section ccs on ccs.section_id = a.section_id
+        inner join class_course cc on cc.course_id = ccs.course_id
+        inner join sim_user su on su.class_id = cc.class_id
+        where a.section_id =#{sectionId} ::uuid
+        group by su.id, su.name
+    </select>
+
+    <select  id="getSubStudentAssignmentBySectionId" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">
+        select sa.user_id as userId, su.name
+        from student_answer sa
+        inner join assignment a on a.id = sa.assignment_id
+        inner join sim_user su on su.id = sa.user_id
+        where a.section_id =#{sectionId} ::uuid and sa.status = 1
+        group by sa.user_id, sa.assignment_id, su.name
     </select>
 
     <select  id="getAssignmentByClassId" resultType="org.tdos.tdospractice.entity.AssignmentEntity">

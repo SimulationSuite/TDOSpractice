@@ -5,10 +5,10 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tdos.tdospractice.body.StudentAnswer;
-import org.tdos.tdospractice.entity.QuestionBackEntity;
 import org.tdos.tdospractice.entity.StudentAnswerEntity;
 import org.tdos.tdospractice.mapper.StudentAnswerMapper;
 import org.tdos.tdospractice.service.StudentAnswerService;
+import org.tdos.tdospractice.type.StudentQuestionAnswer;
 
 import java.util.*;
 
@@ -19,9 +19,9 @@ public class StudentAnswerServiceImpl implements StudentAnswerService {
     private StudentAnswerMapper studentAnswerMapper;
 
     @Override
-    public PageInfo<QuestionBackEntity> getStudentAnswerByAssignmentUserId(String userId, String assignmentId, Integer perPage, Integer page) {
+    public PageInfo<StudentQuestionAnswer> getStudentAnswerByAssignmentUserId(String userId, String assignmentId, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        List<QuestionBackEntity> list = studentAnswerMapper.getStudentAnswerByAssignmentUserId(userId, assignmentId);
+        List<StudentQuestionAnswer> list = studentAnswerMapper.getStudentAnswerByAssignmentUserId(userId, assignmentId);
         return new PageInfo<>(list);
     }
 
