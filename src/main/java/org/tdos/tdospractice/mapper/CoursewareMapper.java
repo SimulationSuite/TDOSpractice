@@ -16,11 +16,11 @@ public interface CoursewareMapper {
 
     List<CoursewareEntity> getCoursewareByClassId(@Param("classId") String classId);
 
-    List<CoursewareEntity> getCoursewareBySectionId(@Param("sectionId") String sectionId);
+    List<CoursewareEntity> getCoursewareBySectionId(@Param("sectionId") String sectionId, @Param("kind") Integer kind, @Param("type") Integer type);
 
-    List<CoursewareEntity> getCoursewareByChapterId(@Param("chapterId") String chapterId);
+    List<CoursewareEntity> getCoursewareByChapterId(@Param("chapterId") String chapterId, @Param("kind") Integer kind, @Param("type") Integer type);
 
-    List<CoursewareEntity> getCoursewareByCourseId(@Param("courseId") String courseId);
+    List<CoursewareEntity> getCoursewareByCourseId(@Param("courseId") String courseId, @Param("kind") Integer kind, @Param("type") Integer type);
 
     int deleteCoursewareById(@Param("id") String id);
 

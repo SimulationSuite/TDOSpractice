@@ -1,6 +1,7 @@
 package org.tdos.tdospractice.service;
 
 import com.github.pagehelper.PageInfo;
+import org.apache.ibatis.annotations.Param;
 import org.tdos.tdospractice.entity.CoursewareEntity;
 import org.tdos.tdospractice.body.Courseware;
 import org.tdos.tdospractice.entity.ChapterSectionCoursewareEntity;
@@ -14,11 +15,11 @@ public interface CoursewareService {
 
     PageInfo<CoursewareEntity> getCoursewareByClassId(String classId, Integer perPage, Integer page);
 
-    PageInfo<CoursewareEntity> getCoursewareBySectionId(String sectionId, Integer perPage,Integer page);
+    PageInfo<CoursewareEntity> getCoursewareBySectionId(String sectionId, Integer kind, Integer type, Integer perPage, Integer page);
 
-    PageInfo<CoursewareEntity> getCoursewareByChapterId(String chapterId, Integer perPage,Integer page);
+    PageInfo<CoursewareEntity> getCoursewareByChapterId(String chapterId, Integer kind, Integer type, Integer perPage,Integer page);
 
-    PageInfo<CoursewareEntity> getCoursewareByCourseId(String courseId, Integer perPage,Integer page);
+    PageInfo<CoursewareEntity> getCoursewareByCourseId(String courseId, Integer kind, Integer type, Integer perPage,Integer page);
 
     Map<String, Object> deleteCoursewareById(List<String> id);
 

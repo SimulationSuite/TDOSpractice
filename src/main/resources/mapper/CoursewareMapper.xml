@@ -39,6 +39,12 @@
         from chapter_section_courseware csc
         inner join courseware c on c.id = csc.courseware_id
         where csc.section_id =#{sectionId} ::uuid
+        <if test="kind != null" >
+            and c.kind = #{kind}
+        </if>
+        <if test="type != null" >
+            and c.type = #{type}
+        </if>
     </select>
 
     <select  id="getCoursewareByChapterId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
@@ -47,6 +53,12 @@
         from chapter_section_courseware csc
         inner join courseware c on c.id = csc.courseware_id
         where csc.chapter_id =#{chapterId} ::uuid
+        <if test="kind != null" >
+            and c.kind = #{kind}
+        </if>
+        <if test="type != null" >
+            and c.type = #{type}
+        </if>
     </select>
 
     <select  id="getCoursewareByCourseId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
@@ -56,6 +68,12 @@
         inner join courseware c on c.id = csc.courseware_id
         inner join course_chapter_section ccs on (ccs.section_id = csc.section_id or ccs.chapter_id = csc.chapter_id)
         where ccs.course_id =#{courseId} ::uuid
+        <if test="kind != null" >
+            and c.kind = #{kind}
+        </if>
+        <if test="type != null" >
+            and c.type = #{type}
+        </if>
     </select>
 
     <delete id="deleteCoursewareById">
