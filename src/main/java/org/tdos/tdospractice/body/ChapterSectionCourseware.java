@@ -13,7 +13,4 @@ public class ChapterSectionCourseware {
     @JsonProperty("courseware_id")
     public String coursewareId;
 
-    @JsonProperty("type")
-    public int type;
-
 }

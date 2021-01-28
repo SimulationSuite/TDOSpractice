@@ -45,18 +45,25 @@ public class ExperimentController {
     }
 
     @GetMapping(value = "/findExperiment")
-    public Response findAllByCourseId(@RequestParam(value = "category_id") String category_id, @RequestParam(value = "name") String name) {
-        Optional<CategoryEntity> categoryEntity = categoryService.findCategory(category_id);
-        if (categoryEntity.isPresent()) {
-            List<String> list = new ArrayList<>();
-            if (categoryEntity.get().getParent_category_id() == null) {
-                categoryService.findChildCategory(category_id).forEach(c ->{
-                    list.add(c.getId());
-                });
-            }else {
-                list.add(category_id);
+    public Response findAllByCourseId(@RequestParam(value = "category_id") String category_id,
+                                      @RequestParam(value = "name") String name,
+                                      @RequestParam(value = "perPage") Integer perPage,
+                                      @RequestParam(value = "page") Integer page) {
+        List<String> list = new ArrayList<>();
+        if (category_id.equals("")){
+            return Response.success(experimentService.findExperiment(list, name,perPage,page));
+        }else{
+            Optional<CategoryEntity> categoryEntity = categoryService.findCategory(category_id);
+            if (categoryEntity.isPresent()) {
+                if (categoryEntity.get().getParent_category_id() == null) {
+                    categoryService.findChildCategory(category_id).forEach(c ->{
+                        list.add(c.getId());
+                    });
+                }else {
+                    list.add(category_id);
+                }
+                return Response.success(experimentService.findExperiment(list, name,perPage,page));
             }
-            return Response.success(experimentService.findExperiment(list, name));
         }
         return Response.error("找不到该分类");
     }

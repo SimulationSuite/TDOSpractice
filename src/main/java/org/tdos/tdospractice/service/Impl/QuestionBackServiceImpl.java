@@ -10,6 +10,7 @@ import org.tdos.tdospractice.body.QuestionBackAssignment;
 import org.tdos.tdospractice.entity.QuestionBackAssignmentEntity;
 import org.tdos.tdospractice.mapper.QuestionBackMapper;
 import org.tdos.tdospractice.service.QuestionBackService;
+import org.tdos.tdospractice.type.StudentQuestionAnswer;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -89,12 +90,10 @@ public class QuestionBackServiceImpl implements QuestionBackService {
     }
 
     @Override
-    public QuestionBackEntity getStudentAnswerByAssignment(String assignmentId) {
-        try {
-            return questionBackMapper.getStudentAnswerByAssignment(assignmentId);
-        } catch (Exception e) {
-            return new QuestionBackEntity();
-        }
+    public PageInfo<StudentQuestionAnswer> getStudentAnswerByAssignment(String userId, String assignmentId, Integer perPage, Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<StudentQuestionAnswer> list = questionBackMapper.getStudentAnswerByAssignment(userId, assignmentId);
+        return new PageInfo<>(list);
     }
 
     @Override

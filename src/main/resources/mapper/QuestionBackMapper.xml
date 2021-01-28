@@ -20,11 +20,12 @@
         </if>
     </select>
 
-    <select  id="getStudentAnswerByAssignment" resultType="org.tdos.tdospractice.entity.QuestionBackEntity">
-        select qb.id, qb.type, qb.content, qb.choice, qb.answer, qb.pic_url as picUrl, qb.model_id as modelId,
-        qb.category_id as categoryId, qb.created_at as createdAt, qb.updated_at as updatedAt
+    <select  id="getStudentAnswerByAssignment" resultType="org.tdos.tdospractice.type.StudentQuestionAnswer">
+        select qb.id, qb.type, qb.content, qb.choice, qb.pic_url as picUrl, qb.model_id as modelId,
+        qb.category_id as categoryId, sa.answer as studentAnswer, qba.score as totalScore
         from question_back qb
         inner join question_back_assignment qba on qba.question_id = qb.id
+        left join student_answer sa on sa.assignment_id = qba.assignment_id and sa.question_id = qb.id and sa.user_id = #{userId}
         where qba.assignment_id =#{assignmentId} ::uuid
     </select>
 

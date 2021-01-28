@@ -22,6 +22,17 @@ public class AssignmentServiceImpl implements AssignmentService {
     private AssignmentMapper assignmentMapper;
 
     @Override
+    public PageInfo<StudentAssignment> getStudentAssignment(String userId, String courseId,String chapterId, String sectionId, Integer status,String name, Integer perPage, Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<StudentAssignment> list = assignmentMapper.getStudentAssignment(userId, courseId, chapterId, sectionId, name);
+        if(status != null)
+        {
+            list = list.stream().filter(x -> x.getStatus() == status).collect(Collectors.toList());
+        }
+        return new PageInfo<>(list);
+    }
+
+    @Override
     public AssignmentStatistics getAssignmentStatisticsBySectionId(String sectionId) {
         AssignmentStatistics assignmentStatistics = new AssignmentStatistics();
         List<StudentAnswerEntity> allStudentAssignmentList = assignmentMapper.getAllStudentAssignmentBySectionId(sectionId);

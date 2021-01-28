@@ -107,7 +107,6 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
         chapterSectionCoursewareEntity.setChapterId(sectionCourseware.chapterId);
         chapterSectionCoursewareEntity.setSectionId(sectionCourseware.sectionId);
         chapterSectionCoursewareEntity.setCoursewareId(sectionCourseware.coursewareId);
-        chapterSectionCoursewareEntity.setType(sectionCourseware.type);
         try {
             coursewareMapper.addChapterSectionCourseware(chapterSectionCoursewareEntity);
         } catch (Exception e) {
