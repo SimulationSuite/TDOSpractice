@@ -24,7 +24,7 @@
     </select>
 
     <select id="findContainerByClass" resultType="java.util.HashMap">
-        select c.*,s.* from container c
+        select c.*,s.name as user_name,e.name as experiment_name from container c
         left join sim_user s on c.user_id=s.id
         left join class l on s.class_id=l.id
         left join experiment e on c.experiment_id=e.id
@@ -53,14 +53,14 @@
     </select>
 
     <select id="findContainerByTeacher" resultType="java.util.HashMap">
-        select * from container c
+        select c.*,s.name as user_name,e.name as experiment_name from container c
         left join sim_user s on c.user_id=s.id
         left join experiment e on c.experiment_id=e.id
         where s.role_id=1 and c.status=2 order by c.created_at
     </select>
 
     <select id="findContainerAll" resultType="java.util.HashMap">
-        select * from container c
+        select c.*,s.name as user_name,e.name as experiment_name from container c
         left join sim_user s on c.user_id=s.id
         left join experiment e on c.experiment_id=e.id
         where c.status=2 order by c.created_at
