@@ -32,6 +32,11 @@
     <delete id="deleteQuestionBackById">
         delete from question_back where id=#{id}::uuid;
     </delete>
+
+    <delete id="deleteQuestionBackAssignmentByAssignmentId">
+        delete from question_back_assignment where assignment_id=#{assignmentId}::uuid;
+    </delete>
+
     <select id="ifExistId"  resultType="Boolean">
         select case when count(*) > 1 then true else false end
         from question_back_assignment qba

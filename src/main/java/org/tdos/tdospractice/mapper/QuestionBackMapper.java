@@ -15,6 +15,8 @@ public interface QuestionBackMapper {
 
     int deleteQuestionBackById(@Param("id") String id);
 
+    int deleteQuestionBackAssignmentByAssignmentId(@Param("assignmentId") String assignmentId);
+
     boolean ifSectionQuestionBackByQuestionBackId(String id);
 
     boolean ifExistId(String id);
