@@ -1,5 +1,7 @@
 package org.tdos.tdospractice.service.Impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tdos.tdospractice.entity.ExperimentEntity;
@@ -21,8 +23,10 @@ public class ExperimentServiceImpl implements ExperimentService {
     }
 
     @Override
-    public List<ExperimentEntity> findExperiment(List<String> category_ids,String name) {
-        return experimentMapper.findExperiment(category_ids,name);
+    public PageInfo<ExperimentEntity> findExperiment(List<String> category_ids, String name, Integer perPage, Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<ExperimentEntity> list = experimentMapper.findExperiment(category_ids,name);
+        return new PageInfo<>(list);
     }
 
     @Override
