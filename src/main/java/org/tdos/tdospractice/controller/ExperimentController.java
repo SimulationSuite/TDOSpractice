@@ -44,45 +44,44 @@ public class ExperimentController {
 
     }
 
-    @GetMapping(value = "/findExperiment")
-    public Response findAllByCourseId(@RequestParam(value = "category_id") String category_id,
-                                      @RequestParam(value = "name") String name,
-                                      @RequestParam(value = "perPage") Integer perPage,
-                                      @RequestParam(value = "page") Integer page) {
+    @GetMapping(value = "/findExperimentByCategory")
+    public Response findExperimentByCategory(@RequestParam(value = "category_id") String category_id,
+                                             @RequestParam(value = "name") String name,
+                                             @RequestParam(value = "perPage") Integer perPage,
+                                             @RequestParam(value = "page") Integer page) {
         List<String> list = new ArrayList<>();
-        if (category_id.equals("")){
-            return Response.success(experimentService.findExperiment(list, name,perPage,page));
-        }else{
+        if (category_id.equals("")) {
+            return Response.success(experimentService.findExperiment(list, name, perPage, page));
+        } else {
             Optional<CategoryEntity> categoryEntity = categoryService.findCategory(category_id);
             if (categoryEntity.isPresent()) {
                 if (categoryEntity.get().getParent_category_id() == null) {
-                    categoryService.findChildCategory(category_id).forEach(c ->{
+                    categoryService.findChildCategory(category_id).forEach(c -> {
                         list.add(c.getId());
                     });
-                }else {
+                } else {
                     list.add(category_id);
                 }
-                return Response.success(experimentService.findExperiment(list, name,perPage,page));
+                return Response.success(experimentService.findExperiment(list, name, perPage, page));
             }
         }
         return Response.error("找不到该分类");
     }
 
-    @GetMapping(value = "/findAllByChapterId")
-    public Response findAllByChapterId(@RequestParam(value = "chapter_id") String chapter_id) {
-        return Response.success(experimentService.findAllByChapterId(chapter_id));
+    @GetMapping(value = "/findAllByCourse")
+    public Response findAllByChapterId(@RequestParam(value = "id") String id,
+                                       @RequestParam(value = "type") int type,
+                                       @RequestParam(value = "perPage") Integer perPage,
+                                       @RequestParam(value = "page") Integer page) {
+        if (type == 0) {
+            return Response.success(experimentService.findAllByCourseId(id,perPage,page));
+        } else if (type == 1) {
+            return Response.success(experimentService.findAllByChapterId(id,perPage,page));
+        } else if (type == 2) {
+            return Response.success(experimentService.findAllBySectionId(id,perPage,page));
+        }
+        return Response.error("类型错误");
     }
-
-    @GetMapping(value = "/findAllBySectionId")
-    public Response findAllBySectionId(@RequestParam(value = "section_id") String section_id) {
-        return Response.success(experimentService.findAllBySectionId(section_id));
-    }
-
-    @GetMapping(value = "/findAllByCategoryId")
-    public Response findAllByCategoryId(@RequestParam(value = "category_id") String category_id) {
-        return Response.success(experimentService.findAllByCategoryId(category_id));
-    }
-
 
     @PostMapping(value = "/updateExperiment")
     public Response updateExperiment(@RequestBody ExperimentEntity experimentEntity) {

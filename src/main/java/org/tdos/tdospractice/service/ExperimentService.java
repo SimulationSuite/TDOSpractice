@@ -11,11 +11,11 @@ public interface ExperimentService {
 
     PageInfo<ExperimentEntity> findExperiment(List<String> category_ids, String name, Integer perPage, Integer page);
 
-    List<ExperimentEntity> findAllByCourseId(String course_id);
+    PageInfo<ExperimentEntity> findAllByCourseId(String course_id, Integer perPage, Integer page);
 
-    List<ExperimentEntity> findAllByChapterId(String chapter_id);
+    PageInfo<ExperimentEntity> findAllByChapterId(String chapter_id, Integer perPage, Integer page);
 
-    List<ExperimentEntity> findAllBySectionId(String section_id);
+    PageInfo<ExperimentEntity> findAllBySectionId(String section_id, Integer perPage, Integer page);
 
     List<ExperimentEntity> findAllByCategoryId(String category_id);
 
