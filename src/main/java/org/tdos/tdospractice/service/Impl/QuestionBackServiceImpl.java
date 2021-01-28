@@ -133,6 +133,8 @@ public class QuestionBackServiceImpl implements QuestionBackService {
             questionBackAssignmentEntityList.add(questionBackAssignmentEntity);
         });
         try {
+            String assignmentId = questionBackAssignmentEntityList.get(0).getAssignmentId();
+            questionBackMapper.deleteQuestionBackAssignmentByAssignmentId(assignmentId);
             questionBackMapper.addQuestionBackAssignmentList(questionBackAssignmentEntityList);
         } catch (Exception e) {
             return questionBackAssignmentEntityList;
