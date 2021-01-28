@@ -71,5 +71,10 @@ public class StudentAnswerController {
         return Response.success(studentAnswerService.addStudentAnswerList(studentAnswerList.studentAnswerList));
     }
 
+    @PostMapping(value = "/modifyStudentAnswerStatusById")
+    public Response<Boolean> modifyStudentAnswerStatusById(@RequestBody StudentAnswer studentAnswer) {
+        return Response.success(studentAnswerService.modifyStudentAnswerStatusById(studentAnswer));
+    }
+
 }
 

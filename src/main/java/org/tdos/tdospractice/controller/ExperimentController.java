@@ -2,11 +2,17 @@ package org.tdos.tdospractice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.tdos.tdospractice.entity.CategoryEntity;
+import org.tdos.tdospractice.entity.ChapterSectionExperimentEntity;
 import org.tdos.tdospractice.entity.ExperimentEntity;
+import org.tdos.tdospractice.service.CategoryService;
+import org.tdos.tdospractice.service.ChapterSectionExperimentService;
 import org.tdos.tdospractice.service.ExperimentService;
 import org.tdos.tdospractice.type.Response;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -15,11 +21,20 @@ public class ExperimentController {
     @Autowired
     private ExperimentService experimentService;
 
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private ChapterSectionExperimentService chapterSectionExperimentService;
+
     @PostMapping(value = "/insertExperiment")
     public Response insertExperiment(@RequestBody ExperimentEntity experimentEntity) {
         try {
             int i = experimentService.insert(experimentEntity);
-            if (i == 1)
+            int j = chapterSectionExperimentService.insert(ChapterSectionExperimentEntity.builder()
+                    .experiment_id(experimentEntity.getId())
+                    .section_id(experimentEntity.getSection_id()).build());
+            if (i == 1 && j == 1)
                 return Response.success();
             return Response.error("新增失败");
         } catch (Exception e) {
@@ -29,9 +44,21 @@ public class ExperimentController {
 
     }
 
-    @GetMapping(value = "/findAllByCourseId")
-    public Response findAllByCourseId(@RequestParam(value = "course_id") String course_id) {
-        return Response.success(experimentService.findAllByCourseId(course_id));
+    @GetMapping(value = "/findExperiment")
+    public Response findAllByCourseId(@RequestParam(value = "category_id") String category_id, @RequestParam(value = "name") String name) {
+        Optional<CategoryEntity> categoryEntity = categoryService.findCategory(category_id);
+        if (categoryEntity.isPresent()) {
+            List<String> list = new ArrayList<>();
+            if (categoryEntity.get().getParent_category_id() == null) {
+                categoryService.findChildCategory(category_id).forEach(c ->{
+                    list.add(c.getId());
+                });
+            }else {
+                list.add(category_id);
+            }
+            return Response.success(experimentService.findExperiment(list, name));
+        }
+        return Response.error("找不到该分类");
     }
 
     @GetMapping(value = "/findAllByChapterId")

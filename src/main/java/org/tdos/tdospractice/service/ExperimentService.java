@@ -8,6 +8,8 @@ public interface ExperimentService {
 
     int insert(ExperimentEntity experimentEntity);
 
+    List<ExperimentEntity> findExperiment(List<String> category_ids,String name);
+
     List<ExperimentEntity> findAllByCourseId(String course_id);
 
     List<ExperimentEntity> findAllByChapterId(String chapter_id);
