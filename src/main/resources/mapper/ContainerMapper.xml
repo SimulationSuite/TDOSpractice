@@ -29,7 +29,7 @@
         left join class l on s.class_id=l.id
         left join experiment e on c.experiment_id=e.id
         where s.role_id=1 and c.status=2
-        <if test="classId != null">
+        <if test="classId != null and classId!=''">
             and l.id=#{classId}::uuid
         </if>
     </select>
@@ -39,10 +39,10 @@
         left join sim_user s on c.user_id=s.id
         left join experiment e on c.experiment_id=e.id
         where c.status=2
-        <if test="classId != null">
+        <if test="classId != null and classId!=''">
             and s.class_id=#{classId}::uuid
         </if>
-        <if test="filter != null ">
+        <if test="filter != null and filter!=''">
             and (s.name like concat('%',#{filter},'%') or s.id like concat('%',#{filter},'%') or e.name like
             concat('%',#{filter},'%'))
         </if>
