@@ -3,7 +3,14 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tdos.tdospractice.mapper.ChapterSectionExperimentMapper">
-    <insert id = "insert" useGeneratedKeys="true" keyProperty="id">
-        insert into chapter_section_experiment(section_id, experiment_id) values (#{section_id}::uuid, #{experiment_id}::uuid);
+    <insert id = "insert" parameterType="java.util.List" useGeneratedKeys="false">
+        insert into
+        chapter_section_experiment(section_id, experiment_id) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (
+            #{item.section_id}::uuid,
+            #{item.experiment_id}::uuid
+            )
+        </foreach>
     </insert>
 </mapper>
