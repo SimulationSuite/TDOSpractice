@@ -3,12 +3,14 @@ package org.tdos.tdospractice.service.Impl;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.tdos.tdospractice.body.DeleteSmallSection;
 import org.tdos.tdospractice.body.InsertSmallSection;
 import org.tdos.tdospractice.entity.CourseChapterSectionEntity;
 import org.tdos.tdospractice.mapper.*;
 import org.tdos.tdospractice.service.SmallSectionService;
 import org.tdos.tdospractice.type.SmallSection;
+import org.tdos.tdospractice.utils.UUIDPattern;
 
 @Service
 public class SmallSectionServiceImpl implements SmallSectionService {
@@ -71,6 +73,12 @@ public class SmallSectionServiceImpl implements SmallSectionService {
 
     @Override
     public Pair<Boolean, String> removeSmallSection(DeleteSmallSection deleteSmallSection) {
+        if (ObjectUtils.isEmpty(deleteSmallSection.smallSectionId)){
+            return new Pair<>(false, "small section is not exist");
+        }
+        if (!UUIDPattern.isValidUUID(deleteSmallSection.smallSectionId)){
+            return new Pair<>(false, "small_section_id is not be uuid");
+        }
         if (smallSectionMapper.hasSmallSection(deleteSmallSection.smallSectionId) == 0) {
             return new Pair<>(false, "small section is not exist");
         }

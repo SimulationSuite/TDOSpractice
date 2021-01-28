@@ -12,6 +12,8 @@ import java.util.List;
 public interface ExperimentMapper {
     int insert(ExperimentEntity experimentEntity);
 
+    List<ExperimentEntity> findExperiment(@Param("category_ids")List<String> category_ids,@Param("name")String name);
+
     List<ExperimentEntity> findAllByCourseId(String course_id);
 
     List<ExperimentEntity> findAllByChapterId(String chapter_id);
@@ -20,7 +22,7 @@ public interface ExperimentMapper {
 
     List<ExperimentEntity> findAllByCategoryId(String category_id);
 
-    ExperimentEntity findByID(String id);
+    ExperimentEntity findById(String id);
 
     boolean updateExperiment(ExperimentEntity experimentEntity);
 

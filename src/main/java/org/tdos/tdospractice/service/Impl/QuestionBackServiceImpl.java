@@ -5,12 +5,12 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tdos.tdospractice.body.QuestionBack;
-import org.tdos.tdospractice.entity.CoursewareEntity;
 import org.tdos.tdospractice.entity.QuestionBackEntity;
 import org.tdos.tdospractice.body.QuestionBackAssignment;
 import org.tdos.tdospractice.entity.QuestionBackAssignmentEntity;
 import org.tdos.tdospractice.mapper.QuestionBackMapper;
 import org.tdos.tdospractice.service.QuestionBackService;
+import org.tdos.tdospractice.type.StudentQuestionAnswer;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,7 +24,7 @@ public class QuestionBackServiceImpl implements QuestionBackService {
     @Override
     public PageInfo<QuestionBackEntity> getQuestionBackAll(Integer type, String content, String categoryId, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        List<QuestionBackEntity> list = questionBackMapper.getStudentAnswerAll(type, categoryId, content);
+        List<QuestionBackEntity> list = questionBackMapper.getQuestionBackAll(type, categoryId, content);
         return new PageInfo<>(list);
     }
 
@@ -33,13 +33,17 @@ public class QuestionBackServiceImpl implements QuestionBackService {
         Map<String, Object> map = new HashMap<>();
         List<String> sectionQuestionBack = new ArrayList<>();
         id.forEach(x -> {
-            if (!questionBackMapper.ifSectionQuestionBackByQuestionBackId(x)){
-                sectionQuestionBack.add(x);
+            if (questionBackMapper.ifExistId(x)){
+                if (!questionBackMapper.ifSectionQuestionBackByQuestionBackId(x))
+                {
+                    sectionQuestionBack.add(x);
+                }
             }
         });
         if (sectionQuestionBack.size() > 0){
             map.put("isDelete", false);
             map.put("notDeleteId", sectionQuestionBack);
+            map.put("reason", "题目关联课程为已发布课程。");
             return map;
         }
         id.forEach(x -> questionBackMapper.deleteQuestionBackById(x));
@@ -86,12 +90,10 @@ public class QuestionBackServiceImpl implements QuestionBackService {
     }
 
     @Override
-    public QuestionBackEntity getStudentAnswerByAssignment(String assignmentId) {
-        try {
-            return questionBackMapper.getStudentAnswerByAssignment(assignmentId);
-        } catch (Exception e) {
-            return new QuestionBackEntity();
-        }
+    public PageInfo<StudentQuestionAnswer> getStudentAnswerByAssignment(String userId, String assignmentId, Integer perPage, Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<StudentQuestionAnswer> list = questionBackMapper.getStudentAnswerByAssignment(userId, assignmentId);
+        return new PageInfo<>(list);
     }
 
     @Override

@@ -6,14 +6,16 @@ import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import org.tdos.tdospractice.body.AddCourse;
-import org.tdos.tdospractice.body.AddCourseCompleted;
-import org.tdos.tdospractice.body.ModifyCourseStatus;
-import org.tdos.tdospractice.body.PrepareCourse;
+import org.springframework.util.StringUtils;
+import org.tdos.tdospractice.body.*;
 import org.tdos.tdospractice.entity.CourseChapterSectionEntity;
 import org.tdos.tdospractice.mapper.*;
 import org.tdos.tdospractice.service.CourseService;
 import org.tdos.tdospractice.type.*;
+import org.tdos.tdospractice.type.Chapter;
+import org.tdos.tdospractice.type.Section;
+import org.tdos.tdospractice.type.SmallSection;
+import org.tdos.tdospractice.utils.UUIDPattern;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -43,6 +45,8 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private SmallSectionMapper smallSectionMapper;
+
+    private static final String EMPTY_UUID = "fb0a1080-b11e-427c-8567-56ca6105ea07";
 
     @Override
     public PageInfo<Course> getAdminCourseList(Integer perPage, Integer page, String name) {
@@ -92,6 +96,19 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Pair<Boolean, String> prepareCourse(PrepareCourse prepareCourse) {
+
+        if (ObjectUtils.isEmpty(prepareCourse.courseId)) {
+            return new Pair<>(false, "course_id can not be null");
+        }
+        if (ObjectUtils.isEmpty(prepareCourse.user_id)) {
+            return new Pair<>(false, "user_id  can not be null");
+        }
+        if (!UUIDPattern.isValidUUID(prepareCourse.courseId)){
+            return new Pair<>(false, "course_id is not be uuid");
+        }
+        if (!UUIDPattern.isValidUUID(prepareCourse.user_id)){
+            return new Pair<>(false, "user_id is not be uuid");
+        }
         if (courseMapper.hasCourseExist(prepareCourse.courseId) == 0) {
             return new Pair<>(false, "course is not exist");
         }
@@ -135,7 +152,22 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course AddAdminCourse(AddCourse addCourse) {
+    public Pair<Boolean, Object> AddAdminCourse(AddCourse addCourse) {
+        if (ObjectUtils.isEmpty(addCourse.name)) {
+            return new Pair<>(false, "name can not be null");
+        }
+        if (ObjectUtils.isEmpty(addCourse.picUrl)) {
+            return new Pair<>(false, "pic_url  can not be null");
+        }
+        if (ObjectUtils.isEmpty(addCourse.introduction)) {
+            return new Pair<>(false, "introduction  can not be null");
+        }
+        if (ObjectUtils.isEmpty(addCourse.ownerId)) {
+            return new Pair<>(false, "owner_id can not be null");
+        }
+        if (ObjectUtils.isEmpty(addCourse.chapters)) {
+            return new Pair<>(false, "chapters can not be null");
+        }
         Course course = new Course();
         course.name = addCourse.name;
         course.picUrl = addCourse.picUrl;
@@ -159,11 +191,21 @@ public class CourseServiceImpl implements CourseService {
             }).collect(Collectors.toList());
             return chapter;
         }).collect(Collectors.toList());
-        return writeCourse(course);
+
+        return new Pair<>(true, writeCourse(course));
     }
 
     @Override
     public Pair<Boolean, String> modifyCourseStatus(ModifyCourseStatus modifyCourseStatus) {
+        if (ObjectUtils.isEmpty(modifyCourseStatus.userId)) {
+            return new Pair<>(false, "user_id can not be null");
+        }
+        if (ObjectUtils.isEmpty(modifyCourseStatus.courseId)) {
+            return new Pair<>(false, "course_id  can not be null");
+        }
+        if (!UUIDPattern.isValidUUID(modifyCourseStatus.courseId)){
+            return new Pair<>(false, "course_id is not be uuid");
+        }
         if (courseMapper.hasCourseExist(modifyCourseStatus.courseId) == 0) {
             return new Pair<>(false, "course is not exist");
         }
@@ -257,7 +299,13 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course getCourseById(String courseId) {
+    public Pair<Boolean, Object>  getCourseById(String courseId) {
+        if (ObjectUtils.isEmpty(courseId)){
+            return new Pair<>(false,"course_id is not be null");
+        }
+        if (!UUIDPattern.isValidUUID(courseId)){
+            return new Pair<>(false,"course_id is not be uuid");
+        }
         Course course = courseMapper.getCourseById(courseId);
         List<ClassNumber> classNumbers = classMapper.findClassNumber();
         classNumbers.forEach(classNumber -> {
@@ -267,7 +315,7 @@ public class CourseServiceImpl implements CourseService {
         });
         course.chapterNumber = course.chapters.size();
         course.sectionNumber = course.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
-        return course;
+        return new Pair<>(true,course);
     }
 
     @Override
@@ -292,7 +340,13 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course AddAdminCourseCompleted(AddCourseCompleted addCourseCompleted) {
+    public Pair<Boolean, Object> AddAdminCourseCompleted(AddCourseCompleted addCourseCompleted) {
+        if (ObjectUtils.isEmpty(addCourseCompleted.courseId)) {
+            return new Pair<>(false, "course_id is not be null");
+        }
+        if (ObjectUtils.isEmpty(addCourseCompleted.chapters) || addCourseCompleted.chapters.size() == 0) {
+            return new Pair<>(false, "chapters is not be null");
+        }
         Course course = courseMapper.getCourseById(addCourseCompleted.courseId);
         course.chapters.forEach(chapter -> chapterMapper.removeChapter(chapter.id));
         course.chapters = addCourseCompleted.chapters.stream().map(x -> {
@@ -336,7 +390,75 @@ public class CourseServiceImpl implements CourseService {
             });
             course.chapters = course.chapters.stream().sorted(Comparator.comparing(Chapter::getOrder)).collect(Collectors.toList());
         }
-        return course;
+        return new Pair<>(true, course);
+    }
+
+    @Override
+    public Pair<Boolean, String> insertCourseChapterCompleted(AddChapterCompleted addChapterCompleted) {
+        if (ObjectUtils.isEmpty(addChapterCompleted.courseId)) {
+            return new Pair<>(false, "course_id is not be null");
+        }
+        if (ObjectUtils.isEmpty(addChapterCompleted.chapter)) {
+            return new Pair<>(false, "chapter is not be null");
+        }
+        if (!UUIDPattern.isValidUUID(addChapterCompleted.courseId)){
+            return new Pair<>(false, "course_id is not be uuid");
+        }
+        Course course = courseMapper.getCourseById(addChapterCompleted.courseId);
+        if (course.chapters.stream().map(Chapter::getId)
+                .collect(Collectors.toList()).contains(addChapterCompleted.chapter.id)) {
+            chapterMapper.removeChapter(addChapterCompleted.chapter.id);
+        }
+        Chapter chapter = new Chapter();
+        chapter.name = addChapterCompleted.chapter.name;
+        chapter.order = addChapterCompleted.chapter.order;
+        chapter.sections = addChapterCompleted.chapter.sections.stream().map(y -> {
+            Section section = new Section();
+            section.name = y.name;
+            section.order = y.order;
+            section.smallSections = y.smallSections.stream().map(z -> {
+                SmallSection smallSection = new SmallSection();
+                smallSection.name = z.name;
+                smallSection.order = z.order;
+                return smallSection;
+            }).collect(Collectors.toList());
+            return section;
+        }).collect(Collectors.toList());
+        chapterMapper.insertChapter(chapter);
+        List<CourseChapterSectionEntity> list = new ArrayList<>();
+        if (chapter.sections.size() > 0) {
+            chapter.sections.forEach(section -> {
+                sectionMapper.insertSection(section);
+                if (section.smallSections.size() != 0) {
+                    section.smallSections.forEach(smallSection -> {
+                        smallSectionMapper.insertSmallSection(smallSection);
+                        list.add(CourseChapterSectionEntity.builder().courseId(course.id)
+                                .chapterId(chapter.id)
+                                .sectionId(section.id)
+                                .smallSectionId(smallSection.id)
+                                .build());
+                    });
+
+                } else {
+                    list.add(CourseChapterSectionEntity.builder().courseId(course.id)
+                            .chapterId(chapter.id)
+                            .sectionId(section.id)
+                            .smallSectionId(EMPTY_UUID)
+                            .build());
+                }
+
+            });
+        } else {
+            list.add(CourseChapterSectionEntity.builder().courseId(course.id)
+                    .chapterId(chapter.id)
+                    .sectionId(EMPTY_UUID)
+                    .smallSectionId(EMPTY_UUID)
+                    .build());
+        }
+        if (list.size() > 0) {
+            courseChapterSectionMapper.insertCourseChapterSectionList(list);
+        }
+        return new Pair<>(true, "");
     }
 
 }

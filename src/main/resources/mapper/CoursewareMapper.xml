@@ -18,6 +18,9 @@
         <if test="type != null" >
             and c.type = #{type}
         </if>
+        <if test="categoryId != null and categoryId != ''" >
+            and c.category_id = #{categoryId}
+        </if>
     </select>
 
     <select  id="getCoursewareByClassId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
@@ -36,6 +39,12 @@
         from chapter_section_courseware csc
         inner join courseware c on c.id = csc.courseware_id
         where csc.section_id =#{sectionId} ::uuid
+        <if test="kind != null" >
+            and c.kind = #{kind}
+        </if>
+        <if test="type != null" >
+            and c.type = #{type}
+        </if>
     </select>
 
     <select  id="getCoursewareByChapterId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
@@ -44,6 +53,12 @@
         from chapter_section_courseware csc
         inner join courseware c on c.id = csc.courseware_id
         where csc.chapter_id =#{chapterId} ::uuid
+        <if test="kind != null" >
+            and c.kind = #{kind}
+        </if>
+        <if test="type != null" >
+            and c.type = #{type}
+        </if>
     </select>
 
     <select  id="getCoursewareByCourseId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
@@ -53,6 +68,12 @@
         inner join courseware c on c.id = csc.courseware_id
         inner join course_chapter_section ccs on (ccs.section_id = csc.section_id or ccs.chapter_id = csc.chapter_id)
         where ccs.course_id =#{courseId} ::uuid
+        <if test="kind != null" >
+            and c.kind = #{kind}
+        </if>
+        <if test="type != null" >
+            and c.type = #{type}
+        </if>
     </select>
 
     <delete id="deleteCoursewareById">
@@ -68,9 +89,9 @@
     </update>
 
     <insert id="addCourseware" useGeneratedKeys="true" keyProperty="id">
-        insert into courseware (name, kind, type, url, duration, size)
+        insert into courseware (name, kind, type, url, duration, size, category_id)
         values
-        (#{name}, #{kind}, #{type}, #{url}, #{duration}, #{size});
+        (#{name}, #{kind}, #{type}, #{url}, #{duration}, #{size}, #{categoryId});
     </insert>
 
     <select id="ifSectionCourseware"  resultType="Boolean">
@@ -92,9 +113,9 @@
     </select>
 
     <insert id="addChapterSectionCourseware" useGeneratedKeys="true" keyProperty="id">
-        insert into section_courseware (section_id, chapter_id, courseware_id, type)
+        insert into section_courseware (section_id, chapter_id, courseware_id)
         values
-        (#{sectionId}, #{chapterId}, #{coursewareId}, #{type});
+        (#{sectionId}, #{chapterId}, #{coursewareId});
     </insert>
 
 </mapper>

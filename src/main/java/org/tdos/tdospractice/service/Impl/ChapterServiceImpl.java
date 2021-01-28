@@ -3,6 +3,7 @@ package org.tdos.tdospractice.service.Impl;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.tdos.tdospractice.body.DeleteChapter;
 import org.tdos.tdospractice.body.InsertChapter;
 import org.tdos.tdospractice.entity.CourseChapterSectionEntity;
@@ -13,6 +14,7 @@ import org.tdos.tdospractice.mapper.SectionMapper;
 import org.tdos.tdospractice.service.ChapterService;
 import org.tdos.tdospractice.type.Chapter;
 import org.tdos.tdospractice.type.Section;
+import org.tdos.tdospractice.utils.UUIDPattern;
 
 @Service
 public class ChapterServiceImpl implements ChapterService {
@@ -66,6 +68,12 @@ public class ChapterServiceImpl implements ChapterService {
 
     @Override
     public Pair<Boolean, String> removeChapter(DeleteChapter deleteChapter) {
+        if (!UUIDPattern.isValidUUID(deleteChapter.chapterId)){
+            return new Pair<>(false, "chapter_id is not be uuid");
+        }
+        if (ObjectUtils.isEmpty(deleteChapter.chapterId)){
+            return new Pair<>(false, "chapter is not exist");
+        }
         if (chapterMapper.hasChapter(deleteChapter.chapterId) == 0) {
             return new Pair<>(false, "chapter is not exist");
         }

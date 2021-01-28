@@ -385,9 +385,9 @@ SELECT
 	c."type",
 	c.model_id
 FROM course c
-	LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
+	LEFT JOIN class_course cc ON cc.course_id = c.id
 and
-	cc.class_id = #{classId}
+	cc.class_id = #{classId}::uuid
 Where c.type = 1
 	AND c.STATUS = 1
     </select>
@@ -449,9 +449,9 @@ FROM
 	course c
 	LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
 	LEFT JOIN course_chapter_section ccs ON ccs.course_id = c.id
-	LEFT JOIN chapter ON chapter.id = ccs.chapter_id
-	LEFT JOIN "section" ON "section".id = ccs.section_id
-	LEFT JOIN "small_section" ON "small_section".id = ccs.small_section_id
+	LEFT JOIN chapter ON chapter.id = ccs.chapter_id and "chapter".order != -1
+	LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
+	LEFT JOIN "small_section" ON "small_section".id = ccs.small_section_id and "small_section".order != -1
 WHERE
     c.id = #{courseId} :: uuid
     </select>

@@ -20,9 +20,15 @@ public class StudentAnswerEntity {
 
     private String userId;
 
+    private String name;
+
     private String answer;
 
     private Integer score;
+
+    private Integer status;
+
+    private LocalDateTime committedAt;
 
     private LocalDateTime createdAt;
 

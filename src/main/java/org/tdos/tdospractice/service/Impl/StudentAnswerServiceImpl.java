@@ -8,7 +8,9 @@ import org.tdos.tdospractice.body.StudentAnswer;
 import org.tdos.tdospractice.entity.StudentAnswerEntity;
 import org.tdos.tdospractice.mapper.StudentAnswerMapper;
 import org.tdos.tdospractice.service.StudentAnswerService;
+import org.tdos.tdospractice.type.StudentQuestionAnswer;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -16,6 +18,13 @@ public class StudentAnswerServiceImpl implements StudentAnswerService {
 
     @Autowired
     private StudentAnswerMapper studentAnswerMapper;
+
+    @Override
+    public PageInfo<StudentQuestionAnswer> getStudentAnswerByAssignmentUserId(String userId, String assignmentId, Integer perPage, Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<StudentQuestionAnswer> list = studentAnswerMapper.getStudentAnswerByAssignmentUserId(userId, assignmentId);
+        return new PageInfo<>(list);
+    }
 
     @Override
     public PageInfo<StudentAnswerEntity> getStudentAnswerByCourseId(String sectionId, Integer perPage,Integer page) {
@@ -111,6 +120,16 @@ public class StudentAnswerServiceImpl implements StudentAnswerService {
             return studentAnswerEntityList;
         }
         return studentAnswerEntityList;
+    }
+
+    @Override
+    public Boolean modifyStudentAnswerStatusById(StudentAnswer studentAnswer) {
+        try {
+            studentAnswerMapper.modifyStudentAnswerStatus(1, new Date(), studentAnswer.assignmentId, studentAnswer.userId);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
 }

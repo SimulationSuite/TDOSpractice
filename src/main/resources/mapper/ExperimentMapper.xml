@@ -7,24 +7,43 @@
     <insert id="insert" parameterType="org.tdos.tdospractice.entity.ExperimentEntity" useGeneratedKeys="true"
             keyProperty="id">
         insert into
-        experiment(section_id,name,pic_url,end_at,step_url,duration,category_id,type,created_at,updated_at)
-        values(#{section_id},#{name},#{pic_url},#{end_at},#{step_url},#{duration},#{category_id},#{type},#{created_at},#{updated_at})
+        experiment(name,pic_url,end_at,step,duration,category_id,introduce)
+        values(#{name},#{pic_url},#{end_at},#{step},#{duration},#{category_id},#{introduce})
     </insert>
 
+    <select id="findExperiment" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
+        select * from experiment where 1 = 1
+        <if test="category_ids != null and category_ids.size > 0">
+            AND category_id IN
+            <foreach collection="category_ids" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+        <if test="name!=null and name!=''">
+            AND "name" like concat('%',#{name},'%')
+        </if>
+    </select>
+
     <select id="findAllByCourseId" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
-        select * from experiment e , course_chapter_section c where e.section_id = c.section_id and c.course_id = #{course_id} and type = 1
+        SELECT e.* FROM experiment e
+            INNER JOIN chapter_section_experiment c on e.id = c.experiment_id
+            INNER JOIN course_chapter_section cc on c.section_id = cc.section_id
+            WHERE cc.course_id = #{course_id}::uuid
     </select>
 
     <select id="findAllByChapterId" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
-        select * from experiment e , course_chapter_section c where e.section_id = c.section_id and c.chapter_id = #{chapter_id} and type = 1
+        SELECT e.* FROM experiment e
+            INNER JOIN chapter_section_experiment c on e.id = c.experiment_id
+            INNER JOIN course_chapter_section cc on c.section_id = cc.section_id
+            WHERE cc.chapter_id = #{chapter_id}::uuid
     </select>
 
     <select id="findAllBySectionId" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
-        select * from experiment where section_id = #{section_id} and type = 1
-    </select>
-
-    <select id="findAllByCategoryId" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
-        select * from experiment where category_id = #{category_id} and type = 0
+        SELECT e.* FROM experiment e
+            INNER JOIN chapter_section_experiment c on e.id = c.experiment_id
+            INNER JOIN course_chapter_section cc on c.section_id = cc.section_id
+            WHERE cc.section_id = #{section_id}::uuid
     </select>
 
     <select id="findById" resultType="org.tdos.tdospractice.entity.ExperimentEntity">

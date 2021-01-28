@@ -10,6 +10,9 @@ public class StudentScore {
     @JsonProperty("id")
     public String id;
 
+    @JsonProperty("question_id")
+    public String questionId;
+
     @JsonProperty("assignment_id")
     public String assignmentId;
 

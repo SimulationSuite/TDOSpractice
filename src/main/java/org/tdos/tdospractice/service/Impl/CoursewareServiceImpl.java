@@ -23,9 +23,9 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
     private CoursewareMapper coursewareMapper;
 
     @Override
-    public PageInfo<CoursewareEntity> getCoursewareAll(String name, Integer kind, Integer type, Integer perPage,Integer page) {
+    public PageInfo<CoursewareEntity> getCoursewareAll(String name, Integer kind, Integer type, String categoryId, Integer perPage,Integer page) {
         PageHelper.startPage(page, perPage);
-        List<CoursewareEntity> list = coursewareMapper.getCoursewareAll(name, kind, type);
+        List<CoursewareEntity> list = coursewareMapper.getCoursewareAll(name, kind, type, categoryId);
         return new PageInfo<>(list);
     }
 
@@ -37,23 +37,23 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
     }
 
     @Override
-    public PageInfo<CoursewareEntity> getCoursewareBySectionId(String sectionId, Integer perPage,Integer page) {
+    public PageInfo<CoursewareEntity> getCoursewareBySectionId(String sectionId, Integer kind, Integer type, Integer perPage,Integer page) {
         PageHelper.startPage(page, perPage);
-        List<CoursewareEntity> list = coursewareMapper.getCoursewareBySectionId(sectionId);
+        List<CoursewareEntity> list = coursewareMapper.getCoursewareBySectionId(sectionId, kind, type);
         return new PageInfo<>(list);
     }
 
     @Override
-    public PageInfo<CoursewareEntity> getCoursewareByChapterId(String chapterId, Integer perPage,Integer page) {
+    public PageInfo<CoursewareEntity> getCoursewareByChapterId(String chapterId, Integer kind, Integer type, Integer perPage,Integer page) {
         PageHelper.startPage(page, perPage);
-        List<CoursewareEntity> list = coursewareMapper.getCoursewareByChapterId(chapterId);
+        List<CoursewareEntity> list = coursewareMapper.getCoursewareByChapterId(chapterId, kind, type);
         return new PageInfo<>(list);
     }
 
     @Override
-    public PageInfo<CoursewareEntity> getCoursewareByCourseId(String courseId, Integer perPage,Integer page) {
+    public PageInfo<CoursewareEntity> getCoursewareByCourseId(String courseId, Integer kind, Integer type, Integer perPage,Integer page) {
         PageHelper.startPage(page, perPage);
-        List<CoursewareEntity> list = coursewareMapper.getCoursewareByCourseId(courseId);
+        List<CoursewareEntity> list = coursewareMapper.getCoursewareByCourseId(courseId, kind, type);
         return new PageInfo<>(list);
     }
 
@@ -63,7 +63,7 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
         List<String> sectionCourseware = new ArrayList<String>();
         id.forEach(x -> {
             if (coursewareMapper.ifSectionCourseware(x)){
-                if(coursewareMapper.ifSectionCoursewarePub(x)){
+                if(!coursewareMapper.ifSectionCoursewarePub(x)){
                     sectionCourseware.add(x);
                 }
             }
@@ -92,6 +92,7 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
         coursewareEntity.setUrl(courseware.url);
         coursewareEntity.setDuration(courseware.duration);
         coursewareEntity.setSize(courseware.size);
+        coursewareEntity.setCategoryId(courseware.categoryId);
         try {
             coursewareMapper.addCourseware(coursewareEntity);
         } catch (Exception e) {
@@ -106,7 +107,6 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
         chapterSectionCoursewareEntity.setChapterId(sectionCourseware.chapterId);
         chapterSectionCoursewareEntity.setSectionId(sectionCourseware.sectionId);
         chapterSectionCoursewareEntity.setCoursewareId(sectionCourseware.coursewareId);
-        chapterSectionCoursewareEntity.setType(sectionCourseware.type);
         try {
             coursewareMapper.addChapterSectionCourseware(chapterSectionCoursewareEntity);
         } catch (Exception e) {

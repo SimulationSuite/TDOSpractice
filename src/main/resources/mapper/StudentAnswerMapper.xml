@@ -4,13 +4,22 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tdos.tdospractice.mapper.StudentAnswerMapper">
 
+    <select  id="getStudentAnswerByAssignmentUserId" resultType="org.tdos.tdospractice.type.StudentQuestionAnswer">
+        select qb.id, qb.type, qb.content, qb.choice, qb.answer, qb.pic_url as picUrl, qb.model_id as modelId,
+        qb.category_id as categoryId, sa.answer as studentAnswer, qba.score  as totalScore, sa.score
+        from student_answer sa
+        inner join question_back qb on qb.id = sa.question_id
+        inner join question_back_assignment qba on qba.question_id = sa.question_id and qba.assignment_id = sa.assignment_id
+        where sa.user_id = #{userId} and sa.assignment_id = #{assignmentId}::uuid
+    </select>
+
     <select  id="getStudentAnswerByCourseId" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">
         select sa.id, sa.question_id as questionId, sa.assignment_id as assignmentId, sa.user_id as userId,
         sa.answer, sa.score, sa.created_at as createdAt, sa.updated_at as updatedAt
         from student_answer sa
         inner join assignment a on a.id = sa.assignment_id::uuid
-        inner join course_chapter_section ccs on ccs.section_id = a.section_id::uuid
-        where ccs.course_id =#{courseId}::uuid;
+        inner join course_chapter_section ccs on ccs.section_id = a.section_id
+        where ccs.course_id =#{courseId}
     </select>
 
     <select  id="getStudentAnswerByChapterId" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">
@@ -18,8 +27,8 @@
         sa.answer, sa.score, sa.created_at as createdAt, sa.updated_at as updatedAt
         from student_answer sa
         inner join assignment a on a.id = sa.assignment_id::uuid
-        inner join course_chapter_section ccs on ccs.section_id = a.section_id::uuid
-        where ccs.chapter_id =#{chapterId}::uuid;
+        inner join course_chapter_section ccs on ccs.section_id = a.section_id
+        where ccs.chapter_id =#{chapterId}
     </select>
 
     <select  id="getStudentAnswerBySectionId" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">
@@ -27,7 +36,7 @@
         sa.answer, sa.score, sa.created_at as createdAt, sa.updated_at as updatedAt
         from student_answer sa
         inner join assignment a on a.id = sa.assignment_id::uuid
-        where a.section_id =#{sectionId}::uuid;
+        where a.section_id =#{sectionId}
     </select>
 
     <delete id="deleteStudentAnswerById">
@@ -66,5 +75,21 @@
             )
         </foreach>
     </insert>
+
+    <update id="modifyStudentAnswerScore">
+        update student_answer
+        set score = #{score}
+        where question_id=#{questionId}::uuid and assignment_id = #{assignmentId}::uuid and user_id = #{userId}::uuid;
+    </update>
+
+    <update id="modifyStudentAnswerStatus">
+        update student_answer
+        set status = #{status}, committed_at = #{committedAt}
+        where assignment_id = #{assignmentId}::uuid and user_id = #{userId}::uuid;
+    </update>
+
+    <delete id="deleteStudentAnswerByAssignmentUserId">
+        delete from student_answer where assignment_id = #{assignmentId}::uuid and user_id = #{userId}::uuid;
+    </delete>
 
 </mapper>

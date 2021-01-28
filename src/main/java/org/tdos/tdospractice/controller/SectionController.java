@@ -12,6 +12,7 @@ import org.tdos.tdospractice.body.InsertSection;
 import org.tdos.tdospractice.body.Section;
 import org.tdos.tdospractice.service.SectionService;
 import org.tdos.tdospractice.type.Response;
+import org.tdos.tdospractice.utils.UUIDPattern;
 
 @RestController
 public class SectionController {

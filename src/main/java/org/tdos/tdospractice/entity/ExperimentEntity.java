@@ -13,25 +13,21 @@ import java.util.Date;
 public class ExperimentEntity {
     private String id;
 
-    private String section_id;
-
     private String name;
 
     private String pic_url;
 
     private Date end_at;
 
-    private String step_url;
+    private String step;
 
     private Long duration;
 
-    private String image_id;
-
     private String category_id;
 
-    private int type; //0. 基础实验 1.引用实验
+    private String introduce;
 
-    private String parent_experiment_id;
+    private String section_id; //只用于接收参数
 
     private LocalDateTime created_at;
 

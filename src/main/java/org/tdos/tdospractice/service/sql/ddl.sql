@@ -72,10 +72,6 @@ create table if not exists class_course(
 create trigger t_name before update on class_course for each row execute procedure upd_timestamp();
 
 
-
-
-
-
 create table if not exists chapter(
     id UUID primary key DEFAULT uuid_generate_v4(),
     "name" varchar(255) not null,
@@ -219,6 +215,8 @@ create table if not exists student_answer(
     user_id varchar(255) not null,
     answer text,
     score int4 DEFAULT NULL,
+    status int4 default 0,
+    committed_at TIMESTAMP(0)  without time zone,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
@@ -246,11 +244,10 @@ create table if not exists experiment(
     "name" varchar(255) NOT NULL,
     pic_url varchar(255) DEFAULT null,
     end_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    step_url varchar(255) DEFAULT null,
+    step text DEFAULT null,
     duration int8 DEFAULT 0,
     category_id varchar(255) NOT null,
-    "type" int4 default 0,
-    parent_experiment_id varchar(255) DEFAULT null,
+    introduce varchar(255) DEFAULT null,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
@@ -259,7 +256,6 @@ create trigger t_name before update on experiment for each row execute procedure
 
 create table if not exists chapter_section_experiment(
     id UUID primary key DEFAULT uuid_generate_v4(),
-    chapter_id UUID references "chapter"("id") on delete cascade NOT NULL,
     section_id UUID references "section"("id") on delete cascade NOT NULL,
     experiment_id UUID references "experiment"("id") on delete cascade NOT NULL,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
@@ -311,7 +307,7 @@ create trigger t_name before update on experiment_image for each row execute pro
 create table if not exists experiment_report(
     experiment_id UUID references "experiment"("id") on delete cascade NOT NULL,
     user_id varchar(255) NOT NULL,
-    url varchar(255) DEFAULT null,
+    info text DEFAULT null,
     score int4 DEFAULT NULL,
     status int4 default 0,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
@@ -348,3 +344,4 @@ create table if not exists user_serve(
 );
 
 create trigger t_name before update on user_serve for each row execute procedure upd_timestamp();
+

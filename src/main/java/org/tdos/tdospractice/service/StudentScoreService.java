@@ -13,7 +13,7 @@ public interface StudentScoreService {
 
     Map<String, Object> deleteStudentScoreById(List<String> id);
 
-    StudentScoreEntity addStudentScore(StudentScore studentScore);
+    StudentScoreEntity addStudentScore(List<StudentScore> studentScore);
 
     Boolean modifyStudentScoreById(StudentScore studentScore);
 

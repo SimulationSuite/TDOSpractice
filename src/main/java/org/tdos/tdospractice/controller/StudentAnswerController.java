@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 import org.tdos.tdospractice.body.DeleteIdList;
+import org.tdos.tdospractice.entity.QuestionBackEntity;
 import org.tdos.tdospractice.entity.StudentAnswerEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.tdos.tdospractice.service.StudentAnswerService;
 import org.tdos.tdospractice.type.Response;
 import org.tdos.tdospractice.body.StudentAnswer;
 import org.tdos.tdospractice.body.StudentAnswerList;
+import org.tdos.tdospractice.type.StudentQuestionAnswer;
 
 import java.util.*;
 
@@ -18,6 +20,14 @@ public class StudentAnswerController {
 
     @Autowired
     private StudentAnswerService studentAnswerService;
+
+    @GetMapping(value = "/getStudentAnswerByAssignmentUserId")
+    public Response<PageInfo<StudentQuestionAnswer>> getStudentAnswerByAssignmentUserId(@RequestParam(value = "userId") String userId,
+                                                                                        @RequestParam(value = "assignmentId") String assignmentId,
+                                                                                        @RequestParam(value = "perPage") Integer perPage,
+                                                                                        @RequestParam(value = "page") Integer page) {
+        return Response.success(studentAnswerService.getStudentAnswerByAssignmentUserId(userId, assignmentId, perPage, page));
+    }
 
     @GetMapping(value = "/getStudentAnswerByCourseId")
     public Response<PageInfo<StudentAnswerEntity>> getStudentAnswerByCourseId(@RequestParam(value = "courseId") String courseId,
@@ -59,6 +69,11 @@ public class StudentAnswerController {
     @PostMapping(value = "/addStudentAnswerList")
     public Response<List<StudentAnswerEntity>> addStudentAnswerList(@RequestBody StudentAnswerList studentAnswerList) {
         return Response.success(studentAnswerService.addStudentAnswerList(studentAnswerList.studentAnswerList));
+    }
+
+    @PostMapping(value = "/modifyStudentAnswerStatusById")
+    public Response<Boolean> modifyStudentAnswerStatusById(@RequestBody StudentAnswer studentAnswer) {
+        return Response.success(studentAnswerService.modifyStudentAnswerStatusById(studentAnswer));
     }
 
 }

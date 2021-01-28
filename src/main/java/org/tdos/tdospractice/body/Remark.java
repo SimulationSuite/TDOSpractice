@@ -14,7 +14,7 @@ public class Remark {
 
     public String content;
 
-    public int type;
+    public Integer type;
 
     @JsonProperty("remark_page")
     public int remarkPage;

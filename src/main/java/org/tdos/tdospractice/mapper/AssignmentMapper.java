@@ -4,12 +4,22 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.tdos.tdospractice.entity.AssignmentEntity;
+import org.tdos.tdospractice.entity.StudentAnswerEntity;
+import org.tdos.tdospractice.type.StudentAssignment;
 
 import java.util.List;
 
 @Mapper
 @Repository
 public interface AssignmentMapper {
+
+    List<StudentAssignment> getStudentAssignment(@Param("userId") String userId, @Param("courseId") String courseId, @Param("chapterId") String chapterId, @Param("sectionId") String sectionId, @Param("name") String name);
+
+    List<StudentAnswerEntity> getAllStudentAssignmentBySectionId(@Param("sectionId") String sectionId);
+
+    List<StudentAnswerEntity> getSubStudentAssignmentBySectionId(@Param("sectionId") String sectionId);
+
+    List<StudentAssignment> getAssignmentAll(@Param("classId") String classId, @Param("courseId") String courseId, @Param("chapterId") String chapterId, @Param("sectionId") String sectionId, @Param("name") String name);
 
     List<AssignmentEntity> getAssignmentByClassId(@Param("classId") String classId);
 

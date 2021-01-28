@@ -1,5 +1,6 @@
 package org.tdos.tdospractice.type;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public class Section {
 
     public int order;
 
+    @JsonProperty("small_sections")
     public List<SmallSection> smallSections;
 
 }

@@ -1,16 +1,13 @@
-package org.tdos.tdospractice.entity;
+package org.tdos.tdospractice.type;
 
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Builder
-
-public class QuestionBackEntity {
+public class StudentQuestionAnswer {
 
     private String id;
 
@@ -28,10 +25,10 @@ public class QuestionBackEntity {
 
     private String categoryId;
 
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
     private String studentAnswer;
+
+    private int score;
+
+    private int totalScore;
 
 }
