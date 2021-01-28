@@ -118,8 +118,12 @@ public class CourseController {
     }
 
     @GetMapping(value = "/get_course_by_id")
-    public Response<Course> getCourseById(@RequestParam(value = "course_id") String courseId) {
-        return Response.success(courseService.getCourseById(courseId));
+    public Response<Object> getCourseById(@RequestParam(value = "course_id") String courseId) {
+        Pair<Boolean, Object> pair = courseService.getCourseById(courseId);
+        if (pair.getKey()) {
+            return Response.success(pair.getValue());
+        }
+        return Response.error((String) pair.getValue());
     }
 
 

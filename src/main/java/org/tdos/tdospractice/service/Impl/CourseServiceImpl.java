@@ -15,6 +15,7 @@ import org.tdos.tdospractice.type.*;
 import org.tdos.tdospractice.type.Chapter;
 import org.tdos.tdospractice.type.Section;
 import org.tdos.tdospractice.type.SmallSection;
+import org.tdos.tdospractice.utils.UUIDPattern;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -95,6 +96,12 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Pair<Boolean, String> prepareCourse(PrepareCourse prepareCourse) {
+        if (!UUIDPattern.isValidUUID(prepareCourse.courseId)){
+            return new Pair<>(false, "course_id is not be uuid");
+        }
+        if (!UUIDPattern.isValidUUID(prepareCourse.user_id)){
+            return new Pair<>(false, "user_id is not be uuid");
+        }
         if (ObjectUtils.isEmpty(prepareCourse.courseId)) {
             return new Pair<>(false, "course_id can not be null");
         }
@@ -149,13 +156,16 @@ public class CourseServiceImpl implements CourseService {
             return new Pair<>(false, "name can not be null");
         }
         if (ObjectUtils.isEmpty(addCourse.picUrl)) {
-            return new Pair<>(false, "pic url  can not be null");
+            return new Pair<>(false, "pic_url  can not be null");
         }
         if (ObjectUtils.isEmpty(addCourse.introduction)) {
             return new Pair<>(false, "introduction  can not be null");
         }
         if (ObjectUtils.isEmpty(addCourse.ownerId)) {
             return new Pair<>(false, "owner_id can not be null");
+        }
+        if (ObjectUtils.isEmpty(addCourse.chapters)) {
+            return new Pair<>(false, "chapters can not be null");
         }
         Course course = new Course();
         course.name = addCourse.name;
@@ -188,6 +198,9 @@ public class CourseServiceImpl implements CourseService {
     public Pair<Boolean, String> modifyCourseStatus(ModifyCourseStatus modifyCourseStatus) {
         if (ObjectUtils.isEmpty(modifyCourseStatus.userId)) {
             return new Pair<>(false, "user_id can not be null");
+        }
+        if (!UUIDPattern.isValidUUID(modifyCourseStatus.courseId)){
+            return new Pair<>(false, "course_id is not be uuid");
         }
         if (ObjectUtils.isEmpty(modifyCourseStatus.courseId)) {
             return new Pair<>(false, "course_id  can not be null");
@@ -285,7 +298,10 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course getCourseById(String courseId) {
+    public Pair<Boolean, Object>  getCourseById(String courseId) {
+        if (!UUIDPattern.isValidUUID(courseId)){
+            return new Pair<>(false,"course_id is not be uuid");
+        }
         Course course = courseMapper.getCourseById(courseId);
         List<ClassNumber> classNumbers = classMapper.findClassNumber();
         classNumbers.forEach(classNumber -> {
@@ -295,7 +311,7 @@ public class CourseServiceImpl implements CourseService {
         });
         course.chapterNumber = course.chapters.size();
         course.sectionNumber = course.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
-        return course;
+        return new Pair<>(true,course);
     }
 
     @Override
@@ -375,6 +391,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Pair<Boolean, String> insertCourseChapterCompleted(AddChapterCompleted addChapterCompleted) {
+        if (!UUIDPattern.isValidUUID(addChapterCompleted.courseId)){
+            return new Pair<>(false, "course_id is not be uuid");
+        }
         if (ObjectUtils.isEmpty(addChapterCompleted.courseId)) {
             return new Pair<>(false, "course_id is not be null");
         }
