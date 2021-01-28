@@ -19,6 +19,6 @@ public class ClassController {
     @GetMapping(value = "/search_class")
     public Response<List<ClassEntity>> classList() {
         List<ClassEntity> classes = classMapper.findAll();
-        return Response.success(classes);
+        return Response.success(classes.stream().filter(x -> !x.getId().equals("fb0a1080-b11e-427c-8567-56ca6105ea07")).collect(Collectors.toList()));
     }
 }

@@ -31,10 +31,7 @@ public class ExperimentController {
     public Response insertExperiment(@RequestBody ExperimentEntity experimentEntity) {
         try {
             int i = experimentService.insert(experimentEntity);
-            int j = chapterSectionExperimentService.insert(ChapterSectionExperimentEntity.builder()
-                    .experiment_id(experimentEntity.getId())
-                    .section_id(experimentEntity.getSection_id()).build());
-            if (i == 1 && j == 1)
+            if (i == 1)
                 return Response.success();
             return Response.error("新增失败");
         } catch (Exception e) {
@@ -69,7 +66,7 @@ public class ExperimentController {
     }
 
     @GetMapping(value = "/findAllByType")
-    public Response findAllByCourse(@RequestParam(value = "id") String id,
+    public Response findAllByType(@RequestParam(value = "id") String id,
                                        @RequestParam(value = "type") int type,
                                        @RequestParam(value = "perPage") Integer perPage,
                                        @RequestParam(value = "page") Integer page) {
@@ -101,7 +98,6 @@ public class ExperimentController {
     public Response deleteExperiment(@RequestParam(value = "id") String id) {
         try {
             ExperimentEntity experimentEntity = experimentService.findById(id);
-
             if (experimentService.deleteExperiment(id))
                 return Response.success();
             return Response.error("删除失败");
