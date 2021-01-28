@@ -16,7 +16,7 @@ public interface ContainerService {
 
     boolean stopRunContainerList();
 
-    List<ContainerEntity> createContainers(String containerId);
+    List<ContainerEntity> createContainers(String userId, String containerId);
 
-    boolean execContainer(String containerId, int type);
+    boolean execContainer(List<String> containerId, int type);
 }

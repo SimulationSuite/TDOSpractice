@@ -74,31 +74,33 @@ public class ContainerServiceImpl implements ContainerService {
     }
 
     @Override
-    public List<ContainerEntity> createContainers(String containerId) {
+    public List<ContainerEntity> createContainers(String userId, String containerId) {
 
         return null;
     }
 
     @Override
-    public boolean execContainer(String containerId, int type) {
+    public boolean execContainer(List<String> containerIds, int type) {
         if (type < KvmManager.ExecType.START.ordinal() || KvmManager.ExecType.RESTART.ordinal() > type) {
             return true;
         }
-        ContainerEntity containerEntity = containerMapper.findContainerById(containerId);
-        if (containerEntity == null) {
+        List<ContainerEntity> containers = containerMapper.findContainerByIds(containerIds);
+        if (containers.size() != containerIds.size()) {
             return true;
         }
-        if (KvmManager.ExecType.START.ordinal() == type && containerEntity.getStatus() == 1) {
-            return true;
+        for (ContainerEntity c : containers) {
+            if (KvmManager.ExecType.START.ordinal() == type && c.getStatus() == 1) {
+                return true;
+            }
+            kvmManager.execContainer(c.getContainerId(), c.getNodeOrder(), type);
         }
-        kvmManager.execContainer(containerEntity.getContainerId(), containerEntity.getNodeOrder(), type);
         int status;
         if (KvmManager.ExecType.STOP.ordinal() == type) {
             status = 2;
         } else {
             status = 1;
         }
-        containerMapper.updateContainerByIds(status, Collections.singletonList(containerId));
+        containerMapper.updateContainerByIds(status, containerIds);
         return false;
     }
 }

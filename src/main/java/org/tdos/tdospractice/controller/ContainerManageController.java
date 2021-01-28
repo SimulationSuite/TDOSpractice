@@ -35,8 +35,8 @@ public class ContainerManageController {
     }
 
     @PostMapping(value = "/execContainer")
-    public Response<String> execContainer(@RequestParam(value = "containerId") String containerId, @RequestParam(value = "type") int type) {
-        if (containerService.execContainer(containerId, type)) {
+    public Response<String> execContainer(@RequestParam(value = "containerId") List<String> containerIds, @RequestParam(value = "type") int type) {
+        if (containerService.execContainer(containerIds, type)) {
             return Response.error();
         }
         return Response.success();
@@ -56,7 +56,7 @@ public class ContainerManageController {
 
     @GetMapping(value = "/createContainers")
     public Response<List<ContainerEntity>> createContainers(@RequestParam(value = "userId") String userId, @RequestParam(value = "containerId") String containerId) {
-        containerService.createContainers(containerId);
+        containerService.createContainers(userId, containerId);
         return null;
     }
 }

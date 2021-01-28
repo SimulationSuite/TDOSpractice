@@ -15,7 +15,7 @@ public class ContainerEntity {
 
     private String containerId;
 
-    private String name; //userID+@+实验ID
+    private String name; //userID+@+实验ID+@+镜像ID
 
     private String userId;
 
