@@ -47,7 +47,7 @@ public class DockerTool implements CommonTool {
     private final ExposedPort tcp = ExposedPort.tcp(6080);
 
     public enum Type {
-        GUI, SSH
+        SSH, GUI
     }
 
     public DockerTool(String certsPath, String serverName, String serverURL, int order, int startPort, int count) {
@@ -225,23 +225,15 @@ public class DockerTool implements CommonTool {
      * @param imageContainer
      * @param containerName
      * @param type
+     * @param ports
      * @return
      */
-    public CreateContainerResponse creatContainer(String imageContainer, String containerName, int type) {
-        List<Integer> ports;
+    public CreateContainerResponse creatContainer(String imageContainer, String containerName, int type, List<Integer> ports) {
         if (type == Type.GUI.ordinal()) {
-            ports = getFreePort(1);
-            if (ports.size() != 1) {
-                return null;
-            }
             addPorts(ports);
             return createContainerGUI(imageContainer, ports.get(0), containerName);
         }
         if (type == Type.SSH.ordinal()) {
-            ports = getFreePort(2);
-            if (ports.size() != 2) {
-                return null;
-            }
             addPorts(ports);
             return createContainerSSH(imageContainer, ports, containerName);
         }

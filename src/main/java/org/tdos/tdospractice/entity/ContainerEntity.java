@@ -23,11 +23,11 @@ public class ContainerEntity {
 
     private String imageId;
 
-    private String ports;
+    private String ports;// pubport@pubport...
 
     private int nodeOrder;
 
-    private int status;// 0 created/1 restarting/2 running/3 paused/4 exited
+    private int status;// 0 created/1 running/2 exited
 
     private LocalDateTime createdAt;
 

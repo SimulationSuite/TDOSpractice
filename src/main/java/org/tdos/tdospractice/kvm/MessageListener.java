@@ -52,7 +52,7 @@ public class MessageListener {
     public void execContainerMessage(String message) {
         List<ContainerEntity> list = Arrays.asList(jsonUtils.decode(Hex.decode(message), ContainerEntity[].class));
         kvmManager.stopContainers(list);
-        containerMapper.updateContainerByIds(4, list.stream().map(ContainerEntity::getContainerId).collect(Collectors.toList()));
+        containerMapper.updateContainerByIds(2, list.stream().map(ContainerEntity::getContainerId).collect(Collectors.toList()));
         int count = kvmManager.getRunContainerCount();
         log.info("One-key release has been completed. The number of running containers is " + count);
     }

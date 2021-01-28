@@ -24,6 +24,8 @@ public interface ContainerMapper {
 
     List<ContainerEntity> findRunContainers();
 
+    ContainerEntity findContainerById(String containerId);
+
     int updateContainerByIds(int status, @Param("experimentIds") List<String> containerIds);
 
     int deleteByExperimentIds(@Param("experimentIds") List<String> experimentIds);

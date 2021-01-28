@@ -20,7 +20,7 @@
     <select id="findExperimentCount" resultType="java.util.HashMap">
         select * from experiment e left join (
         select c.experiment_id,count(*) from container c
-        where c.status=2 group by c.experiment_id) as c on e.id=c.experiment_id
+        where c.status=1 group by c.experiment_id) as c on e.id=c.experiment_id
     </select>
 
     <select id="findContainerByClass" resultType="java.util.HashMap">
@@ -28,7 +28,7 @@
         left join sim_user s on c.user_id=s.id
         left join class l on s.class_id=l.id
         left join experiment e on c.experiment_id=e.id
-        where s.role_id=1 and c.status=2
+        where s.role_id=2 and c.status=1
         <if test="classId != null and classId!=''">
             and l.id=#{classId}::uuid
         </if>
@@ -38,7 +38,7 @@
         select c.*,s.name as user_name,s.id,e.name as experiment_name,i.kind from container c
         left join sim_user s on c.user_id=s.id
         left join experiment e on c.experiment_id=e.id
-        where c.status=2
+        where c.status=1
         <if test="classId != null and classId!=''">
             and s.class_id=#{classId}::uuid
         </if>
@@ -48,22 +48,26 @@
         </if>
     </select>
 
+    <select id="findContainerById" resultType="ContainerMap">
+        select * from container c where c.container_id=#{containerId}
+    </select>
+
     <select id="findRunContainers" resultMap="ContainerMap">
-        select * from container c where c.status=2 order by c.nodeOrder
+        select * from container c where c.status=1 order by c.nodeOrder
     </select>
 
     <select id="findContainerByTeacher" resultType="java.util.HashMap">
         select c.*,s.name as user_name,e.name as experiment_name from container c
         left join sim_user s on c.user_id=s.id
         left join experiment e on c.experiment_id=e.id
-        where s.role_id=1 and c.status=2 order by c.created_at
+        where s.role_id=1 and c.status=1 order by c.created_at
     </select>
 
     <select id="findContainerAll" resultType="java.util.HashMap">
         select c.*,s.name as user_name,e.name as experiment_name from container c
         left join sim_user s on c.user_id=s.id
         left join experiment e on c.experiment_id=e.id
-        where c.status=2 order by c.created_at
+        where c.status=1 order by c.created_at
     </select>
 
     <update id="updateContainerByIds">

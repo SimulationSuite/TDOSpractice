@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.tdos.tdospractice.entity.ContainerEntity;
+import org.tdos.tdospractice.kvm.KvmManager;
 import org.tdos.tdospractice.mapper.ContainerMapper;
 import org.tdos.tdospractice.service.ContainerService;
 import org.tdos.tdospractice.utils.JsonUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +27,9 @@ public class ContainerServiceImpl implements ContainerService {
     @Qualifier("ConrtainerQueue")
     @Autowired
     private ActiveMQQueue containerQueue;
+
+    @Autowired
+    private KvmManager kvmManager;
 
     @Autowired
     private JmsMessagingTemplate jmsMessagingTemplate;
@@ -62,15 +67,38 @@ public class ContainerServiceImpl implements ContainerService {
     public boolean stopRunContainerList() {
         List<ContainerEntity> list = containerMapper.findRunContainers();
         if (list.size() == 0) {
-            return false;
+            return true;
         }
         jmsMessagingTemplate.convertAndSend(this.containerQueue, Hex.encodeHexString(jsonUtils.encode(list)));
-        return true;
+        return false;
     }
 
     @Override
     public List<ContainerEntity> createContainers(String containerId) {
 
         return null;
+    }
+
+    @Override
+    public boolean execContainer(String containerId, int type) {
+        if (type < KvmManager.ExecType.START.ordinal() || KvmManager.ExecType.RESTART.ordinal() > type) {
+            return true;
+        }
+        ContainerEntity containerEntity = containerMapper.findContainerById(containerId);
+        if (containerEntity == null) {
+            return true;
+        }
+        if (KvmManager.ExecType.START.ordinal() == type && containerEntity.getStatus() == 1) {
+            return true;
+        }
+        kvmManager.execContainer(containerEntity.getContainerId(), containerEntity.getNodeOrder(), type);
+        int status;
+        if (KvmManager.ExecType.STOP.ordinal() == type) {
+            status = 2;
+        } else {
+            status = 1;
+        }
+        containerMapper.updateContainerByIds(status, Collections.singletonList(containerId));
+        return false;
     }
 }

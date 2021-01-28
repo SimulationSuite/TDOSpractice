@@ -21,18 +21,27 @@ public class ContainerManageController {
                                                                        @RequestParam(value = "page") int page, @RequestParam(value = "perPage") int perPage) {
         PageInfo<Map<String, Object>> map = containerService.getRunContainerList(type, classId, page, perPage);
         if (map == null) {
-            Response.error();
+            return Response.error();
         }
         return Response.success(map);
     }
 
     @PostMapping(value = "/stopRunContainerList")
     public Response<String> stopRunContainerList() {
-        if (!containerService.stopRunContainerList()) {
-            Response.error();
+        if (containerService.stopRunContainerList()) {
+            return Response.error();
         }
         return Response.success();
     }
+
+    @PostMapping(value = "/execContainer")
+    public Response<String> execContainer(@RequestParam(value = "containerId") String containerId, @RequestParam(value = "type") int type) {
+        if (containerService.execContainer(containerId, type)) {
+            return Response.error();
+        }
+        return Response.success();
+    }
+
 
     @GetMapping(value = "/getRunExperiment")
     public Response<PageInfo<Map<String, Object>>> getRunExperiment(@RequestParam(value = "page") int page, @RequestParam(value = "perPage") int perPage) {

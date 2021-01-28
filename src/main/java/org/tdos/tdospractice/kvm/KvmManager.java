@@ -28,6 +28,12 @@ public class KvmManager {
 
     private KvmConfiguration.Docker docker;
 
+    private final String separator = "@";
+
+    public enum ExecType {
+        START, STOP, RESTART
+    }
+
     private void dockerInit() {
         this.dockerTools = new ArrayList<>();
         this.docker = kvmConfiguration.getDocker();
@@ -36,7 +42,7 @@ public class KvmManager {
             throw new RuntimeException("No service failed to initialize");
         }
         for (int x = 0; x < list.size(); x++) {
-            String[] s = list.get(x).split("@");
+            String[] s = list.get(x).split(separator);
             DockerTool dockerTool = new DockerTool(docker.getCertPath()[x], s[0], s[1], x, docker.getStartPort(), docker.getCount());
             dockerTool.addPortList();
             this.dockerTools.add(dockerTool);
@@ -53,8 +59,12 @@ public class KvmManager {
     public ContainerEntity createContainer(String userId, String experimentId, String imageName, int kind) {
         int dockerIndex = randomDocker();
         DockerTool dockerTool = dockerTools.get(dockerIndex);
-        String containerName = userId + "@" + experimentId;
-        CreateContainerResponse ccr = dockerTool.creatContainer(imageName, containerName, kind);
+        List<Integer> ports = getFreePorts(dockerTool, kind);
+        if (ports.size() == 0) {
+            return null;
+        }
+        String containerName = userId + separator + experimentId;
+        CreateContainerResponse ccr = dockerTool.creatContainer(imageName, containerName, kind, ports);
         if (ccr == null) {
             return null;
         }
@@ -63,8 +73,19 @@ public class KvmManager {
                 .name(containerName)
                 .userId(userId)
                 .experimentId(experimentId)
+                .ports(ports.stream().map(String::valueOf).collect(Collectors.joining(separator)))
                 .nodeOrder(dockerIndex)
                 .status(0).build();
+    }
+
+    private List<Integer> getFreePorts(DockerTool dockerTool, int kind) {
+        if (kind == DockerTool.Type.GUI.ordinal()) {
+            return dockerTool.getFreePort(1);
+        }
+        if (kind == DockerTool.Type.SSH.ordinal()) {
+            return dockerTool.getFreePort(1);
+        }
+        return new ArrayList<>();
     }
 
     /**
@@ -72,31 +93,39 @@ public class KvmManager {
      * @param nodeOrder
      * @param type        0 start, 1 stop, 2 restart
      */
-    private void execContainer(String ContainerID, int nodeOrder, int type) {
-        DockerTool dockerTool = dockerTools.get(nodeOrder);
-        if (type == 0) {
-            dockerTool.start(ContainerID);
-            return;
-        } else if (type == 1) {
-            dockerTool.stop(ContainerID);
-            return;
-        } else if (type == 2) {
-            dockerTool.restart(ContainerID);
+    public void execContainer(String ContainerID, int nodeOrder, int type) {
+        try {
+            DockerTool dockerTool = dockerTools.get(nodeOrder);
+            if (type == ExecType.START.ordinal()) {
+                dockerTool.start(ContainerID);
+                return;
+            } else if (type == ExecType.STOP.ordinal()) {
+                dockerTool.stop(ContainerID);
+                return;
+            } else if (type == ExecType.RESTART.ordinal()) {
+                dockerTool.restart(ContainerID);
+                return;
+            }
+        } catch (Exception e) {
             return;
         }
     }
 
     public void stopContainers(List<ContainerEntity> containerEntities) {
-        List<CompletableFuture<Void>> list = new ArrayList<>();
-        for (int x = 0; x < dockerTools.size(); x++) {
-            int finalX = x;
-            containerEntities.stream().filter(f -> f.getNodeOrder() == finalX).forEach(l -> {
-                list.add(CompletableFuture.runAsync(() -> {
-                    dockerTools.get(finalX).stop(l.getContainerId());
-                }, executor));
-            });
+        try {
+            List<CompletableFuture<Void>> list = new ArrayList<>();
+            for (int x = 0; x < dockerTools.size(); x++) {
+                int finalX = x;
+                containerEntities.stream().filter(f -> f.getNodeOrder() == finalX).forEach(l -> {
+                    list.add(CompletableFuture.runAsync(() -> {
+                        dockerTools.get(finalX).stop(l.getContainerId());
+                    }, executor));
+                });
+            }
+            CompletableFuture.allOf(list.toArray(new CompletableFuture[]{})).join();
+        } catch (Exception e) {
+            return;
         }
-        CompletableFuture.allOf(list.toArray(new CompletableFuture[]{})).join();
     }
 
     public int getRunContainerCount() {
