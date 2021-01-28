@@ -57,8 +57,8 @@ public class ExperimentServiceImpl implements ExperimentService {
     }
 
     @Override
-    public ExperimentEntity findByID(String id) {
-        return experimentMapper.findByID(id);
+    public ExperimentEntity findById(String id) {
+        return experimentMapper.findById(id);
     }
 
     @Override

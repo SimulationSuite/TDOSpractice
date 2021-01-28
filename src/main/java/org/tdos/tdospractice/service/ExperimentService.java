@@ -19,7 +19,7 @@ public interface ExperimentService {
 
     List<ExperimentEntity> findAllByCategoryId(String category_id);
 
-    ExperimentEntity findByID(String id);
+    ExperimentEntity findById(String id);
 
     boolean updateExperiment(ExperimentEntity experimentEntity);
 

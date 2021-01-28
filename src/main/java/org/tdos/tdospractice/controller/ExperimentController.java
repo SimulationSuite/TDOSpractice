@@ -68,16 +68,18 @@ public class ExperimentController {
         return Response.error("找不到该分类");
     }
 
-    @GetMapping(value = "/findAllByCourse")
-    public Response findAllByChapterId(@RequestParam(value = "id") String id,
+    @GetMapping(value = "/findAllByType")
+    public Response findAllByCourse(@RequestParam(value = "id") String id,
                                        @RequestParam(value = "type") int type,
                                        @RequestParam(value = "perPage") Integer perPage,
                                        @RequestParam(value = "page") Integer page) {
         if (type == 0) {
-            return Response.success(experimentService.findAllByCourseId(id,perPage,page));
+            return Response.success(experimentService.findById(id));
         } else if (type == 1) {
-            return Response.success(experimentService.findAllByChapterId(id,perPage,page));
+            return Response.success(experimentService.findAllByCourseId(id,perPage,page));
         } else if (type == 2) {
+            return Response.success(experimentService.findAllByChapterId(id,perPage,page));
+        }else if(type == 3){
             return Response.success(experimentService.findAllBySectionId(id,perPage,page));
         }
         return Response.error("类型错误");
@@ -98,7 +100,8 @@ public class ExperimentController {
     @PostMapping(value = "/deleteExperiment")
     public Response deleteExperiment(@RequestParam(value = "id") String id) {
         try {
-            ExperimentEntity experimentEntity = experimentService.findByID(id);
+            ExperimentEntity experimentEntity = experimentService.findById(id);
+
             if (experimentService.deleteExperiment(id))
                 return Response.success();
             return Response.error("删除失败");
