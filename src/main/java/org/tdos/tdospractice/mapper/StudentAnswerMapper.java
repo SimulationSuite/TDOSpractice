@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 import org.tdos.tdospractice.entity.StudentAnswerEntity;
 import org.tdos.tdospractice.type.StudentQuestionAnswer;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -31,5 +33,7 @@ public interface StudentAnswerMapper {
     int addStudentAnswerList(@Param("studentAnswerList") List<StudentAnswerEntity> studentAnswerList);
 
     int modifyStudentAnswerScore(@Param("score") int score, @Param("questionId") String questionId,@Param("assignmentId") String assignmentId,@Param("userId") String userId);
+
+    int modifyStudentAnswerStatus(@Param("status") int status, @Param("committedAt") Date committedAt, @Param("assignmentId") String assignmentId, @Param("userId") String userId);
 
 }

@@ -10,6 +10,7 @@ import org.tdos.tdospractice.mapper.StudentAnswerMapper;
 import org.tdos.tdospractice.service.StudentAnswerService;
 import org.tdos.tdospractice.type.StudentQuestionAnswer;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -119,6 +120,16 @@ public class StudentAnswerServiceImpl implements StudentAnswerService {
             return studentAnswerEntityList;
         }
         return studentAnswerEntityList;
+    }
+
+    @Override
+    public Boolean modifyStudentAnswerStatusById(StudentAnswer studentAnswer) {
+        try {
+            studentAnswerMapper.modifyStudentAnswerStatus(1, new Date(), studentAnswer.assignmentId, studentAnswer.userId);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
 }

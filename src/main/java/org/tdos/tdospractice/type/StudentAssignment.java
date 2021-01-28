@@ -25,4 +25,6 @@ public class StudentAssignment {
 
     private LocalDateTime committedAt;
 
+    private LocalDateTime endAt;
+
 }
