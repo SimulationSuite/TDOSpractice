@@ -13,6 +13,11 @@ public class MessageConfig {
         return new ActiveMQQueue("image-Queue");
     }
 
+    @Bean("ConrtainerQueue")
+    public ActiveMQQueue ConrtainerQueue() {
+        return new ActiveMQQueue("container-Queue");
+    }
+
     /**
      * 消息重试配置项
      *

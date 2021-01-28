@@ -282,6 +282,21 @@ create table if not exists image(
 
 create trigger t_name before update on image for each row execute procedure upd_timestamp();
 
+create table if not exists container(
+    container_id varchar(255) primary key,
+    "name" varchar(255) NOT NULL,
+    user_id varchar(255) references "sim_user"("id") NOT NULL,
+    experiment_id UUID references "experiment"("id") NOT NULL,
+    image_id UUID references "image"("id") NOT NULL,
+    ports varchar(255) NOT NULL,
+    nodeOrder int4 NOT NULL,
+    status int4 NOT NULL,
+    created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
+    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
+);
+
+create trigger t_name before update on container for each row execute procedure upd_timestamp();
+
 create table if not exists experiment_image(
     experiment_id UUID references "experiment"("id") on delete cascade NOT NULL,
     image_id UUID references "image"("id") on delete cascade NOT NULL,

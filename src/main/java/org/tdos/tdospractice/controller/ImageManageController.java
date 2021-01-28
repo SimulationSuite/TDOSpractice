@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.tdos.tdospractice.entity.ImageEntity;
-import org.tdos.tdospractice.service.ImageManageService;
+import org.tdos.tdospractice.service.ImageService;
 import org.tdos.tdospractice.type.Response;
 
 import java.util.List;
@@ -17,23 +17,23 @@ import java.util.Map;
 public class ImageManageController {
 
     @Autowired
-    private ImageManageService imageManageService;
+    private ImageService imageService;
 
     @GetMapping(value = "/getImageList")
     public Response<PageInfo<ImageEntity>> getImageList(@RequestParam(value = "kind") int kind, @RequestParam(value = "imageName") String imageName,
                                                         @RequestParam(value = "page") int page, @RequestParam(value = "perPage") int perPage) {
-        return Response.success(imageManageService.getImageList(kind, imageName, page, perPage));
+        return Response.success(imageService.getImageList(kind, imageName, page, perPage));
     }
 
     @GetMapping(value = "/getImagequoteList")
     public Response<PageInfo<Map<String, Object>>> getImagequoteList(@RequestParam(value = "kind") int kind, @RequestParam(value = "imageName") String imageName,
-                                                                 @RequestParam(value = "page") int page, @RequestParam(value = "perPage") int perPage) {
-        return Response.success(imageManageService.getImagequoteList(kind, imageName, page, perPage));
+                                                                     @RequestParam(value = "page") int page, @RequestParam(value = "perPage") int perPage) {
+        return Response.success(imageService.getImagequoteList(kind, imageName, page, perPage));
     }
 
     @GetMapping(value = "/addImage")
     public Response<String> addImage(@RequestParam(value = "imageName") String imageName, @RequestParam(value = "introduction") String introduction) {
-        if (imageManageService.addImage(imageName, introduction) < 0) {
+        if (imageService.addImage(imageName, introduction) < 0) {
             return Response.error();//image is exit
         }
         return Response.success();
@@ -44,11 +44,10 @@ public class ImageManageController {
         if (imagesID.isEmpty() || imagesID.size() == 0) {
             return Response.error();
         }
-        int result = imageManageService.deleteImages(imagesID);
+        int result = imageService.deleteImages(imagesID);
         if (result < 0) {
             return Response.error();
         }
         return Response.success();
     }
-
 }

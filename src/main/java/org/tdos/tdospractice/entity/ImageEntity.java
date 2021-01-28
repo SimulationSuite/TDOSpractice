@@ -22,7 +22,7 @@ public class ImageEntity implements Serializable {
 
     private String introduction;
 
-    private int kind;//0 docker 1 kvm
+    private int kind;//0 Docker-SSH2 1 Docker-GUI  2 KVM
 
     private int type;//0 内置 1 引用
 

@@ -6,7 +6,7 @@ import org.tdos.tdospractice.entity.ImageEntity;
 import java.util.List;
 import java.util.Map;
 
-public interface ImageManageService {
+public interface ImageService {
 
     PageInfo<ImageEntity> getImageList(int kind, String imageName, int page, int perPage);
 
@@ -15,4 +15,5 @@ public interface ImageManageService {
     int addImage(String imageName, String introduction);
 
     int deleteImages(List<String> imagesID);
+
 }
