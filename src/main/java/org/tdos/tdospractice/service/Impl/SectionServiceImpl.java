@@ -73,11 +73,11 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     public Pair<Boolean, String> removeSection(DeleteSection deleteSection) {
-        if (!UUIDPattern.isValidUUID(deleteSection.sectionId)){
-            return new Pair<>(false, "section_id is not be uuid");
-        }
         if (ObjectUtils.isEmpty(deleteSection.sectionId)){
             return new Pair<>(false, "section is not exist");
+        }
+        if (!UUIDPattern.isValidUUID(deleteSection.sectionId)){
+            return new Pair<>(false, "section_id is not be uuid");
         }
         if (sectionMapper.hasSection(deleteSection.sectionId) == 0) {
             return new Pair<>(false, "section is not exist");

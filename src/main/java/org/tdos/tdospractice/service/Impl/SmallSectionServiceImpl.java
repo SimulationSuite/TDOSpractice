@@ -73,11 +73,11 @@ public class SmallSectionServiceImpl implements SmallSectionService {
 
     @Override
     public Pair<Boolean, String> removeSmallSection(DeleteSmallSection deleteSmallSection) {
-        if (!UUIDPattern.isValidUUID(deleteSmallSection.smallSectionId)){
-            return new Pair<>(false, "small_section_id is not be uuid");
-        }
         if (ObjectUtils.isEmpty(deleteSmallSection.smallSectionId)){
             return new Pair<>(false, "small section is not exist");
+        }
+        if (!UUIDPattern.isValidUUID(deleteSmallSection.smallSectionId)){
+            return new Pair<>(false, "small_section_id is not be uuid");
         }
         if (smallSectionMapper.hasSmallSection(deleteSmallSection.smallSectionId) == 0) {
             return new Pair<>(false, "small section is not exist");

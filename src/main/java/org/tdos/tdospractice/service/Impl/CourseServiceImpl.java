@@ -96,17 +96,18 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Pair<Boolean, String> prepareCourse(PrepareCourse prepareCourse) {
-        if (!UUIDPattern.isValidUUID(prepareCourse.courseId)){
-            return new Pair<>(false, "course_id is not be uuid");
-        }
-        if (!UUIDPattern.isValidUUID(prepareCourse.user_id)){
-            return new Pair<>(false, "user_id is not be uuid");
-        }
+
         if (ObjectUtils.isEmpty(prepareCourse.courseId)) {
             return new Pair<>(false, "course_id can not be null");
         }
         if (ObjectUtils.isEmpty(prepareCourse.user_id)) {
             return new Pair<>(false, "user_id  can not be null");
+        }
+        if (!UUIDPattern.isValidUUID(prepareCourse.courseId)){
+            return new Pair<>(false, "course_id is not be uuid");
+        }
+        if (!UUIDPattern.isValidUUID(prepareCourse.user_id)){
+            return new Pair<>(false, "user_id is not be uuid");
         }
         if (courseMapper.hasCourseExist(prepareCourse.courseId) == 0) {
             return new Pair<>(false, "course is not exist");
@@ -199,11 +200,11 @@ public class CourseServiceImpl implements CourseService {
         if (ObjectUtils.isEmpty(modifyCourseStatus.userId)) {
             return new Pair<>(false, "user_id can not be null");
         }
-        if (!UUIDPattern.isValidUUID(modifyCourseStatus.courseId)){
-            return new Pair<>(false, "course_id is not be uuid");
-        }
         if (ObjectUtils.isEmpty(modifyCourseStatus.courseId)) {
             return new Pair<>(false, "course_id  can not be null");
+        }
+        if (!UUIDPattern.isValidUUID(modifyCourseStatus.courseId)){
+            return new Pair<>(false, "course_id is not be uuid");
         }
         if (courseMapper.hasCourseExist(modifyCourseStatus.courseId) == 0) {
             return new Pair<>(false, "course is not exist");
@@ -299,6 +300,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Pair<Boolean, Object>  getCourseById(String courseId) {
+        if (ObjectUtils.isEmpty(courseId)){
+            return new Pair<>(false,"course_id is not be null");
+        }
         if (!UUIDPattern.isValidUUID(courseId)){
             return new Pair<>(false,"course_id is not be uuid");
         }
@@ -391,14 +395,14 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Pair<Boolean, String> insertCourseChapterCompleted(AddChapterCompleted addChapterCompleted) {
-        if (!UUIDPattern.isValidUUID(addChapterCompleted.courseId)){
-            return new Pair<>(false, "course_id is not be uuid");
-        }
         if (ObjectUtils.isEmpty(addChapterCompleted.courseId)) {
             return new Pair<>(false, "course_id is not be null");
         }
         if (ObjectUtils.isEmpty(addChapterCompleted.chapter)) {
             return new Pair<>(false, "chapter is not be null");
+        }
+        if (!UUIDPattern.isValidUUID(addChapterCompleted.courseId)){
+            return new Pair<>(false, "course_id is not be uuid");
         }
         Course course = courseMapper.getCourseById(addChapterCompleted.courseId);
         if (course.chapters.stream().map(Chapter::getId)
