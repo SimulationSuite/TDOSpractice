@@ -15,6 +15,7 @@ import org.tdos.tdospractice.type.Response;
 import org.tdos.tdospractice.body.QuestionBack;
 import org.tdos.tdospractice.body.QuestionBackAssignment;
 import org.tdos.tdospractice.body.QuestionBackAssignmentList;
+import org.tdos.tdospractice.type.StudentQuestionAnswer;
 
 import java.util.*;
 
@@ -34,8 +35,11 @@ public class QuestionBackController {
     }
 
     @GetMapping(value = "/getStudentAnswerByAssignment")
-    public Response<QuestionBackEntity> getStudentAnswerByAssignment(@RequestParam(value = "assignmentId") String assignmentId) {
-        return Response.success(questionBackService.getStudentAnswerByAssignment(assignmentId));
+    public Response<PageInfo<StudentQuestionAnswer>> getStudentAnswerByAssignment(@RequestParam(value = "userId") String userId,
+                                                                                  @RequestParam(value = "assignmentId") String assignmentId,
+                                                                                  @RequestParam(value = "perPage") Integer perPage,
+                                                                                  @RequestParam(value = "page") Integer page) {
+        return Response.success(questionBackService.getStudentAnswerByAssignment(userId, assignmentId, perPage, page));
     }
 
     @PostMapping(value = "/deleteQuestionBackById")

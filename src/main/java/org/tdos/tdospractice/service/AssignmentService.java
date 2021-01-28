@@ -11,6 +11,8 @@ import java.util.Map;
 
 public interface AssignmentService {
 
+    PageInfo<StudentAssignment> getStudentAssignment(String userId, String courseId,String chapterId, String sectionId, Integer status,String name, Integer perPage, Integer page);
+
     AssignmentStatistics getAssignmentStatisticsBySectionId(String sectionId);
 
     PageInfo<StudentAssignment> getAssignmentAll(String classId,String courseId,String chapterId, String sectionId, Integer status,String name, Integer perPage, Integer page);

@@ -20,6 +20,18 @@ public class AssignmentController {
     @Autowired
     private AssignmentService assignmentService;
 
+    @GetMapping(value = "/getStudentAssignment")
+    public Response<PageInfo<StudentAssignment>> getStudentAssignment(@RequestParam(value = "userId") String userId,
+                                                                  @RequestParam(value = "courseId",required = false) String courseId,
+                                                                  @RequestParam(value = "chapterId",required = false) String chapterId,
+                                                                  @RequestParam(value = "sectionId",required = false) String sectionId,
+                                                                  @RequestParam(value = "status",required = false) Integer status,
+                                                                  @RequestParam(value = "name",required = false) String name,
+                                                                  @RequestParam(value = "perPage") Integer perPage,
+                                                                  @RequestParam(value = "page") Integer page) {
+        return Response.success(assignmentService.getStudentAssignment(userId, courseId, chapterId, sectionId, status, name, perPage, page));
+    }
+
     @GetMapping(value = "/getAssignmentStatisticsBySectionId")
     public Response<AssignmentStatistics> getAssignmentStatisticsBySectionId(@RequestParam(value = "sectionId") String sectionId) {
         return Response.success(assignmentService.getAssignmentStatisticsBySectionId(sectionId));
