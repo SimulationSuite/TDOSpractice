@@ -48,8 +48,11 @@
         </if>
     </select>
 
-    <select id="findContainerById" resultType="ContainerMap">
-        select * from container c where c.container_id=#{containerId}
+    <select id="findContainerByIds" resultMap="ContainerMap">
+        select * from container c where c.container_id in
+        <foreach collection="containerIds" open="(" separator="," close=")" item="item">
+            #{item}
+        </foreach>
     </select>
 
     <select id="findRunContainers" resultMap="ContainerMap">
