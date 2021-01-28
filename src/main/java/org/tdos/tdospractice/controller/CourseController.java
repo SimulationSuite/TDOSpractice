@@ -51,14 +51,22 @@ public class CourseController {
 
     // 管理员添加内置课程
     @PostMapping(value = "/insert_course")
-    public Response<Course> insertCourse(@RequestBody AddCourse addCourse) {
-        return Response.success(courseService.AddAdminCourse(addCourse));
+    public Response<Object> insertCourse(@RequestBody AddCourse addCourse) {
+        Pair<Boolean, Object> pair = courseService.AddAdminCourse(addCourse);
+        if (pair.getKey()) {
+            return Response.success(pair.getValue());
+        }
+        return Response.error((String) pair.getValue());
     }
 
     // 管理员完善课程
     @PostMapping(value = "/insert_course_completed")
-    public Response<Course> insertCourseCompleted(@RequestBody AddCourseCompleted addCourseCompleted) {
-        return Response.success(courseService.AddAdminCourseCompleted(addCourseCompleted));
+    public Response<Object> insertCourseCompleted(@RequestBody AddCourseCompleted addCourseCompleted) {
+        Pair<Boolean, Object> pair = courseService.AddAdminCourseCompleted(addCourseCompleted);
+        if (pair.getKey()) {
+            return Response.success(pair.getValue());
+        }
+        return Response.error((String) pair.getValue());
     }
 
     // 管理员完善课程

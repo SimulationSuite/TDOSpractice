@@ -6,6 +6,7 @@ import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.tdos.tdospractice.body.*;
 import org.tdos.tdospractice.entity.CourseChapterSectionEntity;
 import org.tdos.tdospractice.mapper.*;
@@ -94,6 +95,12 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Pair<Boolean, String> prepareCourse(PrepareCourse prepareCourse) {
+        if (ObjectUtils.isEmpty(prepareCourse.courseId)) {
+            return new Pair<>(false, "course_id can not be null");
+        }
+        if (ObjectUtils.isEmpty(prepareCourse.user_id)) {
+            return new Pair<>(false, "user_id  can not be null");
+        }
         if (courseMapper.hasCourseExist(prepareCourse.courseId) == 0) {
             return new Pair<>(false, "course is not exist");
         }
@@ -137,7 +144,19 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course AddAdminCourse(AddCourse addCourse) {
+    public Pair<Boolean, Object> AddAdminCourse(AddCourse addCourse) {
+        if (ObjectUtils.isEmpty(addCourse.name)) {
+            return new Pair<>(false, "name can not be null");
+        }
+        if (ObjectUtils.isEmpty(addCourse.picUrl)) {
+            return new Pair<>(false, "pic url  can not be null");
+        }
+        if (ObjectUtils.isEmpty(addCourse.introduction)) {
+            return new Pair<>(false, "introduction  can not be null");
+        }
+        if (ObjectUtils.isEmpty(addCourse.ownerId)) {
+            return new Pair<>(false, "owner_id can not be null");
+        }
         Course course = new Course();
         course.name = addCourse.name;
         course.picUrl = addCourse.picUrl;
@@ -161,11 +180,18 @@ public class CourseServiceImpl implements CourseService {
             }).collect(Collectors.toList());
             return chapter;
         }).collect(Collectors.toList());
-        return writeCourse(course);
+
+        return new Pair<>(true, writeCourse(course));
     }
 
     @Override
     public Pair<Boolean, String> modifyCourseStatus(ModifyCourseStatus modifyCourseStatus) {
+        if (ObjectUtils.isEmpty(modifyCourseStatus.userId)) {
+            return new Pair<>(false, "user_id can not be null");
+        }
+        if (ObjectUtils.isEmpty(modifyCourseStatus.courseId)) {
+            return new Pair<>(false, "course_id  can not be null");
+        }
         if (courseMapper.hasCourseExist(modifyCourseStatus.courseId) == 0) {
             return new Pair<>(false, "course is not exist");
         }
@@ -294,7 +320,13 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course AddAdminCourseCompleted(AddCourseCompleted addCourseCompleted) {
+    public Pair<Boolean, Object> AddAdminCourseCompleted(AddCourseCompleted addCourseCompleted) {
+        if (ObjectUtils.isEmpty(addCourseCompleted.courseId)) {
+            return new Pair<>(false, "course_id is not be null");
+        }
+        if (ObjectUtils.isEmpty(addCourseCompleted.chapters) || addCourseCompleted.chapters.size() == 0) {
+            return new Pair<>(false, "chapters is not be null");
+        }
         Course course = courseMapper.getCourseById(addCourseCompleted.courseId);
         course.chapters.forEach(chapter -> chapterMapper.removeChapter(chapter.id));
         course.chapters = addCourseCompleted.chapters.stream().map(x -> {
@@ -338,11 +370,17 @@ public class CourseServiceImpl implements CourseService {
             });
             course.chapters = course.chapters.stream().sorted(Comparator.comparing(Chapter::getOrder)).collect(Collectors.toList());
         }
-        return course;
+        return new Pair<>(true, course);
     }
 
     @Override
     public Pair<Boolean, String> insertCourseChapterCompleted(AddChapterCompleted addChapterCompleted) {
+        if (ObjectUtils.isEmpty(addChapterCompleted.courseId)) {
+            return new Pair<>(false, "course_id is not be null");
+        }
+        if (ObjectUtils.isEmpty(addChapterCompleted.chapter)) {
+            return new Pair<>(false, "chapter is not be null");
+        }
         Course course = courseMapper.getCourseById(addChapterCompleted.courseId);
         if (course.chapters.stream().map(Chapter::getId)
                 .collect(Collectors.toList()).contains(addChapterCompleted.chapter.id)) {

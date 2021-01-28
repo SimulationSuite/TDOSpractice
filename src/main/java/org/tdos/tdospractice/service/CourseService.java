@@ -17,7 +17,7 @@ public interface CourseService {
 
     PageInfo<Course> getCourseListById(String userId, Integer perPage, Integer page,String name);
 
-    Course AddAdminCourse(AddCourse addCourse);
+    Pair<Boolean, Object> AddAdminCourse(AddCourse addCourse);
 
     Pair<Boolean, String> modifyCourseStatus(ModifyCourseStatus modifyCourseStatus);
     // 1
@@ -29,7 +29,7 @@ public interface CourseService {
     // 1
     PageInfo<Course> getExpiredList(Integer perPage, Integer page, String name);
 
-    Course AddAdminCourseCompleted(AddCourseCompleted addCourseCompleted);
+    Pair<Boolean, Object> AddAdminCourseCompleted(AddCourseCompleted addCourseCompleted);
 
     Pair<Boolean, String> insertCourseChapterCompleted(AddChapterCompleted addChapterCompleted);
 }
