@@ -113,9 +113,9 @@
     </select>
 
     <insert id="addChapterSectionCourseware" useGeneratedKeys="true" keyProperty="id">
-        insert into section_courseware (section_id, chapter_id, courseware_id, type)
+        insert into section_courseware (section_id, chapter_id, courseware_id)
         values
-        (#{sectionId}, #{chapterId}, #{coursewareId}, #{type});
+        (#{sectionId}, #{chapterId}, #{coursewareId});
     </insert>
 
 </mapper>
