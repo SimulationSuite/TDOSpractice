@@ -130,5 +130,4 @@ public class CourseController {
         return Response.error((String) pair.getValue());
     }
 
-
 }
