@@ -49,4 +49,6 @@ public interface CourseMapper {
     List<Course> getExpiredList(@Param("name") String name);
 
     List<Course> getExpiredListPerfect(@Param("courseIds") List<String> courseIds);
+
+    int hasCourseNameExist(String name);
 }

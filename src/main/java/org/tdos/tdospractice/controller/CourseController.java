@@ -24,10 +24,14 @@ public class CourseController {
     }
 
     @GetMapping(value = "/get_admin_course_list_by_class_id")
-    public Response<PageInfo<Course>> getAdminCourseList(@RequestParam(value = "class_id") String classId,
+    public Response<Object> getAdminCourseList(@RequestParam(value = "class_id") String classId,
                                                          @RequestParam(value = "per_page") Integer perPage,
                                                          @RequestParam(value = "page") Integer page) {
-        return Response.success(courseService.getAdminCourseListByClassId(classId, perPage, page));
+        Pair<Boolean, Object> pair = courseService.getAdminCourseListByClassId(classId, perPage, page);
+        if (pair.getKey()) {
+            return Response.success(null);
+        }
+        return Response.error((String) pair.getValue());
     }
 
     // 老师备课

@@ -3,6 +3,7 @@ package org.tdos.tdospractice.service.Impl;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.tdos.tdospractice.body.DeleteSmallSection;
 import org.tdos.tdospractice.body.InsertSmallSection;
@@ -43,6 +44,7 @@ public class SmallSectionServiceImpl implements SmallSectionService {
     }
 
     @Override
+    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     public Pair<Boolean, String> addSmallSection(InsertSmallSection insertSmallSection) {
         if (courseMapper.hasCourseExist(insertSmallSection.courseId) == 0) {
             return new Pair<>(false, "course is not exist");
@@ -72,6 +74,7 @@ public class SmallSectionServiceImpl implements SmallSectionService {
     }
 
     @Override
+    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     public Pair<Boolean, String> removeSmallSection(DeleteSmallSection deleteSmallSection) {
         if (ObjectUtils.isEmpty(deleteSmallSection.smallSectionId)){
             return new Pair<>(false, "small section is not exist");

@@ -456,4 +456,8 @@ WHERE
     c.id = #{courseId} :: uuid
     </select>
 
+    <select  id="hasCourseNameExist" resultType="int">
+        select count(*) from course where name=#{name} and type = 0
+    </select>
+
 </mapper>
