@@ -28,6 +28,8 @@ public interface ExperimentMapper {
 
     boolean deleteExperiment(String id);
 
+    int hasExperiment(String section_id);
+
     long deleteExperimentList(List<String> ids);
 
 }

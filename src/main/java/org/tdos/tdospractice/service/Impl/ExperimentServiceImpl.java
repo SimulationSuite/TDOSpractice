@@ -50,12 +50,6 @@ public class ExperimentServiceImpl implements ExperimentService {
         return new PageInfo<>(list);
     }
 
-
-    @Override
-    public List<ExperimentEntity> findAllByCategoryId(String category_id) {
-        return experimentMapper.findAllByCategoryId(category_id);
-    }
-
     @Override
     public ExperimentEntity findById(String id) {
         return experimentMapper.findById(id);
@@ -69,6 +63,11 @@ public class ExperimentServiceImpl implements ExperimentService {
     @Override
     public boolean deleteExperiment(String id) {
         return experimentMapper.deleteExperiment(id);
+    }
+
+    @Override
+    public int hasExperiment(String section_id) {
+        return 0;
     }
 
     @Override

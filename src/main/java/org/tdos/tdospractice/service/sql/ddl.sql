@@ -248,6 +248,7 @@ create table if not exists experiment(
     duration int8 DEFAULT 0,
     category_id varchar(255) NOT null,
     introduce varchar(255) DEFAULT null,
+    report_requirement varchar(255) DEFAULT null,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
