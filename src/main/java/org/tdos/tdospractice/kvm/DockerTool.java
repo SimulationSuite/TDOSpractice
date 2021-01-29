@@ -2,7 +2,6 @@ package org.tdos.tdospractice.kvm;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.*;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
@@ -14,11 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static com.github.dockerjava.api.model.Capability.SYS_ADMIN;
 
@@ -37,17 +34,28 @@ public class DockerTool implements CommonTool {
 
     private List<Image> imageList;
 
+    private int startPort;
+
+    private int count;
+
+    private Set<Integer> usedPorts;
+
+    private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
+
     private final String downloadPath = "/root/Download/";
 
     private final ExposedPort tcp = ExposedPort.tcp(6080);
 
     public enum Type {
-        GUI, SSH
+        SSH, GUI
     }
 
-    public DockerTool(String certsPath, String serverName, String serverURL, int order) {
+    public DockerTool(String certsPath, String serverName, String serverURL, int order, int startPort, int count) {
         this.serverName = serverName;
         this.order = order;
+        this.startPort = startPort;
+        this.count = count;
+        this.usedPorts = new HashSet<>();
         initClient(certsPath, serverURL);
         this.imageList = dockerClient.listImagesCmd().withShowAll(true).exec();
     }
@@ -63,32 +71,62 @@ public class DockerTool implements CommonTool {
         log.info("Connected successful " + this.serverName + " , Docker host is " + serverURL);
     }
 
-    public List<ContainerVO> getAllContainers() {
-        List<ContainerVO> voList = new ArrayList<>();
-        List<Container> dockerSearch = dockerClient.listContainersCmd().withShowAll(true).exec();
-        for (Iterator<Container> iterator = dockerSearch.iterator(); iterator.hasNext(); ) {
-            Container container = (Container) iterator.next();
-            InspectContainerResponse containerInfo =
-                    dockerClient.inspectContainerCmd((container.getId())).exec();
-            ContainerVO containerVO = ContainerVO.parse(container, containerInfo, this.order);
-            voList.add(containerVO);
-        }
-        return voList;
+    public void addPortList() {
+        List<Integer> ports = new ArrayList<>();
+        getAllgetAllContainers(true).forEach(l -> {
+            for (ContainerPort c : l.getPorts()) {
+                if (c.getPrivatePort() != null && c.getPublicPort() != null) {
+                    ports.add(c.getPublicPort());
+                }
+            }
+        });
+        addPorts(ports);
     }
 
-    public ContainerVO findContainer(String containerId) {
-        Container container = (Container) dockerClient.listContainersCmd().withIdFilter(Collections.singleton(containerId)).exec();
-        if (container == null) {
-            return null;
+    public void addPorts(Collection<Integer> ports) {
+        rwLock.writeLock().lock();
+        try {
+            usedPorts.addAll(ports);
+        } finally {
+            rwLock.writeLock().unlock();
         }
-        InspectContainerResponse containerInfo =
-                dockerClient.inspectContainerCmd(containerId).exec();
-        return ContainerVO.parse(container, containerInfo, this.order);
+    }
+
+    public void removePorts(Collection<Integer> ports) {
+        rwLock.writeLock().lock();
+        try {
+            usedPorts.removeAll(ports);
+        } finally {
+            rwLock.writeLock().unlock();
+        }
+    }
+
+    public List<Integer> getFreePort(int count) {
+        List<Integer> list = new ArrayList<>();
+        int item = count;
+        rwLock.readLock().lock();
+        try {
+            for (int x = startPort; x <= (startPort + count); x++) {
+                if (!usedPorts.contains(x)) {
+                    list.add(x);
+                    if (--item == 0) {
+                        break;
+                    }
+                }
+            }
+            return list;
+        } finally {
+            rwLock.readLock().unlock();
+        }
+    }
+
+    public List<Container> getAllgetAllContainers(boolean type) {
+        return dockerClient.listContainersCmd().withShowAll(type).exec();
     }
 
     @SneakyThrows
     public void pull(String imagesName) {
-        if (isExistImages(imagesName)) {
+        if (isExistImageName(imagesName)) {
             dockerClient.pullImageCmd(imagesName).start().awaitCompletion();
             Image newig = findImageList(imagesName);
             if (newig == null) {
@@ -108,7 +146,7 @@ public class DockerTool implements CommonTool {
         return null;
     }
 
-    private boolean isExistImages(String imagesName) {
+    private boolean isExistImageName(String imagesName) {
         for (Image i : imageList) {
             if (i.getRepoTags()[0].equals(imagesName)) {
                 return false;
@@ -117,9 +155,13 @@ public class DockerTool implements CommonTool {
         return true;
     }
 
-    public List<String> getImageNames(List<String> imagesID) {
-        return imageList.stream().filter(i -> imagesID.contains(i.getId()))
-                .map(s -> s.getRepoTags()[0]).collect(Collectors.toList());
+    public boolean isExistImageID(List<String> imageID) {
+        for (Image i : imageList) {
+            if (imageID.contains(i.getId())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void removeImage(String imageID) {
@@ -181,17 +223,19 @@ public class DockerTool implements CommonTool {
      * Creat Container
      *
      * @param imageContainer
-     * @param port
      * @param containerName
      * @param type
+     * @param ports
      * @return
      */
-    public CreateContainerResponse creatContainer(String imageContainer, int port, String containerName, int type) {
+    public CreateContainerResponse creatContainer(String imageContainer, String containerName, int type, List<Integer> ports) {
         if (type == Type.GUI.ordinal()) {
-            return createContainerGUI(imageContainer, port, containerName);
+            addPorts(ports);
+            return createContainerGUI(imageContainer, ports.get(0), containerName);
         }
         if (type == Type.SSH.ordinal()) {
-            //TODO ssh?
+            addPorts(ports);
+            return createContainerSSH(imageContainer, ports, containerName);
         }
         return null;
     }
@@ -209,12 +253,26 @@ public class DockerTool implements CommonTool {
                         .withCapAdd(SYS_ADMIN))
                 .withEntrypoint("bash", "-c", "/home/init.sh") //Start the novnc
                 .exec();
+
         return newContainer;
     }
 
     //Create SSH2
-    private CreateContainerResponse createContainerSSH() {
-        return null;
+    private CreateContainerResponse createContainerSSH(String imageContainer, List<Integer> ports, String containerName) {
+        ExposedPort tcp = ExposedPort.tcp(2222);
+        ExposedPort tcp22 = ExposedPort.tcp(22);
+        Ports portBindings = new Ports();
+        portBindings.bind(tcp, Ports.Binding.bindPort(ports.get(0)));
+        portBindings.bind(tcp22, Ports.Binding.bindPort(ports.get(1)));
+        CreateContainerResponse newContainer = dockerClient.createContainerCmd(imageContainer)
+                .withName(containerName)
+                .withExposedPorts(tcp)
+                .withHostConfig(new HostConfig()
+                        .withPrivileged(true)
+                        .withPortBindings(portBindings)
+                        .withCapAdd(SYS_ADMIN))
+                .exec();
+        return newContainer;
     }
 
     /**

@@ -1,17 +1,18 @@
 package org.tdos.tdospractice.kvm;
 
 import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.tdos.tdospractice.entity.ContainerEntity;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.stream.Collectors;
 
 @Component
 public class KvmManager {
@@ -19,136 +20,120 @@ public class KvmManager {
     @Autowired
     private KvmConfiguration kvmConfiguration;
 
-    public Map<String, ContainerVO> ContainersMap;
-
-    private final Executor executor = Executors.newCachedThreadPool();
+    private final Executor executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() / 2);
 
     private List<DockerTool> dockerTools;
 
-    private ReadWriteLock rwLock;
-
     private Random random = new Random();
-
-    private AutoportTool autoportTool;
 
     private KvmConfiguration.Docker docker;
 
+    private final String separator = "@";
+
+    public enum ExecType {
+        START, STOP, RESTART
+    }
+
     private void dockerInit() {
-        this.rwLock = new ReentrantReadWriteLock();
-        this.ContainersMap = new HashMap<>();
         this.dockerTools = new ArrayList<>();
         this.docker = kvmConfiguration.getDocker();
-        this.autoportTool = new AutoportTool(docker.getStartPort(), docker.getCount());
         List<String> list = docker.getServerInfo();
         if (list.size() <= 0) {
             throw new RuntimeException("No service failed to initialize");
         }
         for (int x = 0; x < list.size(); x++) {
-            String[] s = list.get(x).split("@");
-            DockerTool dockerTool = new DockerTool(docker.getCertPath()[x], s[0], s[1], x);
-            Set<Integer> set = new HashSet<>();
-            dockerTool.getAllContainers().forEach(c -> {
-                ContainersMap.put(c.getContainername(), c);
-                c.getPorts().forEach(p -> {
-                    set.add(p.getPubPort());
-                });
-            });
-            this.autoportTool.addRunPorts(x, set);
+            String[] s = list.get(x).split(separator);
+            DockerTool dockerTool = new DockerTool(docker.getCertPath()[x], s[0], s[1], x, docker.getStartPort(), docker.getCount());
+            dockerTool.addPortList();
             this.dockerTools.add(dockerTool);
         }
     }
 
-    private String createAndstartContainer(String studentID, String experimentID, String imageContainer, int type) {
-        String containerName = studentID + "@" + experimentID;
-        ContainerVO containerVO = findContainer(containerName);
-        if (containerVO != null) {
-            if (containerVO.getStatus() != ContainerVO.Status.running.ordinal()) {
-                execContainer(containerVO, 0);
-                ContainerVO cvo = findContainerFromTool(containerVO);
-                if (cvo != null) {
-                    putLockContainersMap(cvo);
-                }
-            }
-            return containerVO.getContainerID();
-        } else {
-            int dockerIndex = randomDocker();
-            int port = autoportTool.getFreePort(dockerIndex);
-            DockerTool dockerTool = dockerTools.get(dockerIndex);
-            CreateContainerResponse ccr = dockerTool.creatContainer(containerName, port, imageContainer, type);
-            dockerTool.start(ccr.getId());
-            ContainerVO cv = dockerTool.findContainer(ccr.getId());
-            if (cv == null) {
-                return null;
-            }
-            putLockContainersMap(cv);
-            return ccr.getId();
-        }
-    }
-
     /**
-     * Gets the running container
-     *
+     * @param userId
+     * @param experimentId
+     * @param imageName
+     * @param kind
      * @return
      */
-    private List<ContainerVO> getRunContainers() {
+    public ContainerEntity createContainer(String userId, String experimentId, String iamgeId, String imageName, int kind) {
+        int dockerIndex = randomDocker();
+        DockerTool dockerTool = dockerTools.get(dockerIndex);
+        List<Integer> ports = getFreePorts(dockerTool, kind);
+        if (ports.size() == 0) {
+            return null;
+        }
+        String containerName = userId + separator + iamgeId;
+        CreateContainerResponse ccr = dockerTool.creatContainer(imageName, containerName, kind, ports);
+        if (ccr == null) {
+            return null;
+        }
+        return ContainerEntity.builder()
+                .containerId(ccr.getId())
+                .name(containerName)
+                .userId(userId)
+                .experimentId(experimentId)
+                .ports(ports.stream().map(String::valueOf).collect(Collectors.joining(separator)))
+                .nodeOrder(dockerIndex)
+                .status(0).build();
+    }
+
+    private List<Integer> getFreePorts(DockerTool dockerTool, int kind) {
+        if (kind == DockerTool.Type.GUI.ordinal()) {
+            return dockerTool.getFreePort(1);
+        }
+        if (kind == DockerTool.Type.SSH.ordinal()) {
+            return dockerTool.getFreePort(1);
+        }
+        return new ArrayList<>();
+    }
+
+    /**
+     * @param ContainerID
+     * @param nodeOrder
+     * @param type        0 start, 1 stop, 2 restart
+     */
+    public void execContainer(String ContainerID, int nodeOrder, int type) {
         try {
-            List<ContainerVO> clist = new ArrayList<>();
-            rwLock.readLock();
-            for (Map.Entry<String, ContainerVO> entry : ContainersMap.entrySet()) {
-                if (entry.getValue().getStatus() == ContainerVO.Status.running.ordinal()) {
-                    clist.add(entry.getValue());
-                }
+            DockerTool dockerTool = dockerTools.get(nodeOrder);
+            if (type == ExecType.START.ordinal()) {
+                dockerTool.start(ContainerID);
+                return;
+            } else if (type == ExecType.STOP.ordinal()) {
+                dockerTool.stop(ContainerID);
+                return;
+            } else if (type == ExecType.RESTART.ordinal()) {
+                dockerTool.restart(ContainerID);
+                return;
             }
-            Collections.sort(clist);
-            return clist;
-        } finally {
-            try {
-                rwLock.readLock().unlock();
-            } catch (Exception e) {
-                e.printStackTrace();
-                rwLock.readLock().unlock();
-            }
-
+        } catch (Exception e) {
+            return;
         }
     }
 
-    /**
-     * Get the latest container refresh status
-     *
-     * @param containerVO
-     */
-    private void RefreshMap(ContainerVO containerVO) {
-        putLockContainersMap(findContainerFromTool(containerVO));
-    }
-
-    private ContainerVO findContainerFromTool(ContainerVO containerVO) {
-        DockerTool dockerTool = dockerTools.get(containerVO.getNodeOrder());
-        return dockerTool.findContainer(containerVO.getContainerID());
-    }
-
-    /**
-     * @param containerVO
-     * @param type        0 start, 1 stop, 2 restart 3 remove
-     */
-    private void execContainer(ContainerVO containerVO, int type) {
-        DockerTool dockerTool = dockerTools.get(containerVO.getNodeOrder());
-        if (type == 0) {
-            dockerTool.start(containerVO.getContainerID());
-            RefreshMap(containerVO);
-            return;
-        } else if (type == 1) {
-            dockerTool.stop(containerVO.getContainerID());
-            RefreshMap(containerVO);
-            return;
-        } else if (type == 2) {
-            dockerTool.restart(containerVO.getContainerID());
-            RefreshMap(containerVO);
-            return;
-        } else {
-            dockerTool.remove(containerVO.getContainerID());
-            removeLockContainersMap(containerVO);
+    public void stopContainers(List<ContainerEntity> containerEntities) {
+        try {
+            List<CompletableFuture<Void>> list = new ArrayList<>();
+            for (int x = 0; x < dockerTools.size(); x++) {
+                int finalX = x;
+                containerEntities.stream().filter(f -> f.getNodeOrder() == finalX).forEach(l -> {
+                    list.add(CompletableFuture.runAsync(() -> {
+                        dockerTools.get(finalX).stop(l.getContainerId());
+                    }, executor));
+                });
+            }
+            CompletableFuture.allOf(list.toArray(new CompletableFuture[]{})).join();
+        } catch (Exception e) {
             return;
         }
+    }
+
+    public int getRunContainerCount() {
+        return dockerTools.stream().mapToInt(d -> d.getAllgetAllContainers(false).size()).sum();
+    }
+
+    public void removeContainers(List<ContainerEntity> containerEntities) {
+
     }
 
     public void pullImages(String imagesName) {
@@ -173,40 +158,6 @@ public class KvmManager {
         return list;
     }
 
-    private void removeLockContainersMap(ContainerVO containerVO) {
-        try {
-            rwLock.writeLock().lock();
-            ContainersMap.remove(containerVO.getContainername());
-        } finally {
-            rwLock.writeLock().unlock();
-        }
-    }
-
-    private void putLockContainersMap(ContainerVO containerVO) {
-        try {
-            rwLock.writeLock().lock();
-            ContainersMap.put(containerVO.getContainername(), containerVO);
-        } finally {
-            rwLock.writeLock().unlock();
-        }
-    }
-
-    private ContainerVO findContainer(String containerName) {
-        try {
-            rwLock.readLock().lock();
-            if (ContainersMap.containsKey(containerName)) {
-                for (Map.Entry<String, ContainerVO> c : ContainersMap.entrySet()) {
-                    if (c.equals(containerName)) {
-                        return c.getValue();
-                    }
-                }
-            }
-            return null;
-        } finally {
-            rwLock.readLock().unlock();
-        }
-    }
-
     //radmon docker server
     private int randomDocker() {
         if (dockerTools.size() == 1) {
@@ -215,14 +166,12 @@ public class KvmManager {
         return random.nextInt(dockerTools.size());
     }
 
-    public List<ContainerVO> getAll() {
-        rwLock.readLock().lock();
-        try {
-            List<ContainerVO> list = new ArrayList<>(ContainersMap.values());
-            return list;
-        } finally {
-            rwLock.readLock().unlock();
-        }
+    public List<Container> getAll() {
+        List<Container> containers = new ArrayList<>();
+        dockerTools.forEach(d -> {
+            containers.addAll(d.getAllgetAllContainers(true));
+        });
+        return containers;
     }
 
     @PostConstruct
@@ -231,12 +180,18 @@ public class KvmManager {
     }
 
     public boolean isQuoteContainer(List<String> imagesID) {
-        return getAll().stream().anyMatch(s -> imagesID.contains(s.getImageID()));
+        return getAll().stream()
+                .filter(s -> imagesID.contains(s.getImageId()))
+                .collect(Collectors.toList()).size() > 0;
     }
 
     public void removeImages(List<String> imagesID) {
         dockerTools.forEach(d -> {
             imagesID.forEach(d::removeImage);
         });
+    }
+
+    public boolean isExistImageID(List<String> imageID) {
+        return dockerTools.stream().anyMatch(s -> s.isExistImageID(imageID));
     }
 }

@@ -26,23 +26,35 @@
     </select>
 
     <select id="findAllByCourseId" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
-        select * from experiment e , course_chapter_section c where e.section_id = c.section_id and c.course_id = #{course_id} and type = 1
+        SELECT e.* FROM experiment e
+            INNER JOIN chapter_section_experiment c on e.id = c.experiment_id
+            INNER JOIN course_chapter_section cc on c.section_id = cc.section_id
+            WHERE cc.course_id = #{course_id}::uuid
     </select>
 
     <select id="findAllByChapterId" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
-        select * from experiment e , course_chapter_section c where e.section_id = c.section_id and c.chapter_id = #{chapter_id} and type = 1
+        SELECT e.* FROM experiment e
+            INNER JOIN chapter_section_experiment c on e.id = c.experiment_id
+            INNER JOIN course_chapter_section cc on c.section_id = cc.section_id
+            WHERE cc.chapter_id = #{chapter_id}::uuid
     </select>
 
     <select id="findAllBySectionId" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
-        select * from experiment where section_id = #{section_id} and type = 1
-    </select>
-
-    <select id="findAllByCategoryId" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
-        select * from experiment where category_id = #{category_id} and type = 0
+        SELECT e.* FROM experiment e
+            INNER JOIN chapter_section_experiment c on e.id = c.experiment_id
+            INNER JOIN course_chapter_section cc on c.section_id = cc.section_id
+            WHERE cc.section_id = #{section_id}::uuid
     </select>
 
     <select id="findById" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
         select * from experiment where id = #{id}::uuid
+    </select>
+
+    <select  id="hasExperiment" resultType="int">
+        select count(*) from
+            INNER JOIN chapter_section_experiment c
+            ON e.id = c.experiment_id
+            WHERE c.section_id =  #{section_id}::uuid
     </select>
 
     <update id="updateExperiment">
@@ -62,6 +74,9 @@
             </if>
             <if test="updated_at != null">
                 updated_at = #{updated_at},
+            </if>
+            <if test="report_requirement != null">
+                report_requirement = #{report_requirement}
             </if>
         </set>
         where id = #{id}::uuid

@@ -30,28 +30,29 @@ public class ExperimentServiceImpl implements ExperimentService {
     }
 
     @Override
-    public List<ExperimentEntity> findAllByCourseId(String course_Id) {
-        return experimentMapper.findAllByCourseId(course_Id);
+    public PageInfo<ExperimentEntity> findAllByCourseId(String course_id, Integer perPage, Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<ExperimentEntity> list = experimentMapper.findAllByCourseId(course_id);
+        return new PageInfo<>(list);
     }
 
     @Override
-    public List<ExperimentEntity> findAllByChapterId(String chapter_Id) {
-        return experimentMapper.findAllByChapterId(chapter_Id);
+    public PageInfo<ExperimentEntity> findAllByChapterId(String chapter_id, Integer perPage, Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<ExperimentEntity> list = experimentMapper.findAllByChapterId(chapter_id);
+        return new PageInfo<>(list);
     }
 
     @Override
-    public List<ExperimentEntity> findAllBySectionId(String section_id) {
-        return experimentMapper.findAllBySectionId(section_id);
+    public PageInfo<ExperimentEntity> findAllBySectionId(String section_id, Integer perPage, Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<ExperimentEntity> list = experimentMapper.findAllBySectionId(section_id);
+        return new PageInfo<>(list);
     }
 
     @Override
-    public List<ExperimentEntity> findAllByCategoryId(String category_id) {
-        return experimentMapper.findAllByCategoryId(category_id);
-    }
-
-    @Override
-    public ExperimentEntity findByID(String id) {
-        return experimentMapper.findByID(id);
+    public ExperimentEntity findById(String id) {
+        return experimentMapper.findById(id);
     }
 
     @Override
@@ -62,6 +63,11 @@ public class ExperimentServiceImpl implements ExperimentService {
     @Override
     public boolean deleteExperiment(String id) {
         return experimentMapper.deleteExperiment(id);
+    }
+
+    @Override
+    public int hasExperiment(String section_id) {
+        return 0;
     }
 
     @Override

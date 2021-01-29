@@ -6,6 +6,8 @@ import org.tdos.tdospractice.entity.ChapterSectionExperimentEntity;
 import org.tdos.tdospractice.mapper.ChapterSectionExperimentMapper;
 import org.tdos.tdospractice.service.ChapterSectionExperimentService;
 
+import java.util.List;
+
 @Service
 public class ChapterSectionExperimentServiceImpl implements ChapterSectionExperimentService {
 
@@ -13,7 +15,7 @@ public class ChapterSectionExperimentServiceImpl implements ChapterSectionExperi
     private ChapterSectionExperimentMapper chapterSectionExperimentMapper;
 
     @Override
-    public int insert(ChapterSectionExperimentEntity chapterSectionExperimentEntity) {
-        return chapterSectionExperimentMapper.insert(chapterSectionExperimentEntity);
+    public int insert(List<ChapterSectionExperimentEntity> list) {
+        return chapterSectionExperimentMapper.insert(list);
     }
 }

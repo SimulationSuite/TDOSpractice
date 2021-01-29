@@ -67,6 +67,8 @@ dependencies {
     compile group: 'org.apache.poi', name: 'poi', version: '4.1.0'
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.0'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-activemq', version: '2.4.2'
+    // https://mvnrepository.com/artifact/commons-net/commons-net
+    compile group: 'commons-net', name: 'commons-net', version: '3.6'
 }
 
 
@@ -83,5 +85,5 @@ configurations {
 //原因：mac下是找不到 ./src 路径的，需要全路径，如下配置。windows则为src/main/resources/generator.xml
 mybatisGenerator {
     verbose = true
-    configFile = 'src/main/resources/generator.xml'
+    configFile = '/Users/yongyang/work/project/TDOSpractice/src/main/resources/generator.xml'
 }

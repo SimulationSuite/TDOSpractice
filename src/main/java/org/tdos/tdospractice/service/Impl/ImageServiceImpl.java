@@ -6,19 +6,20 @@ import lombok.SneakyThrows;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.tdos.tdospractice.entity.ImageEntity;
 import org.tdos.tdospractice.kvm.KvmManager;
 import org.tdos.tdospractice.mapper.ImageMapper;
-import org.tdos.tdospractice.service.ImageManageService;
+import org.tdos.tdospractice.service.ImageService;
 import org.tdos.tdospractice.utils.JsonUtils;
 
 import java.util.List;
 import java.util.Map;
 
 @Service
-public class ImageManageServiceImpl implements ImageManageService {
+public class ImageServiceImpl implements ImageService {
 
     @Autowired
     private ImageMapper imageMapper;
@@ -26,6 +27,7 @@ public class ImageManageServiceImpl implements ImageManageService {
     @Autowired
     private JmsMessagingTemplate jmsMessagingTemplate;
 
+    @Qualifier("ImageQueue")
     @Autowired
     private ActiveMQQueue imageQueue;
 
@@ -67,6 +69,9 @@ public class ImageManageServiceImpl implements ImageManageService {
     public int deleteImages(List<String> imagesID) {
         List<String> getlist = imageMapper.findExperimentImageByImageids(imagesID);
         if (getlist.size() > 0) {
+            return -1;
+        }
+        if (!kvmManager.isExistImageID(imagesID)) {
             return -1;
         }
         if (kvmManager.isQuoteContainer(imagesID)) {
