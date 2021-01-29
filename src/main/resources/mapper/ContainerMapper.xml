@@ -18,7 +18,7 @@
     </resultMap>
 
     <select id="findExperimentCount" resultType="java.util.HashMap">
-        select * from experiment e left join (
+        select * from experiment e right join (
         select c.experiment_id,count(*) from container c
         where c.status=1 group by c.experiment_id) as c on e.id=c.experiment_id
     </select>
@@ -71,6 +71,10 @@
         left join sim_user s on c.user_id=s.id
         left join experiment e on c.experiment_id=e.id
         where c.status=1 order by c.created_at
+    </select>
+
+    <select id="findContainerByName" parameterType="java.lang.String" resultMap="ContainerMap">
+        select * from container c where c.name=#{ContainerName}
     </select>
 
     <update id="updateContainerByIds">
