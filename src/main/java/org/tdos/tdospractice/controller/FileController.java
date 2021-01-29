@@ -29,12 +29,10 @@ public class FileController {
             return Response.error("type error");
         }
         if (pair.getKey()) {
-            UploadFile
+            return Response.success(UploadFile
                     .builder()
                     .size(multipartFile.getSize())
-                    .name(uppath + pair.getValue()).build();
-            System.out.println("1111");
-            return Response.success();
+                    .name(uppath + pair.getValue()).build());
         }else {
             return Response.error("上传失败");
         }
