@@ -20,11 +20,11 @@ public class FileController {
         Pair<Boolean,String> pair = fileService.upload(multipartFile, type);
         String uppath = "";
         if (type == 0) {//图片
-            uppath = "/data2/pic/";
+            uppath = "/pic/";
         } else if (type == 1) {//视频
-            uppath = "/data2/video/";
+            uppath = "/video/";
         } else if (type == 2) {//PDF
-            uppath = "/data2/pic/courseware";
+            uppath = "/courseware/";
         }else {
             return Response.error("type error");
         }
@@ -32,7 +32,7 @@ public class FileController {
             return Response.success(UploadFile
                     .builder()
                     .size(multipartFile.getSize())
-                    .name("/data2/pic/" +pair.getValue()).build());
+                    .name(uppath + pair.getValue()).build());
         }else {
             return Response.error("上传失败");
         }
