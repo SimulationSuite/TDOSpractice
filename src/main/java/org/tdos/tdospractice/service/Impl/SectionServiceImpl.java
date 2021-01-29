@@ -3,6 +3,7 @@ package org.tdos.tdospractice.service.Impl;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.tdos.tdospractice.body.DeleteSection;
 import org.tdos.tdospractice.body.InsertSection;
@@ -46,6 +47,7 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
+    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     public Pair<Boolean, String> addSection(InsertSection insertSection) {
         if (courseMapper.hasCourseExist(insertSection.courseId) == 0) {
             return new Pair<>(false, "course is not exist");
@@ -72,6 +74,7 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
+    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     public Pair<Boolean, String> removeSection(DeleteSection deleteSection) {
         if (ObjectUtils.isEmpty(deleteSection.sectionId)){
             return new Pair<>(false, "section is not exist");
