@@ -49,7 +49,7 @@ public class FileServiceImpl implements FileService {
         if (!file.isEmpty()) {
             String fileName=file.getOriginalFilename();
             String fileExtensionName=fileName.substring(fileName.lastIndexOf(".")+1);
-            String uploadFileName= UUID.randomUUID().toString()+"-"+fileName;
+            String uploadFileName= UUID.randomUUID().toString()+"."+fileExtensionName;
             String path = System.getProperty("user.dir");
             File fileDir=new File(path);
             if (!fileDir.exists()){
