@@ -35,6 +35,4 @@ public class ExperimentEntity {
     private LocalDateTime updated_at;
 
     private String section_id; //只用于接收参数
-
-    private int isBind; //只用于接收参数
 }

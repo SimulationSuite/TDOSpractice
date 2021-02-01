@@ -101,14 +101,13 @@ public class ExperimentServiceImpl implements ExperimentService {
         PageHelper.startPage(page, perPage);
         List<String> category_ids = new ArrayList<>();
         List<String> section_ids = new ArrayList<>();
-        List<ExperimentEntity> list = new ArrayList<>();
+        List<ExperimentEntity> list = experimentService.findExperiment(category_ids, name, perPage, page).getList();
         section_ids.add(section_id);
         if (category_id.equals("")) {
-            list = experimentService.findExperiment(category_ids, name, perPage, page).getList();
-            list.forEach(experimentEntity -> {
+            experimentService.findExperiment(category_ids, name, perPage, page).getList().forEach(experimentEntity -> {
                 experimentMapper.findAllByIds(section_ids).forEach(e -> {
                     if (e.getId().equals(experimentEntity.getId())) {
-                        experimentEntity.setIsBind(1);
+                        list.remove(experimentEntity);
                     }
                 });
             });
@@ -123,11 +122,10 @@ public class ExperimentServiceImpl implements ExperimentService {
                 } else {
                     ids.add(category_id);
                 }
-                list = experimentService.findExperiment(ids, name, perPage, page).getList();
-                list.forEach(experimentEntity -> {
+                experimentService.findExperiment(category_ids, name, perPage, page).getList().forEach(experimentEntity -> {
                     experimentMapper.findAllByIds(section_ids).forEach(e -> {
                         if (e.getId().equals(experimentEntity.getId())) {
-                            experimentEntity.setIsBind(1);
+                            list.remove(experimentEntity);
                         }
                     });
                 });
