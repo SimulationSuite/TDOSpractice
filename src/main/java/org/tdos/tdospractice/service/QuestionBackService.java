@@ -12,7 +12,7 @@ import java.util.Map;
 
 public interface QuestionBackService {
 
-    PageInfo<QuestionBackEntity> getQuestionBackAll(Integer type, String content, String categoryId, Integer perPage, Integer page);
+    PageInfo<QuestionBackEntity> getQuestionBackAll(Integer type, String content, String categoryId, String assignmentId, Integer perPage, Integer page);
 
     Map<String, Object> deleteQuestionBackById(List<String> id);
 

@@ -36,4 +36,6 @@ public class QuestionBackEntity {
 
     private int score;
 
+    private int isSelect;
+
 }
