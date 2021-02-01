@@ -273,8 +273,7 @@ FROM
         FROM
         course c
         INNER JOIN class_course cc ON cc.course_id = c.id
-        INNER JOIN "sim_user" ON sim_user.class_id = cc.class_id
-        AND sim_user."id" = #{userId}
+        AND cc.user_id = #{userId}
         Where c.type = 1
         AND c.STATUS = 1
         <if test = "start != null" >

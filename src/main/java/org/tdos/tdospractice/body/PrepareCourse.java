@@ -8,6 +8,6 @@ public class PrepareCourse {
     public String courseId;
 
     @JsonProperty("user_id")
-    public String user_id;
+    public String userId;
 
 }

@@ -7,9 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.tdos.tdospractice.body.*;
 import org.tdos.tdospractice.entity.CourseChapterSectionEntity;
+import org.tdos.tdospractice.entity.UserEntity;
 import org.tdos.tdospractice.mapper.*;
 import org.tdos.tdospractice.service.CourseService;
 import org.tdos.tdospractice.type.*;
@@ -46,6 +46,10 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private SmallSectionMapper smallSectionMapper;
+
+    @Autowired
+    private UserMapper userMapper;
+
 
     private static final String EMPTY_UUID = "fb0a1080-b11e-427c-8567-56ca6105ea07";
 
@@ -107,7 +111,7 @@ public class CourseServiceImpl implements CourseService {
         if (ObjectUtils.isEmpty(prepareCourse.courseId)) {
             return new Pair<>(false, "course_id can not be null");
         }
-        if (ObjectUtils.isEmpty(prepareCourse.user_id)) {
+        if (ObjectUtils.isEmpty(prepareCourse.userId)) {
             return new Pair<>(false, "user_id  can not be null");
         }
         if (!UUIDPattern.isValidUUID(prepareCourse.courseId)) {
@@ -123,7 +127,7 @@ public class CourseServiceImpl implements CourseService {
         if (course.type == 1) {
             return new Pair<>(false, "select course is not admin public");
         }
-        course.ownerId = prepareCourse.user_id;
+        course.ownerId = prepareCourse.userId;
         course.type = 1;
         course.status = 0;
         course.modelId = course.id;
@@ -204,9 +208,10 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
     public Pair<Boolean, String> modifyCourseStatus(ModifyCourseStatus modifyCourseStatus) {
-        if (ObjectUtils.isEmpty(modifyCourseStatus.userId)) {
-            return new Pair<>(false, "user_id can not be null");
+        if (ObjectUtils.isEmpty(modifyCourseStatus.ownerId)) {
+            return new Pair<>(false, "owner_id can not be null");
         }
         if (ObjectUtils.isEmpty(modifyCourseStatus.courseId)) {
             return new Pair<>(false, "course_id  can not be null");
@@ -218,12 +223,20 @@ public class CourseServiceImpl implements CourseService {
             return new Pair<>(false, "course is not exist");
         }
         Course course = courseMapper.getCourseByCourseId(modifyCourseStatus.courseId);
-        if (!course.ownerId.equals(modifyCourseStatus.userId)) {
-            return new Pair<>(false, "course is not belong to userId: " + modifyCourseStatus.userId);
+        if (!course.ownerId.equals(modifyCourseStatus.ownerId)) {
+            return new Pair<>(false, "course is not belong to owner_id: " + modifyCourseStatus.ownerId);
         }
         courseMapper.modifyCourseStatus(modifyCourseStatus.courseId, modifyCourseStatus.start, modifyCourseStatus.end);
-        if (!ObjectUtils.isEmpty(modifyCourseStatus.classId)) {
-            classCourseMapper.insertClassCourse(modifyCourseStatus.courseId, modifyCourseStatus.classId);
+        if (modifyCourseStatus.userIds != null && modifyCourseStatus.userIds.size() > 0) {
+            if (!modifyCourseStatus.userIds.stream().allMatch((userId -> userMapper.findUserById(userId) != null
+                    && userMapper.findUserById(userId).getRoleID() == 2))) {
+                return new Pair<>(false, "user_id list is not exist or not all student");
+            }
+            classCourseMapper.deleteByCourseId(modifyCourseStatus.courseId);
+            modifyCourseStatus.userIds.forEach(userId -> {
+                UserEntity userEntity = userMapper.findUserById(userId);
+                classCourseMapper.insertClassCourse(userId, modifyCourseStatus.courseId, userEntity.getClassID());
+            });
         }
         return new Pair<>(true, "");
     }

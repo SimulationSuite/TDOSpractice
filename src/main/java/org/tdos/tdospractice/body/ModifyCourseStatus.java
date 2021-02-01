@@ -2,10 +2,12 @@ package org.tdos.tdospractice.body;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 public class ModifyCourseStatus {
 
-    @JsonProperty("user_id")
-    public String userId;
+    @JsonProperty("owner_id")
+    public String ownerId;
 
     @JsonProperty("course_id")
     public String courseId;
@@ -14,7 +16,7 @@ public class ModifyCourseStatus {
 
     public String end;
 
-    @JsonProperty("class_id")
-    public String classId;
+    @JsonProperty("user_id_list")
+    public List<String> userIds;
 
 }
