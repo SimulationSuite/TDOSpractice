@@ -34,4 +34,6 @@ public class QuestionBackEntity {
 
     private String studentAnswer;
 
+    private int score;
+
 }

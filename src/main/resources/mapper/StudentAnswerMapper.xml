@@ -92,4 +92,10 @@
         delete from student_answer where assignment_id = #{assignmentId}::uuid and user_id = #{userId}::uuid;
     </delete>
 
+    <select  id="getQuestionBackTypeByAssignment" resultType="org.tdos.tdospractice.type.StudentQuestionAnswer">
+        select distinct qb.type = 0
+        from question_back qb
+        where qba.assignment_id =#{assignmentId} ::uuid
+    </select>
+
 </mapper>
