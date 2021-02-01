@@ -25,25 +25,13 @@
         </if>
     </select>
 
-    <select id="findAllByCourseId" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
-        SELECT e.* FROM experiment e
-            INNER JOIN chapter_section_experiment c on e.id = c.experiment_id
-            INNER JOIN course_chapter_section cc on c.section_id = cc.section_id
-            WHERE cc.course_id = #{course_id}::uuid
-    </select>
-
-    <select id="findAllByChapterId" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
-        SELECT e.* FROM experiment e
-            INNER JOIN chapter_section_experiment c on e.id = c.experiment_id
-            INNER JOIN course_chapter_section cc on c.section_id = cc.section_id
-            WHERE cc.chapter_id = #{chapter_id}::uuid
-    </select>
-
-    <select id="findAllBySectionId" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
-        SELECT e.* FROM experiment e
-            INNER JOIN chapter_section_experiment c on e.id = c.experiment_id
-            INNER JOIN course_chapter_section cc on c.section_id = cc.section_id
-            WHERE cc.section_id = #{section_id}::uuid
+    <select id="findAllByIds" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
+        SELECT * FROM experiment
+        WHERE experiment_id IN
+        <foreach collection="list" item="id" index="index"
+                 open="(" close=")" separator=",">
+            #{id}::uuid
+        </foreach>
     </select>
 
     <select id="findById" resultType="org.tdos.tdospractice.entity.ExperimentEntity">

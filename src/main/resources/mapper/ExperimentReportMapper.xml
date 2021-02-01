@@ -35,4 +35,9 @@
         </set>
         where id = #{id}::uuid
     </update>
+
+    <update id="updateExperimentReportByEndtime">
+        update experiment_report SET score = 0 , iscorrect = 1 , status = 1 WHERE end_at &lt; current_date AND status = 0 AND iscorrect = 0
+    </update>
+
 </mapper>

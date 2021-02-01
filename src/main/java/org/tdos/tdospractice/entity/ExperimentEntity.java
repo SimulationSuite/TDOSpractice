@@ -28,12 +28,13 @@ public class ExperimentEntity {
 
     private String introduce;
 
-    private String section_id; //只用于接收参数
-
     private List<String> images;
 
     private LocalDateTime created_at;
 
     private LocalDateTime updated_at;
 
+    private String section_id; //只用于接收参数
+
+    private int isBind; //只用于接收参数
 }

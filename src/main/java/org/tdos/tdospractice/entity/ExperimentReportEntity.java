@@ -3,6 +3,7 @@ package org.tdos.tdospractice.entity;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -22,6 +23,10 @@ public class ExperimentReportEntity {
     private String score;
 
     private int status; //0. 未提交 1.已提交
+
+    private int isCorrect; //0.未批改 1. 已批改
+
+    private Date end_at;
 
     private LocalDateTime created_at;
 

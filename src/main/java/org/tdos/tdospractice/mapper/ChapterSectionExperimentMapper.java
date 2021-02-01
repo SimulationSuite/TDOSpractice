@@ -13,4 +13,6 @@ public interface ChapterSectionExperimentMapper {
 
     int insert(@Param("list") List<ChapterSectionExperimentEntity> list);
 
+    List<String> getExperimentIds(@Param("section_ids")List<String> section_ids);
+
 }
