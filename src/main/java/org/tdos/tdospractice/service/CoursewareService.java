@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface CoursewareService {
-    PageInfo<CoursewareEntity> getCoursewareAll(String name, Integer kind, Integer type, String categoryId, Integer perPage, Integer page);
+    PageInfo<CoursewareEntity> getCoursewareAll(String name, Integer kind, Integer type, String categoryId, String chapterId, String sectionId, Integer perPage, Integer page);
 
     PageInfo<CoursewareEntity> getCoursewareByClassId(String classId, Integer perPage, Integer page);
 

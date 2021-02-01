@@ -16,4 +16,6 @@ public interface ExperimentReportMapper {
 
     boolean updateExperimentReport(ExperimentReportEntity experimentEntity);
 
+    boolean updateExperimentReportByEndtime();
+
 }

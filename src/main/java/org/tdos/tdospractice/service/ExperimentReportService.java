@@ -11,4 +11,6 @@ public interface ExperimentReportService {
     List<ExperimentReportEntity> findByExperimentReport(ExperimentReportEntity experimentReportEntity);
 
     boolean updateExperimentReport(ExperimentReportEntity experimentEntity);
+
+    boolean updateExperimentReportByEndtime();
 }
