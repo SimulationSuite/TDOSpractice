@@ -299,9 +299,9 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public PageInfo<Course> getCourseList(String userId, String start, String end, Integer perPage, Integer page) {
+    public PageInfo<Course> getCourseList(String userId, String name, String start, String end, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        PageInfo<Course> pageInfo = new PageInfo<>(courseMapper.getCourseList(userId, start, end));
+        PageInfo<Course> pageInfo = new PageInfo<>(courseMapper.getCourseList(userId, name, start, end));
         if (pageInfo.getList().size() > 0) {
             List<Course> list = courseMapper.getCourseListPerfect(pageInfo.getList().stream().map(x -> x.id).collect(Collectors.toList()));
             List<ClassNumber> classNumbers = classMapper.findClassNumber();
