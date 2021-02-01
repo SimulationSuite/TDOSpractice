@@ -36,4 +36,6 @@ public interface StudentAnswerMapper {
 
     int modifyStudentAnswerStatus(@Param("status") int status, @Param("committedAt") Date committedAt, @Param("assignmentId") String assignmentId, @Param("userId") String userId);
 
+    List<StudentQuestionAnswer> getQuestionBackTypeByAssignment(String assignmentId);
+
 }

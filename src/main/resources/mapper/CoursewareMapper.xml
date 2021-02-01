@@ -81,7 +81,8 @@
     </delete>
 
     <delete id="deleteChapterSectionCourseById">
-        delete from chapter_section_courseware where courseware_id=#{id}::uuid;
+        delete from chapter_section_courseware
+        where courseware_id=#{coursewareId}::uuid and chapter_id = #{chapterId}::uuid and section_id = #{sectionId}::uuid;
     </delete>
 
     <update id="modifyCoursewareNameById">

@@ -5,19 +5,26 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tdos.tdospractice.body.StudentAnswer;
+import org.tdos.tdospractice.body.StudentScore;
 import org.tdos.tdospractice.entity.StudentAnswerEntity;
+import org.tdos.tdospractice.entity.StudentScoreEntity;
 import org.tdos.tdospractice.mapper.StudentAnswerMapper;
+import org.tdos.tdospractice.mapper.StudentScoreMapper;
 import org.tdos.tdospractice.service.StudentAnswerService;
 import org.tdos.tdospractice.type.StudentQuestionAnswer;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentAnswerServiceImpl implements StudentAnswerService {
 
     @Autowired
     private StudentAnswerMapper studentAnswerMapper;
+
+    @Autowired
+    private StudentScoreMapper studentScoreMapper;
 
     @Override
     public PageInfo<StudentQuestionAnswer> getStudentAnswerByAssignmentUserId(String userId, String assignmentId, Integer perPage, Integer page) {
@@ -125,7 +132,21 @@ public class StudentAnswerServiceImpl implements StudentAnswerService {
     @Override
     public Boolean modifyStudentAnswerStatusById(StudentAnswer studentAnswer) {
         try {
-            studentAnswerMapper.modifyStudentAnswerStatus(1, new Date(), studentAnswer.assignmentId, studentAnswer.userId);
+            String assignmentId = studentAnswer.assignmentId;
+            String userId = studentAnswer.userId;
+            List<StudentQuestionAnswer> list = studentAnswerMapper.getQuestionBackTypeByAssignment(assignmentId);
+            if(list.size() == 1 && list.get(0).getType() == 0){
+                List<StudentQuestionAnswer> studentQuestionAnswerList = studentAnswerMapper.getStudentAnswerByAssignmentUserId(assignmentId, userId);
+                List<StudentQuestionAnswer> rightStudentQuestionAnswerList = studentQuestionAnswerList.stream().filter(x -> x.getAnswer() == x.getStudentAnswer()).collect(Collectors.toList());
+                int score = rightStudentQuestionAnswerList.stream().mapToInt(x->x.getScore()).sum();
+                StudentScoreEntity studentScoreEntity = new StudentScoreEntity();
+                studentScoreEntity.setAssignmentId(assignmentId);
+                studentScoreEntity.setUserId(userId);
+                studentScoreEntity.setStatus(1);
+                studentScoreEntity.setStatus(score);
+                studentScoreMapper.addStudentScore(studentScoreEntity);
+            }
+            studentAnswerMapper.modifyStudentAnswerStatus(1, new Date(), assignmentId, userId);
         } catch (Exception e) {
             return false;
         }

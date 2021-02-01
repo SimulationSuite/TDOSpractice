@@ -28,5 +28,7 @@ public interface CoursewareService {
     Map<String, Object> modifyCoursewareNameById(Courseware courseware);
 
     ChapterSectionCoursewareEntity addChapterSectionCourseware(ChapterSectionCourseware chapterSectionCourseware);
+
+    Map<String, Object> deleteChapterSectionCourseById(List<ChapterSectionCourseware> chapterSectionCoursewareList);
 }
 

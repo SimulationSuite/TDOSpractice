@@ -24,7 +24,7 @@ public interface CoursewareMapper {
 
     int deleteCoursewareById(@Param("id") String id);
 
-    int deleteChapterSectionCourseById(@Param("id") String id);
+    int deleteChapterSectionCourseById(@Param("chapterId") String chapterId, @Param("sectionId") String sectionId, @Param("coursewareId") String coursewareId);
 
     int modifyCoursewareNameById(@Param("id") String id, @Param("coursewareName") String coursewareName);
 
