@@ -6,16 +6,8 @@
 
     <select  id="getCoursewareAll" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
         select c.id, c.name, c.kind, c.type, c.url, c.category_id as categoryId,
-        c.duration, c.size, c.created_at as createdAt, c.updated_at as updatedAt,
-        case when csc.id is null then 0 else 1 end as isSelect
+        c.duration, c.size, c.created_at as createdAt, c.updated_at as updatedAt
         from courseware c
-        left join chapter_section_courseware csc on csc.courseware_id = c.id
-        <if test="chapterId != null and chapterId != ''" >
-            and csc.chapter_id = #{chapterId}
-        </if>
-        <if test="sectionId != null and sectionId != ''" >
-            and csc.section_id = #{sectionId}
-        </if>
         where c.id is not null
         <if test="name != null" >
             and c.name like  concat('%',#{name},'%')
@@ -28,6 +20,12 @@
         </if>
         <if test="categoryId != null and categoryId != ''" >
             and c.category_id = #{categoryId}
+        </if>
+        <if test="chapterId != null and chapterId != ''" >
+            and c.id not in select csc.courseware_id from chapter_section_courseware csc where csc.chapter_id = #{chapterId}
+        </if>
+        <if test="sectionId != null and sectionId != ''" >
+            and c.id not in select csc.courseware_id from chapter_section_courseware csc where csc.section_id = #{sectionId}
         </if>
     </select>
 

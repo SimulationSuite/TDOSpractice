@@ -31,6 +31,4 @@ public class CoursewareEntity {
 
     private LocalDateTime updatedAt;
 
-    private int isSelect;
-
 }
