@@ -15,12 +15,17 @@
         select * from class_course where class_id=#{classId}
     </select>
 
+    <delete  id="deleteByCourseId">
+        delete from class_course where course_id = #{courseId}::uuid
+    </delete>
+
     <insert id="insertClassCourse" useGeneratedKeys="false">
-        insert into class_course(course_id, class_id) values
+        insert into class_course(user_id, course_id, class_id) values
             (
+            #{userId},
             #{courseId}::uuid,
             #{classId}::uuid
-            ) on conflict(course_id, class_id)
+            ) on conflict(user_id, course_id)
             DO UPDATE SET updated_at = now() at time zone 'utc';
     </insert>
 
