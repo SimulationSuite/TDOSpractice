@@ -37,4 +37,6 @@ public interface CoursewareMapper {
     int addChapterSectionCourseware(ChapterSectionCoursewareEntity chapterSectionCoursewareEntity);
 
     int hasSectionCoursewareId(String id);
+
+    int hasChapterSectionCoursewareId(String coursewareId);
 }

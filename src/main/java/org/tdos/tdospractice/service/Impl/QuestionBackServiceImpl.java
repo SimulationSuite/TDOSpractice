@@ -34,10 +34,7 @@ public class QuestionBackServiceImpl implements QuestionBackService {
         List<String> sectionQuestionBack = new ArrayList<>();
         id.forEach(x -> {
             if (questionBackMapper.ifExistId(x)){
-                if (!questionBackMapper.ifSectionQuestionBackByQuestionBackId(x))
-                {
-                    sectionQuestionBack.add(x);
-                }
+                sectionQuestionBack.add(x);
             }
         });
         if (sectionQuestionBack.size() > 0){

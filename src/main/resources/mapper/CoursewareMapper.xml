@@ -115,6 +115,10 @@
         where csc.courseware_id=#{id} ::uuid
     </select>
 
+    <select id="hasChapterSectionCoursewareId"  resultType="int">
+        select count(*) from courseware where courseware_id=#{coursewareId}::uuid
+    </select>
+
     <select id="hasSectionCoursewareId"  resultType="int">
         select count(*) from courseware where id=#{id}::uuid
     </select>
