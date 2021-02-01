@@ -113,9 +113,6 @@ public class CourseServiceImpl implements CourseService {
         if (!UUIDPattern.isValidUUID(prepareCourse.courseId)) {
             return new Pair<>(false, "course_id is not be uuid");
         }
-        if (!UUIDPattern.isValidUUID(prepareCourse.user_id)) {
-            return new Pair<>(false, "user_id is not be uuid");
-        }
         if (courseMapper.hasCourseExist(prepareCourse.courseId) == 0) {
             return new Pair<>(false, "course is not exist");
         }
