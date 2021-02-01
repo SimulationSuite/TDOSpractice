@@ -50,6 +50,9 @@ FROM
 	INNER JOIN courseware ON courseware_remark.courseware_id = courseware."id" and courseware."id" = #{coursewareId}::uuid
 WHERE
 	courseware_remark.user_id = #{userId}
+    <if  test = "title != null" >
+        AND courseware_remark.title LIKE concat('%',#{title},'%')
+    </if>
     </select>
 
 

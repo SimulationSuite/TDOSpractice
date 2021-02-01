@@ -28,4 +28,9 @@ public class ExperimentReportServiceImpl implements ExperimentReportService {
     public boolean updateExperimentReport(ExperimentReportEntity experimentEntity) {
         return experimentReportMapper.updateExperimentReport(experimentEntity);
     }
+
+    @Override
+    public boolean updateExperimentReportByEndtime() {
+        return experimentReportMapper.updateExperimentReportByEndtime();
+    }
 }

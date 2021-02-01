@@ -114,10 +114,11 @@ public class CourseController {
     public Response<PageInfo<Course>> getCourseList(@RequestParam(value = "user_id") String userId,
                                                     @RequestParam(value = "start", required = false) String start,
                                                     @RequestParam(value = "end", required = false) String end,
+                                                    @RequestParam(value = "name", required = false) String name,
                                                     @RequestParam(value = "per_page") Integer perPage,
                                                     @RequestParam(value = "page") Integer page) {
 
-        PageInfo<Course> courses = courseService.getCourseList(userId, start, end, perPage, page);
+        PageInfo<Course> courses = courseService.getCourseList(userId,name, start, end, perPage, page);
         return Response.success(courses);
     }
 

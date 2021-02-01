@@ -282,6 +282,9 @@ FROM
         <if test = "end != null" >
             AND c.end_at &lt;= #{end} :: timestamp
         </if>
+        <if  test = "name != null" >
+            AND c.NAME LIKE concat('%',#{name},'%')
+        </if>
     </select>
 
     <select  id="getCourseListPerfect" resultMap="CourseResult">

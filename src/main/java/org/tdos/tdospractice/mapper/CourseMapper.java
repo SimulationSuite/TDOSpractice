@@ -24,7 +24,7 @@ public interface CourseMapper {
 
     int insertCourse(Course course);
 
-    List<Course> getCourseListById(String userId,@Param("name") String name);
+    List<Course> getCourseListById(String userId, @Param("name") String name);
 
     List<Course> getCourseListByIdPerfect(@Param("courseIds") List<String> courseIds);
 
@@ -34,13 +34,13 @@ public interface CourseMapper {
 
     Integer findSmallSectionOrder(String sectionId);
 
-    int modifyCourseStatus(String courseId,String start,String end);
+    int modifyCourseStatus(String courseId, String start, String end);
 
-    List<Course> getCourseList(String userId, String start, String end);
+    List<Course> getCourseList(String userId, String name, String start, String end);
 
     List<Course> getCourseListPerfect(@Param("courseIds") List<String> courseIds);
 
-    List<Course> getAdminUnpublishedCourseList(String userId,String name);
+    List<Course> getAdminUnpublishedCourseList(String userId, String name);
 
     List<Course> getAdminUnpublishedCourseListPerfect(@Param("courseIds") List<String> courseIds);
 
