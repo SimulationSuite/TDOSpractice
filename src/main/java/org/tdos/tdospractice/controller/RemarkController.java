@@ -28,8 +28,9 @@ public class RemarkController {
     public Response<PageInfo<CoursewareRemark>> getCoursewareRemarkList(@RequestParam(value = "courseware_id") String coursewareId,
                                                                         @RequestParam(value = "user_id") String userId,
                                                                         @RequestParam(value = "per_page") Integer perPage,
+                                                                        @RequestParam(value = "title", required = false) String title,
                                                                         @RequestParam(value = "page") Integer page) {
-        return Response.success(remarkService.getCoursewareRemarkList(userId, coursewareId, perPage, page));
+        return Response.success(remarkService.getCoursewareRemarkList(userId, coursewareId, title, perPage, page));
     }
 
 

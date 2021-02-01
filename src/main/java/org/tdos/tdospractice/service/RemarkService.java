@@ -9,5 +9,5 @@ public interface RemarkService {
 
     Pair<Boolean, String> uploadRemark(Remark remark);
 
-    PageInfo<CoursewareRemark> getCoursewareRemarkList(String userId, String coursewareId,Integer perPage, Integer page);
+    PageInfo<CoursewareRemark> getCoursewareRemarkList(String userId, String coursewareId, String title, Integer perPage, Integer page);
 }

@@ -33,19 +33,19 @@ public class RemarkServiceImpl implements RemarkService {
 
     @Override
     public Pair<Boolean, String> uploadRemark(Remark remark) {
-        if (ObjectUtils.isEmpty(remark.title)){
+        if (ObjectUtils.isEmpty(remark.title)) {
             return new Pair<>(false, "title is not be null");
         }
-        if (ObjectUtils.isEmpty(remark.content)){
+        if (ObjectUtils.isEmpty(remark.content)) {
             return new Pair<>(false, "content is not be null");
         }
-        if (ObjectUtils.isEmpty(remark.userId)){
+        if (ObjectUtils.isEmpty(remark.userId)) {
             return new Pair<>(false, "user_id is not be null");
         }
-        if (ObjectUtils.isEmpty(remark.coursewareId)){
+        if (ObjectUtils.isEmpty(remark.coursewareId)) {
             return new Pair<>(false, "courseware_id is not be null");
         }
-        if (ObjectUtils.isEmpty(remark.type)){
+        if (ObjectUtils.isEmpty(remark.type)) {
             return new Pair<>(false, "type is not be null");
         }
         UserEntity userEntity = userMapper.findUserById(remark.userId);
@@ -63,9 +63,9 @@ public class RemarkServiceImpl implements RemarkService {
     }
 
     @Override
-    public PageInfo<CoursewareRemark> getCoursewareRemarkList(String userId, String coursewareId, Integer perPage, Integer page) {
+    public PageInfo<CoursewareRemark> getCoursewareRemarkList(String userId, String coursewareId, String title, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        List<CoursewareRemark> list = remarkMapper.getCoursewareRemarkList(userId, coursewareId);
+        List<CoursewareRemark> list = remarkMapper.getCoursewareRemarkList(userId, coursewareId, title);
         return new PageInfo<>(list);
     }
 
