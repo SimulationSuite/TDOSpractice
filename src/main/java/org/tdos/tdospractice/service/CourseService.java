@@ -32,4 +32,8 @@ public interface CourseService {
     Pair<Boolean, Object> AddAdminCourseCompleted(AddCourseCompleted addCourseCompleted);
 
     Pair<Boolean, String> insertCourseChapterCompleted(AddChapterCompleted addChapterCompleted);
+
+    Pair<Boolean, String> modifyExpiredCourseStatus(ModifyExpiredCourseStatus modifyExpiredCourseStatus);
+
+    PageInfo<Course> getChangedList(Integer perPage, Integer page, String name);
 }

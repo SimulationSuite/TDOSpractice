@@ -18,6 +18,7 @@ import org.tdos.tdospractice.type.Section;
 import org.tdos.tdospractice.type.SmallSection;
 import org.tdos.tdospractice.utils.UUIDPattern;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -482,6 +483,56 @@ public class CourseServiceImpl implements CourseService {
             courseChapterSectionMapper.insertCourseChapterSectionList(list);
         }
         return new Pair<>(true, "");
+    }
+
+    @Override
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
+    public Pair<Boolean, String> modifyExpiredCourseStatus(ModifyExpiredCourseStatus modifyExpiredCourseStatus) {
+        if (ObjectUtils.isEmpty(modifyExpiredCourseStatus.ownerId)) {
+            return new Pair<>(false, "owner_id can not be null");
+        }
+        if (ObjectUtils.isEmpty(modifyExpiredCourseStatus.courseId)) {
+            return new Pair<>(false, "course_id  can not be null");
+        }
+        if (!UUIDPattern.isValidUUID(modifyExpiredCourseStatus.courseId)) {
+            return new Pair<>(false, "course_id is not be uuid");
+        }
+        if (courseMapper.hasCourseExist(modifyExpiredCourseStatus.courseId) == 0) {
+            return new Pair<>(false, "course is not exist");
+        }
+        Course course = courseMapper.getCourseByCourseId(modifyExpiredCourseStatus.courseId);
+        if (!course.ownerId.equals(modifyExpiredCourseStatus.ownerId)) {
+            return new Pair<>(false, "course is not belong to owner_id: " + modifyExpiredCourseStatus.ownerId);
+        }
+        if (course.endAt == null || !course.endAt.isBefore(LocalDateTime.now())) {
+            return new Pair<>(false, "end at is not been expired");
+        }
+        if (course.status != 1) {
+            return new Pair<>(false, "course has not been teacher published or has been changed");
+        }
+        courseMapper.modifyExpiredCourseStatus(modifyExpiredCourseStatus.courseId, 2);
+        return new Pair<>(true, "");
+    }
+
+    @Override
+    public PageInfo<Course> getChangedList(Integer perPage, Integer page, String name) {
+        PageHelper.startPage(page, perPage);
+        PageInfo<Course> pageInfo = new PageInfo<>(courseMapper.getChangedList(name));
+        if (pageInfo.getList().size() > 0) {
+            List<Course> list = courseMapper.getChangedListPerfect(pageInfo.getList().stream().map(x -> x.id).collect(Collectors.toList()));
+            List<ClassNumber> classNumbers = classMapper.findClassNumber();
+            list.forEach(x -> classNumbers.forEach(classNumber -> {
+                if (!ObjectUtils.isEmpty(x.classId) && x.classId.equals(classNumber.classId)) {
+                    x.numbers = classNumber.numbers;
+                }
+            }));
+            list.forEach(c -> {
+                c.chapterNumber = c.chapters.size();
+                c.sectionNumber = c.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
+            });
+            pageInfo.setList(list);
+        }
+        return pageInfo;
     }
 
 }

@@ -102,6 +102,23 @@ public class CourseController {
         return Response.success(courseService.getAdminUnpublishedCourseList(userId, perPage, page, name));
     }
 
+    // 归档课程
+    @PostMapping(value = "/modify_expired_course_status")
+    public Response<String> modifyExpiredCourseStatus(@RequestBody ModifyExpiredCourseStatus modifyExpiredCourseStatus) {
+        Pair<Boolean, String> pair = courseService.modifyExpiredCourseStatus(modifyExpiredCourseStatus);
+        if (pair.getKey()) {
+            return Response.success(null);
+        }
+        return Response.error(pair.getValue());
+    }
+
+    @GetMapping(value = "/get_changed_course_list")
+    public Response<PageInfo<Course>> getChangedList(@RequestParam(value = "per_page") Integer perPage,
+                                                     @RequestParam(value = "page") Integer page,
+                                                     @RequestParam(value = "name", required = false) String name) {
+        return Response.success(courseService.getChangedList(perPage, page, name));
+    }
+
     @GetMapping(value = "/get_expired_course_list")
     public Response<PageInfo<Course>> getExpiredList(@RequestParam(value = "per_page") Integer perPage,
                                                      @RequestParam(value = "page") Integer page,

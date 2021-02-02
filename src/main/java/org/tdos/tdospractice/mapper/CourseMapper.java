@@ -36,6 +36,8 @@ public interface CourseMapper {
 
     int modifyCourseStatus(String courseId, String start, String end);
 
+    int modifyExpiredCourseStatus(String courseId, int status);
+
     List<Course> getCourseList(String userId, String name, String start, String end);
 
     List<Course> getCourseListPerfect(@Param("courseIds") List<String> courseIds);
@@ -51,4 +53,8 @@ public interface CourseMapper {
     List<Course> getExpiredListPerfect(@Param("courseIds") List<String> courseIds);
 
     int hasCourseNameExist(String name);
+
+    List<Course> getChangedList(@Param("name") String name);
+
+    List<Course> getChangedListPerfect(@Param("courseIds") List<String> courseIds);
 }

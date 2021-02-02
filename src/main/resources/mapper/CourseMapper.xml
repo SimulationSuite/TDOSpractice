@@ -258,6 +258,11 @@ FROM
         where id= #{courseId}::uuid
     </update>
 
+    <update id="modifyExpiredCourseStatus">
+        update course set status = #{status}
+        where id= #{courseId}::uuid
+    </update>
+
     <select  id="getCourseList" resultMap="CourseResult">
         SELECT
         c.id AS course_id,
@@ -460,6 +465,57 @@ WHERE
 
     <select  id="hasCourseNameExist" resultType="int">
         select count(*) from course where name=#{name} and type = 0
+    </select>
+
+
+    <select  id="getChangedList" resultMap="CourseResult">
+        SELECT
+        c.id AS course_id,
+        c.NAME AS course_name,
+        c.pic_url,
+        c.owner_id,
+        c.introduction AS course_introduction,
+        c.start_at,
+        c.end_at,
+        c.STATUS,
+        c."type",
+        c.model_id
+        FROM
+        course c
+        WHERE c.STATUS = 2
+        <if  test = "name != null" >
+            AND c.NAME LIKE concat('%',#{name},'%')
+        </if>
+    </select>
+
+    <select  id="getChangedListPerfect" resultMap="CourseResult">
+        SELECT
+        c.id AS course_id,
+        c.NAME AS course_name,
+        c.pic_url,
+        c.owner_id,
+        c.introduction AS course_introduction,
+        c.start_at,
+        c.end_at,
+        c.STATUS,
+        c."type",
+        c.model_id,
+        chapter.id AS chapter_id,
+        chapter.NAME AS chapter_name,
+        chapter."order" AS chapter_order,
+        section.id AS section_id,
+        section.NAME AS section_name,
+        section.ORDER AS section_order
+        FROM
+        course c
+        LEFT JOIN course_chapter_section ccs ON  ccs.course_id = c.id
+        LEFT JOIN chapter ON chapter.id = ccs.chapter_id and "chapter".order != -1
+        LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
+        WHERE
+        c.id  IN
+        <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
+            #{courseId}::uuid
+        </foreach>
     </select>
 
 </mapper>
