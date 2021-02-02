@@ -34,13 +34,14 @@
     <select  id="getAssignmentAll" resultType="org.tdos.tdospractice.type.StudentAssignment">
         select sa.assignment_id as assignmentId, sa.user_id as userId, su.name as userName,
         case when ss.status is null then 0 else ss.status end as status,
-        sa.committed_at as committedAt, a.name as assignmentName
+        sa.committed_at as committedAt, a.name as assignmentName, c.name as className
         from student_answer sa
         inner join assignment a on a.id = sa.assignment_id
         inner join sim_user su on su.id = sa.user_id
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
         inner join course ci on ci.id = ccs.course_id
         inner join class_course cc on cc.course_id = ci.id
+        inner join class c on c.id = cc.class_id
         left join student_score ss on ss.assignment_id = sa.assignment_id and ss.user_id = sa.user_id
         where sa.id is not null
         <if test="classId != null and classId != ''" >
@@ -58,7 +59,13 @@
         <if test="name != null and name != ''" >
             and (su.name like concat('%',#{name},'%') or sa.user_id like concat('%',#{name},'%'))
         </if>
-        group by sa.user_id, sa.assignment_id, ss.status, sa.committed_at, su.name, a.name
+        <if test="startTime != null and startTime != ''" >
+            and ss.update_time &gt;= #{startTime}::timestamp
+        </if>
+        <if test="endTime != null and endTime != ''" >
+            and ss.update_time &lt;= #{endTime}::timestamp
+        </if>
+        group by sa.user_id, sa.assignment_id, ss.status, sa.committed_at, su.name, a.name, c.name
     </select>
 
     <select  id="getAllStudentAssignmentBySectionId" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">
