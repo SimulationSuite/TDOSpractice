@@ -55,8 +55,7 @@ public class ContainerManageController {
     }
 
     @GetMapping(value = "/createContainers")
-    public Response<List<ContainerEntity>> createContainers(@RequestParam(value = "userId") String userId, @RequestParam(value = "containerId") String containerId) {
-        containerService.createContainers(userId, containerId);
-        return null;
+    public Response<List<ContainerEntity>> createContainers(@RequestParam(value = "userId") String userId, @RequestParam(value = "containerId") String experimentId) {
+        return Response.success(containerService.createContainers(userId, experimentId));
     }
 }

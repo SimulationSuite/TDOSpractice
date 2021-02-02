@@ -31,4 +31,6 @@ public interface ContainerMapper {
     int deleteByExperimentIds(@Param("experimentIds") List<String> experimentIds);
 
     List<Map<String, Object>> findRunContainerByTeacher(String classId, String filter);
+
+    ContainerEntity findContainerByName(String ContainerName);
 }

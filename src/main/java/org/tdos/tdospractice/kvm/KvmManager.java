@@ -6,6 +6,7 @@ import com.github.dockerjava.api.model.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.tdos.tdospractice.entity.ContainerEntity;
+import org.tdos.tdospractice.entity.ImageEntity;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
@@ -52,19 +53,18 @@ public class KvmManager {
     /**
      * @param userId
      * @param experimentId
-     * @param imageName
-     * @param kind
+     * @param imageEntity
      * @return
      */
-    public ContainerEntity createContainer(String userId, String experimentId, String iamgeId, String imageName, int kind) {
+    public ContainerEntity createContainer(String userId, String experimentId, ImageEntity imageEntity) {
         int dockerIndex = randomDocker();
         DockerTool dockerTool = dockerTools.get(dockerIndex);
-        List<Integer> ports = getFreePorts(dockerTool, kind);
+        List<Integer> ports = getFreePorts(dockerTool, imageEntity.getKind());
         if (ports.size() == 0) {
             return null;
         }
-        String containerName = userId + separator + iamgeId;
-        CreateContainerResponse ccr = dockerTool.creatContainer(imageName, containerName, kind, ports);
+        String containerName = userId + separator + experimentId + separator + imageEntity.getId();
+        CreateContainerResponse ccr = dockerTool.creatContainer(imageEntity.getImageName(), containerName, imageEntity.getKind(), ports);
         if (ccr == null) {
             return null;
         }
@@ -83,7 +83,7 @@ public class KvmManager {
             return dockerTool.getFreePort(1);
         }
         if (kind == DockerTool.Type.SSH.ordinal()) {
-            return dockerTool.getFreePort(1);
+            return dockerTool.getFreePort(2);
         }
         return new ArrayList<>();
     }

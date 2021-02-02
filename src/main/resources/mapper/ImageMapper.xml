@@ -30,6 +30,12 @@
         order by i.created_at desc
     </select>
 
+    <select id="findImageByExperimentId" resultMap="ImageMap">
+        select * from image i where i.id in (
+        select e.image_id from experiment_image e
+        where e.experiment_id=#{experimentId}::uuid )
+    </select>
+
     <select id="findImageByName" resultType="java.lang.Integer" parameterType="java.lang.String">
         select count(*) from image i where i.name= #{imageName}
     </select>
