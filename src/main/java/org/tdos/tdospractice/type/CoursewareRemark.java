@@ -6,6 +6,9 @@ import java.time.LocalDateTime;
 
 public class CoursewareRemark {
 
+    @JsonProperty("remark_id")
+    public String id;
+
     @JsonProperty("courseware_name")
     public String coursewareName;
 

@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.tdos.tdospractice.body.DeleteCourse;
+import org.tdos.tdospractice.body.DeleteRemark;
 import org.tdos.tdospractice.body.Remark;
 import org.tdos.tdospractice.service.RemarkService;
 import org.tdos.tdospractice.type.CoursewareRemark;
@@ -33,5 +35,13 @@ public class RemarkController {
         return Response.success(remarkService.getCoursewareRemarkList(userId, coursewareId, title, perPage, page));
     }
 
+    @DeleteMapping(value = "/delete_remark")
+    public Response<String> deleteRemark(@RequestBody DeleteRemark deleteRemark) {
+        Pair<Boolean, String> pair = remarkService.deleteRemark(deleteRemark);
+        if (pair.getKey()) {
+            return Response.success(null);
+        }
+        return Response.error(pair.getValue());
+    }
 
 }
