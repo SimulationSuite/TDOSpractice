@@ -21,6 +21,12 @@
         <if test="categoryId != null and categoryId != ''" >
             and c.category_id = #{categoryId}
         </if>
+        <if test="chapterId != null and chapterId != ''" >
+            and c.id not in select csc.courseware_id from chapter_section_courseware csc where csc.chapter_id = #{chapterId}
+        </if>
+        <if test="sectionId != null and sectionId != ''" >
+            and c.id not in select csc.courseware_id from chapter_section_courseware csc where csc.section_id = #{sectionId}
+        </if>
     </select>
 
     <select  id="getCoursewareByClassId" resultType="org.tdos.tdospractice.entity.CoursewareEntity">
@@ -81,7 +87,8 @@
     </delete>
 
     <delete id="deleteChapterSectionCourseById">
-        delete from chapter_section_courseware where courseware_id=#{id}::uuid;
+        delete from chapter_section_courseware
+        where courseware_id=#{coursewareId}::uuid and chapter_id = #{chapterId}::uuid and section_id = #{sectionId}::uuid;
     </delete>
 
     <update id="modifyCoursewareNameById">
@@ -106,6 +113,10 @@
         inner join course_chapter_section ccs on (ccs.section_id = csc.section_id or ccs.chapter_id = csc.chapter_id)
         inner join course c on c.id = ccs.course_id
         where csc.courseware_id=#{id} ::uuid
+    </select>
+
+    <select id="hasChapterSectionCoursewareId"  resultType="int">
+        select count(*) from courseware where courseware_id=#{coursewareId}::uuid
     </select>
 
     <select id="hasSectionCoursewareId"  resultType="int">

@@ -12,6 +12,7 @@ import org.tdos.tdospractice.type.Response;
 import org.tdos.tdospractice.body.CoursewareIdList;
 import org.tdos.tdospractice.body.Courseware;
 import org.tdos.tdospractice.body.ChapterSectionCourseware;
+import org.tdos.tdospractice.body.ChapterSectionCoursewareList;
 import java.util.*;
 
 @RestController
@@ -25,9 +26,11 @@ public class CoursewareController {
                                                                  @RequestParam(value = "kind", required = false) Integer kind,
                                                                  @RequestParam(value = "type", required = false) Integer type,
                                                                  @RequestParam(value = "category_id", required = false) String categoryId,
+                                                                 @RequestParam(value = "chapter_id", required = false) String chapterId,
+                                                                 @RequestParam(value = "section_id", required = false) String sectionId,
                                                                  @RequestParam(value = "perPage") Integer perPage,
                                                                  @RequestParam(value = "page") Integer page) {
-        return Response.success(coursewareService.getCoursewareAll(name, kind, type, categoryId, perPage, page));
+        return Response.success(coursewareService.getCoursewareAll(name, kind, type, categoryId, chapterId, sectionId, perPage, page));
     }
 
     @GetMapping(value = "/getCoursewareByClassId")
@@ -67,6 +70,12 @@ public class CoursewareController {
     @PostMapping(value = "/deleteCoursewareById")
     public Response<Map<String, Object>> deleteCoursewareById(@RequestBody CoursewareIdList idList) {
         Map<String, Object> map = coursewareService.deleteCoursewareById(idList.coursewareIdList);
+        return Response.success(map);
+    }
+
+    @PostMapping(value = "/deleteChapterSectionCourseById")
+    public Response<Map<String, Object>> deleteChapterSectionCourseById(@RequestBody ChapterSectionCoursewareList chapterSectionCoursewareList) {
+        Map<String, Object> map = coursewareService.deleteChapterSectionCourseById(chapterSectionCoursewareList.chapterSectionCoursewareList);
         return Response.success(map);
     }
 

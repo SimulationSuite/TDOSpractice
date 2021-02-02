@@ -14,19 +14,15 @@ public interface ExperimentMapper {
 
     List<ExperimentEntity> findExperiment(@Param("category_ids")List<String> category_ids,@Param("name")String name);
 
-    List<ExperimentEntity> findAllByCourseId(String course_id);
-
-    List<ExperimentEntity> findAllByChapterId(String chapter_id);
-
-    List<ExperimentEntity> findAllBySectionId(String section_id);
-
-    List<ExperimentEntity> findAllByCategoryId(String category_id);
+    List<ExperimentEntity> findAllByIds(@Param("section_ids")List<String> section_ids);
 
     ExperimentEntity findById(String id);
 
     boolean updateExperiment(ExperimentEntity experimentEntity);
 
     boolean deleteExperiment(String id);
+
+    int hasExperiment(String section_id);
 
     long deleteExperimentList(List<String> ids);
 

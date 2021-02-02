@@ -5,10 +5,11 @@ import com.github.pagehelper.PageInfo;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.tdos.tdospractice.body.*;
 import org.tdos.tdospractice.entity.CourseChapterSectionEntity;
+import org.tdos.tdospractice.entity.UserEntity;
 import org.tdos.tdospractice.mapper.*;
 import org.tdos.tdospractice.service.CourseService;
 import org.tdos.tdospractice.type.*;
@@ -46,6 +47,10 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     private SmallSectionMapper smallSectionMapper;
 
+    @Autowired
+    private UserMapper userMapper;
+
+
     private static final String EMPTY_UUID = "fb0a1080-b11e-427c-8567-56ca6105ea07";
 
     @Override
@@ -74,7 +79,13 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public PageInfo<Course> getAdminCourseListByClassId(String classId, Integer perPage, Integer page) {
+    public Pair<Boolean, Object> getAdminCourseListByClassId(String classId, Integer perPage, Integer page) {
+        if (ObjectUtils.isEmpty(classId)) {
+            return new Pair<>(false, "class_id is not be null");
+        }
+        if (!UUIDPattern.isValidUUID(classId)) {
+            return new Pair<>(false, "class_id is not be uuid");
+        }
         PageHelper.startPage(page, perPage);
         PageInfo<Course> pageInfo = new PageInfo<>(courseMapper.getAdminCourseListByClassId(classId));
         if (pageInfo.getList().size() > 0) {
@@ -91,7 +102,7 @@ public class CourseServiceImpl implements CourseService {
             });
             pageInfo.setList(list);
         }
-        return pageInfo;
+        return new Pair<>(true, pageInfo);
     }
 
     @Override
@@ -100,14 +111,11 @@ public class CourseServiceImpl implements CourseService {
         if (ObjectUtils.isEmpty(prepareCourse.courseId)) {
             return new Pair<>(false, "course_id can not be null");
         }
-        if (ObjectUtils.isEmpty(prepareCourse.user_id)) {
+        if (ObjectUtils.isEmpty(prepareCourse.userId)) {
             return new Pair<>(false, "user_id  can not be null");
         }
-        if (!UUIDPattern.isValidUUID(prepareCourse.courseId)){
+        if (!UUIDPattern.isValidUUID(prepareCourse.courseId)) {
             return new Pair<>(false, "course_id is not be uuid");
-        }
-        if (!UUIDPattern.isValidUUID(prepareCourse.user_id)){
-            return new Pair<>(false, "user_id is not be uuid");
         }
         if (courseMapper.hasCourseExist(prepareCourse.courseId) == 0) {
             return new Pair<>(false, "course is not exist");
@@ -119,7 +127,7 @@ public class CourseServiceImpl implements CourseService {
         if (course.type == 1) {
             return new Pair<>(false, "select course is not admin public");
         }
-        course.ownerId = prepareCourse.user_id;
+        course.ownerId = prepareCourse.userId;
         course.type = 1;
         course.status = 0;
         course.modelId = course.id;
@@ -152,9 +160,13 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
     public Pair<Boolean, Object> AddAdminCourse(AddCourse addCourse) {
         if (ObjectUtils.isEmpty(addCourse.name)) {
             return new Pair<>(false, "name can not be null");
+        }
+        if (courseMapper.hasCourseNameExist(addCourse.name) > 0) {
+            return new Pair<>(false, "course name has been existed");
         }
         if (ObjectUtils.isEmpty(addCourse.picUrl)) {
             return new Pair<>(false, "pic_url  can not be null");
@@ -165,7 +177,7 @@ public class CourseServiceImpl implements CourseService {
         if (ObjectUtils.isEmpty(addCourse.ownerId)) {
             return new Pair<>(false, "owner_id can not be null");
         }
-        if (ObjectUtils.isEmpty(addCourse.chapters)) {
+        if (addCourse.chapters == null) {
             return new Pair<>(false, "chapters can not be null");
         }
         Course course = new Course();
@@ -196,26 +208,35 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
     public Pair<Boolean, String> modifyCourseStatus(ModifyCourseStatus modifyCourseStatus) {
-        if (ObjectUtils.isEmpty(modifyCourseStatus.userId)) {
-            return new Pair<>(false, "user_id can not be null");
+        if (ObjectUtils.isEmpty(modifyCourseStatus.ownerId)) {
+            return new Pair<>(false, "owner_id can not be null");
         }
         if (ObjectUtils.isEmpty(modifyCourseStatus.courseId)) {
             return new Pair<>(false, "course_id  can not be null");
         }
-        if (!UUIDPattern.isValidUUID(modifyCourseStatus.courseId)){
+        if (!UUIDPattern.isValidUUID(modifyCourseStatus.courseId)) {
             return new Pair<>(false, "course_id is not be uuid");
         }
         if (courseMapper.hasCourseExist(modifyCourseStatus.courseId) == 0) {
             return new Pair<>(false, "course is not exist");
         }
         Course course = courseMapper.getCourseByCourseId(modifyCourseStatus.courseId);
-        if (!course.ownerId.equals(modifyCourseStatus.userId)) {
-            return new Pair<>(false, "course is not belong to userId: " + modifyCourseStatus.userId);
+        if (!course.ownerId.equals(modifyCourseStatus.ownerId)) {
+            return new Pair<>(false, "course is not belong to owner_id: " + modifyCourseStatus.ownerId);
         }
         courseMapper.modifyCourseStatus(modifyCourseStatus.courseId, modifyCourseStatus.start, modifyCourseStatus.end);
-        if (!ObjectUtils.isEmpty(modifyCourseStatus.classId)) {
-            classCourseMapper.insertClassCourse(modifyCourseStatus.courseId, modifyCourseStatus.classId);
+        if (modifyCourseStatus.userIds != null && modifyCourseStatus.userIds.size() > 0) {
+            if (!modifyCourseStatus.userIds.stream().allMatch((userId -> userMapper.findUserById(userId) != null
+                    && userMapper.findUserById(userId).getRoleID() == 2))) {
+                return new Pair<>(false, "user_id list is not exist or not all student");
+            }
+            classCourseMapper.deleteByCourseId(modifyCourseStatus.courseId);
+            modifyCourseStatus.userIds.forEach(userId -> {
+                UserEntity userEntity = userMapper.findUserById(userId);
+                classCourseMapper.insertClassCourse(userId, modifyCourseStatus.courseId, userEntity.getClassID());
+            });
         }
         return new Pair<>(true, "");
     }
@@ -278,9 +299,9 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public PageInfo<Course> getCourseList(String userId, String start, String end, Integer perPage, Integer page) {
+    public PageInfo<Course> getCourseList(String userId, String name, String start, String end, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        PageInfo<Course> pageInfo = new PageInfo<>(courseMapper.getCourseList(userId, start, end));
+        PageInfo<Course> pageInfo = new PageInfo<>(courseMapper.getCourseList(userId, name, start, end));
         if (pageInfo.getList().size() > 0) {
             List<Course> list = courseMapper.getCourseListPerfect(pageInfo.getList().stream().map(x -> x.id).collect(Collectors.toList()));
             List<ClassNumber> classNumbers = classMapper.findClassNumber();
@@ -299,12 +320,12 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Pair<Boolean, Object>  getCourseById(String courseId) {
-        if (ObjectUtils.isEmpty(courseId)){
-            return new Pair<>(false,"course_id is not be null");
+    public Pair<Boolean, Object> getCourseById(String courseId) {
+        if (ObjectUtils.isEmpty(courseId)) {
+            return new Pair<>(false, "course_id is not be null");
         }
-        if (!UUIDPattern.isValidUUID(courseId)){
-            return new Pair<>(false,"course_id is not be uuid");
+        if (!UUIDPattern.isValidUUID(courseId)) {
+            return new Pair<>(false, "course_id is not be uuid");
         }
         Course course = courseMapper.getCourseById(courseId);
         List<ClassNumber> classNumbers = classMapper.findClassNumber();
@@ -315,7 +336,7 @@ public class CourseServiceImpl implements CourseService {
         });
         course.chapterNumber = course.chapters.size();
         course.sectionNumber = course.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
-        return new Pair<>(true,course);
+        return new Pair<>(true, course);
     }
 
     @Override
@@ -340,6 +361,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
     public Pair<Boolean, Object> AddAdminCourseCompleted(AddCourseCompleted addCourseCompleted) {
         if (ObjectUtils.isEmpty(addCourseCompleted.courseId)) {
             return new Pair<>(false, "course_id is not be null");
@@ -394,6 +416,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
     public Pair<Boolean, String> insertCourseChapterCompleted(AddChapterCompleted addChapterCompleted) {
         if (ObjectUtils.isEmpty(addChapterCompleted.courseId)) {
             return new Pair<>(false, "course_id is not be null");
@@ -401,7 +424,7 @@ public class CourseServiceImpl implements CourseService {
         if (ObjectUtils.isEmpty(addChapterCompleted.chapter)) {
             return new Pair<>(false, "chapter is not be null");
         }
-        if (!UUIDPattern.isValidUUID(addChapterCompleted.courseId)){
+        if (!UUIDPattern.isValidUUID(addChapterCompleted.courseId)) {
             return new Pair<>(false, "course_id is not be uuid");
         }
         Course course = courseMapper.getCourseById(addChapterCompleted.courseId);

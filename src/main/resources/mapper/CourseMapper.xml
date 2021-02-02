@@ -77,8 +77,8 @@
         FROM course c
         LEFT JOIN class_course cc ON c.id = cc.course_id::uuid
         LEFT JOIN course_chapter_section ccs ON  ccs.course_id = c.id
-        LEFT JOIN chapter ON chapter.id = ccs.chapter_id
-        LEFT JOIN "section" ON "section".id = ccs.section_id
+        LEFT JOIN chapter ON chapter.id = ccs.chapter_id and "chapter".order != -1
+        LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
         WHERE
         c.id  IN
         <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
@@ -129,8 +129,8 @@
         FROM course c
         LEFT JOIN course_chapter_section ccs on ccs.course_id = c.id
         LEFT JOIN class_course cc ON cc.course_id :: uuid = ccs.course_id
-        LEFT JOIN chapter ON chapter.id = ccs.chapter_id
-        LEFT JOIN "section" ON "section".id = ccs.section_id
+        LEFT JOIN chapter ON chapter.id = ccs.chapter_id and "chapter".order != -1
+        LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
         WHERE
         c.id  IN
         <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
@@ -168,9 +168,9 @@ FROM
 	course c
 	LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
 	LEFT JOIN course_chapter_section ccs ON  ccs.course_id  = c.id
-	LEFT JOIN chapter ON chapter.id = ccs.chapter_id
-	LEFT JOIN "section" ON "section".id = ccs.section_id
-	LEFT JOIN "small_section" ON "small_section".id = ccs.small_section_id
+	LEFT JOIN chapter ON chapter.id = ccs.chapter_id and "chapter".order != -1
+	LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
+	LEFT JOIN "small_section" ON "small_section".id = ccs.small_section_id and "small_section".order != -1
 	WHERE c.id = #{courseId}::uuid
     </select>
 
@@ -224,8 +224,8 @@ FROM
         course c
         LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
         LEFT JOIN course_chapter_section ccs ON  ccs.course_id = c.id
-        LEFT JOIN chapter ON chapter.id = ccs.chapter_id
-        LEFT JOIN "section" ON "section".id = ccs.section_id
+        LEFT JOIN chapter ON chapter.id = ccs.chapter_id and "chapter".order != -1
+        LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
         WHERE
         c.id  IN
         <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
@@ -273,8 +273,7 @@ FROM
         FROM
         course c
         INNER JOIN class_course cc ON cc.course_id = c.id
-        INNER JOIN "sim_user" ON sim_user.class_id = cc.class_id
-        AND sim_user."id" = #{userId}
+        AND cc.user_id = #{userId}
         Where c.type = 1
         AND c.STATUS = 1
         <if test = "start != null" >
@@ -282,6 +281,9 @@ FROM
         </if>
         <if test = "end != null" >
             AND c.end_at &lt;= #{end} :: timestamp
+        </if>
+        <if  test = "name != null" >
+            AND c.NAME LIKE concat('%',#{name},'%')
         </if>
     </select>
 
@@ -307,8 +309,8 @@ FROM
         FROM
         course c
         LEFT JOIN course_chapter_section ccs ON  ccs.course_id = c.id
-        LEFT JOIN chapter ON chapter.id = ccs.chapter_id
-        LEFT JOIN "section" ON "section".id = ccs.section_id
+        LEFT JOIN chapter ON chapter.id = ccs.chapter_id and "chapter".order != -1
+        LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
         LEFT JOIN class_course cc ON cc.course_id = ccs.course_id
         WHERE
         c.id  IN
@@ -360,8 +362,8 @@ FROM
 FROM
     course c
         LEFT JOIN course_chapter_section ccs ON  ccs.course_id = c.id
-        LEFT JOIN chapter ON chapter.id = ccs.chapter_id
-        LEFT JOIN "section" ON "section".id = ccs.section_id
+        LEFT JOIN chapter ON chapter.id = ccs.chapter_id and "chapter".order != -1
+        LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
  WHERE
     c.id  IN
 <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
@@ -414,8 +416,8 @@ SELECT
 FROM course c
 	LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
     LEFT JOIN course_chapter_section ccs ON c.id = ccs.course_id
-    LEFT JOIN chapter ON chapter.id = ccs.chapter_id
-    LEFT JOIN "section" ON "section".id = ccs.section_id
+    LEFT JOIN chapter ON chapter.id = ccs.chapter_id and "chapter".order != -1
+    LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
 WHERE
     c.id  IN
 <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
@@ -454,6 +456,10 @@ FROM
 	LEFT JOIN "small_section" ON "small_section".id = ccs.small_section_id and "small_section".order != -1
 WHERE
     c.id = #{courseId} :: uuid
+    </select>
+
+    <select  id="hasCourseNameExist" resultType="int">
+        select count(*) from course where name=#{name} and type = 0
     </select>
 
 </mapper>

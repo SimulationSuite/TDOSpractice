@@ -17,13 +17,17 @@ public interface ExperimentService {
 
     PageInfo<ExperimentEntity> findAllBySectionId(String section_id, Integer perPage, Integer page);
 
-    List<ExperimentEntity> findAllByCategoryId(String category_id);
+    PageInfo<ExperimentEntity> findAllByIds(List<String> section_id, Integer perPage, Integer page);
+
+    PageInfo<ExperimentEntity> findSelectedExperimentByCategory(String category_id, String section_id, String name, Integer perPage, Integer page);
 
     ExperimentEntity findById(String id);
 
     boolean updateExperiment(ExperimentEntity experimentEntity);
 
     boolean deleteExperiment(String id);
+
+    int hasExperiment(String section_id);
 
     long deleteExperimentList(List<String> ids);
 }

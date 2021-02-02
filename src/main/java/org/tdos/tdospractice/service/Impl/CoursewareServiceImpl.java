@@ -23,9 +23,9 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
     private CoursewareMapper coursewareMapper;
 
     @Override
-    public PageInfo<CoursewareEntity> getCoursewareAll(String name, Integer kind, Integer type, String categoryId, Integer perPage,Integer page) {
+    public PageInfo<CoursewareEntity> getCoursewareAll(String name, Integer kind, Integer type, String categoryId, String chapterId, String sectionId, Integer perPage,Integer page) {
         PageHelper.startPage(page, perPage);
-        List<CoursewareEntity> list = coursewareMapper.getCoursewareAll(name, kind, type, categoryId);
+        List<CoursewareEntity> list = coursewareMapper.getCoursewareAll(name, kind, type, categoryId, chapterId, sectionId);
         return new PageInfo<>(list);
     }
 
@@ -62,10 +62,8 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
         Map<String, Object> map = new HashMap<>();
         List<String> sectionCourseware = new ArrayList<String>();
         id.forEach(x -> {
-            if (coursewareMapper.ifSectionCourseware(x)){
-                if(!coursewareMapper.ifSectionCoursewarePub(x)){
-                    sectionCourseware.add(x);
-                }
+            if (coursewareMapper.hasChapterSectionCoursewareId(x) > 0){
+                sectionCourseware.add(x);
             }
         });
         if (sectionCourseware.size() > 0){
@@ -75,11 +73,23 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
             return map;
         }
         id.forEach(x -> {
-            coursewareMapper.deleteChapterSectionCourseById(x);
             coursewareMapper.deleteCoursewareById(x);
         });
         map.put("isDelete", true);
         map.put("deleteId", sectionCourseware);
+        return map;
+    }
+
+    @Override
+    public Map<String, Object> deleteChapterSectionCourseById(List<ChapterSectionCourseware> chapterSectionCoursewareList) {
+        Map<String, Object> map = new HashMap<>();
+        List<ChapterSectionCourseware> deleteChapterSectionCoursewareList = new ArrayList<ChapterSectionCourseware>();
+        chapterSectionCoursewareList.forEach(x -> {
+            coursewareMapper.deleteChapterSectionCourseById(x.chapterId, x.sectionId, x.coursewareId);
+            deleteChapterSectionCoursewareList.add(x);
+        });
+        map.put("isDelete", true);
+        map.put("deleteId", deleteChapterSectionCoursewareList);
         return map;
     }
 

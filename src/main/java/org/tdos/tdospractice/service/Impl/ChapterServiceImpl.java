@@ -3,6 +3,7 @@ package org.tdos.tdospractice.service.Impl;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.tdos.tdospractice.body.DeleteChapter;
 import org.tdos.tdospractice.body.InsertChapter;
@@ -44,6 +45,7 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
     @Override
+    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     public Pair<Boolean, String> addChapter(InsertChapter insertChapter) {
         if (courseMapper.hasCourseExist(insertChapter.courseId) == 0) {
             return new Pair<>(false, "course is not exist");
@@ -67,6 +69,7 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
     @Override
+    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
     public Pair<Boolean, String> removeChapter(DeleteChapter deleteChapter) {
         if (!UUIDPattern.isValidUUID(deleteChapter.chapterId)){
             return new Pair<>(false, "chapter_id is not be uuid");

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.tdos.tdospractice.mapper.ExperimentReportMapper">
+    <insert id="insert" parameterType="org.tdos.tdospractice.entity.ExperimentReportEntity" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into
+        experiment_report(user_id,info)
+        values(#{user_id},#{info})
+    </insert>
+
+    <select id="findByExperimentReport" resultType="org.tdos.tdospractice.entity.ExperimentReportEntity">
+        select * from experiment_report
+        <if test="id != null and id != ''">
+            id=#{id}::uuid
+        </if>
+        <if test="experiment_id != null and experiment_id != ''">
+            and experiment_id = #{experiment_id}
+        </if>
+        <if test="user_id != null and user_id != ''">
+            and user_id=#{user_id}
+        </if>
+    </select>
+
+    <update id="updateExperimentReport">
+        update experiment
+        <set>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="score != null">
+                score = #{score},
+            </if>
+        </set>
+        where id = #{id}::uuid
+    </update>
+
+    <update id="updateExperimentReportByEndtime">
+        update experiment_report SET score = 0 , iscorrect = 1 , status = 1 WHERE end_at &lt; current_date AND status = 0 AND iscorrect = 0
+    </update>
+
+</mapper>

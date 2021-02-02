@@ -22,9 +22,9 @@ public class QuestionBackServiceImpl implements QuestionBackService {
     private QuestionBackMapper questionBackMapper;
 
     @Override
-    public PageInfo<QuestionBackEntity> getQuestionBackAll(Integer type, String content, String categoryId, Integer perPage, Integer page) {
+    public PageInfo<QuestionBackEntity> getQuestionBackAll(Integer type, String content, String categoryId, String assignmentId, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        List<QuestionBackEntity> list = questionBackMapper.getQuestionBackAll(type, categoryId, content);
+        List<QuestionBackEntity> list = questionBackMapper.getQuestionBackAll(type, categoryId, content, assignmentId);
         return new PageInfo<>(list);
     }
 
@@ -34,10 +34,7 @@ public class QuestionBackServiceImpl implements QuestionBackService {
         List<String> sectionQuestionBack = new ArrayList<>();
         id.forEach(x -> {
             if (questionBackMapper.ifExistId(x)){
-                if (!questionBackMapper.ifSectionQuestionBackByQuestionBackId(x))
-                {
-                    sectionQuestionBack.add(x);
-                }
+                sectionQuestionBack.add(x);
             }
         });
         if (sectionQuestionBack.size() > 0){

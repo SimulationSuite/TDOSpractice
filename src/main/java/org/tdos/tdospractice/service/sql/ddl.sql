@@ -62,11 +62,12 @@ create trigger t_name before update on course for each row execute procedure upd
 
 
 create table if not exists class_course(
-    class_id UUID references "class"("id") on delete cascade NOT NULL,
+    user_id varchar(255) references "sim_user"("id") on delete cascade NOT NULL,
     course_id UUID references "course"("id") on delete cascade NOT NULL,
+    class_id UUID references "class"("id") on delete cascade NOT NULL,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    CONSTRAINT "class_course_pk" PRIMARY KEY ( "class_id", "course_id" )
+    CONSTRAINT "class_course_pk" PRIMARY KEY ( "user_id", "course_id" )
 );
 
 create trigger t_name before update on class_course for each row execute procedure upd_timestamp();
@@ -243,11 +244,12 @@ create table if not exists experiment(
     id UUID primary key DEFAULT uuid_generate_v4(),
     "name" varchar(255) NOT NULL,
     pic_url varchar(255) DEFAULT null,
-    end_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
+    end_at TIMESTAMP(0)  without time zone default NULL,
     step text DEFAULT null,
     duration int8 DEFAULT 0,
     category_id varchar(255) NOT null,
     introduce varchar(255) DEFAULT null,
+    report_requirement varchar(255) DEFAULT null,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
@@ -310,6 +312,8 @@ create table if not exists experiment_report(
     info text DEFAULT null,
     score int4 DEFAULT NULL,
     status int4 default 0,
+    isCorrect int4 default 0,
+    end_at TIMESTAMP(0)  without time zone,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     CONSTRAINT "experiment_report_pk" PRIMARY KEY ( "experiment_id", "user_id")

@@ -12,7 +12,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface CoursewareMapper {
-    List<CoursewareEntity> getCoursewareAll(@Param("name") String name, @Param("kind") Integer kind, @Param("type") Integer type, @Param("categoryId") String categoryId);
+    List<CoursewareEntity> getCoursewareAll(@Param("name") String name, @Param("kind") Integer kind, @Param("type") Integer type, @Param("categoryId") String categoryId, @Param("chapterId") String chapterId, @Param("sectionId") String sectionId);
 
     List<CoursewareEntity> getCoursewareByClassId(@Param("classId") String classId);
 
@@ -24,7 +24,7 @@ public interface CoursewareMapper {
 
     int deleteCoursewareById(@Param("id") String id);
 
-    int deleteChapterSectionCourseById(@Param("id") String id);
+    int deleteChapterSectionCourseById(@Param("chapterId") String chapterId, @Param("sectionId") String sectionId, @Param("coursewareId") String coursewareId);
 
     int modifyCoursewareNameById(@Param("id") String id, @Param("coursewareName") String coursewareName);
 
@@ -37,4 +37,6 @@ public interface CoursewareMapper {
     int addChapterSectionCourseware(ChapterSectionCoursewareEntity chapterSectionCoursewareEntity);
 
     int hasSectionCoursewareId(String id);
+
+    int hasChapterSectionCoursewareId(String coursewareId);
 }
