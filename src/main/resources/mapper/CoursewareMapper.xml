@@ -22,10 +22,10 @@
             and c.category_id = #{categoryId}
         </if>
         <if test="chapterId != null and chapterId != ''" >
-            and c.id not in select csc.courseware_id from chapter_section_courseware csc where csc.chapter_id = #{chapterId}
+            and c.id not in (select csc.courseware_id from chapter_section_courseware csc where csc.chapter_id = #{chapterId}::uuid)
         </if>
         <if test="sectionId != null and sectionId != ''" >
-            and c.id not in select csc.courseware_id from chapter_section_courseware csc where csc.section_id = #{sectionId}
+            and c.id not in (select csc.courseware_id from chapter_section_courseware csc where csc.section_id = #{sectionId}::uuid)
         </if>
     </select>
 
