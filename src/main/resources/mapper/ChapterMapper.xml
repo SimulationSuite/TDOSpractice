@@ -12,6 +12,9 @@
                 <id column="section_id" property="id"/>
                 <result column="section_name" property="name"/>
                 <result column="section_order" property="order"/>
+                <result column="section_kind" property="kind"/>
+                <result column="section_has_assignment" property="sectionHasAssignment"/>
+                <result column="section_has_report" property="sectionHasReport"/>
                 <collection property="smallSections" ofType="org.tdos.tdospractice.type.SmallSection">
                     <id column="small_section_id" property="id"/>
                     <result column="small_section_name" property="name"/>
@@ -51,6 +54,32 @@ FROM "chapter"
 	LEFT JOIN course_chapter_section ccs ON  ccs.chapter_id = "chapter".id
 	LEFT JOIN "section" ON "section".id = ccs.section_id
 	LEFT JOIN "small_section" ON  "small_section".id = ccs.small_section_id
+	WHERE "chapter".id = #{chapterId}::uuid
+    </select>
+
+    <select id="getSlightChapter" resultMap="ChapterResult">
+        SELECT
+	chapter.id :: "varchar" AS chapter_id,
+	chapter.NAME AS chapter_name,
+	chapter."order" AS chapter_order,
+	section.id :: "varchar" AS section_id,
+	section.NAME AS section_name,
+	section.ORDER AS section_order,
+	small_section.id :: "varchar" AS small_section_id,
+	small_section.NAME AS small_section_name,
+	small_section.ORDER AS small_section_order,
+	courseware.kind As section_kind,
+	case  WHEN a.id IS null THEN 0 else 1 END as section_has_assignment,
+	case  WHEN er.experiment_id IS null THEN 0 else 1 END as section_has_report
+FROM "chapter"
+	LEFT JOIN course_chapter_section ccs ON  ccs.chapter_id = "chapter".id
+	LEFT JOIN "section" ON "section".id = ccs.section_id
+	LEFT JOIN "small_section" ON  "small_section".id = ccs.small_section_id
+	LEFT JOIN chapter_section_courseware csc on csc.chapter_id = section.id
+    LEFT JOIN courseware on courseware."id" = csc.courseware_id
+	LEFT JOIN "assignment" a on a.section_id = section.id
+	LEFT JOIN chapter_section_experiment cse on cse.section_id = section.id
+	LEFT JOIN experiment_report er on er.experiment_id = cse.experiment_id
 	WHERE "chapter".id = #{chapterId}::uuid
     </select>
 

@@ -21,6 +21,7 @@
             <id column="chapter_id" property="id"/>
             <result column="chapter_name" property="name"/>
             <result column="chapter_order" property="order"/>
+            <result column="chapter_kind" property="kind"/>
             <collection property="sections" ofType="org.tdos.tdospractice.type.Section">
                 <id column="section_id" property="id"/>
                 <result column="section_name" property="name"/>
@@ -446,6 +447,7 @@ SELECT
 	chapter.id :: "varchar" AS chapter_id,
 	chapter.NAME AS chapter_name,
 	chapter."order" AS chapter_order,
+	courseware.kind As chapter_kind,
 	section.id :: "varchar" AS section_id,
 	section.NAME AS section_name,
 	section."order" AS section_order,
@@ -459,6 +461,8 @@ FROM
 	LEFT JOIN chapter ON chapter.id = ccs.chapter_id and "chapter".order != -1
 	LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
 	LEFT JOIN "small_section" ON "small_section".id = ccs.small_section_id and "small_section".order != -1
+	LEFT JOIN chapter_section_courseware csc on csc.chapter_id = chapter.id
+    LEFT JOIN courseware on courseware."id" = csc.courseware_id
 WHERE
     c.id = #{courseId} :: uuid
     </select>

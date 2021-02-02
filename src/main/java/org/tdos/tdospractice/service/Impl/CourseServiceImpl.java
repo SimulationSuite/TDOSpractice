@@ -57,6 +57,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public PageInfo<Course> getAdminCourseList(Integer perPage, Integer page, String name) {
         PageHelper.startPage(page, perPage);
+        PageHelper.orderBy("c.created_at desc");
         PageInfo<Course> pageInfo = new PageInfo<>(courseMapper.getAdminCourseList(name));
         if (pageInfo.getList().size() > 0) {
             List<Course> courses = courseMapper.getAdminCourseListPerfect(pageInfo.getList().stream().map(x -> x.id).collect(Collectors.toList()));
@@ -88,6 +89,7 @@ public class CourseServiceImpl implements CourseService {
             return new Pair<>(false, "class_id is not be uuid");
         }
         PageHelper.startPage(page, perPage);
+        PageHelper.orderBy("c.created_at desc");
         PageInfo<Course> pageInfo = new PageInfo<>(courseMapper.getAdminCourseListByClassId(classId));
         if (pageInfo.getList().size() > 0) {
             List<Course> list = courseMapper.getAdminCourseListByClassIdPerfect(pageInfo.getList().stream().map(x -> x.id).collect(Collectors.toList()));
@@ -141,6 +143,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public PageInfo<Course> getCourseListById(String userId, Integer perPage, Integer page, String name) {
         PageHelper.startPage(page, perPage);
+        PageHelper.orderBy("c.created_at desc");
         List<Course> courses = courseMapper.getCourseListById(userId, name);
         PageInfo<Course> pageInfo = new PageInfo<>(courses);
         if (courses.size() > 0) {
@@ -245,6 +248,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public PageInfo<Course> getAdminUnpublishedCourseList(String userId, Integer perPage, Integer page, String name) {
         PageHelper.startPage(page, perPage, true, true);
+        PageHelper.orderBy("c.created_at desc");
         List<Course> courses = courseMapper.getAdminUnpublishedCourseList(userId, name);
         PageInfo<Course> list = new PageInfo<>(courses);
         if (list.getList().size() > 0) {
@@ -302,6 +306,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public PageInfo<Course> getCourseList(String userId, String name, String start, String end, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
+        PageHelper.orderBy("c.created_at desc");
         PageInfo<Course> pageInfo = new PageInfo<>(courseMapper.getCourseList(userId, name, start, end));
         if (pageInfo.getList().size() > 0) {
             List<Course> list = courseMapper.getCourseListPerfect(pageInfo.getList().stream().map(x -> x.id).collect(Collectors.toList()));
@@ -345,6 +350,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public PageInfo<Course> getExpiredList(Integer perPage, Integer page, String name) {
         PageHelper.startPage(page, perPage);
+        PageHelper.orderBy("c.created_at desc");
         PageInfo<Course> pageInfo = new PageInfo<>(courseMapper.getExpiredList(name));
         if (pageInfo.getList().size() > 0) {
             List<Course> list = courseMapper.getExpiredListPerfect(pageInfo.getList().stream().map(x -> x.id).collect(Collectors.toList()));
@@ -514,6 +520,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public PageInfo<Course> getChangedList(Integer perPage, Integer page, String name) {
         PageHelper.startPage(page, perPage);
+        PageHelper.orderBy("c.created_at desc");
         PageInfo<Course> pageInfo = new PageInfo<>(courseMapper.getChangedList(name));
         if (pageInfo.getList().size() > 0) {
             List<Course> list = courseMapper.getChangedListPerfect(pageInfo.getList().stream().map(x -> x.id).collect(Collectors.toList()));
