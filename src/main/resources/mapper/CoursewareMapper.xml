@@ -72,8 +72,8 @@
         c.duration, c.size, c.created_at as createdAt, c.updated_at as updatedAt
         from chapter_section_courseware csc
         inner join courseware c on c.id = csc.courseware_id
-        inner join course_chapter_section ccs on (ccs.section_id = csc.section_id or ccs.chapter_id = csc.chapter_id)
-        where ccs.course_id =#{courseId} ::uuid
+        where (csc.section_id in select distinct section_id from course_chapter_section where course_id =#{courseId} ::uuid)
+        or (csc.chapter_id in select distinct chapter_id from course_chapter_section where course_id =#{courseId} ::uuid)
         <if test="kind != null" >
             and c.kind = #{kind}
         </if>
