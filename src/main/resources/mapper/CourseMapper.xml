@@ -50,7 +50,7 @@
         FROM course c
         Where c.type = 0
         AND c.STATUS = 1
-        <if test = "name != null" >
+        <if test = "name != null and name != ''" >
             AND c.NAME LIKE concat('%',#{name},'%')
         </if>
     </select>
@@ -101,7 +101,7 @@
         FROM course c
         Where c.type = 0
         AND c.STATUS = 0
-        <if test="name != null" >
+        <if test="name != null and name != ''" >
             AND c.NAME LIKE concat('%',#{name},'%')
         </if>
         AND c.owner_id = #{userId}
@@ -196,7 +196,7 @@ FROM
         LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
         WHERE c.type = 1
         AND c.owner_id = #{userId}
-        <if  test = "name != null" >
+        <if  test = "name != null and name != ''" >
             AND c.NAME LIKE concat('%',#{name},'%')
         </if>
     </select>
@@ -249,10 +249,10 @@ FROM
 
     <update  id="modifyCourseStatus">
         update course set status = 1
-        <if test="start != null">
+        <if test="start != null and start != ''">
             , start_at = #{start} :: timestamp
         </if>
-        <if test="end != null">
+        <if test="end != null and end != ''">
             , end_at = #{end} :: timestamp
         </if>
         where id= #{courseId}::uuid
@@ -281,13 +281,13 @@ FROM
         AND cc.user_id = #{userId}
         Where c.type = 1
         AND c.STATUS = 1
-        <if test = "start != null" >
+        <if test = "start != null and start != '' " >
             AND c.start_at &gt;= #{start} :: timestamp
         </if>
-        <if test = "end != null" >
+        <if test = "end != null and end != ''" >
             AND c.end_at &lt;= #{end} :: timestamp
         </if>
-        <if  test = "name != null" >
+        <if  test = "name != null and name != ''" >
             AND c.NAME LIKE concat('%',#{name},'%')
         </if>
     </select>
@@ -341,7 +341,7 @@ FROM
 	WHERE c.type = 1
 	AND c.STATUS = 1
 	AND c.end_at &lt; now( ) ::TIMESTAMP
-    <if  test = "name != null" >
+    <if  test = "name != null and name != ''" >
         AND c.NAME LIKE concat('%',#{name},'%')
     </if>
     </select>
@@ -483,7 +483,7 @@ WHERE
         FROM
         course c
         WHERE c.STATUS = 2
-        <if  test = "name != null" >
+        <if  test = "name != null and name != ''" >
             AND c.NAME LIKE concat('%',#{name},'%')
         </if>
     </select>
