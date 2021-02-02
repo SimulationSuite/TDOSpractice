@@ -21,7 +21,8 @@
             <id column="chapter_id" property="id"/>
             <result column="chapter_name" property="name"/>
             <result column="chapter_order" property="order"/>
-            <result column="chapter_kind" property="kind"/>
+            <result column="chapter_has_video" property="chapterHasVideo"/>
+            <result column="chapter_has_pdf" property="chapterHasPdf"/>
             <collection property="sections" ofType="org.tdos.tdospractice.type.Section">
                 <id column="section_id" property="id"/>
                 <result column="section_name" property="name"/>
@@ -447,7 +448,8 @@ SELECT
 	chapter.id :: "varchar" AS chapter_id,
 	chapter.NAME AS chapter_name,
 	chapter."order" AS chapter_order,
-	courseware.kind As chapter_kind,
+	case  WHEN courseware.kind = 0 THEN 1 else 0 END as chapter_has_video,
+	case  WHEN courseware.kind = 1 THEN 1 else 0 END as chapter_has_pdf,
 	section.id :: "varchar" AS section_id,
 	section.NAME AS section_name,
 	section."order" AS section_order,

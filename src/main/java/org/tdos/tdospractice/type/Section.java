@@ -17,8 +17,11 @@ public class Section {
     @JsonProperty("small_sections")
     public List<SmallSection> smallSections;
 
-    @JsonProperty("section_kind")
-    public Integer kind;
+    @JsonProperty("section_has_video")
+    public Boolean sectionHasVideo;
+
+    @JsonProperty("section_has_pdf")
+    public Boolean sectionHasPdf;
 
     @JsonProperty("section_has_assignment")
     public Boolean sectionHasAssignment;

@@ -12,7 +12,8 @@
                 <id column="section_id" property="id"/>
                 <result column="section_name" property="name"/>
                 <result column="section_order" property="order"/>
-                <result column="section_kind" property="kind"/>
+                <result column="section_has_video" property="sectionHasVideo"/>
+                <result column="section_has_pdf" property="sectionHasPdf"/>
                 <result column="section_has_assignment" property="sectionHasAssignment"/>
                 <result column="section_has_report" property="sectionHasReport"/>
                 <collection property="smallSections" ofType="org.tdos.tdospractice.type.SmallSection">
@@ -68,7 +69,8 @@ FROM "chapter"
 	small_section.id :: "varchar" AS small_section_id,
 	small_section.NAME AS small_section_name,
 	small_section.ORDER AS small_section_order,
-	courseware.kind As section_kind,
+	case  WHEN courseware.kind = 0 THEN 0 else 1 END as section_has_video,
+	case  WHEN courseware.kind = 1 IS null THEN 0 else 1 END as section_has_pdf,
 	case  WHEN a.id IS null THEN 0 else 1 END as section_has_assignment,
 	case  WHEN er.experiment_id IS null THEN 0 else 1 END as section_has_report
 FROM "chapter"

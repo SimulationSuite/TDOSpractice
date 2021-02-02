@@ -16,7 +16,10 @@ public class Chapter {
 
     public List<Section> sections;
 
-    @JsonProperty("chapter_kind")
-    public Integer kind;
+    @JsonProperty("chapter_has_video")
+    public Boolean chapterHasVideo;
+
+    @JsonProperty("chapter_has_pdf")
+    public Boolean chapterHasPdf;
 
 }
