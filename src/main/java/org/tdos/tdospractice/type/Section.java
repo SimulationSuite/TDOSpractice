@@ -26,7 +26,7 @@ public class Section {
     @JsonProperty("section_has_assignment")
     public Boolean sectionHasAssignment;
 
-    @JsonProperty("section_has_report")
-    public Boolean sectionHasReport;
+    @JsonProperty("section_has_experiment")
+    public Boolean sectionHasExperiment;
 
 }
