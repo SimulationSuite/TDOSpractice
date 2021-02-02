@@ -453,32 +453,27 @@ public class CourseServiceImpl implements CourseService {
         if (chapter.sections.size() > 0) {
             chapter.sections.forEach(section -> {
                 sectionMapper.insertSection(section);
-                if (section.smallSections.size() != 0) {
-                    section.smallSections.forEach(smallSection -> {
-                        smallSectionMapper.insertSmallSection(smallSection);
-                        list.add(CourseChapterSectionEntity.builder().courseId(course.id)
-                                .chapterId(chapter.id)
-                                .sectionId(section.id)
-                                .smallSectionId(smallSection.id)
-                                .build());
-                    });
-
-                } else {
+                section.smallSections.forEach(smallSection -> {
+                    smallSectionMapper.insertSmallSection(smallSection);
                     list.add(CourseChapterSectionEntity.builder().courseId(course.id)
                             .chapterId(chapter.id)
                             .sectionId(section.id)
-                            .smallSectionId(EMPTY_UUID)
+                            .smallSectionId(smallSection.id)
                             .build());
-                }
-
+                });
+                list.add(CourseChapterSectionEntity.builder().courseId(course.id)
+                        .chapterId(chapter.id)
+                        .sectionId(section.id)
+                        .smallSectionId(EMPTY_UUID)
+                        .build());
             });
-        } else {
-            list.add(CourseChapterSectionEntity.builder().courseId(course.id)
-                    .chapterId(chapter.id)
-                    .sectionId(EMPTY_UUID)
-                    .smallSectionId(EMPTY_UUID)
-                    .build());
         }
+        list.add(CourseChapterSectionEntity.builder().courseId(course.id)
+                .chapterId(chapter.id)
+                .sectionId(EMPTY_UUID)
+                .smallSectionId(EMPTY_UUID)
+                .build());
+
         if (list.size() > 0) {
             courseChapterSectionMapper.insertCourseChapterSectionList(list);
         }

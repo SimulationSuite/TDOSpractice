@@ -81,7 +81,7 @@ public class ChapterServiceImpl implements ChapterService {
             return new Pair<>(false, "chapter is not exist");
         }
         Chapter chapter = chapterMapper.getChapter(deleteChapter.chapterId);
-        chapter.sections.forEach(x-> sectionMapper.removeSection(x.id));
+        chapter.sections.stream().filter(section -> !section.id.equals(EMPTY_UUID)).forEach(x-> sectionMapper.removeSection(x.id));
         chapterMapper.removeChapter(deleteChapter.chapterId);
         return new Pair<>(true, "");
     }

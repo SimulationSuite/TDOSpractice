@@ -47,7 +47,7 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
-    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
     public Pair<Boolean, String> addSection(InsertSection insertSection) {
         if (courseMapper.hasCourseExist(insertSection.courseId) == 0) {
             return new Pair<>(false, "course is not exist");
@@ -74,19 +74,19 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
-    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
     public Pair<Boolean, String> removeSection(DeleteSection deleteSection) {
-        if (ObjectUtils.isEmpty(deleteSection.sectionId)){
+        if (ObjectUtils.isEmpty(deleteSection.sectionId)) {
             return new Pair<>(false, "section is not exist");
         }
-        if (!UUIDPattern.isValidUUID(deleteSection.sectionId)){
+        if (!UUIDPattern.isValidUUID(deleteSection.sectionId)) {
             return new Pair<>(false, "section_id is not be uuid");
         }
         if (sectionMapper.hasSection(deleteSection.sectionId) == 0) {
             return new Pair<>(false, "section is not exist");
         }
         Section section = sectionMapper.getSection(deleteSection.sectionId);
-        section.smallSections.forEach(x-> smallSectionMapper.removeSmallSection(x.id));
+        section.smallSections.stream().filter(smallSection -> !smallSection.id.equals(EMPTY_UUID)).forEach(x -> smallSectionMapper.removeSmallSection(x.id));
         sectionMapper.removeSection(deleteSection.sectionId);
         return new Pair<>(true, "");
     }
