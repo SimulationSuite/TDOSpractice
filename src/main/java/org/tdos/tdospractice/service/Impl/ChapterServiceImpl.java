@@ -45,7 +45,7 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
     @Override
-    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
     public Pair<Boolean, String> addChapter(InsertChapter insertChapter) {
         if (courseMapper.hasCourseExist(insertChapter.courseId) == 0) {
             return new Pair<>(false, "course is not exist");
@@ -53,9 +53,9 @@ public class ChapterServiceImpl implements ChapterService {
         Integer order = courseMapper.findCourseChapterOrder(insertChapter.courseId);
         Chapter chapter = new Chapter();
         chapter.name = insertChapter.chapterName;
-        if (order == null){
+        if (order == null) {
             chapter.order = 0;
-        }else{
+        } else {
             chapter.order = order + 1;
         }
         chapterMapper.insertChapter(chapter);
@@ -69,21 +69,36 @@ public class ChapterServiceImpl implements ChapterService {
     }
 
     @Override
-    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
     public Pair<Boolean, String> removeChapter(DeleteChapter deleteChapter) {
-        if (!UUIDPattern.isValidUUID(deleteChapter.chapterId)){
-            return new Pair<>(false, "chapter_id is not be uuid");
+        if (ObjectUtils.isEmpty(deleteChapter.chapterId)) {
+            return new Pair<>(false, "chapter is not be null");
         }
-        if (ObjectUtils.isEmpty(deleteChapter.chapterId)){
-            return new Pair<>(false, "chapter is not exist");
+        if (!UUIDPattern.isValidUUID(deleteChapter.chapterId)) {
+            return new Pair<>(false, "chapter_id is not be uuid");
         }
         if (chapterMapper.hasChapter(deleteChapter.chapterId) == 0) {
             return new Pair<>(false, "chapter is not exist");
         }
         Chapter chapter = chapterMapper.getChapter(deleteChapter.chapterId);
-        chapter.sections.stream().filter(section -> !section.id.equals(EMPTY_UUID)).forEach(x-> sectionMapper.removeSection(x.id));
+        chapter.sections.stream().filter(section -> !section.id.equals(EMPTY_UUID)).forEach(x -> sectionMapper.removeSection(x.id));
         chapterMapper.removeChapter(deleteChapter.chapterId);
         return new Pair<>(true, "");
+    }
+
+    @Override
+    public Pair<Boolean, Object> getChapter(String chapterId) {
+        if (ObjectUtils.isEmpty(chapterId)) {
+            return new Pair<>(false, "chapter is not be null");
+        }
+        if (!UUIDPattern.isValidUUID(chapterId)) {
+            return new Pair<>(false, "chapter_id is not be uuid");
+        }
+        if (chapterMapper.hasChapter(chapterId) == 0) {
+            return new Pair<>(false, "chapter is not exist");
+        }
+        Chapter chapter = chapterMapper.getSlightChapter(chapterId);
+        return new Pair<>(true, chapter);
     }
 
 }

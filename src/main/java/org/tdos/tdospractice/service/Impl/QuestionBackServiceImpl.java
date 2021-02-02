@@ -40,7 +40,7 @@ public class QuestionBackServiceImpl implements QuestionBackService {
         if (sectionQuestionBack.size() > 0){
             map.put("isDelete", false);
             map.put("notDeleteId", sectionQuestionBack);
-            map.put("reason", "题目关联课程为已发布课程。");
+            map.put("reason", "题目已被关联。");
             return map;
         }
         id.forEach(x -> questionBackMapper.deleteQuestionBackById(x));

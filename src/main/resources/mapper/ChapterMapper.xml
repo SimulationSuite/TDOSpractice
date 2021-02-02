@@ -12,6 +12,10 @@
                 <id column="section_id" property="id"/>
                 <result column="section_name" property="name"/>
                 <result column="section_order" property="order"/>
+                <result column="section_has_video" property="sectionHasVideo"/>
+                <result column="section_has_pdf" property="sectionHasPdf"/>
+                <result column="section_has_assignment" property="sectionHasAssignment"/>
+                <result column="section_has_experiment" property="sectionHasExperiment"/>
                 <collection property="smallSections" ofType="org.tdos.tdospractice.type.SmallSection">
                     <id column="small_section_id" property="id"/>
                     <result column="small_section_name" property="name"/>
@@ -49,9 +53,36 @@
 	small_section.ORDER AS small_section_order
 FROM "chapter"
 	LEFT JOIN course_chapter_section ccs ON  ccs.chapter_id = "chapter".id
-	LEFT JOIN "section" ON "section".id = ccs.section_id
-	LEFT JOIN "small_section" ON  "small_section".id = ccs.small_section_id
-	WHERE "chapter".id = #{chapterId}::uuid
+	LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
+	LEFT JOIN "small_section" ON  "small_section".id = ccs.small_section_id and "small_section".order != -1
+	WHERE "chapter".id = #{chapterId}::uuid and "chapter".order != -1
+    </select>
+
+    <select id="getSlightChapter" resultMap="ChapterResult">
+        SELECT
+	chapter.id :: "varchar" AS chapter_id,
+	chapter.NAME AS chapter_name,
+	chapter."order" AS chapter_order,
+	section.id :: "varchar" AS section_id,
+	section.NAME AS section_name,
+	section.ORDER AS section_order,
+	small_section.id :: "varchar" AS small_section_id,
+	small_section.NAME AS small_section_name,
+	small_section.ORDER AS small_section_order,
+	case  WHEN courseware.kind = 0 THEN 0 else 1 END as section_has_video,
+	case  WHEN courseware.kind = 1 IS null THEN 0 else 1 END as section_has_pdf,
+	case  WHEN a.id IS null THEN 0 else 1 END as section_has_assignment,
+	case  WHEN e.id IS null THEN 0 else 1 END as section_has_experiment
+FROM "chapter"
+	LEFT JOIN course_chapter_section ccs ON  ccs.chapter_id = "chapter".id
+	LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
+	LEFT JOIN "small_section" ON  "small_section".id = ccs.small_section_id and "small_section".order != -1
+	LEFT JOIN chapter_section_courseware csc on csc.chapter_id = section.id
+    LEFT JOIN courseware on courseware."id" = csc.courseware_id
+	LEFT JOIN "assignment" a on a.section_id = section.id
+	LEFT JOIN chapter_section_experiment cse on cse.section_id = section.id
+	LEFT JOIN experiment e on e.id = cse.experiment_id
+	WHERE "chapter".id = #{chapterId}::uuid and "chapter".order != -1
     </select>
 
 </mapper>

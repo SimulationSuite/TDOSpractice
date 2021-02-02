@@ -27,4 +27,6 @@ public class StudentAssignment {
 
     private LocalDateTime endAt;
 
+    private String className;
+
 }

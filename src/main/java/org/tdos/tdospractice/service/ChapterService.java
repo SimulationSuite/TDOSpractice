@@ -11,4 +11,6 @@ public interface ChapterService {
     Pair<Boolean, String> addChapter(InsertChapter insertChapter);
 
     Pair<Boolean, String> removeChapter(DeleteChapter deleteChapter);
+
+    Pair<Boolean, Object> getChapter(String chapterId);
 }

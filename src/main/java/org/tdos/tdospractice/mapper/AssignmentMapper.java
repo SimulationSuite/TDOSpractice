@@ -19,7 +19,7 @@ public interface AssignmentMapper {
 
     List<StudentAnswerEntity> getSubStudentAssignmentBySectionId(@Param("sectionId") String sectionId);
 
-    List<StudentAssignment> getAssignmentAll(@Param("classId") String classId, @Param("courseId") String courseId, @Param("chapterId") String chapterId, @Param("sectionId") String sectionId, @Param("name") String name);
+    List<StudentAssignment> getAssignmentAll(@Param("classId") String classId, @Param("courseId") String courseId, @Param("chapterId") String chapterId, @Param("sectionId") String sectionId, @Param("name") String name, @Param("startTime") String startTime, @Param("endTime") String endTime);
 
     List<AssignmentEntity> getAssignmentByClassId(@Param("classId") String classId);
 

@@ -18,4 +18,6 @@ public interface ChapterMapper {
     Chapter getChapter(String chapterId);
 
     int removeChapter(String chapterId);
+
+    Chapter getSlightChapter(String chapterId);
 }

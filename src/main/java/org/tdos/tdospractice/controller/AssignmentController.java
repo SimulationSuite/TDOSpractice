@@ -44,9 +44,11 @@ public class AssignmentController {
                                                                   @RequestParam(value = "sectionId",required = false) String sectionId,
                                                                   @RequestParam(value = "status",required = false) Integer status,
                                                                   @RequestParam(value = "name",required = false) String name,
+                                                                  @RequestParam(value = "startTime",required = false) String startTime,
+                                                                  @RequestParam(value = "endTime",required = false) String endTime,
                                                                   @RequestParam(value = "perPage") Integer perPage,
                                                                   @RequestParam(value = "page") Integer page) {
-        return Response.success(assignmentService.getAssignmentAll(classId, courseId, chapterId, sectionId, status, name, perPage, page));
+        return Response.success(assignmentService.getAssignmentAll(classId, courseId, chapterId, sectionId, status, name, startTime, endTime, perPage, page));
     }
 
     @GetMapping(value = "/getAssignmentByClassId")
