@@ -53,9 +53,9 @@
 	small_section.ORDER AS small_section_order
 FROM "chapter"
 	LEFT JOIN course_chapter_section ccs ON  ccs.chapter_id = "chapter".id
-	LEFT JOIN "section" ON "section".id = ccs.section_id
-	LEFT JOIN "small_section" ON  "small_section".id = ccs.small_section_id
-	WHERE "chapter".id = #{chapterId}::uuid
+	LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
+	LEFT JOIN "small_section" ON  "small_section".id = ccs.small_section_id and "small_section".order != -1
+	WHERE "chapter".id = #{chapterId}::uuid and "chapter".order != -1
     </select>
 
     <select id="getSlightChapter" resultMap="ChapterResult">
@@ -75,14 +75,14 @@ FROM "chapter"
 	case  WHEN er.experiment_id IS null THEN 0 else 1 END as section_has_report
 FROM "chapter"
 	LEFT JOIN course_chapter_section ccs ON  ccs.chapter_id = "chapter".id
-	LEFT JOIN "section" ON "section".id = ccs.section_id
-	LEFT JOIN "small_section" ON  "small_section".id = ccs.small_section_id
+	LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
+	LEFT JOIN "small_section" ON  "small_section".id = ccs.small_section_id and "small_section".order != -1
 	LEFT JOIN chapter_section_courseware csc on csc.chapter_id = section.id
     LEFT JOIN courseware on courseware."id" = csc.courseware_id
 	LEFT JOIN "assignment" a on a.section_id = section.id
 	LEFT JOIN chapter_section_experiment cse on cse.section_id = section.id
 	LEFT JOIN experiment_report er on er.experiment_id = cse.experiment_id
-	WHERE "chapter".id = #{chapterId}::uuid
+	WHERE "chapter".id = #{chapterId}::uuid and "chapter".order != -1
     </select>
 
 </mapper>
