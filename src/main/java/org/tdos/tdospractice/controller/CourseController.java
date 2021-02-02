@@ -139,6 +139,8 @@ public class CourseController {
         return Response.success(courses);
     }
 
+
+
     @GetMapping(value = "/get_course_by_id")
     public Response<Object> getCourseById(@RequestParam(value = "course_id") String courseId) {
         Pair<Boolean, Object> pair = courseService.getCourseById(courseId);
@@ -146,6 +148,15 @@ public class CourseController {
             return Response.success(pair.getValue());
         }
         return Response.error((String) pair.getValue());
+    }
+
+    @DeleteMapping(value = "/remove_course_by_id")
+    public Response<String> removeCourseById(@RequestBody DeleteCourse deleteCourse) {
+        Pair<Boolean, String> pair = courseService.removeCourseById(deleteCourse);
+        if (pair.getKey()) {
+            return Response.success(pair.getValue());
+        }
+        return Response.error(pair.getValue());
     }
 
 }

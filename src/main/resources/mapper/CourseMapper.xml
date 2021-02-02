@@ -518,4 +518,8 @@ WHERE
         </foreach>
     </select>
 
+    <delete id="removeCourse">
+           delete from course where id = #{courseId}::uuid
+    </delete>
+
 </mapper>

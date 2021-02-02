@@ -36,4 +36,6 @@ public interface CourseService {
     Pair<Boolean, String> modifyExpiredCourseStatus(ModifyExpiredCourseStatus modifyExpiredCourseStatus);
 
     PageInfo<Course> getChangedList(Integer perPage, Integer page, String name);
+
+    Pair<Boolean, String> removeCourseById(DeleteCourse deleteCourse);
 }
