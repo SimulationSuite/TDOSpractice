@@ -9,12 +9,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.tdos.tdospractice.entity.ContainerEntity;
+import org.tdos.tdospractice.entity.ImageEntity;
 import org.tdos.tdospractice.kvm.KvmManager;
 import org.tdos.tdospractice.mapper.ContainerMapper;
+import org.tdos.tdospractice.mapper.ImageMapper;
 import org.tdos.tdospractice.service.ContainerService;
 import org.tdos.tdospractice.utils.JsonUtils;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +25,9 @@ public class ContainerServiceImpl implements ContainerService {
 
     @Autowired
     private ContainerMapper containerMapper;
+
+    @Autowired
+    private ImageMapper imageMapper;
 
     @Qualifier("ConrtainerQueue")
     @Autowired
@@ -74,9 +79,22 @@ public class ContainerServiceImpl implements ContainerService {
     }
 
     @Override
-    public List<ContainerEntity> createContainers(String userId, String containerId) {
-
-        return null;
+    public List<ContainerEntity> createContainers(String userId, String experimentId) {
+        List<ImageEntity> imageEntityList = imageMapper.findImageByExperimentId(experimentId);
+        if (imageEntityList.size() == 0) {
+            return null;
+        }
+        List<ContainerEntity> list = new ArrayList<>();
+        imageEntityList.forEach(i -> {
+            ContainerEntity containerEntity = containerMapper.findContainerByName(String.format("%s@%s@%s", userId, experimentId, i.getId()));
+            if (containerEntity == null) {
+                //create container
+                list.add(kvmManager.createContainer(userId, experimentId, i));
+            } else {
+                list.add(containerEntity);
+            }
+        });
+        return list;
     }
 
     @Override

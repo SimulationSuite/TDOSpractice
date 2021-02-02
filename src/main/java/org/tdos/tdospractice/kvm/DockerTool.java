@@ -251,7 +251,7 @@ public class DockerTool implements CommonTool {
                 .withHostConfig(new HostConfig()
                         .withPortBindings(portBindings)
                         .withCapAdd(SYS_ADMIN))
-                .withEntrypoint("bash", "-c", "/home/init.sh") //Start the novnc
+                .withEntrypoint("bash", "-c", "/usr/local/init.sh") //Start the novnc
                 .exec();
 
         return newContainer;
