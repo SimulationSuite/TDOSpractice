@@ -8,6 +8,7 @@
         <id column="container_id" property="containerId"/>
         <result column="name" property="name"/>
         <result column="user_id" property="userId"/>
+        <result column="course_id" property="courseId"/>
         <result column="experiment_id" property="experimentId"/>
         <result column="image_id" property="imageId"/>
         <result column="ports" property="ports"/>
@@ -35,13 +36,10 @@
     </select>
 
     <select id="findRunContainerByTeacher" resultType="java.util.HashMap">
-        select c.*,s.name as user_name,s.id,e.name as experiment_name,i.kind from container c
+        select c.*,s.name as user_name,s.id,e.name as experiment_name from container c
         left join sim_user s on c.user_id=s.id
         left join experiment e on c.experiment_id=e.id
-        where c.status=1
-        <if test="classId != null and classId!=''">
-            and s.class_id=#{classId}::uuid
-        </if>
+        where c.status=1 and c.course_id=#{courseId}::uuid
         <if test="filter != null and filter!=''">
             and (s.name like concat('%',#{filter},'%') or s.id like concat('%',#{filter},'%') or e.name like
             concat('%',#{filter},'%'))

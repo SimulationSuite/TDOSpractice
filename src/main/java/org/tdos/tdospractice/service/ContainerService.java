@@ -12,7 +12,7 @@ public interface ContainerService {
 
     PageInfo<Map<String, Object>> getRunExperiment(int page, int perPage);
 
-    PageInfo<Map<String, Object>> getRunContainerByTeacher(String classId, String filter, int page, int perPage);
+    PageInfo<Map<String, Object>> getRunContainerByTeacher(String courseId, String filter, int page, int perPage);
 
     boolean stopRunContainerList();
 

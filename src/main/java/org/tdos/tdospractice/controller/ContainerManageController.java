@@ -53,9 +53,12 @@ public class ContainerManageController {
     }
 
     @GetMapping(value = "/getRunContainerByTeacher")
-    public Response<PageInfo<Map<String, Object>>> getRunContainerByTeacher(@RequestParam(value = "classId") String classId, @RequestParam(value = "filter") String filter,
+    public Response<PageInfo<Map<String, Object>>> getRunContainerByTeacher(@RequestParam(value = "courseId") String courseId, @RequestParam(value = "filter") String filter,
                                                                             @RequestParam(value = "page") int page, @RequestParam(value = "perPage") int perPage) {
-        return Response.success(containerService.getRunContainerByTeacher(classId, filter, page, perPage));
+        if (courseId == null || courseId.equals("")) {
+            return Response.error();
+        }
+        return Response.success(containerService.getRunContainerByTeacher(courseId, filter, page, perPage));
     }
 
     @GetMapping(value = "/createContainers")

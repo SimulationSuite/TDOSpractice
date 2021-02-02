@@ -284,6 +284,7 @@ create table if not exists container(
     container_id varchar(255) primary key,
     "name" varchar(255) NOT NULL,
     user_id varchar(255) references "sim_user"("id") NOT NULL,
+    course_id UUID references "course"("id"),
     experiment_id UUID references "experiment"("id") NOT NULL,
     image_id UUID references "image"("id") NOT NULL,
     ports varchar(255) NOT NULL,
