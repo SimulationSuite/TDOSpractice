@@ -42,6 +42,10 @@ public class ContainerManageController {
         return Response.success();
     }
 
+    @PostMapping(value = "/downloadCode")
+    public Response<byte[]> downloadCode(@RequestParam(value = "containerId") String containerId, @RequestParam(value = "fileName") String fileName) {
+        return Response.success(containerService.downloadCode(containerId, fileName));
+    }
 
     @GetMapping(value = "/getRunExperiment")
     public Response<PageInfo<Map<String, Object>>> getRunExperiment(@RequestParam(value = "page") int page, @RequestParam(value = "perPage") int perPage) {

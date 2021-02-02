@@ -77,6 +77,10 @@
         select * from container c where c.name=#{ContainerName}
     </select>
 
+    <select id="findContainerById" parameterType="java.lang.String" resultMap="ContainerMap">
+        select * from container c where c.container_id=#{containerId}
+    </select>
+
     <update id="updateContainerByIds">
         update container set status=#{status}
         where container_id in

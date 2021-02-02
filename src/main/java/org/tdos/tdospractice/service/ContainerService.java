@@ -19,4 +19,6 @@ public interface ContainerService {
     List<ContainerEntity> createContainers(String userId, String experimentId);
 
     boolean execContainer(List<String> containerId, int type);
+
+    byte[] downloadCode(String containerId, String fileNmae);
 }
