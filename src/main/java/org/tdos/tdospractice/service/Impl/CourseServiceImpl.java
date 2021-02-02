@@ -329,14 +329,16 @@ public class CourseServiceImpl implements CourseService {
             return new Pair<>(false, "course_id is not be uuid");
         }
         Course course = courseMapper.getCourseById(courseId);
-        List<ClassNumber> classNumbers = classMapper.findClassNumber();
-        classNumbers.forEach(classNumber -> {
-            if (!ObjectUtils.isEmpty(course.classId) && course.classId.equals(classNumber.classId)) {
-                course.numbers = classNumber.numbers;
-            }
-        });
-        course.chapterNumber = course.chapters.size();
-        course.sectionNumber = course.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
+        if (course!=null){
+            List<ClassNumber> classNumbers = classMapper.findClassNumber();
+            classNumbers.forEach(classNumber -> {
+                if (!ObjectUtils.isEmpty(course.classId) && course.classId.equals(classNumber.classId)) {
+                    course.numbers = classNumber.numbers;
+                }
+            });
+            course.chapterNumber = course.chapters.size();
+            course.sectionNumber = course.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
+        }
         return new Pair<>(true, course);
     }
 
@@ -528,6 +530,27 @@ public class CourseServiceImpl implements CourseService {
             pageInfo.setList(list);
         }
         return pageInfo;
+    }
+
+    @Override
+    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
+    public Pair<Boolean, String> removeCourseById(DeleteCourse deleteCourse) {
+        if (ObjectUtils.isEmpty(deleteCourse.ownerId)) {
+            return new Pair<>(false, "owner_id can not be null");
+        }
+        if (ObjectUtils.isEmpty(deleteCourse.courseId)) {
+            return new Pair<>(false, "course_id  can not be null");
+        }
+        if (!UUIDPattern.isValidUUID(deleteCourse.courseId)) {
+            return new Pair<>(false, "course_id is not be uuid");
+        }
+        Course course = courseMapper.getCourseByCourseId(deleteCourse.courseId);
+        if (!course.ownerId.equals(deleteCourse.ownerId)) {
+            return new Pair<>(false, "course is not belong to owner_id: " + deleteCourse.ownerId);
+        }
+        course.chapters.stream().filter(chapter -> !chapter.id.equals(EMPTY_UUID)).forEach(x-> chapterMapper.removeChapter(x.id));
+        courseMapper.removeCourse(deleteCourse.courseId);
+        return new Pair<>(true, "");
     }
 
 }

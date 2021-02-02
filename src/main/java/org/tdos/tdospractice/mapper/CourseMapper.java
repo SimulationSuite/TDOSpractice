@@ -57,4 +57,6 @@ public interface CourseMapper {
     List<Course> getChangedList(@Param("name") String name);
 
     List<Course> getChangedListPerfect(@Param("courseIds") List<String> courseIds);
+
+    int removeCourse(String courseId);
 }
