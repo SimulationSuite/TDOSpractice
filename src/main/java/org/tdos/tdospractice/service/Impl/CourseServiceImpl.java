@@ -329,7 +329,7 @@ public class CourseServiceImpl implements CourseService {
             return new Pair<>(false, "course_id is not be uuid");
         }
         Course course = courseMapper.getCourseById(courseId);
-        if (course!=null){
+        if (course != null) {
             List<ClassNumber> classNumbers = classMapper.findClassNumber();
             classNumbers.forEach(classNumber -> {
                 if (!ObjectUtils.isEmpty(course.classId) && course.classId.equals(classNumber.classId)) {
@@ -533,7 +533,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    @Transactional(rollbackFor = {RuntimeException.class,Error.class})
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
     public Pair<Boolean, String> removeCourseById(DeleteCourse deleteCourse) {
         if (ObjectUtils.isEmpty(deleteCourse.ownerId)) {
             return new Pair<>(false, "owner_id can not be null");
@@ -548,7 +548,7 @@ public class CourseServiceImpl implements CourseService {
         if (!course.ownerId.equals(deleteCourse.ownerId)) {
             return new Pair<>(false, "course is not belong to owner_id: " + deleteCourse.ownerId);
         }
-        course.chapters.stream().filter(chapter -> !chapter.id.equals(EMPTY_UUID)).forEach(x-> chapterMapper.removeChapter(x.id));
+        course.chapters.stream().filter(chapter -> !chapter.id.equals(EMPTY_UUID)).forEach(x -> chapterMapper.removeChapter(x.id));
         courseMapper.removeCourse(deleteCourse.courseId);
         return new Pair<>(true, "");
     }
