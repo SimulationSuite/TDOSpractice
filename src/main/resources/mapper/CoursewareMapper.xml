@@ -126,7 +126,7 @@
     <insert id="addChapterSectionCourseware" useGeneratedKeys="true" keyProperty="id">
         insert into chapter_section_courseware (section_id, chapter_id, courseware_id)
         values
-        (#{sectionId}, #{chapterId}, #{coursewareId});
+        (#{sectionId}::uuid, #{chapterId}::uuid, #{coursewareId}::uuid);
     </insert>
 
 </mapper>
