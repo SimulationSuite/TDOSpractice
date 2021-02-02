@@ -33,4 +33,6 @@ public interface ContainerMapper {
     List<Map<String, Object>> findRunContainerByTeacher(String classId, String filter);
 
     ContainerEntity findContainerByName(String ContainerName);
+
+    ContainerEntity findContainerById(String containerId);
 }

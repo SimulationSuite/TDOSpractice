@@ -121,4 +121,13 @@ public class ContainerServiceImpl implements ContainerService {
         containerMapper.updateContainerByIds(status, containerIds);
         return false;
     }
+
+    @Override
+    public byte[] downloadCode(String containerId, String fileName) {
+        ContainerEntity containerEntity = containerMapper.findContainerById(containerId);
+        if (containerEntity == null) {
+            return null;
+        }
+        return kvmManager.downloadFile(containerEntity, fileName);
+    }
 }
