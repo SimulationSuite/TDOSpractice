@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,7 +43,7 @@ public class DockerTool implements CommonTool {
 
     private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
 
-    private final String downloadPath = "/root/Download/";
+    private final String downloadPath = "/root/Downloads/";
 
     private final ExposedPort tcp = ExposedPort.tcp(6080);
 
@@ -215,8 +216,13 @@ public class DockerTool implements CommonTool {
      * @param fileName
      * @return
      */
-    public InputStream downloadArchiveContainer(String containerId, String fileName) {
-        return dockerClient.copyArchiveFromContainerCmd(containerId, downloadPath + fileName).exec();
+    public byte[] downloadArchiveContainer(String containerId, String fileName) {
+        try {
+            InputStream s = dockerClient.copyArchiveFromContainerCmd(containerId, downloadPath + fileName).exec();
+            return IOUtils.toByteArray(s);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**

@@ -128,6 +128,11 @@ public class KvmManager {
         }
     }
 
+    public byte[] downloadFile(ContainerEntity containerEntity, String fileName) {
+        DockerTool dockerTool = dockerTools.get(containerEntity.getNodeOrder());
+        return dockerTool.downloadArchiveContainer(containerEntity.getContainerId(), fileName);
+    }
+
     public int getRunContainerCount() {
         return dockerTools.stream().mapToInt(d -> d.getAllgetAllContainers(false).size()).sum();
     }
