@@ -63,9 +63,9 @@ public class ContainerServiceImpl implements ContainerService {
     }
 
     @Override
-    public PageInfo<Map<String, Object>> getRunContainerByTeacher(String classId, String filter, int page, int perPage) {
+    public PageInfo<Map<String, Object>> getRunContainerByTeacher(String courseId, String filter, int page, int perPage) {
         PageHelper.startPage(page, perPage);
-        return new PageInfo<>(containerMapper.findRunContainerByTeacher(classId, filter));
+        return new PageInfo<>(containerMapper.findRunContainerByTeacher(courseId, filter));
     }
 
     @Override

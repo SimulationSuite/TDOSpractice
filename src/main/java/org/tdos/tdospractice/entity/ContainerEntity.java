@@ -19,6 +19,8 @@ public class ContainerEntity {
 
     private String userId;
 
+    private String courseId;
+
     private String experimentId;
 
     private String imageId;
