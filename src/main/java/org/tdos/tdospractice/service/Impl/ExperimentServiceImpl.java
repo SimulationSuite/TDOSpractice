@@ -66,6 +66,9 @@ public class ExperimentServiceImpl implements ExperimentService {
                 sectionid_list.add(section.id);
             });
         });
+        if (sectionid_list.size() == 0){
+            return new PageInfo<>(new ArrayList<>());
+        }
         List<String> list = chapterSectionExperimentService.getExperimentIds(sectionid_list);
         return findAllByIds(list, perPage, page);
     }
