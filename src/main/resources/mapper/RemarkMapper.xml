@@ -5,6 +5,7 @@
 <mapper namespace="org.tdos.tdospractice.mapper.RemarkMapper">
 
     <resultMap id="CoursewareRemark" type="org.tdos.tdospractice.type.CoursewareRemark">
+        <result column="id" property="id"/>
         <result column="name" property="coursewareName"/>
         <result column="title" property="title"/>
         <result column="content" property="content"/>
@@ -38,6 +39,7 @@
 
     <select  id="getCoursewareRemarkList" resultMap="CoursewareRemark">
         SELECT
+    courseware_remark.id,
 	courseware.NAME,
 	courseware_remark.title,
 	courseware_remark."content",
@@ -54,6 +56,10 @@ WHERE
         AND courseware_remark.title LIKE concat('%',#{title},'%')
     </if>
     </select>
+
+    <delete id="deleteRemark">
+        delete from courseware_remark where id = #{remarkId}::uuid
+    </delete>
 
 
 </mapper>

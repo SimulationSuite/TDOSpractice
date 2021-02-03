@@ -6,6 +6,7 @@ import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.tdos.tdospractice.body.DeleteRemark;
 import org.tdos.tdospractice.body.Remark;
 import org.tdos.tdospractice.entity.CoursewareEntity;
 import org.tdos.tdospractice.entity.UserEntity;
@@ -67,6 +68,12 @@ public class RemarkServiceImpl implements RemarkService {
         PageHelper.startPage(page, perPage);
         List<CoursewareRemark> list = remarkMapper.getCoursewareRemarkList(userId, coursewareId, title);
         return new PageInfo<>(list);
+    }
+
+    @Override
+    public Pair<Boolean, String> deleteRemark(DeleteRemark deleteRemark) {
+        remarkMapper.deleteRemark(deleteRemark.remarkId);
+        return new Pair<>(true,"");
     }
 
 
