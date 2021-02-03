@@ -69,15 +69,15 @@ FROM "chapter"
 	small_section.id :: "varchar" AS small_section_id,
 	small_section.NAME AS small_section_name,
 	small_section.ORDER AS small_section_order,
-	case  WHEN courseware.kind = 0 THEN 0 else 1 END as section_has_video,
-	case  WHEN courseware.kind = 1 IS null THEN 0 else 1 END as section_has_pdf,
-	case  WHEN a.id IS null THEN 0 else 1 END as section_has_assignment,
-	case  WHEN e.id IS null THEN 0 else 1 END as section_has_experiment
+	case  WHEN courseware.kind = 0 THEN 1 else 0 END as section_has_video,
+	case  WHEN courseware.kind = 1 THEN 1 else 0 END as section_has_pdf,
+	case  WHEN a.id IS not null THEN 1 else 0 END as section_has_assignment,
+	case  WHEN e.id IS not null THEN 1 else 0 END as section_has_experiment
 FROM "chapter"
 	LEFT JOIN course_chapter_section ccs ON  ccs.chapter_id = "chapter".id
 	LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
 	LEFT JOIN "small_section" ON  "small_section".id = ccs.small_section_id and "small_section".order != -1
-	LEFT JOIN chapter_section_courseware csc on csc.chapter_id = chapter.id
+	LEFT JOIN chapter_section_courseware csc on csc.section_id = section.id
     LEFT JOIN courseware on courseware."id" = csc.courseware_id
 	LEFT JOIN "assignment" a on a.section_id = section.id
 	LEFT JOIN chapter_section_experiment cse on cse.section_id = section.id
