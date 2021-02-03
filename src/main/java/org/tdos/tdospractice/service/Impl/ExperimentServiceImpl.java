@@ -92,6 +92,9 @@ public class ExperimentServiceImpl implements ExperimentService {
     @Override
     public PageInfo<ExperimentEntity> findAllByIds(List<String> section_ids, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
+        if (section_ids.size() == 0){
+            return new PageInfo<>(new ArrayList<>());
+        }
         List<ExperimentEntity> list = experimentMapper.findAllByIds(section_ids);
         return new PageInfo<>(list);
     }
