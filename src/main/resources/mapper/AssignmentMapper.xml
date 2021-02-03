@@ -5,7 +5,7 @@
 <mapper namespace="org.tdos.tdospractice.mapper.AssignmentMapper">
 
     <select  id="getStudentAssignment" resultType="org.tdos.tdospractice.type.StudentAssignment">
-        select a.id as assignmentId, a.name as assignmentName, a.end_at as endAt,
+        select distinct a.id as assignmentId, a.name as assignmentName, a.end_at as endAt,
         case when ss.score is null then 0 else ss.score end as score ,
         case when sa.status is null then 0 else sa.status end as status
         from assignment a
