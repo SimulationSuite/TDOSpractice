@@ -3,6 +3,7 @@ package org.tdos.tdospractice.service;
 import com.github.pagehelper.PageInfo;
 import org.tdos.tdospractice.body.Assignment;
 import org.tdos.tdospractice.entity.AssignmentEntity;
+import org.tdos.tdospractice.type.AssignmentQuestionBack;
 import org.tdos.tdospractice.type.AssignmentStatistics;
 import org.tdos.tdospractice.type.StudentAssignment;
 
@@ -23,7 +24,7 @@ public interface AssignmentService {
 
     PageInfo<AssignmentEntity> getAssignmentByChapterId(String chapterId, Integer perPage,Integer page);
 
-    PageInfo<AssignmentEntity> getAssignmentBySectionId(String sectionId, Integer perPage,Integer page);
+    PageInfo<AssignmentQuestionBack> getAssignmentBySectionId(String sectionId, Integer perPage, Integer page);
 
     Map<String, Object> deleteAssignmentById(List<String> id);
 

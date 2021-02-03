@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import org.tdos.tdospractice.entity.AssignmentEntity;
 import org.tdos.tdospractice.entity.StudentAnswerEntity;
 import org.tdos.tdospractice.type.StudentAssignment;
+import org.tdos.tdospractice.type.AssignmentQuestionBack;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public interface AssignmentMapper {
 
     List<AssignmentEntity> getAssignmentByChapterId(@Param("chapterId") String chapterId);
 
-    List<AssignmentEntity> getAssignmentBySectionId(@Param("sectionId") String sectionId);
+    List<AssignmentQuestionBack> getAssignmentBySectionId(@Param("sectionId") String sectionId);
 
     int deleteAssignmentById(@Param("id") String id);
 
