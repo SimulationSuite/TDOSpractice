@@ -165,6 +165,7 @@ create table if not exists assignment(
     section_id UUID references "section"("id") on delete cascade NOT NULL,
     end_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     qualified_score int4 DEFAULT NULL,
+    status int4 DEFAULT 0,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
