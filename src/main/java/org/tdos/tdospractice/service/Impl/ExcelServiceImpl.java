@@ -123,7 +123,7 @@ public class ExcelServiceImpl implements ExcelService {
         List<QuestionBackEntity> questionBackEntityList =  utils.parseQuestionBack(utils.read(0, 1, end));
         List<CategoryEntity> categoryEntityList = categoryMapper.findAllChildCategory();
         for (QuestionBackEntity q : questionBackEntityList) {
-            List<String> categoryId = categoryEntityList.stream().filter(x -> x.getName() == q.getCategoryId()).map(CategoryEntity::getId).collect(Collectors.toList());
+            List<String> categoryId = categoryEntityList.stream().filter(x -> x.getName().equals(q.getCategoryId())).map(CategoryEntity::getId).collect(Collectors.toList());
             try{
                 q.setCategoryId(categoryId.get(0));
                 questionBackMapper.addQuestionBack(q);
