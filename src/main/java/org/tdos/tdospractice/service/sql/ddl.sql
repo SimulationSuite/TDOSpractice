@@ -280,6 +280,7 @@ create table if not exists image(
     "size" int8 DEFAULT 0,
     introduction text not null,
     kind int4 DEFAULT 0,
+    url varchar(255),
     "type" int4 DEFAULT 0,
     parent_image_id varchar(255) DEFAULT NULL,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),

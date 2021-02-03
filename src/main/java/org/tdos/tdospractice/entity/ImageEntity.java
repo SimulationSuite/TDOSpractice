@@ -24,6 +24,8 @@ public class ImageEntity implements Serializable {
 
     private int kind;//0 Docker-SSH 1 Docker-GUI
 
+    private String url;
+
     private int type;//0 内置 1 引用
 
     private String parentImageId;

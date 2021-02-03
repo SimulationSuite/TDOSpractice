@@ -11,6 +11,7 @@
         <result column="size" property="size"/>
         <result column="introduction" property="introduction"/>
         <result column="kind" property="kind"/>
+        <result column="url" property="url"/>
         <result column="type" property="type"/>
         <result column="parent_image_id" property="parentImageId"/>
         <result column="created_at" property="createdAt"/>
@@ -70,7 +71,7 @@
 
     <insert id="addImage" parameterType="org.tdos.tdospractice.entity.ImageEntity" useGeneratedKeys="true"
             keyProperty="id">
-        insert into image (name,imageid,size,introduction,kind,type,parent_image_id) values (#{imageName},#{imageId},#{size},#{introduction},#{kind},#{type},#{parentImageId})
+        insert into image (name,imageid,size,introduction,kind,url,type,parent_image_id) values (#{imageName},#{imageId},#{size},#{introduction},#{kind},#{url},#{type},#{parentImageId})
     </insert>
 
     <delete id="deleteImages" parameterType="java.lang.String">

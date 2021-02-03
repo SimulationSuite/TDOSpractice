@@ -32,10 +32,6 @@ public class KvmManager {
 
     private final String separator = "@";
 
-    private final String GUIURL = "/vnc.html?password=123456&autoconnect=true";
-
-    private final String SSHURL = "";
-
     public enum ExecType {
         START, STOP, RESTART
     }
@@ -87,7 +83,7 @@ public class KvmManager {
 
     private String getURL(ImageEntity imageEntity, int port, String IP) {
         if (imageEntity.getKind() == DockerTool.Type.GUI.ordinal()) {
-            return String.format("http://%s:%i%s", IP, port, GUIURL);
+            return String.format("http://%s:%i%s", IP, port, imageEntity.getUrl());
         }
         return null;
     }

@@ -33,8 +33,8 @@ public class ImageManageController {
 
     @GetMapping(value = "/addImage")
     public Response<String> addImage(@RequestParam(value = "imageName") String imageName, @RequestParam(value = "introduction") String introduction,
-                                     @RequestParam(value = "kind") int kind) {
-        if (imageService.addImage(imageName, introduction, kind) < 0) {
+                                     @RequestParam(value = "kind") int kind, @RequestParam(value = "url") String url) {
+        if (imageService.addImage(imageName, introduction, kind, url) < 0) {
             return Response.error();//image is exit
         }
         return Response.success();
