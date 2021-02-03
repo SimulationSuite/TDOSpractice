@@ -80,6 +80,9 @@ public class ExperimentServiceImpl implements ExperimentService {
         chapter.getSections().forEach(section -> {
             sectionid_list.add(section.id);
         });
+        if (sectionid_list.size() == 0){
+            return new PageInfo<>(new ArrayList<>());
+        }
         List<String> list = chapterSectionExperimentService.getExperimentIds(sectionid_list);
         return findAllByIds(list, perPage, page);
     }
@@ -88,6 +91,9 @@ public class ExperimentServiceImpl implements ExperimentService {
     public PageInfo<ExperimentEntity> findAllBySectionId(String section_id, Integer perPage, Integer page) {
         List<String> sectionid_list = new ArrayList<>();
         sectionid_list.add(section_id);
+        if (sectionid_list.size() == 0){
+            return new PageInfo<>(new ArrayList<>());
+        }
         List<String> list = chapterSectionExperimentService.getExperimentIds(sectionid_list);
         return findAllByIds(list, perPage, page);
     }
