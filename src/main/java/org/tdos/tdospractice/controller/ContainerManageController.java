@@ -42,6 +42,12 @@ public class ContainerManageController {
         return Response.success();
     }
 
+    @PostMapping(value = "/removeContainers")
+    public void removeContainers(@RequestParam(value = "containerIds") List<String> containerIds) {
+        containerService.removeContainers(containerIds);
+    }
+
+
     @PostMapping(value = "/downloadCode")
     public Response<byte[]> downloadCode(@RequestParam(value = "containerId") String containerId, @RequestParam(value = "fileName") String fileName) {
         return Response.success(containerService.downloadCode(containerId, fileName));
@@ -62,7 +68,8 @@ public class ContainerManageController {
     }
 
     @GetMapping(value = "/createContainers")
-    public Response<List<ContainerEntity>> createContainers(@RequestParam(value = "userId") String userId, @RequestParam(value = "containerId") String experimentId) {
-        return Response.success(containerService.createContainers(userId, experimentId));
+    public Response<List<ContainerEntity>> createContainers(@RequestParam(value = "userId") String userId, @RequestParam(value = "containerId") String experimentId,
+                                                            @RequestParam(value = "courseId") String courseId) {
+        return Response.success(containerService.createContainers(userId, experimentId, courseId));
     }
 }

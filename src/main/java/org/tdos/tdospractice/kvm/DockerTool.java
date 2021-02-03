@@ -180,8 +180,11 @@ public class DockerTool implements CommonTool {
      * @param containerId
      */
     public void start(String containerId) {
-        dockerClient.startContainerCmd(containerId).exec();
-        log.info(serverName + " start the container, containerId is " + containerId);
+        List<Container> containers = dockerClient.listContainersCmd().withIdFilter(Collections.singleton(containerId)).exec();
+        if (containers.size() == 0) {
+            dockerClient.startContainerCmd(containerId).exec();
+            log.info(serverName + " start the container, containerId is " + containerId);
+        }
     }
 
     /**
@@ -190,8 +193,11 @@ public class DockerTool implements CommonTool {
      * @param containerId
      */
     public void stop(String containerId) {
-        dockerClient.stopContainerCmd(containerId).exec();
-        log.info(serverName + " stop the container, containerId is " + containerId);
+        List<Container> containers = dockerClient.listContainersCmd().withIdFilter(Collections.singleton(containerId)).exec();
+        if (containers.size() > 0) {
+            dockerClient.stopContainerCmd(containerId).exec();
+            log.info(serverName + " stop the container, containerId is " + containerId);
+        }
     }
 
     /**
@@ -205,8 +211,17 @@ public class DockerTool implements CommonTool {
     }
 
     public void remove(String containerId) {
+        List<Container> containers = dockerClient.listContainersCmd().withIdFilter(Collections.singleton(containerId)).exec();
+        if (containers.size() > 0) {
+            dockerClient.stopContainerCmd(containerId).exec();
+        }
         dockerClient.removeContainerCmd(containerId).exec();
         log.info(serverName + " remove the container, containerId is " + containerId);
+    }
+
+    public void stopAndremove(String containerId) {
+        stop(containerId);
+        remove(containerId);
     }
 
     /**

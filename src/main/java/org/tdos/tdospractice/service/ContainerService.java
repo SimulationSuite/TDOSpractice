@@ -16,9 +16,11 @@ public interface ContainerService {
 
     boolean stopRunContainerList();
 
-    List<ContainerEntity> createContainers(String userId, String experimentId);
+    List<ContainerEntity> createContainers(String userId, String experimentId,String courseId);
 
     boolean execContainer(List<String> containerId, int type);
 
     byte[] downloadCode(String containerId, String fileNmae);
+
+    void removeContainers(List<String> containerIds);
 }
