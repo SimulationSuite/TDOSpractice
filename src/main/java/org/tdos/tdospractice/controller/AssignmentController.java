@@ -7,6 +7,7 @@ import org.tdos.tdospractice.body.AssignmentIdList;
 import org.tdos.tdospractice.entity.AssignmentEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.tdos.tdospractice.service.AssignmentService;
+import org.tdos.tdospractice.type.AssignmentQuestionBack;
 import org.tdos.tdospractice.type.AssignmentStatistics;
 import org.tdos.tdospractice.type.Response;
 import org.tdos.tdospractice.body.Assignment;
@@ -73,9 +74,9 @@ public class AssignmentController {
     }
 
     @GetMapping(value = "/getAssignmentBySectionId")
-    public Response<PageInfo<AssignmentEntity>> getAssignmentBySectionId(@RequestParam(value = "sectionId") String sectionId,
-                                                                         @RequestParam(value = "perPage") Integer perPage,
-                                                                         @RequestParam(value = "page") Integer page) {
+    public Response<PageInfo<AssignmentQuestionBack>> getAssignmentBySectionId(@RequestParam(value = "sectionId") String sectionId,
+                                                                               @RequestParam(value = "perPage") Integer perPage,
+                                                                               @RequestParam(value = "page") Integer page) {
         return Response.success(assignmentService.getAssignmentBySectionId(sectionId, perPage, page));
     }
 
