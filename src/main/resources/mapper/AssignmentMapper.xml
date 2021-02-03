@@ -15,7 +15,7 @@
         inner join sim_user su on su.class_id = cc.class_id
         left join student_score ss on ss.assignment_id = a.id and ss.user_id = su.id
         left join student_answer sa on sa.assignment_id = a.id
-        where su.id = #{userId}
+        where su.id = #{userId} and a.status = 1
         <if test="courseId != null and courseId != ''" >
             and ccs.course_id = #{courseId} ::uuid
         </if>
@@ -116,7 +116,7 @@
 
     <select  id="getAssignmentBySectionId" resultType="org.tdos.tdospractice.type.AssignmentQuestionBack">
         select a.id, a.section_id as sectionId, a.name, a.end_at as endAt, a.qualified_score as qualifiedScore,
-        qb.type, qb.content, qb.choice, qb.answer, qb.pic_url as picUrl
+        qb.type, qb.content, qb.choice, qb.answer, qb.pic_url as picUrl, a.status
         from assignment a
         inner join question_back_assignment qba on qba.assignment_id = a.id
         inner join question_back qb on qb.id = qba.question_id

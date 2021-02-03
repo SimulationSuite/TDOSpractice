@@ -96,5 +96,10 @@ public class AssignmentController {
         return Response.success(assignmentService.modifyAssignmentNameById(assignment));
     }
 
+    @PostMapping(value = "/modifyAssignmentStatusById")
+    public Response<Boolean> modifyAssignmentStatusById(@RequestBody Assignment assignment) {
+        return Response.success(assignmentService.modifyAssignmentStatusById(assignment));
+    }
+
 }
 
