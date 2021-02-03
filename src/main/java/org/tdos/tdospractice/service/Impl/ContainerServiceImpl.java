@@ -103,7 +103,7 @@ public class ContainerServiceImpl implements ContainerService {
 
     @Override
     public boolean execContainer(List<String> containerIds, int type) {
-        if (type < KvmManager.ExecType.START.ordinal() || KvmManager.ExecType.RESTART.ordinal() > type) {
+        if (type < KvmManager.ExecType.START.ordinal() || KvmManager.ExecType.RESTART.ordinal() < type) {
             return true;
         }
         List<ContainerEntity> containers = containerMapper.findContainerByIds(containerIds);
