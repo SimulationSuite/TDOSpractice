@@ -112,7 +112,7 @@ public class ContainerServiceImpl implements ContainerService {
         }
         for (ContainerEntity c : containers) {
             if (KvmManager.ExecType.START.ordinal() == type && c.getStatus() == 1) {
-                return true;
+                continue;
             }
             kvmManager.execContainer(c.getContainerId(), c.getNodeOrder(), type);
         }
