@@ -80,6 +80,13 @@
         select * from container c where c.container_id=#{containerId}
     </select>
 
+    <select id="findContainerByCourseIds" resultMap="ContainerMap" parameterType="java.lang.String">
+        select * from container c where c.course_id in
+        <foreach collection="courseIds" open="(" separator="," close=")" item="item">
+            #{item}::uuid
+        </foreach>
+    </select>
+
     <update id="updateContainerByIds">
         update container set status=#{status}
         where container_id in

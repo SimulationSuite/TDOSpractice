@@ -1,5 +1,7 @@
 package org.tdos.tdospractice.kvm;
 
+import java.util.List;
+
 public interface CommonTool {
 
     void start(String id);
@@ -8,5 +10,5 @@ public interface CommonTool {
 
     void restart(String id);
 
-    void remove(String id);
+    void remove(String containerId, List<Integer> pubPorts);
 }

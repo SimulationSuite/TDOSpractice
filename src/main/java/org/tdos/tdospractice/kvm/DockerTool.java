@@ -219,17 +219,18 @@ public class DockerTool implements CommonTool {
         log.info(serverName + " restart the container, containerId is " + containerId);
     }
 
-    public void remove(String containerId) {
+    public void remove(String containerId, List<Integer> pubPorts) {
         List<Container> containers = dockerClient.listContainersCmd().withIdFilter(Collections.singleton(containerId)).exec();
         if (containers.size() > 0) {
             dockerClient.removeContainerCmd(containerId).exec();
+            removePorts(pubPorts);
             log.info(serverName + " remove the container, containerId is " + containerId);
         }
     }
 
-    public void stopAndremove(String containerId) {
+    public void stopAndremove(String containerId, List<Integer> pubPorts) {
         stop(containerId);
-        remove(containerId);
+        remove(containerId, pubPorts);
     }
 
     /**

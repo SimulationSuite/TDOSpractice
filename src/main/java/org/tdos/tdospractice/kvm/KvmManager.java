@@ -160,7 +160,7 @@ public class KvmManager {
             containerEntities.forEach(c -> {
                 list.add(CompletableFuture.runAsync(() -> {
                     DockerTool dockerTool = dockerTools.get(c.getNodeOrder());
-                    dockerTool.stopAndremove(c.getContainerId());
+                    dockerTool.stopAndremove(c.getContainerId(), c.getPubPorts());
                 }, executor));
             });
             CompletableFuture.allOf(list.toArray(new CompletableFuture[]{})).join();
