@@ -34,4 +34,14 @@ public class CategoryServiceImpl implements CategoryService {
     public Optional<CategoryEntity> findCategory(String id) {
         return Optional.ofNullable(categoryMapper.findCategory(id));
     }
+
+    @Override
+    public List<CategoryEntity> findAllChildCategory() {
+        return categoryMapper.findAllChildCategory();
+    }
+
+    @Override
+    public Optional<CategoryEntity> findCategoryByName(String name) {
+        return Optional.ofNullable(categoryMapper.findCategoryByName(name));
+    }
 }
