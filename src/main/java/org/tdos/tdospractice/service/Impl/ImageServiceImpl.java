@@ -52,14 +52,14 @@ public class ImageServiceImpl implements ImageService {
 
     @SneakyThrows
     @Override
-    public int addImage(String imageName, String introduction) {
+    public int addImage(String imageName, String introduction, int kind) {
         int count = imageMapper.findImageByName(imageName);
         if (count > 0) {
             return -1;
         }
         ImageEntity imageEntity = ImageEntity.builder()
                 .imageName(imageName).introduction(introduction)
-                .type(0).kind(0).build();
+                .type(0).kind(kind).build();
         String message = Hex.encodeHexString(jsonUtils.encode(imageEntity));
         jmsMessagingTemplate.convertAndSend(this.imageQueue, message);
         return 0;

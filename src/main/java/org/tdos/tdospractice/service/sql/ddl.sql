@@ -287,6 +287,7 @@ create table if not exists container(
     course_id UUID references "course"("id"),
     experiment_id UUID references "experiment"("id") NOT NULL,
     image_id UUID references "image"("id") NOT NULL,
+    url varchar(100) NOT NULL,
     ports varchar(255) NOT NULL,
     nodeOrder int4 NOT NULL,
     status int4 NOT NULL,

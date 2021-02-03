@@ -36,10 +36,7 @@ public class ContainerManageController {
 
     @PostMapping(value = "/execContainer")
     public Response<String> execContainer(@RequestParam(value = "containerId") List<String> containerIds, @RequestParam(value = "type") int type) {
-        if (containerService.execContainer(containerIds, type)) {
-            return Response.error();
-        }
-        return Response.success();
+        return containerService.execContainer(containerIds, type);
     }
 
     @PostMapping(value = "/removeContainers")
@@ -61,14 +58,11 @@ public class ContainerManageController {
     @GetMapping(value = "/getRunContainerByTeacher")
     public Response<PageInfo<Map<String, Object>>> getRunContainerByTeacher(@RequestParam(value = "courseId") String courseId, @RequestParam(value = "filter") String filter,
                                                                             @RequestParam(value = "page") int page, @RequestParam(value = "perPage") int perPage) {
-        if (courseId == null || courseId.equals("")) {
-            return Response.error();
-        }
         return Response.success(containerService.getRunContainerByTeacher(courseId, filter, page, perPage));
     }
 
     @GetMapping(value = "/createContainers")
-    public Response<List<ContainerEntity>> createContainers(@RequestParam(value = "userId") String userId, @RequestParam(value = "containerId") String experimentId,
+    public Response<List<ContainerEntity>> createContainers(@RequestParam(value = "userId") String userId, @RequestParam(value = "experimentId") String experimentId,
                                                             @RequestParam(value = "courseId") String courseId) {
         return Response.success(containerService.createContainers(userId, experimentId, courseId));
     }

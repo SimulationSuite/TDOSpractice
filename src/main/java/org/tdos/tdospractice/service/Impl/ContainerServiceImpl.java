@@ -14,6 +14,7 @@ import org.tdos.tdospractice.kvm.KvmManager;
 import org.tdos.tdospractice.mapper.ContainerMapper;
 import org.tdos.tdospractice.mapper.ImageMapper;
 import org.tdos.tdospractice.service.ContainerService;
+import org.tdos.tdospractice.type.Response;
 import org.tdos.tdospractice.utils.JsonUtils;
 
 import java.util.ArrayList;
@@ -90,8 +91,11 @@ public class ContainerServiceImpl implements ContainerService {
             if (containerEntity == null) {
                 //create container
                 ContainerEntity c = kvmManager.createContainer(userId, experimentId, i);
-                if (courseId != null || !courseId.equals("")) {
+                if (courseId != null && !courseId.equals("")) {
                     c.setCourseId(courseId);
+                }
+                if (c != null) {
+                    containerMapper.insertContainer(c);
                 }
                 list.add(c);
             } else {
@@ -102,13 +106,13 @@ public class ContainerServiceImpl implements ContainerService {
     }
 
     @Override
-    public boolean execContainer(List<String> containerIds, int type) {
+    public Response execContainer(List<String> containerIds, int type) {
         if (type < KvmManager.ExecType.START.ordinal() || KvmManager.ExecType.RESTART.ordinal() < type) {
-            return true;
+            return Response.error("异常操作");
         }
         List<ContainerEntity> containers = containerMapper.findContainerByIds(containerIds);
         if (containers.size() != containerIds.size()) {
-            return true;
+            return Response.error("未知实验");
         }
         for (ContainerEntity c : containers) {
             if (KvmManager.ExecType.START.ordinal() == type && c.getStatus() == 1) {
@@ -123,7 +127,7 @@ public class ContainerServiceImpl implements ContainerService {
             status = 1;
         }
         containerMapper.updateContainerByIds(status, containerIds);
-        return false;
+        return Response.success();
     }
 
     @Override
@@ -138,5 +142,7 @@ public class ContainerServiceImpl implements ContainerService {
     @Override
     public void removeContainers(List<String> containerIds) {
         List<ContainerEntity> cl = containerMapper.findContainerByIds(containerIds);
+        kvmManager.removeContainers(cl);
+        containerMapper.deleteByContainerIds(containerIds);
     }
 }

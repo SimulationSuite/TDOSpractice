@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 @Builder
 public class ContainerEntity {
 
-    private String Id;
-
     private String containerId;
 
     private String name; //userID+@+实验ID+@+镜像ID
@@ -24,6 +22,8 @@ public class ContainerEntity {
     private String experimentId;
 
     private String imageId;
+
+    private String url;
 
     private String ports;// pubport@pubport...
 

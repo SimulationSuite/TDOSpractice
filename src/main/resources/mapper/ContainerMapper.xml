@@ -11,6 +11,7 @@
         <result column="course_id" property="courseId"/>
         <result column="experiment_id" property="experimentId"/>
         <result column="image_id" property="imageId"/>
+        <result column="url" property="url"/>
         <result column="ports" property="ports"/>
         <result column="nodeOrder" property="nodeOrder"/>
         <result column="status" property="status"/>
@@ -83,13 +84,13 @@
         update container set status=#{status}
         where container_id in
         <foreach collection="containerIds" open="(" separator="," close=")" item="item">
-            #{item}::uuid
+            #{item}
         </foreach>
     </update>
 
     <insert id="insertContainer" parameterType="org.tdos.tdospractice.entity.ContainerEntity">
-        insert into container (container_id,name,user_id,experiment_id,image_id,ports,nodeOrder,status)
-        values (#{containerId},#{name},#{userId},#{experimentId},#{imageId},#{ports},#{nodeOrder},#{status})
+        insert into container (container_id,name,user_id,course_id,experiment_id,image_id,url,ports,nodeOrder,status)
+        values (#{containerId},#{name},#{userId},#{courseId}::uuid,#{experimentId}::uuid,#{imageId}::uuid,#{url},#{ports},#{nodeOrder},#{status})
     </insert>
 
     <delete id="deleteByExperimentIds" parameterType="java.lang.String">
@@ -97,6 +98,14 @@
         where c.experiment_id in
         <foreach collection="experimentIds" open="(" separator="," close=")" item="item">
             #{item}::uuid
+        </foreach>
+    </delete>
+
+    <delete id="deleteByContainerIds">
+        delete from container c
+        where c.container_id in
+        <foreach collection="containerIds" open="(" separator="," close=")" item="item">
+            #{item}
         </foreach>
     </delete>
 

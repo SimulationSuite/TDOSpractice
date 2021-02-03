@@ -34,6 +34,7 @@ public class MessageListener {
     @JmsListener(destination = "image-Queue")
     public void execMessage(String message) {
         ImageEntity imageEntity = jsonUtils.decode(Hex.decode(message), ImageEntity.class);
+        log.info("Image name is " + imageEntity.getImageName() + ", Start to push");
         //pull image
         kvmManager.pullImages(imageEntity.getImageName());
         List<Image> imageList = kvmManager.getImageInfo(imageEntity.getImageName());
