@@ -32,4 +32,6 @@ public interface AssignmentService {
 
     Boolean modifyAssignmentNameById(Assignment assignment);
 
+    Boolean modifyAssignmentStatusById(Assignment assignment);
+
 }

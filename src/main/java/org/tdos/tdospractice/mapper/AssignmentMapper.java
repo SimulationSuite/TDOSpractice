@@ -38,4 +38,6 @@ public interface AssignmentMapper {
 
     int addAssignment(AssignmentEntity assignment);
 
+    int modifyAssignmentStatusById(@Param("id") String id, @Param("status") Integer status);
+
 }

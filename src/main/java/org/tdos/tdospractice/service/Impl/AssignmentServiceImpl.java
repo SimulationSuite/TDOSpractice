@@ -130,4 +130,14 @@ public class AssignmentServiceImpl implements AssignmentService {
         return true;
     }
 
+    @Override
+    public Boolean modifyAssignmentStatusById(Assignment assignment) {
+        try {
+            assignmentMapper.modifyAssignmentStatusById(assignment.id, assignment.status);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
 }

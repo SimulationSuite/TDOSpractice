@@ -30,4 +30,6 @@ public class AssignmentQuestionBack {
     private String answer;
 
     private String picUrl;
+
+    private Integer status;
 }
