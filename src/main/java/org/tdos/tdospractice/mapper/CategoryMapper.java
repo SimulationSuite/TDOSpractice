@@ -18,4 +18,8 @@ public interface CategoryMapper {
     List<CategoryEntity> findChildCategory(String parent_category_id);
 
     CategoryEntity findCategory(@Param("id")String id);
+
+    List<CategoryEntity> findAllChildCategory();
+
+    CategoryEntity findCategoryByName(String name);
 }

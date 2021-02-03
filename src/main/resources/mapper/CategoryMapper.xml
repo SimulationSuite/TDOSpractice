@@ -21,4 +21,12 @@
     <select id="findCategory" resultType="org.tdos.tdospractice.entity.CategoryEntity">
         select * from category where id = #{id}::uuid
     </select>
+
+    <select id="findAllChildCategory" resultType="org.tdos.tdospractice.entity.CategoryEntity">
+        select * from category parent_category_id IS NOT NULL
+    </select>
+
+    <select id="findCategoryByName" resultType="org.tdos.tdospractice.entity.CategoryEntity">
+        select * from category where name = #{name}
+    </select>
 </mapper>

@@ -14,4 +14,7 @@ public interface CategoryService {
 
     Optional<CategoryEntity> findCategory(String id);
 
+    List<CategoryEntity> findAllChildCategory();
+
+    Optional<CategoryEntity> findCategoryByName(String name);
 }
