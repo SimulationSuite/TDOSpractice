@@ -54,6 +54,9 @@ create table if not exists course(
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
 
+create unique index if not exists course_name
+    on course ("name");
+
 create index if not exists course_owner_id_index
     on course (owner_id);
 
@@ -132,6 +135,9 @@ create table if not exists courseware(
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
 
+create unique index if not exists courseware_name
+    on courseware ("name");
+
 create index if not exists courseware_name_index
     on courseware ("name");
 
@@ -169,6 +175,9 @@ create table if not exists assignment(
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
+
+create unique index if not exists assignment_name
+    on assignment ("name");
 
 create index if not exists assignment_section_id_index
     on assignment ("section_id");
