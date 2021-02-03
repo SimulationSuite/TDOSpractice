@@ -27,6 +27,10 @@
                 <id column="section_id" property="id"/>
                 <result column="section_name" property="name"/>
                 <result column="section_order" property="order"/>
+                <result column="section_has_video" property="sectionHasVideo"/>
+                <result column="section_has_pdf" property="sectionHasPdf"/>
+                <result column="section_has_assignment" property="sectionHasAssignment"/>
+                <result column="section_has_experiment" property="sectionHasExperiment"/>
                 <collection property="smallSections" ofType="org.tdos.tdospractice.type.SmallSection">
                     <id column="small_section_id" property="id"/>
                     <result column="small_section_name" property="name"/>
@@ -455,7 +459,11 @@ SELECT
 	section."order" AS section_order,
 	small_section.id :: "varchar" AS small_section_id,
 	small_section.NAME AS small_section_name,
-	small_section.ORDER AS small_section_order
+	small_section.ORDER AS small_section_order,
+	case  WHEN cs.kind = 0 THEN 1 else 0 END as section_has_video,
+	case  WHEN cs.kind = 1 THEN 1 else 0 END as section_has_pdf,
+	case  WHEN a.id IS not null THEN 1 else 0 END as section_has_assignment,
+	case  WHEN e.id IS not null THEN 1 else 0 END as section_has_experiment
 FROM
 	course c
 	LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
@@ -465,6 +473,11 @@ FROM
 	LEFT JOIN "small_section" ON "small_section".id = ccs.small_section_id and "small_section".order != -1
 	LEFT JOIN chapter_section_courseware csc on csc.chapter_id = chapter.id
     LEFT JOIN courseware on courseware."id" = csc.courseware_id
+    LEFT JOIN chapter_section_courseware cscs on cscs.section_id = section.id
+    LEFT JOIN courseware cs on cs."id" = cscs.courseware_id
+    LEFT JOIN "assignment" a on a.section_id = section.id
+	LEFT JOIN chapter_section_experiment cse on cse.section_id = section.id
+	LEFT JOIN experiment e on e.id = cse.experiment_id
 WHERE
     c.id = #{courseId} :: uuid
     </select>

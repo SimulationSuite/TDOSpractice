@@ -1,4 +1,4 @@
-package org.tdos.tdospractice.entity;
+package org.tdos.tdospractice.type;
 
 import lombok.*;
 
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Builder
-public class AssignmentEntity {
+public class AssignmentQuestionBack {
 
     private String id;
 
@@ -17,16 +17,19 @@ public class AssignmentEntity {
 
     private String name;
 
-    private Integer status;
-
     private LocalDateTime endAt;
 
     private int qualifiedScore;
 
-    private LocalDateTime createdAt;
+    private int type;
 
-    private LocalDateTime updatedAt;
+    private String content;
 
-    private Boolean canUpdate;
+    private String choice;
 
+    private String answer;
+
+    private String picUrl;
+
+    private Integer status;
 }

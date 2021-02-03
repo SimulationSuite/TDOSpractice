@@ -5,8 +5,8 @@
 <mapper namespace="org.tdos.tdospractice.mapper.AssignmentMapper">
 
     <select  id="getStudentAssignment" resultType="org.tdos.tdospractice.type.StudentAssignment">
-        select a.id as assignmentId, a.name as assignmentName, a.end_at as endAt,
-        case when ss.score is null then 0 else ss.score end as score ,
+        select distinct a.id as assignmentId, a.name as assignmentName, a.end_at as endAt,
+        case when ss.score is null then -1 else ss.score end as score ,
         case when sa.status is null then 0 else sa.status end as status
         from assignment a
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
@@ -15,7 +15,7 @@
         inner join sim_user su on su.class_id = cc.class_id
         left join student_score ss on ss.assignment_id = a.id and ss.user_id = su.id
         left join student_answer sa on sa.assignment_id = a.id
-        where su.id = #{userId}
+        where su.id = #{userId} and a.status = 1
         <if test="courseId != null and courseId != ''" >
             and ccs.course_id = #{courseId} ::uuid
         </if>
@@ -43,7 +43,7 @@
         inner join class_course cc on cc.course_id = ci.id
         inner join class c on c.id = cc.class_id
         left join student_score ss on ss.assignment_id = sa.assignment_id and ss.user_id = sa.user_id
-        where sa.id is not null
+        where sa.status = 1
         <if test="classId != null and classId != ''" >
             and cc.class_id = #{classId} ::uuid
         </if>
@@ -114,10 +114,12 @@
         where ccs.chapter_id =#{ChapterId} ::uuid
     </select>
 
-    <select  id="getAssignmentBySectionId" resultType="org.tdos.tdospractice.entity.AssignmentEntity">
-        select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
-        a.created_at as createdAt, a.updated_at as updatedAt
+    <select  id="getAssignmentBySectionId" resultType="org.tdos.tdospractice.type.AssignmentQuestionBack">
+        select a.id, a.section_id as sectionId, a.name, a.end_at as endAt, a.qualified_score as qualifiedScore,
+        qb.type, qb.content, qb.choice, qb.answer, qb.pic_url as picUrl, a.status
         from assignment a
+        inner join question_back_assignment qba on qba.assignment_id = a.id
+        inner join question_back qb on qb.id = qba.question_id
         where a.section_id =#{sectionId} ::uuid
     </select>
 
@@ -134,11 +136,15 @@
     </select>
 
     <update id="modifyAssignmentNameById">
-        update assignment set name = #{name}, end_at = #{endAt}, qualified_score = #{qualifiedScore} where id=#{id}::uuid;
+        update assignment set name = #{name} where id=#{id}::uuid;
     </update>
 
     <insert id="addAssignment" useGeneratedKeys="true" keyProperty="id">
         insert into assignment (section_id, name, end_at, qualified_score) values (#{sectionId}, #{name}, #{endAt}, #{qualifiedScore});
     </insert>
+
+    <update id="modifyAssignmentStatusById">
+        update assignment set status = #{status} where id=#{id}::uuid;
+    </update>
 
 </mapper>

@@ -16,6 +16,9 @@ public class Assignment {
     @JsonProperty("name")
     public String name;
 
+    @JsonProperty("status")
+    public Integer status;
+
     @JsonProperty("end_at")
     public LocalDateTime endAt;
 

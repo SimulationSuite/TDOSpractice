@@ -3,11 +3,14 @@ package org.tdos.tdospractice.service.Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
+import org.tdos.tdospractice.entity.CategoryEntity;
 import org.tdos.tdospractice.entity.ClassEntity;
+import org.tdos.tdospractice.entity.QuestionBackEntity;
 import org.tdos.tdospractice.entity.UserEntity;
+import org.tdos.tdospractice.mapper.CategoryMapper;
 import org.tdos.tdospractice.mapper.ClassMapper;
 import org.tdos.tdospractice.mapper.UserMapper;
+import org.tdos.tdospractice.mapper.QuestionBackMapper;
 import org.tdos.tdospractice.service.ExcelService;
 import org.tdos.tdospractice.type.Personnel;
 import org.tdos.tdospractice.type.Response;
@@ -16,6 +19,7 @@ import org.tdos.tdospractice.utils.ExcelUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ExcelServiceImpl implements ExcelService {
@@ -25,6 +29,24 @@ public class ExcelServiceImpl implements ExcelService {
 
     @Autowired
     private ClassMapper classMapper;
+
+    @Autowired
+    private CategoryMapper categoryMapper;
+
+    @Autowired
+    private QuestionBackMapper questionBackMapper;
+
+    @Override
+    public String getCategoryName(){
+        String result = "";
+        List<CategoryEntity> categoryEntityList = categoryMapper.findAllChildCategory();
+        List<String> categoryNameList = categoryEntityList.stream().map(x -> x.getName()).collect(Collectors.toList());
+        for(int i =0;i<categoryNameList.size();i++)
+        {
+            result += categoryNameList.get(i);
+        }
+        return result;
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -79,15 +101,36 @@ public class ExcelServiceImpl implements ExcelService {
                 // 教师
                 case 1:
                     if (user == null) {
-                        userMapper.insertUserById(p.getId(),p.getName(),p.getGender(),"12345678",1,"",p.getPhone(),p.getIdentificationNumber());
+                        userMapper.insertUserById(p.getId(),p.getName(),p.getGender(),"12345678",1,"fb0a1080-b11e-427c-8567-56ca6105ea07",p.getPhone(),p.getIdentificationNumber());
                     }
                     break;
                  //管理员
                 case 0:
                     if (user == null) {
-                        userMapper.insertUserById(p.getId(),p.getName(),p.getGender(),"12345678",0,"",p.getPhone(),p.getIdentificationNumber());
+                        userMapper.insertUserById(p.getId(),p.getName(),p.getGender(),"12345678",0,"fb0a1080-b11e-427c-8567-56ca6105ea07",p.getPhone(),p.getIdentificationNumber());
                     }
                     break;
+            }
+        }
+        return Response.success("success");
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Response<String> uploadQbExcel(InputStream in, String filename) throws IOException {
+        ExcelUtils utils = new ExcelUtils(in, filename);
+        int end = utils.getRowCount(0);
+        List<QuestionBackEntity> questionBackEntityList =  utils.parseQuestionBack(utils.read(0, 1, end));
+        List<CategoryEntity> categoryEntityList = categoryMapper.findAllChildCategory();
+        for (QuestionBackEntity q : questionBackEntityList) {
+            List<String> categoryId = categoryEntityList.stream().filter(x -> x.getName().equals(q.getCategoryId())).map(CategoryEntity::getId).collect(Collectors.toList());
+            try{
+                q.setCategoryId(categoryId.get(0));
+                questionBackMapper.addQuestionBack(q);
+            }
+            catch (Exception e)
+            {
+                Response.error(e.toString());
             }
         }
         return Response.success("success");

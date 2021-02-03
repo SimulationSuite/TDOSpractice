@@ -54,6 +54,9 @@ create table if not exists course(
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
 
+
+alter table course add constraint course_name unique ("name");
+
 create index if not exists course_owner_id_index
     on course (owner_id);
 
@@ -132,8 +135,7 @@ create table if not exists courseware(
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
 
-create index if not exists courseware_name_index
-    on courseware ("name");
+alter table courseware add constraint courseware_name unique ("name");
 
 create trigger t_name before update on courseware for each row execute procedure upd_timestamp();
 
@@ -165,9 +167,12 @@ create table if not exists assignment(
     section_id UUID references "section"("id") on delete cascade NOT NULL,
     end_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     qualified_score int4 DEFAULT NULL,
+    status int4 DEFAULT 0,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
+
+alter table assignment add constraint assignment_name unique ("name");
 
 create index if not exists assignment_section_id_index
     on assignment ("section_id");
@@ -187,6 +192,8 @@ create table if not exists question_back(
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
 
+alter table question_back add constraint question_back_content unique (content);
+
 create trigger t_name before update on question_back for each row execute procedure upd_timestamp();
 
 create table if not exists question_back_assignment(
@@ -198,6 +205,7 @@ create table if not exists question_back_assignment(
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     CONSTRAINT "question_back_assignment_pk" PRIMARY KEY ( "assignment_id", "question_id")
 );
+
 
 CREATE SEQUENCE question_back_assignment_order_seq
     START WITH 1

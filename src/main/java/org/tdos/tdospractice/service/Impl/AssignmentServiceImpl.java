@@ -9,6 +9,7 @@ import org.tdos.tdospractice.entity.AssignmentEntity;
 import org.tdos.tdospractice.entity.StudentAnswerEntity;
 import org.tdos.tdospractice.mapper.AssignmentMapper;
 import org.tdos.tdospractice.service.AssignmentService;
+import org.tdos.tdospractice.type.AssignmentQuestionBack;
 import org.tdos.tdospractice.type.AssignmentStatistics;
 import org.tdos.tdospractice.type.StudentAssignment;
 
@@ -78,9 +79,9 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
-    public PageInfo<AssignmentEntity> getAssignmentBySectionId(String sectionId, Integer perPage,Integer page) {
+    public PageInfo<AssignmentQuestionBack> getAssignmentBySectionId(String sectionId, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        List<AssignmentEntity> list = assignmentMapper.getAssignmentBySectionId(sectionId);
+        List<AssignmentQuestionBack> list = assignmentMapper.getAssignmentBySectionId(sectionId);
         return new PageInfo<>(list);
     }
 
@@ -123,6 +124,16 @@ public class AssignmentServiceImpl implements AssignmentService {
     public Boolean modifyAssignmentNameById(Assignment assignment) {
         try {
             assignmentMapper.modifyAssignmentNameById(assignment.id, assignment.name);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public Boolean modifyAssignmentStatusById(Assignment assignment) {
+        try {
+            assignmentMapper.modifyAssignmentStatusById(assignment.id, assignment.status);
         } catch (Exception e) {
             return false;
         }

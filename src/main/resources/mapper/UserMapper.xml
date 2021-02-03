@@ -42,7 +42,7 @@
 
     <insert id="insertUserById">
       insert into sim_user(id,name,gender,password,role_id,class_id,phone,identification_number)
-      values (#{id},#{name},#{gender},#{password},#{roleId},#{classId},#{phone},#{identificationNumber})
+      values (#{id},#{name},#{gender},#{password},#{roleId},#{classId}::uuid,#{phone},#{identificationNumber})
     </insert>
 
     <!-- 自定义高级映射 -->
