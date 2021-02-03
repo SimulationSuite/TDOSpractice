@@ -79,7 +79,7 @@ public class ContainerServiceImpl implements ContainerService {
     }
 
     @Override
-    public List<ContainerEntity> createContainers(String userId, String experimentId) {
+    public List<ContainerEntity> createContainers(String userId, String experimentId, String courseId) {
         List<ImageEntity> imageEntityList = imageMapper.findImageByExperimentId(experimentId);
         if (imageEntityList.size() == 0) {
             return null;
@@ -89,7 +89,11 @@ public class ContainerServiceImpl implements ContainerService {
             ContainerEntity containerEntity = containerMapper.findContainerByName(String.format("%s@%s@%s", userId, experimentId, i.getId()));
             if (containerEntity == null) {
                 //create container
-                list.add(kvmManager.createContainer(userId, experimentId, i));
+                ContainerEntity c = kvmManager.createContainer(userId, experimentId, i);
+                if (courseId != null || !courseId.equals("")) {
+                    c.setCourseId(courseId);
+                }
+                list.add(c);
             } else {
                 list.add(containerEntity);
             }
@@ -99,7 +103,7 @@ public class ContainerServiceImpl implements ContainerService {
 
     @Override
     public boolean execContainer(List<String> containerIds, int type) {
-        if (type < KvmManager.ExecType.START.ordinal() || KvmManager.ExecType.RESTART.ordinal() > type) {
+        if (type < KvmManager.ExecType.START.ordinal() || KvmManager.ExecType.RESTART.ordinal() < type) {
             return true;
         }
         List<ContainerEntity> containers = containerMapper.findContainerByIds(containerIds);
@@ -108,7 +112,7 @@ public class ContainerServiceImpl implements ContainerService {
         }
         for (ContainerEntity c : containers) {
             if (KvmManager.ExecType.START.ordinal() == type && c.getStatus() == 1) {
-                return true;
+                continue;
             }
             kvmManager.execContainer(c.getContainerId(), c.getNodeOrder(), type);
         }
@@ -129,5 +133,10 @@ public class ContainerServiceImpl implements ContainerService {
             return null;
         }
         return kvmManager.downloadFile(containerEntity, fileName);
+    }
+
+    @Override
+    public void removeContainers(List<String> containerIds) {
+        List<ContainerEntity> cl = containerMapper.findContainerByIds(containerIds);
     }
 }

@@ -5,7 +5,7 @@
 <mapper namespace="org.tdos.tdospractice.mapper.AssignmentMapper">
 
     <select  id="getStudentAssignment" resultType="org.tdos.tdospractice.type.StudentAssignment">
-        select a.id as assignmentId, a.name as assignmentName, a.end_at as endAt,
+        select distinct a.id as assignmentId, a.name as assignmentName, a.end_at as endAt,
         case when ss.score is null then 0 else ss.score end as score ,
         case when sa.status is null then 0 else sa.status end as status
         from assignment a
@@ -43,7 +43,7 @@
         inner join class_course cc on cc.course_id = ci.id
         inner join class c on c.id = cc.class_id
         left join student_score ss on ss.assignment_id = sa.assignment_id and ss.user_id = sa.user_id
-        where sa.id is not null
+        where sa.status = 1
         <if test="classId != null and classId != ''" >
             and cc.class_id = #{classId} ::uuid
         </if>

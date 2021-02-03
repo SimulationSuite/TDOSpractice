@@ -9,7 +9,10 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.util.StringUtils;
+import org.tdos.tdospractice.entity.CategoryEntity;
 import org.tdos.tdospractice.type.Personnel;
+import org.tdos.tdospractice.entity.QuestionBackEntity;
+import org.tdos.tdospractice.mapper.CategoryMapper;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -169,6 +172,26 @@ public class ExcelUtils {
                 type = 0;
             }
             return new Personnel(x.get(0), type, x.get(2), gender, x.get(4), x.get(5), x.get(6), x.get(7),x.get(8),x.get(9));
+        }).collect(Collectors.toList());
+    }
+
+    public List<QuestionBackEntity> parseQuestionBack(List<List<String>> lists) {
+        return lists.stream().map(x -> {
+            int type;
+            if (x.get(0).equals("选择题")) {
+                type = 0;
+            } else {
+                type = 1;
+            }
+            String categoryId = "";
+            QuestionBackEntity questionBackEntity = new QuestionBackEntity();
+            questionBackEntity.setType(type);
+            questionBackEntity.setContent(x.get(1));
+            questionBackEntity.setChoice(x.get(2));
+            questionBackEntity.setAnswer(x.get(3));
+            questionBackEntity.setPicUrl(x.get(4));
+            questionBackEntity.setCategoryId(x.get(5));
+            return questionBackEntity;
         }).collect(Collectors.toList());
     }
 

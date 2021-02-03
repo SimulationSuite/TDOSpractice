@@ -138,7 +138,18 @@ public class KvmManager {
     }
 
     public void removeContainers(List<ContainerEntity> containerEntities) {
-
+        try {
+            List<CompletableFuture<Void>> list = new ArrayList<>();
+            containerEntities.forEach(c -> {
+                list.add(CompletableFuture.runAsync(() -> {
+                    DockerTool dockerTool = dockerTools.get(c.getNodeOrder());
+                    dockerTool.stopAndremove(c.getContainerId());
+                }, executor));
+            });
+            CompletableFuture.allOf(list.toArray(new CompletableFuture[]{})).join();
+        } catch (Exception e) {
+            return;
+        }
     }
 
     public void pullImages(String imagesName) {
