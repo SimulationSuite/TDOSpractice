@@ -36,6 +36,13 @@ public class ExcelController {
 
     @GetMapping("/download_qb_excel")
     public void exportQbExcel(HttpServletResponse response) throws Exception {
-        ExcelUtils.createExcel(response, "template.xlsx", new String[]{"类型（选择题、简答题）","内容","选择","答案","图片链接","模板","分类"});
+        String categoryName = excelService.getCategoryName();
+        ExcelUtils.createExcel(response, "template.xlsx", new String[]{"类型（选择题、简答题）","内容","选择","答案","图片链接","分类(" + categoryName + ")"});
+    }
+
+    @RequestMapping(value = "/upload_qb_excel", method = RequestMethod.POST)
+    @ResponseBody
+    public Response<String> uploadQbExcel(@RequestPart("excel_file") MultipartFile uploadFile) throws IOException {
+        return excelService.uploadQbExcel(uploadFile.getInputStream(), uploadFile.getName());
     }
 }
