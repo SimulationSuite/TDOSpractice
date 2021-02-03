@@ -8,4 +8,6 @@ public interface ClassService {
     List<ClassEntity> findAll();
 
     ClassEntity findClassById(String id);
+
+    int findClassCountByClassId(String classId);
 }

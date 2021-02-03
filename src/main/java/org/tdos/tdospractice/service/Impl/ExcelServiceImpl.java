@@ -101,13 +101,13 @@ public class ExcelServiceImpl implements ExcelService {
                 // 教师
                 case 1:
                     if (user == null) {
-                        userMapper.insertUserById(p.getId(),p.getName(),p.getGender(),"12345678",1,"",p.getPhone(),p.getIdentificationNumber());
+                        userMapper.insertUserById(p.getId(),p.getName(),p.getGender(),"12345678",1,"fb0a1080-b11e-427c-8567-56ca6105ea07",p.getPhone(),p.getIdentificationNumber());
                     }
                     break;
                  //管理员
                 case 0:
                     if (user == null) {
-                        userMapper.insertUserById(p.getId(),p.getName(),p.getGender(),"12345678",0,"",p.getPhone(),p.getIdentificationNumber());
+                        userMapper.insertUserById(p.getId(),p.getName(),p.getGender(),"12345678",0,"fb0a1080-b11e-427c-8567-56ca6105ea07",p.getPhone(),p.getIdentificationNumber());
                     }
                     break;
             }

@@ -24,7 +24,7 @@ public class ExcelController {
 
     @GetMapping("/download_excel")
     public void exportExcel(HttpServletResponse response) throws Exception {
-        ExcelUtils.createExcel(response, "template.xlsx", new String[]{"姓名","类型（教师、学生）","编号（学号、工号）","性别","系","年级","班级"});
+        ExcelUtils.createExcel(response, "template.xlsx", new String[]{"姓名","类型（教师、学生）","编号（学号、工号）","性别","系","年级","班级","手机号","证件号","专业"});
     }
 
     @RequestMapping(value = "/upload_excel", method = RequestMethod.POST)

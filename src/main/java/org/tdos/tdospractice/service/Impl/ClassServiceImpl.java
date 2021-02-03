@@ -22,4 +22,9 @@ public class ClassServiceImpl implements ClassService {
     public ClassEntity findClassById(String id) {
         return classMapper.findClassById(id);
     }
+
+    @Override
+    public int findClassCountByClassId(String classId) {
+        return classMapper.findClassCountByClassId(classId);
+    }
 }
