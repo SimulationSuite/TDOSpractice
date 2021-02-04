@@ -358,6 +358,7 @@ public class CourseServiceImpl implements CourseService {
     public PageInfo<Course> getExpiredList(Integer perPage, Integer page, String name) {
         PageHelper.startPage(page, perPage);
         PageHelper.orderBy("c.created_at desc");
+
         PageInfo<Course> pageInfo = new PageInfo<>(courseMapper.getExpiredList(name));
         if (pageInfo.getList().size() > 0) {
             List<Course> list = courseMapper.getExpiredListPerfect(pageInfo.getList().stream().map(x -> x.id).collect(Collectors.toList()));

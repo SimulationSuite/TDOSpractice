@@ -81,7 +81,7 @@ public class AssignmentController {
     }
 
     @GetMapping(value = "/getAssignmentNameBySectionId")
-    public Response<String> getAssignmentNameBySectionId(@RequestParam(value = "sectionId") String sectionId) {
+    public Response<AssignmentEntity> getAssignmentNameBySectionId(@RequestParam(value = "sectionId") String sectionId) {
         return Response.success(assignmentService.getAssignmentNameBySectionId(sectionId));
     }
 

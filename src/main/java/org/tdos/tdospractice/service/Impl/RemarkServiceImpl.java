@@ -10,6 +10,7 @@ import org.tdos.tdospractice.body.DeleteRemark;
 import org.tdos.tdospractice.body.Remark;
 import org.tdos.tdospractice.entity.CoursewareEntity;
 import org.tdos.tdospractice.entity.UserEntity;
+import org.tdos.tdospractice.mapper.CourseMapper;
 import org.tdos.tdospractice.mapper.CoursewareMapper;
 import org.tdos.tdospractice.mapper.RemarkMapper;
 import org.tdos.tdospractice.mapper.UserMapper;
@@ -30,6 +31,9 @@ public class RemarkServiceImpl implements RemarkService {
 
     @Autowired
     private CoursewareMapper coursewareMapper;
+
+    @Autowired
+    private CourseMapper courseMapper;
 
 
     @Override
@@ -56,6 +60,9 @@ public class RemarkServiceImpl implements RemarkService {
         if (userEntity.getRoleID() != 2) {
             return new Pair<>(false, "role must be student");
         }
+        if (courseMapper.hasCourseExist(remark.courseId) == 0) {
+            return new Pair<>(false, "course_id is not exist");
+        }
         if (coursewareMapper.hasSectionCoursewareId(remark.coursewareId) == 0) {
             return new Pair<>(false, "courseware_id is not exist");
         }
@@ -64,9 +71,9 @@ public class RemarkServiceImpl implements RemarkService {
     }
 
     @Override
-    public PageInfo<CoursewareRemark> getCoursewareRemarkList(String userId, String coursewareId, String title, Integer perPage, Integer page) {
+    public PageInfo<CoursewareRemark> getCoursewareRemarkList(String userId, String courseId, String title, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        List<CoursewareRemark> list = remarkMapper.getCoursewareRemarkList(userId, coursewareId, title);
+        List<CoursewareRemark> list = remarkMapper.getCoursewareRemarkList(userId, courseId, title);
         return new PageInfo<>(list);
     }
 

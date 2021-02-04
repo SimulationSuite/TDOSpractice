@@ -7,6 +7,9 @@ public class Remark {
     @JsonProperty("courseware_id")
     public String coursewareId;
 
+    @JsonProperty("course_id")
+    public String courseId;
+
     @JsonProperty("user_id")
     public String userId;
 
@@ -20,6 +23,6 @@ public class Remark {
     public int remarkPage;
 
     @JsonProperty("remark_at")
-    public long RemarkAt;
+    public long remarkAt;
 
 }

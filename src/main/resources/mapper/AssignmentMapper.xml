@@ -88,7 +88,7 @@
     </select>
 
     <select  id="getAssignmentByClassId" resultType="org.tdos.tdospractice.entity.AssignmentEntity">
-        select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
+        select a.id, a.section_id as sectionId, a.name, a.end_at as endAt, a.qualified_score as qualifiedScore,
         a.created_at as createdAt, a.updated_at as updatedAt
         from assignment a
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
@@ -98,7 +98,7 @@
     </select>
 
     <select  id="getAssignmentByCourseId" resultType="org.tdos.tdospractice.entity.AssignmentEntity">
-        select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
+        select a.id, a.section_id as sectionId, a.name, a.end_at as endAt, a.qualified_score as qualifiedScore,
         a.created_at as createdAt, a.updated_at as updatedAt
         from assignment a
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
@@ -107,15 +107,16 @@
     </select>
 
     <select  id="getAssignmentByChapterId" resultType="org.tdos.tdospractice.entity.AssignmentEntity">
-        select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
+        select a.id, a.section_id as sectionId, a.name, a.end_at as endAt, a.qualified_score as qualifiedScore,
         a.created_at as createdAt, a.updated_at as updatedAt
         from assignment a
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
         where ccs.chapter_id =#{ChapterId} ::uuid
     </select>
 
-    <select  id="getAssignmentNameBySectionId" resultType="String">
-        select a.name
+    <select  id="getAssignmentNameBySectionId" resultType="org.tdos.tdospractice.entity.AssignmentEntity">
+        select a.id, a.section_id as sectionId, a.name, a.end_at as endAt, a.qualified_score as qualifiedScore,
+        a.created_at as createdAt, a.updated_at as updatedAt
         from assignment a
         where a.section_id =#{sectionId} ::uuid
     </select>
@@ -158,5 +159,22 @@
     <update id="modifyAssignmentStatusById">
         update assignment set status = #{status} where id=#{id}::uuid;
     </update>
+
+    <select  id="getEndAssignment" resultType="org.tdos.tdospractice.entity.AssignmentEntity">
+        select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
+        a.created_at as createdAt, a.updated_at as updatedAt
+        from assignment a
+        where a.end_at &lt;= #{endTime}::timestamp
+    </select>
+
+    <select  id="getUsers" resultType="String">
+        select distinct su.id
+        from assignment a
+        inner join course_chapter_section ccs on ccs.section_id = a.section_id
+        inner join course ci on ci.id = ccs.course_id
+        inner join class_course cc on cc.course_id = ci.id
+        inner join sim_user su on su.class_id = cc.class_id
+        where qba.assignment_id =#{assignmentId} ::uuid
+    </select>
 
 </mapper>

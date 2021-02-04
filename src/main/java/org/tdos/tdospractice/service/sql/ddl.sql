@@ -130,7 +130,7 @@ create table if not exists courseware(
     "url" varchar(255) DEFAULT NULL,
     duration int8 DEFAULT NULL,
     "size" int8 DEFAULT 0,
-    category_id varchar(255),
+    category_id UUID references "category"("id"),
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
@@ -154,7 +154,7 @@ create trigger t_name before update on chapter_section_courseware for each row e
 create table if not exists category(
     id UUID primary key DEFAULT uuid_generate_v4(),
     "name" varchar(255) NOT NULL,
-    parent_category_id varchar(255),
+    parent_category_id UUID references "category"("id"),
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
@@ -187,7 +187,7 @@ create table if not exists question_back(
     answer text,
     pic_url varchar(255),
     model_id varchar(255) DEFAULT null,
-    category_id varchar(255),
+    category_id UUID references "category"("id"),
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
@@ -255,7 +255,7 @@ create table if not exists experiment(
     end_at TIMESTAMP(0)  without time zone default NULL,
     step text DEFAULT null,
     duration int8 DEFAULT 0,
-    category_id varchar(255) NOT null,
+    category_id UUID references "category"("id") NOT null,
     introduce varchar(255) DEFAULT null,
     report_requirement varchar(255) DEFAULT null,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
@@ -335,6 +335,7 @@ create trigger t_name before update on experiment_report for each row execute pr
 create table if not exists courseware_remark(
     id UUID primary key DEFAULT uuid_generate_v4(),
     courseware_id UUID  references "courseware"("id") on delete cascade NOT NULL,
+    course_id UUID references "course"("id") on delete cascade NOT NULL,
     user_id varchar(255) NOT NULL,
     title varchar(255) DEFAULT null,
     content varchar(255) DEFAULT NULL,

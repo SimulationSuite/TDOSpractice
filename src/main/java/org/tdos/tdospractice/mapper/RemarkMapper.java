@@ -14,7 +14,7 @@ public interface RemarkMapper {
 
     int uploadRemark(@Param("remark") Remark remark);
 
-    List<CoursewareRemark> getCoursewareRemarkList(String userId, @Param("coursewareId") String coursewareId, String title);
+    List<CoursewareRemark> getCoursewareRemarkList(String userId, @Param("courseId") String courseId, String title);
 
     int deleteRemark(String remarkId);
 }

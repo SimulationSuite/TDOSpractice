@@ -10,7 +10,7 @@ public interface RemarkService {
 
     Pair<Boolean, String> uploadRemark(Remark remark);
 
-    PageInfo<CoursewareRemark> getCoursewareRemarkList(String userId, String coursewareId, String title, Integer perPage, Integer page);
+    PageInfo<CoursewareRemark> getCoursewareRemarkList(String userId, String courseId, String title, Integer perPage, Integer page);
 
     Pair<Boolean, String> deleteRemark(DeleteRemark deleteRemark);
 }
