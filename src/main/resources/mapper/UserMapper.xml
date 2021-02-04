@@ -24,7 +24,7 @@
     </select>
 
     <select id="findAllByRoleIDAndClasses" resultMap="user">
-        select  * from sim_user where role_id = #{role_id} and class_id = #{class_id}
+        select  * from sim_user where role_id = #{role_id} and class_id = #{class_id}::uuid
     </select>
 
     <delete id="deleteUserById">
