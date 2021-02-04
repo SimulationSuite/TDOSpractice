@@ -200,7 +200,7 @@ public class KvmManager {
 
     @PostConstruct
     public void init() {
-//        dockerInit();
+        dockerInit();
     }
 
     public boolean isQuoteContainer(List<String> imagesID) {
