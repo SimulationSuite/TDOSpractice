@@ -67,8 +67,8 @@
         values
         <foreach collection="studentAnswerList" item="item" separator=",">
             (
-            #{item.questionId},
-            #{item.assignmentId},
+            #{item.questionId}::uuid,
+            #{item.assignmentId}::uuid,
             #{item.userId},
             #{item.answer},
             #{item.score}
