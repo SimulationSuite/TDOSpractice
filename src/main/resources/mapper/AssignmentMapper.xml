@@ -167,13 +167,13 @@
         where a.end_at &lt;= #{endTime}::timestamp
     </select>
 
-    <select  id="getUncommittedUser" resultType="String">
-        select distinct qb.type = 0
+    <select  id="getUsers" resultType="String">
+        select distinct su.id
         from assignment a
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
         inner join course ci on ci.id = ccs.course_id
         inner join class_course cc on cc.course_id = ci.id
-        inner join class c on c.id = cc.class_id
+        inner join sim_user su on su.class_id = cc.class_id
         where qba.assignment_id =#{assignmentId} ::uuid
     </select>
 

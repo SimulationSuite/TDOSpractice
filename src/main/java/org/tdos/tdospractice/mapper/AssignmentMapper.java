@@ -46,6 +46,8 @@ public interface AssignmentMapper {
 
     List<AssignmentEntity> getEndAssignment(@Param("endTime") String endTime);
 
-    List<String> getUncommittedUser(@Param("assignmentId") String assignmentId);
+    List<String> getUsers(@Param("assignmentId") String assignmentId);
+
+    boolean ifUncommittedUser(@Param("assignmentId") String assignmentId);
 
 }
