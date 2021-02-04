@@ -3,6 +3,7 @@ package org.tdos.tdospractice.service;
 import org.tdos.tdospractice.entity.ExperimentReportEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ExperimentReportService {
 
@@ -13,4 +14,7 @@ public interface ExperimentReportService {
     boolean updateExperimentReport(ExperimentReportEntity experimentEntity);
 
     boolean updateExperimentReportByEndtime();
+
+    Optional<ExperimentReportEntity> findExperimentReportByExperimentAndUserId(String experiment_id,String user_id);
+
 }
