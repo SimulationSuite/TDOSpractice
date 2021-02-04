@@ -6,15 +6,22 @@ import org.tdos.tdospractice.entity.ExperimentReportEntity;
 import org.tdos.tdospractice.service.ExperimentReportService;
 import org.tdos.tdospractice.type.Response;
 
-//@RestController
+@RestController
 public class ExperimentReportController {
 
 
+    @Autowired
     private ExperimentReportService experimentReportService;
 
     @PostMapping(value = "/insertExperimentRepor")
     public Response insertExperimentRepor(@RequestBody ExperimentReportEntity experimentReportEntity) {
         try {
+            if (experimentReportService.findExperimentReportByExperimentAndUserId(experimentReportEntity.getExperiment_id(), experimentReportEntity.getUser_id()).isPresent()){
+                if (experimentReportService.updateExperimentReport(experimentReportEntity)){
+                    return Response.success();
+                }
+                return Response.error("新增失败");
+            }
             int i = experimentReportService.insert(experimentReportEntity);
             if (i == 1)
                 return Response.success();
@@ -41,5 +48,14 @@ public class ExperimentReportController {
     @GetMapping(value = "/findByExperimentReport")
     public Response findByExperimentReport(@ModelAttribute ExperimentReportEntity experimentReportEntity) {
         return Response.success(experimentReportService.findByExperimentReport(experimentReportEntity));
+    }
+
+    @GetMapping(value = "/hasExperimentReport")
+    public Response hasExperimentReport(@RequestParam(value = "experiment_id") String experiment_id,
+                                        @RequestParam(value = "user_id") String user_id) {
+        if (experimentReportService.findExperimentReportByExperimentAndUserId(experiment_id, user_id).isPresent()){
+            return Response.success("该实验报告已存在");
+        }
+        return Response.error("该实验报告不存在");
     }
 }

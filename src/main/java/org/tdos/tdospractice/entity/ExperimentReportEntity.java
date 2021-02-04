@@ -12,8 +12,6 @@ import java.util.Date;
 @Builder
 public class ExperimentReportEntity {
 
-    private String id;
-
     private String experiment_id;
 
     private String user_id;
