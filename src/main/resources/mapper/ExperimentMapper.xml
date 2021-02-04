@@ -28,7 +28,7 @@
     <select id="findAllByIds" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
         SELECT * FROM experiment
         WHERE id IN
-        <foreach collection="list" item="id" index="index"
+        <foreach collection="section_ids" item="id" index="index"
                  open="(" close=")" separator=",">
             #{id}::uuid
         </foreach>
