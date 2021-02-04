@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.tdos.tdospractice.entity.ContainerEntity;
 import org.tdos.tdospractice.entity.ImageEntity;
+import org.tdos.tdospractice.utils.HashUtils;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
@@ -64,7 +65,7 @@ public class KvmManager {
             return null;
         }
         String containerName = userId + separator + experimentId + separator + imageEntity.getId();
-        CreateContainerResponse ccr = dockerTool.creatContainer(imageEntity.getImageName(), containerName, imageEntity.getKind(), ports);
+        CreateContainerResponse ccr = dockerTool.creatContainer(imageEntity.getImageName(), HashUtils.encodesha3(containerName), imageEntity.getKind(), ports);
         if (ccr == null) {
             return null;
         }
@@ -73,19 +74,35 @@ public class KvmManager {
                 .name(containerName)
                 .userId(userId)
                 .experimentId(experimentId)
+                .imageId(imageEntity.getId())
+                .url(getURL(imageEntity, ports.get(0), dockerTool.getIP()))
                 .ports(ports.stream().map(String::valueOf).collect(Collectors.joining(separator)))
                 .nodeOrder(dockerIndex)
                 .status(0).build();
     }
 
+    private String getURL(ImageEntity imageEntity, int port, String IP) {
+        if (imageEntity.getKind() == DockerTool.Type.GUI.ordinal()) {
+            return String.format("http://%s:%i%s", IP, port, imageEntity.getUrl());
+        }
+        return null;
+    }
+
     private List<Integer> getFreePorts(DockerTool dockerTool, int kind) {
+        List<Integer> list = new ArrayList<>();
         if (kind == DockerTool.Type.GUI.ordinal()) {
-            return dockerTool.getFreePort(1);
+            list = dockerTool.getFreePort(1);
+            if (list.size() != 1) {
+                return new ArrayList<>();
+            }
         }
         if (kind == DockerTool.Type.SSH.ordinal()) {
-            return dockerTool.getFreePort(2);
+            list = dockerTool.getFreePort(2);
+            if (list.size() != 2) {
+                return new ArrayList<>();
+            }
         }
-        return new ArrayList<>();
+        return list;
     }
 
     /**
@@ -143,7 +160,7 @@ public class KvmManager {
             containerEntities.forEach(c -> {
                 list.add(CompletableFuture.runAsync(() -> {
                     DockerTool dockerTool = dockerTools.get(c.getNodeOrder());
-                    dockerTool.stopAndremove(c.getContainerId());
+                    dockerTool.stopAndremove(c.getContainerId(), c.getPubPorts());
                 }, executor));
             });
             CompletableFuture.allOf(list.toArray(new CompletableFuture[]{})).join();

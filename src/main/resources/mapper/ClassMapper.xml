@@ -38,6 +38,11 @@
         where su.role_id = 2 GROUP BY su.class_id
     </select>
 
+    <select id="findClassCountByClassId" resultType="int">
+        SELECT count(id) from sim_user
+        where role_id = 2 and class_id = #{classId} :: uuid
+    </select>
+
     <resultMap type="org.tdos.tdospractice.type.ClassNumber" id="classNumber">
         <result column="class_id" property="classId"/>
         <result column="count" property="numbers"/>

@@ -26,6 +26,8 @@ public interface AssignmentService {
 
     PageInfo<AssignmentQuestionBack> getAssignmentBySectionId(String sectionId, Integer perPage, Integer page);
 
+    AssignmentEntity getAssignmentNameBySectionId(String sectionId);
+
     Map<String, Object> deleteAssignmentById(List<String> id);
 
     AssignmentEntity addAssignment(Assignment assignment);

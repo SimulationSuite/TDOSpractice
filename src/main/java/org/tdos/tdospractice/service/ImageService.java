@@ -12,7 +12,7 @@ public interface ImageService {
 
     PageInfo<Map<String, Object>> getImagequoteList(int kind, String imageName, int page, int perPage);
 
-    int addImage(String imageName, String introduction);
+    int addImage(String imageName, String introduction, int kind, String url);
 
     int deleteImages(List<String> imagesID);
 

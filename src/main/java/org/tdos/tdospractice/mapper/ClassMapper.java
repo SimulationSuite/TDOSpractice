@@ -23,4 +23,6 @@ public interface ClassMapper {
     ClassEntity findClassByClassesId(String id);
 
     ClassEntity findClassByClasses(String name);
+
+    int findClassCountByClassId(String classId);
 }

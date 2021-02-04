@@ -3,6 +3,8 @@ package org.tdos.tdospractice.entity;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -10,8 +12,6 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 public class ContainerEntity {
-
-    private String Id;
 
     private String containerId;
 
@@ -25,6 +25,8 @@ public class ContainerEntity {
 
     private String imageId;
 
+    private String url;
+
     private String ports;// pubport@pubport...
 
     private int nodeOrder;
@@ -34,4 +36,15 @@ public class ContainerEntity {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    public List<Integer> getPubPorts() {
+        List<Integer> list = new ArrayList<>();
+        if (this.ports != null && !this.ports.equals("")) {
+            String[] st = ports.split("@");
+            for (String s : st) {
+                list.add(Integer.parseInt(s));
+            }
+        }
+        return list;
+    }
 }

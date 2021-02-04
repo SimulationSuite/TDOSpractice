@@ -25,6 +25,8 @@ import static com.github.dockerjava.api.model.Capability.SYS_ADMIN;
 @NoArgsConstructor
 public class DockerTool implements CommonTool {
 
+    private String IP;
+
     private DockerClient dockerClient;
 
     private String serverName;
@@ -58,6 +60,7 @@ public class DockerTool implements CommonTool {
         this.count = count;
         this.usedPorts = new HashSet<>();
         initClient(certsPath, serverURL);
+        this.IP = parseIP(serverURL);
         this.imageList = dockerClient.listImagesCmd().withShowAll(true).exec();
     }
 
@@ -70,6 +73,12 @@ public class DockerTool implements CommonTool {
                 .build();
         this.dockerClient = DockerClientBuilder.getInstance(config).build();
         log.info("Connected successful " + this.serverName + " , Docker host is " + serverURL);
+    }
+
+    private String parseIP(String serverURL) {
+        String s = serverURL.substring(serverURL.indexOf("//") + 2);
+        String[] arr = s.split(":");
+        return arr[0];
     }
 
     public void addPortList() {
@@ -94,6 +103,9 @@ public class DockerTool implements CommonTool {
     }
 
     public void removePorts(Collection<Integer> ports) {
+        if (ports.size() == 0) {
+            return;
+        }
         rwLock.writeLock().lock();
         try {
             usedPorts.removeAll(ports);
@@ -102,9 +114,9 @@ public class DockerTool implements CommonTool {
         }
     }
 
-    public List<Integer> getFreePort(int count) {
+    public List<Integer> getFreePort(int counts) {
         List<Integer> list = new ArrayList<>();
-        int item = count;
+        int item = counts;
         rwLock.readLock().lock();
         try {
             for (int x = startPort; x <= (startPort + count); x++) {
@@ -210,18 +222,18 @@ public class DockerTool implements CommonTool {
         log.info(serverName + " restart the container, containerId is " + containerId);
     }
 
-    public void remove(String containerId) {
+    public void remove(String containerId, List<Integer> pubPorts) {
         List<Container> containers = dockerClient.listContainersCmd().withIdFilter(Collections.singleton(containerId)).exec();
         if (containers.size() > 0) {
-            dockerClient.stopContainerCmd(containerId).exec();
+            dockerClient.removeContainerCmd(containerId).exec();
+            removePorts(pubPorts);
+            log.info(serverName + " remove the container, containerId is " + containerId);
         }
-        dockerClient.removeContainerCmd(containerId).exec();
-        log.info(serverName + " remove the container, containerId is " + containerId);
     }
 
-    public void stopAndremove(String containerId) {
+    public void stopAndremove(String containerId, List<Integer> pubPorts) {
         stop(containerId);
-        remove(containerId);
+        remove(containerId, pubPorts);
     }
 
     /**

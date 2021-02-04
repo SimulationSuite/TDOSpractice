@@ -66,6 +66,9 @@ public class ExperimentServiceImpl implements ExperimentService {
                 sectionid_list.add(section.id);
             });
         });
+        if (sectionid_list.size() == 0){
+            return new PageInfo<>(new ArrayList<>());
+        }
         List<String> list = chapterSectionExperimentService.getExperimentIds(sectionid_list);
         return findAllByIds(list, perPage, page);
     }
@@ -77,6 +80,9 @@ public class ExperimentServiceImpl implements ExperimentService {
         chapter.getSections().forEach(section -> {
             sectionid_list.add(section.id);
         });
+        if (sectionid_list.size() == 0){
+            return new PageInfo<>(new ArrayList<>());
+        }
         List<String> list = chapterSectionExperimentService.getExperimentIds(sectionid_list);
         return findAllByIds(list, perPage, page);
     }
@@ -85,6 +91,9 @@ public class ExperimentServiceImpl implements ExperimentService {
     public PageInfo<ExperimentEntity> findAllBySectionId(String section_id, Integer perPage, Integer page) {
         List<String> sectionid_list = new ArrayList<>();
         sectionid_list.add(section_id);
+        if (sectionid_list.size() == 0){
+            return new PageInfo<>(new ArrayList<>());
+        }
         List<String> list = chapterSectionExperimentService.getExperimentIds(sectionid_list);
         return findAllByIds(list, perPage, page);
     }
@@ -92,6 +101,9 @@ public class ExperimentServiceImpl implements ExperimentService {
     @Override
     public PageInfo<ExperimentEntity> findAllByIds(List<String> section_ids, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
+        if (section_ids.size() == 0){
+            return new PageInfo<>(new ArrayList<>());
+        }
         List<ExperimentEntity> list = experimentMapper.findAllByIds(section_ids);
         return new PageInfo<>(list);
     }

@@ -122,21 +122,17 @@ public class ExperimentController {
     @PostMapping(value = "/deleteExperiment")
     public Response deleteExperiment(@RequestParam(value = "id") String id) {
         try {
-            ExperimentEntity experimentEntity = experimentService.findById(id);
-            if (experimentService.deleteExperiment(id))
-                return Response.success();
-            return Response.error("删除失败");
+            //TODO 判断课程是否已发布
+            if (chapterSectionExperimentService.getSectionNumberbyExperiment(id) == 0){
+                if (experimentService.deleteExperiment(id))
+                    return Response.success();
+                return Response.error("删除失败");
+            }else {
+                return Response.error("删除失败,该实验与课程已绑定");
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return Response.error(e.getMessage());
         }
-    }
-
-
-    @PostMapping(value = "/test123")
-    public Response test123(@RequestBody List<String> ids) {
-        List<String> list = chapterSectionExperimentService.getExperimentIds(ids);
-        System.out.println("123");
-        return null;
     }
 }

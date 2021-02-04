@@ -2,6 +2,7 @@ package org.tdos.tdospractice.service;
 
 import com.github.pagehelper.PageInfo;
 import org.tdos.tdospractice.entity.ContainerEntity;
+import org.tdos.tdospractice.type.Response;
 
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,7 @@ public interface ContainerService {
 
     List<ContainerEntity> createContainers(String userId, String experimentId,String courseId);
 
-    boolean execContainer(List<String> containerId, int type);
+    Response execContainer(List<String> containerId, int type);
 
     byte[] downloadCode(String containerId, String fileNmae);
 

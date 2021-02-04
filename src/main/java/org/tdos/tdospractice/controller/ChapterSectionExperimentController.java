@@ -1,8 +1,10 @@
 package org.tdos.tdospractice.controller;
 
+import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.tdos.tdospractice.body.BindExperiments;
 import org.tdos.tdospractice.entity.ChapterSectionExperimentEntity;
@@ -36,6 +38,15 @@ public class ChapterSectionExperimentController {
             e.printStackTrace();
             return Response.error(e.getMessage());
         }
+    }
 
+    @PostMapping(value = "/unbindExperiments")
+    public Response unbindExperiments(@RequestParam(value = "id") String id) {
+        Pair<Boolean,String> pair = chapterSectionExperimentService.deleteChapterSectionExperiment(id);
+        if (pair.getKey()){
+            return Response.success();
+        }else {
+            return Response.error("删除失败");
+        }
     }
 }

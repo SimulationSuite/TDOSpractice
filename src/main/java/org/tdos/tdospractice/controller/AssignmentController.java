@@ -80,6 +80,11 @@ public class AssignmentController {
         return Response.success(assignmentService.getAssignmentBySectionId(sectionId, perPage, page));
     }
 
+    @GetMapping(value = "/getAssignmentNameBySectionId")
+    public Response<AssignmentEntity> getAssignmentNameBySectionId(@RequestParam(value = "sectionId") String sectionId) {
+        return Response.success(assignmentService.getAssignmentNameBySectionId(sectionId));
+    }
+
     @PostMapping(value = "/deleteAssignmentById")
     public Response<Map<String, Object>> deleteAssignmentById(@RequestBody AssignmentIdList idList) {
         Map<String, Object> map = assignmentService.deleteAssignmentById(idList.assignmentIdList);
