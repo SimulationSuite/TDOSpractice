@@ -103,6 +103,9 @@ public class DockerTool implements CommonTool {
     }
 
     public void removePorts(Collection<Integer> ports) {
+        if (ports.size() == 0) {
+            return;
+        }
         rwLock.writeLock().lock();
         try {
             usedPorts.removeAll(ports);

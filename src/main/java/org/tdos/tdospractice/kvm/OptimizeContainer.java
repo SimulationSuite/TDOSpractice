@@ -7,8 +7,8 @@ import org.tdos.tdospractice.entity.ContainerEntity;
 import org.tdos.tdospractice.mapper.ContainerMapper;
 import org.tdos.tdospractice.mapper.CourseMapper;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class OptimizeContainer {
@@ -24,8 +24,8 @@ public class OptimizeContainer {
 
     @Scheduled(cron = "0 0 24 ? * SUN")
     public void execute() {
-        //获取已过期的课程不包含归档的
-        List<String> courses = new ArrayList<>();
+        List<String> courses = courseMapper.getExpiredList("")
+                .stream().map(x -> x.id).collect(Collectors.toList());
         if (courses.size() == 0) {
             return;
         }
