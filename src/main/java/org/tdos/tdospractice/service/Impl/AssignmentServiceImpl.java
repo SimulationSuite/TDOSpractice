@@ -86,6 +86,16 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
+    public String getAssignmentNameBySectionId(String sectionId) {
+        if(assignmentMapper.ifAssignmentBySectionId(sectionId))
+        {
+            String name = assignmentMapper.getAssignmentNameBySectionId(sectionId);
+            return name;
+        }
+        return "";
+    }
+
+    @Override
     public Map<String, Object> deleteAssignmentById(List<String> id) {
         Map<String, Object> map = new HashMap<>();
         List<String> sectionAssignment = new ArrayList<>();

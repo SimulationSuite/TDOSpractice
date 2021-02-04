@@ -30,9 +30,13 @@ public interface AssignmentMapper {
 
     List<AssignmentQuestionBack> getAssignmentBySectionId(@Param("sectionId") String sectionId);
 
+    String getAssignmentNameBySectionId(@Param("sectionId") String sectionId);
+
     int deleteAssignmentById(@Param("id") String id);
 
     boolean ifSectionAssignmentByAssignmentId(String id);
+
+    boolean ifAssignmentBySectionId(@Param("sectionId") String sectionId);
 
     int modifyAssignmentNameById(@Param("id") String id, @Param("name") String name);
 
