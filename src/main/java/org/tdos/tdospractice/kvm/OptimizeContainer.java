@@ -22,7 +22,7 @@ public class OptimizeContainer {
     @Autowired
     private KvmManager kvmManager;
 
-    @Scheduled(cron = "0 0 24 ? * SUN")
+    @Scheduled(cron = "0 0 23 ? * SUN")
     public void execute() {
         List<String> courses = courseMapper.getExpiredList("")
                 .stream().map(x -> x.id).collect(Collectors.toList());
