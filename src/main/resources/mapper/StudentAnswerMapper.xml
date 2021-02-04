@@ -89,13 +89,19 @@
     </update>
 
     <delete id="deleteStudentAnswerByAssignmentUserId">
-        delete from student_answer where assignment_id = #{assignmentId}::uuid and user_id = #{userId}::uuid;
+        delete from student_answer where assignment_id = #{assignmentId}::uuid and user_id = #{userId};
     </delete>
 
     <select  id="getQuestionBackTypeByAssignment" resultType="org.tdos.tdospractice.type.StudentQuestionAnswer">
         select distinct qb.type = 0
         from question_back qb
         where qba.assignment_id =#{assignmentId} ::uuid
+    </select>
+
+    <select id="ifStudentAnswer"  resultType="Boolean">
+        select case when count(*) > 0 then true else false end
+        from student_answer
+        where assignment_id = #{assignmentId}::uuid and user_id = #{userId};
     </select>
 
 </mapper>

@@ -121,6 +121,12 @@ public class StudentAnswerServiceImpl implements StudentAnswerService {
         });
 
         try {
+            String assignmentId = studentAnswerEntityList.get(0).getAssignmentId();
+            String userId = studentAnswerEntityList.get(0).getUserId();
+            if(studentAnswerMapper.ifStudentAnswer(assignmentId, userId))
+            {
+                studentAnswerMapper.deleteStudentAnswerByAssignmentUserId(assignmentId, userId);
+            }
             studentAnswerMapper.addStudentAnswerList(studentAnswerEntityList);
         } catch (Exception e) {
             System.out.println(e);
