@@ -83,7 +83,7 @@ public class KvmManager {
 
     private String getURL(ImageEntity imageEntity, int port, String IP) {
         if (imageEntity.getKind() == DockerTool.Type.GUI.ordinal()) {
-            return String.format("http://%s:%i%s", IP, port, imageEntity.getUrl());
+            return String.format("ws://%s:%d%s", IP, port, imageEntity.getUrl());
         }
         return null;
     }
