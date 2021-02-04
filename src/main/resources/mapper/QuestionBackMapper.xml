@@ -24,7 +24,7 @@
     </select>
 
     <select  id="getStudentAnswerByAssignment" resultType="org.tdos.tdospractice.type.StudentQuestionAnswer">
-        select qb.id, qb.type, qb.content, qb.choice, qb.pic_url as picUrl, qb.model_id as modelId,
+        select qb.id, qb.type, qb.content, qb.choice, qb.answer, qb.pic_url as picUrl, qb.model_id as modelId,
         qb.category_id as categoryId, sa.answer as studentAnswer, qba.score as totalScore
         from question_back qb
         inner join question_back_assignment qba on qba.question_id = qb.id
