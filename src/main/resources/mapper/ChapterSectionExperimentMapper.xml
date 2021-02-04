@@ -24,4 +24,21 @@
         </foreach>;
     </select>
 
+    <delete id="deleteChapterSectionExperiment">
+        delete from chapter_section_experiment where id = #{id}::uuid
+    </delete>
+
+
+    <select  id="getExperimentNumberbySection" resultType="int">
+        select count(*) from chapter_section_experiment
+            WHERE section_id =  #{section_id}::uuid
+    </select>
+
+    <select  id="getSectionNumberbyExperiment" resultType="int">
+        select count(*) from chapter_section_experiment
+            WHERE experiment_id =  #{experiment}::uuid
+    </select>
+
+
+
 </mapper>

@@ -15,4 +15,10 @@ public interface ChapterSectionExperimentMapper {
 
     List<String> getExperimentIds(@Param("section_ids")List<String> section_ids);
 
+    boolean deleteChapterSectionExperiment(String id);
+
+    int getExperimentNumberbySection(String section_id);
+
+    int getSectionNumberbyExperiment(String experiment_id);
+
 }
