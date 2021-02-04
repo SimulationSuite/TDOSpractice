@@ -88,7 +88,7 @@
     </select>
 
     <select  id="getAssignmentByClassId" resultType="org.tdos.tdospractice.entity.AssignmentEntity">
-        select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
+        select a.id, a.section_id as sectionId, a.name, a.end_at as endAt, a.qualified_score as qualifiedScore,
         a.created_at as createdAt, a.updated_at as updatedAt
         from assignment a
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
@@ -98,7 +98,7 @@
     </select>
 
     <select  id="getAssignmentByCourseId" resultType="org.tdos.tdospractice.entity.AssignmentEntity">
-        select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
+        select a.id, a.section_id as sectionId, a.name, a.end_at as endAt, a.qualified_score as qualifiedScore,
         a.created_at as createdAt, a.updated_at as updatedAt
         from assignment a
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
@@ -107,7 +107,7 @@
     </select>
 
     <select  id="getAssignmentByChapterId" resultType="org.tdos.tdospractice.entity.AssignmentEntity">
-        select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
+        select a.id, a.section_id as sectionId, a.name, a.end_at as endAt, a.qualified_score as qualifiedScore,
         a.created_at as createdAt, a.updated_at as updatedAt
         from assignment a
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
@@ -115,7 +115,7 @@
     </select>
 
     <select  id="getAssignmentNameBySectionId" resultType="org.tdos.tdospractice.entity.AssignmentEntity">
-        select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
+        select a.id, a.section_id as sectionId, a.name, a.end_at as endAt, a.qualified_score as qualifiedScore,
         a.created_at as createdAt, a.updated_at as updatedAt
         from assignment a
         where a.section_id =#{sectionId} ::uuid
