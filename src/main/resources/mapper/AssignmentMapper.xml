@@ -128,7 +128,7 @@
     </select>
 
     <select  id="getAssignmentBySectionId" resultType="org.tdos.tdospractice.type.AssignmentQuestionBack">
-        select a.id, a.section_id as sectionId, a.name, a.end_at as endAt, a.qualified_score as qualifiedScore,
+        select qb.id, a.section_id as sectionId, a.name, a.end_at as endAt, a.qualified_score as qualifiedScore,
         qb.type, qb.content, qb.choice, qb.answer, qb.pic_url as picUrl, a.status
         from assignment a
         inner join question_back_assignment qba on qba.assignment_id = a.id
