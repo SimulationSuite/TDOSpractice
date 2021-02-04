@@ -19,21 +19,23 @@
         insert into courseware_remark
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="remark.coursewareId != null">courseware_id,</if>
+            <if test="remark.courseId != null">course_id,</if>
             <if test="remark.userId != null">user_id,</if>
             <if test="remark.title != null">title,</if>
             <if test="remark.content != null">content,</if>
             <if test="remark.type != null">"type",</if>
             <if test="remark.remarkPage != null">remark_page,</if>
-            <if test="remark.RemarkAt != null">remark_at,</if>
+            <if test="remark.remarkAt != null">remark_at,</if>
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
             <if test="remark.coursewareId != null">#{remark.coursewareId}::uuid,</if>
+            <if test="remark.courseId != null">#{remark.courseId}::uuid,</if>
             <if test="remark.userId != null">#{remark.userId},</if>
             <if test="remark.title != null">#{remark.title},</if>
             <if test="remark.content != null">#{remark.content},</if>
             <if test="remark.type != null">#{remark.type},</if>
             <if test="remark.remarkPage != null">#{remark.remarkPage},</if>
-            <if test="remark.RemarkAt != null">#{remark.RemarkAt},</if>
+            <if test="remark.remarkAt != null">#{remark.remarkAt},</if>
         </trim>
     </insert>
 
@@ -49,9 +51,9 @@
 	courseware_remark."created_at"
 FROM
 	courseware_remark
-	INNER JOIN courseware ON courseware_remark.courseware_id = courseware."id" and courseware."id" = #{coursewareId}::uuid
+	INNER JOIN courseware ON courseware_remark.courseware_id = courseware."id"
 WHERE
-	courseware_remark.user_id = #{userId}
+	courseware_remark.user_id = #{userId} and courseware_remark."course_id" = #{courseId}::uuid
     <if  test = "title != null" >
         AND courseware_remark.title LIKE concat('%',#{title},'%')
     </if>
