@@ -18,7 +18,7 @@ public class ExperimentReportEntity {
 
     private String user_id;
 
-    private String url;
+    private String info;
 
     private String score;
 

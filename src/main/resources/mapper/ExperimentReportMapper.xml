@@ -6,8 +6,8 @@
     <insert id="insert" parameterType="org.tdos.tdospractice.entity.ExperimentReportEntity" useGeneratedKeys="true"
             keyProperty="id">
         insert into
-        experiment_report(user_id,info)
-        values(#{user_id},#{info})
+        experiment_report(user_id,experiment_id,info)
+        values(#{user_id},#{experiment_id}#{info})
     </insert>
 
     <select id="findByExperimentReport" resultType="org.tdos.tdospractice.entity.ExperimentReportEntity">
