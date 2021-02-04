@@ -60,7 +60,7 @@ public class KvmManager {
     public ContainerEntity createContainer(String userId, String experimentId, ImageEntity imageEntity) {
         int dockerIndex = randomDocker();
         DockerTool dockerTool = dockerTools.get(dockerIndex);
-        List<Integer> ports = getFreePorts(dockerTool, imageEntity.getKind());
+        List<Integer> ports = getFreePorts(dockerTool);
         if (ports.size() == 0) {
             return null;
         }
@@ -88,19 +88,10 @@ public class KvmManager {
         return null;
     }
 
-    private List<Integer> getFreePorts(DockerTool dockerTool, int kind) {
-        List<Integer> list = new ArrayList<>();
-        if (kind == DockerTool.Type.GUI.ordinal()) {
-            list = dockerTool.getFreePort(1);
-            if (list.size() != 1) {
-                return new ArrayList<>();
-            }
-        }
-        if (kind == DockerTool.Type.SSH.ordinal()) {
-            list = dockerTool.getFreePort(2);
-            if (list.size() != 2) {
-                return new ArrayList<>();
-            }
+    private List<Integer> getFreePorts(DockerTool dockerTool) {
+        List<Integer> list = dockerTool.getFreePort(1);
+        if (list.size() != 1) {
+            return new ArrayList<>();
         }
         return list;
     }

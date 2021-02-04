@@ -292,16 +292,14 @@ public class DockerTool implements CommonTool {
 
     //Create SSH2
     private CreateContainerResponse createContainerSSH(String imageContainer, List<Integer> ports, String containerName) {
-        ExposedPort tcp = ExposedPort.tcp(2222);
-        ExposedPort tcp22 = ExposedPort.tcp(22);
+        ExposedPort tcp = ExposedPort.tcp(4000);
         Ports portBindings = new Ports();
         portBindings.bind(tcp, Ports.Binding.bindPort(ports.get(0)));
-        portBindings.bind(tcp22, Ports.Binding.bindPort(ports.get(1)));
         CreateContainerResponse newContainer = dockerClient.createContainerCmd(imageContainer)
+                .withCmd("sh", "-c", "node /ssh/start.js")
                 .withName(containerName)
                 .withExposedPorts(tcp)
                 .withHostConfig(new HostConfig()
-                        .withPrivileged(true)
                         .withPortBindings(portBindings)
                         .withCapAdd(SYS_ADMIN))
                 .exec();
