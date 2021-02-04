@@ -37,7 +37,7 @@
     </update>
 
     <insert id="addStudentScore" useGeneratedKeys="true" keyProperty="id">
-        insert into student_score (assignment_id, user_id, score, status) values (#{assignmentId}, #{userId}, #{score}, #{status});
+        insert into student_score (assignment_id, user_id, score, status) values (#{assignmentId}::uuid, #{userId}, #{score}, #{status});
     </insert>
 
 </mapper>

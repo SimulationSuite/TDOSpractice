@@ -79,13 +79,13 @@
     <update id="modifyStudentAnswerScore">
         update student_answer
         set score = #{score}
-        where question_id=#{questionId}::uuid and assignment_id = #{assignmentId}::uuid and user_id = #{userId}::uuid;
+        where question_id=#{questionId}::uuid and assignment_id = #{assignmentId}::uuid and user_id = #{userId};
     </update>
 
     <update id="modifyStudentAnswerStatus">
         update student_answer
         set status = #{status}, committed_at = #{committedAt}
-        where assignment_id = #{assignmentId}::uuid and user_id = #{userId}::uuid;
+        where assignment_id = #{assignmentId}::uuid and user_id = #{userId};
     </update>
 
     <delete id="deleteStudentAnswerByAssignmentUserId">
@@ -95,7 +95,7 @@
     <select  id="getQuestionBackTypeByAssignment" resultType="org.tdos.tdospractice.type.StudentQuestionAnswer">
         select distinct qb.type = 0
         from question_back qb
-        where qba.assignment_id =#{assignmentId} ::uuid
+        where qb.assignment_id =#{assignmentId} ::uuid
     </select>
 
     <select id="ifStudentAnswer"  resultType="Boolean">
