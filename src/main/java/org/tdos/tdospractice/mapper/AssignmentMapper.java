@@ -30,7 +30,7 @@ public interface AssignmentMapper {
 
     List<AssignmentQuestionBack> getAssignmentBySectionId(@Param("sectionId") String sectionId);
 
-    String getAssignmentNameBySectionId(@Param("sectionId") String sectionId);
+    AssignmentEntity getAssignmentNameBySectionId(@Param("sectionId") String sectionId);
 
     int deleteAssignmentById(@Param("id") String id);
 
@@ -43,5 +43,9 @@ public interface AssignmentMapper {
     int addAssignment(AssignmentEntity assignment);
 
     int modifyAssignmentStatusById(@Param("id") String id, @Param("status") Integer status);
+
+    List<AssignmentEntity> getEndAssignment(@Param("endTime") String endTime);
+
+    List<String> getUncommittedUser(@Param("assignmentId") String assignmentId);
 
 }

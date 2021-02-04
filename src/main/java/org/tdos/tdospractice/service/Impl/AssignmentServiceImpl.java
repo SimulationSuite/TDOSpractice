@@ -86,13 +86,13 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
-    public String getAssignmentNameBySectionId(String sectionId) {
+    public AssignmentEntity getAssignmentNameBySectionId(String sectionId) {
         if(assignmentMapper.ifAssignmentBySectionId(sectionId))
         {
-            String name = assignmentMapper.getAssignmentNameBySectionId(sectionId);
-            return name;
+            AssignmentEntity assignmentEntity = assignmentMapper.getAssignmentNameBySectionId(sectionId);
+            return assignmentEntity;
         }
-        return "";
+        return new AssignmentEntity();
     }
 
     @Override
