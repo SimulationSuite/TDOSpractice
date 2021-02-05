@@ -19,7 +19,7 @@
             and qb.category_id = #{categoryId}
         </if>
         <if test="assignmentId != null and assignmentId != ''" >
-            and qb.id not in select qba.question_id from question_back_assignment qba where qba.assignment_id = #{assignmentId}
+            and qb.id not in (select qba.question_id from question_back_assignment qba where qba.assignment_id = #{assignmentId}::uuid)
         </if>
     </select>
 
