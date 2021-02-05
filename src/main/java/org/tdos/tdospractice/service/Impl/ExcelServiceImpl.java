@@ -125,7 +125,7 @@ public class ExcelServiceImpl implements ExcelService {
         List<QuestionBackEntity> questionBackEntityList =  utils.parseQuestionBack(utils.read(0, 1, end));
         if(questionBackEntityList.size() < 1)
         {
-            Response.error("无题目内容。");
+            return Response.error("无题目内容。");
         }
         List<CategoryEntity> categoryEntityList = categoryMapper.findAllChildCategory();
         for (QuestionBackEntity q : questionBackEntityList) {
