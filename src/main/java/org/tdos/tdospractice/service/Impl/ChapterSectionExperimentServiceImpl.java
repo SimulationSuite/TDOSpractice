@@ -27,8 +27,8 @@ public class ChapterSectionExperimentServiceImpl implements ChapterSectionExperi
     }
 
     @Override
-    public Pair<Boolean, String> deleteChapterSectionExperiment(String id) {
-        boolean b = chapterSectionExperimentMapper.deleteChapterSectionExperiment(id);
+    public Pair<Boolean, String> deleteChapterSectionExperiment(String section_id, String experiment_id) {
+        boolean b = chapterSectionExperimentMapper.deleteChapterSectionExperiment(section_id,experiment_id);
         if (b){
             return new Pair<>(b,"删除成功");
         }else {

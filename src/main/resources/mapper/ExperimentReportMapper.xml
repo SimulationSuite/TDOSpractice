@@ -11,10 +11,7 @@
     </insert>
 
     <select id="findByExperimentReport" resultType="org.tdos.tdospractice.entity.ExperimentReportEntity">
-        select * from experiment_report
-        <if test="id != null and id != ''">
-            id=#{id}::uuid
-        </if>
+        select * from experiment_report where 1 = 1
         <if test="experiment_id != null and experiment_id != ''">
             and experiment_id = #{experiment_id}
         </if>
@@ -26,8 +23,11 @@
     <update id="updateExperimentReport">
         update experiment_report
         <set>
-            <if test="status != null">
+            <if test="status != 0">
                 status = #{status},
+            </if>
+            <if test="isCorrect != 0">
+                isCorrect = #{isCorrect},
             </if>
             <if test="score != null">
                 score = #{score},
@@ -43,10 +43,41 @@
         update experiment_report SET score = 0 , iscorrect = 1 , status = 1 WHERE end_at &lt; current_date AND status = 0 AND iscorrect = 0
     </update>
 
-    <select id="findExperimentReportByExperimentAndUserId" resultType="org.tdos.tdospractice.entity.ExperimentReportEntity">
+    <select id="findExperimentReportByExperimentAndUserId"
+            resultType="org.tdos.tdospractice.entity.ExperimentReportEntity">
         select * from experiment_report where experiment_id = #{experiment_id}::uuid AND user_id = #{user_id}
     </select>
 
+    <select id="findExperimentReportAll" resultType="org.tdos.tdospractice.type.StudentExperimentReport">
+        select cse.experiment_id as experiment_id,su.id as user_id, su.name as userName,
+        c.name as className,er.status as status,er.iscorrect as iscorrect,er.submit_at submit_at
+        FROM experiment_report er
+        inner join sim_user su on su.id = er.user_id
+        inner join chapter_section_experiment cse on cse.experiment_id = er.experiment_id
+        inner join course_chapter_section ccs on ccs.section_id = cse.section_id
+        inner join course ci on ci.id = ccs.course_id
+        inner join class_course cc on cc.course_id = ci.id
+        inner join class c on c.id = cc.class_id
+        <if test="course_id != null and course_id != ''">
+            and ccs.course_id = #{course_id} ::uuid
+        </if>
+        <if test="status != -1">
+            and er.status = #{status}
+        </if>
+        <if test="isCorrect != -1">
+            and er.isCorrect = #{isCorrect}
+        </if>
+        <if test="name != null and name != ''">
+            and (su.name like concat('%',#{name},'%') or su.id like concat('%',#{name},'%'))
+        </if>
+        <if test="startTime != null and startTime != ''">
+            and er.update_time &gt;= #{startTime}::timestamp
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and er.update_time &lt;= #{endTime}::timestamp
+        </if>
+        group by su.id,cse.experiment_id,c."name",er.status,er.iscorrect,er.submit_at
+    </select>
 
 
 </mapper>

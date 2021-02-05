@@ -10,7 +10,7 @@ public interface ChapterSectionExperimentService {
 
     List<String> getExperimentIds(List<String> section_ids);
 
-    Pair<Boolean,String> deleteChapterSectionExperiment(String id);
+    Pair<Boolean, String> deleteChapterSectionExperiment(String section_id, String experiment_id);
 
     int getExperimentNumberbySection(String section_id);
 

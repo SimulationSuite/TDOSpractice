@@ -1,5 +1,6 @@
 package org.tdos.tdospractice.controller;
 
+import com.github.pagehelper.PageInfo;
 import org.apache.poi.hpsf.ClassID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -34,8 +35,8 @@ public class ClassController {
     }
 
     @GetMapping(value = "/get_students_by_classes")
-    public Response<List<ClassStudents>> getStudentsByClasses(@RequestBody ClassIdList classIds) {
-        List<ClassStudents> list = classService.findStudentsByClass(classIds.classIds);
+    public Response<PageInfo<ClassStudents>> getStudentsByClasses(@RequestParam(value = "classIds") List<String> classIds, @RequestParam(value = "per_page") int perPage, @RequestParam(value = "page") int page) {
+        PageInfo<ClassStudents> list = classService.findStudentsByClass(classIds,page,perPage);
         return Response.success(list);
     }
 }

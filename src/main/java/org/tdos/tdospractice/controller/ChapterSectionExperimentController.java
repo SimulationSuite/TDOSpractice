@@ -24,7 +24,7 @@ public class ChapterSectionExperimentController {
     public Response insertExperiment(@RequestBody BindExperiments bindExperiments) {
         try {
             List<ChapterSectionExperimentEntity> list = new ArrayList<>();
-            bindExperiments.getExperiment_id().forEach(b ->{
+            bindExperiments.getExperiment_id().forEach(b -> {
                 list.add(ChapterSectionExperimentEntity
                         .builder()
                         .experiment_id(b)
@@ -41,11 +41,11 @@ public class ChapterSectionExperimentController {
     }
 
     @PostMapping(value = "/unbindExperiments")
-    public Response unbindExperiments(@RequestParam(value = "id") String id) {
-        Pair<Boolean,String> pair = chapterSectionExperimentService.deleteChapterSectionExperiment(id);
-        if (pair.getKey()){
+    public Response unbindExperiments(@RequestParam(value = "section_id") String section_id, @RequestParam(value = "experiment_id") String experiment_id) {
+        Pair<Boolean, String> pair = chapterSectionExperimentService.deleteChapterSectionExperiment(section_id, experiment_id);
+        if (pair.getKey()) {
             return Response.success();
-        }else {
+        } else {
             return Response.error("删除失败");
         }
     }
