@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
 import org.tdos.tdospractice.body.AssignmentIdList;
+import org.tdos.tdospractice.body.DeleteIdList;
 import org.tdos.tdospractice.entity.AssignmentEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.tdos.tdospractice.service.AssignmentService;
@@ -110,6 +111,12 @@ public class AssignmentController {
     @PostMapping(value = "/modifyAssignmentStatusById")
     public Response<Boolean> modifyAssignmentStatusById(@RequestBody Assignment assignment) {
         return Response.success(assignmentService.modifyAssignmentStatusById(assignment));
+    }
+
+    @PostMapping(value = "/deleteQuestionBackAssignmentById")
+    public Response<Map<String, Object>> deleteQuestionBackAssignmentById(@RequestBody DeleteIdList idList) {
+        Map<String, Object> map = assignmentService.deleteQuestionBackAssignmentById(idList.deleteIdList);
+        return Response.success(map);
     }
 
 }

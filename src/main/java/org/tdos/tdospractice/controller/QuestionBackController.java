@@ -30,10 +30,11 @@ public class QuestionBackController {
     public Response<PageInfo<QuestionBackEntity>> getQuestionBackAll(@RequestParam(value = "type", required = false) Integer type,
                                                                      @RequestParam(value = "content", required = false) String content,
                                                                      @RequestParam(value = "category_id", required = false) String categoryId,
+                                                                     @RequestParam(value = "c_category_id", required = false) String cCategoryId,
                                                                      @RequestParam(value = "assignment_id", required = false) String assignmentId,
                                                                      @RequestParam(value = "perPage") Integer perPage,
                                                                      @RequestParam(value = "page") Integer page) {
-        return Response.success(questionBackService.getQuestionBackAll(type, content, categoryId, assignmentId, perPage, page));
+        return Response.success(questionBackService.getQuestionBackAll(type, content, categoryId, cCategoryId, assignmentId, perPage, page));
     }
 
     @GetMapping(value = "/getStudentAnswerByAssignment")

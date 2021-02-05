@@ -11,6 +11,8 @@ import java.time.LocalDateTime;
 @Builder
 public class AssignmentQuestionBack {
 
+    private String questionBackAssignmentId;
+
     private String id;
 
     private String sectionId;

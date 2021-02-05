@@ -54,4 +54,6 @@ public interface AssignmentMapper {
 
     int hasAssignmentNameExist(@Param("name") String name);
 
+    int deleteQuestionBackAssignmentById(@Param("id") String id);
+
 }
