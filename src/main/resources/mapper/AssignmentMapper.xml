@@ -134,7 +134,7 @@
         inner join question_back_assignment qba on qba.assignment_id = a.id
         inner join question_back qb on qb.id = qba.question_id
         where a.section_id =#{sectionId} ::uuid
-        <if test="type != null and type != ''" >
+        <if test="type != null" >
             and qb.type = #{type}
         </if>
     </select>
