@@ -132,4 +132,8 @@
         (#{sectionId}::uuid, #{chapterId}::uuid, #{coursewareId}::uuid);
     </insert>
 
+    <select id="hasCoursewareMapperNameExist"  resultType="int">
+        select count(*) from courseware where name=#{name}
+    </select>
+
 </mapper>

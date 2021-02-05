@@ -1,6 +1,7 @@
 package org.tdos.tdospractice.service;
 
 import com.github.pagehelper.PageInfo;
+import javafx.util.Pair;
 import org.apache.ibatis.annotations.Param;
 import org.tdos.tdospractice.entity.CoursewareEntity;
 import org.tdos.tdospractice.body.Courseware;
@@ -23,7 +24,7 @@ public interface CoursewareService {
 
     Map<String, Object> deleteCoursewareById(List<String> id);
 
-    CoursewareEntity addCourseware(Courseware courseware);
+    Pair<Boolean, Object> addCourseware(Courseware courseware);
 
     Map<String, Object> modifyCoursewareNameById(Courseware courseware);
 

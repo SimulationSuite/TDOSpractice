@@ -1,5 +1,6 @@
 package org.tdos.tdospractice.controller;
 
+import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
@@ -81,8 +82,12 @@ public class CoursewareController {
     }
 
     @PostMapping(value = "/addCourseware")
-    public Response<CoursewareEntity> addCourseware(@RequestBody Courseware courseware) {
-        return Response.success(coursewareService.addCourseware(courseware));
+    public Response<Object> addCourseware(@RequestBody Courseware courseware) {
+        Pair<Boolean, Object> pair = coursewareService.addCourseware(courseware);
+        if (pair.getKey()) {
+            return Response.success(pair.getValue());
+        }
+        return Response.error((String) pair.getValue());
     }
 
     @PostMapping(value = "/modifyCoursewareNameById")
