@@ -1,5 +1,6 @@
 package org.tdos.tdospractice.controller;
 
+import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.github.pagehelper.PageInfo;
 import org.springframework.web.bind.annotation.*;
@@ -92,8 +93,12 @@ public class AssignmentController {
     }
 
     @PostMapping(value = "/addAssignment")
-    public Response<AssignmentEntity> addAssignment(@RequestBody Assignment assignment) {
-        return Response.success(assignmentService.addAssignment(assignment));
+    public Response<Object> addAssignment(@RequestBody Assignment assignment) {
+        Pair<Boolean, Object> pair = assignmentService.addAssignment(assignment);
+        if (pair.getKey()) {
+            return Response.success(pair.getValue());
+        }
+        return Response.error((String) pair.getValue());
     }
 
     @PostMapping(value = "/modifyAssignmentNameById")

@@ -1,6 +1,7 @@
 package org.tdos.tdospractice.service;
 
 import com.github.pagehelper.PageInfo;
+import javafx.util.Pair;
 import org.tdos.tdospractice.body.Assignment;
 import org.tdos.tdospractice.entity.AssignmentEntity;
 import org.tdos.tdospractice.type.AssignmentQuestionBack;
@@ -30,7 +31,7 @@ public interface AssignmentService {
 
     Map<String, Object> deleteAssignmentById(List<String> id);
 
-    AssignmentEntity addAssignment(Assignment assignment);
+    Pair<Boolean, Object> addAssignment(Assignment assignment);
 
     Boolean modifyAssignmentNameById(Assignment assignment);
 
