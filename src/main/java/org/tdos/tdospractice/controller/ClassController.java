@@ -1,14 +1,13 @@
 package org.tdos.tdospractice.controller;
 
-import org.apache.tomcat.util.http.parser.TokenList;
+import org.apache.poi.hpsf.ClassID;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.tdos.tdospractice.entity.ClassEntity;
 import org.tdos.tdospractice.mapper.ClassMapper;
-import org.tdos.tdospractice.type.ClassNumber;
+import org.tdos.tdospractice.body.ClassIdList;
+import org.tdos.tdospractice.service.ClassService;
+import org.tdos.tdospractice.type.ClassStudents;
 import org.tdos.tdospractice.type.Response;
 
 import java.util.List;
@@ -19,15 +18,24 @@ public class ClassController {
     @Autowired
     private ClassMapper classMapper;
 
+    @Autowired
+    private ClassService classService;
+
     @GetMapping(value = "/search_class")
     public Response<List<ClassEntity>> classList() {
-        List<ClassEntity> classes = classMapper.findAll();
+        List<ClassEntity> classes = classService.findAll();
         return Response.success(classes.stream().filter(x -> !x.getId().equals("fb0a1080-b11e-427c-8567-56ca6105ea07")).collect(Collectors.toList()));
     }
 
     @GetMapping(value = "/getClassCountByClassId")
     public Response<Integer> classList(@RequestParam(value = "classId")String classId) {
-        int count = classMapper.findClassCountByClassId(classId);
+        int count = classService.findClassCountByClassId(classId);
         return Response.success(count);
+    }
+
+    @GetMapping(value = "/get_students_by_classes")
+    public Response<List<ClassStudents>> getStudentsByClasses(@RequestBody ClassIdList classIds) {
+        List<ClassStudents> list = classService.findStudentsByClass(classIds.classIds);
+        return Response.success(list);
     }
 }

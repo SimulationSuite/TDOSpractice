@@ -43,6 +43,16 @@
         where role_id = 2 and class_id = #{classId} :: uuid
     </select>
 
+    <select id="findStudentsByClass" resultType="org.tdos.tdospractice.type.ClassStudents">
+        select s.id as userId,s.name as userName, s.gender,c.department, c.grade,c.name from class c
+        inner JOIN sim_user s on c.id = s.class_id where c.id in
+        <foreach collection="list" item="id" index="index"
+                 open="(" close=")" separator=",">
+            #{id}::uuid
+        </foreach>
+    </select>
+
+
     <resultMap type="org.tdos.tdospractice.type.ClassNumber" id="classNumber">
         <result column="class_id" property="classId"/>
         <result column="count" property="numbers"/>

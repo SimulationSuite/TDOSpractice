@@ -36,4 +36,6 @@ public interface AssignmentService {
 
     Boolean modifyAssignmentStatusById(Assignment assignment);
 
+    void updateEndAssignment(String nowTime);
+
 }

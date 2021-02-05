@@ -6,8 +6,8 @@
     <insert id="insert" parameterType="org.tdos.tdospractice.entity.ExperimentReportEntity" useGeneratedKeys="true"
             keyProperty="id">
         insert into
-        experiment_report(user_id,info)
-        values(#{user_id},#{info})
+        experiment_report(user_id,experiment_id,info)
+        values(#{user_id},#{experiment_id}::uuid,#{info})
     </insert>
 
     <select id="findByExperimentReport" resultType="org.tdos.tdospractice.entity.ExperimentReportEntity">
@@ -24,7 +24,7 @@
     </select>
 
     <update id="updateExperimentReport">
-        update experiment
+        update experiment_report
         <set>
             <if test="status != null">
                 status = #{status},
@@ -32,12 +32,21 @@
             <if test="score != null">
                 score = #{score},
             </if>
+            <if test="info != null">
+                info = #{info},
+            </if>
         </set>
-        where id = #{id}::uuid
+        where experiment_id = #{experiment_id}::uuid AND user_id = #{user_id}
     </update>
 
     <update id="updateExperimentReportByEndtime">
         update experiment_report SET score = 0 , iscorrect = 1 , status = 1 WHERE end_at &lt; current_date AND status = 0 AND iscorrect = 0
     </update>
+
+    <select id="findExperimentReportByExperimentAndUserId" resultType="org.tdos.tdospractice.entity.ExperimentReportEntity">
+        select * from experiment_report where experiment_id = #{experiment_id}::uuid AND user_id = #{user_id}
+    </select>
+
+
 
 </mapper>

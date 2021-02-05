@@ -5,14 +5,24 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.tdos.tdospractice.body.Assignment;
+import org.tdos.tdospractice.body.StudentScore;
 import org.tdos.tdospractice.entity.AssignmentEntity;
 import org.tdos.tdospractice.entity.StudentAnswerEntity;
+import org.tdos.tdospractice.entity.StudentScoreEntity;
 import org.tdos.tdospractice.mapper.AssignmentMapper;
+import org.tdos.tdospractice.mapper.StudentAnswerMapper;
+import org.tdos.tdospractice.mapper.StudentScoreMapper;
 import org.tdos.tdospractice.service.AssignmentService;
 import org.tdos.tdospractice.type.AssignmentQuestionBack;
 import org.tdos.tdospractice.type.AssignmentStatistics;
 import org.tdos.tdospractice.type.StudentAssignment;
+import org.tdos.tdospractice.utils.UTCTimeUtils;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -21,6 +31,12 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     @Autowired
     private AssignmentMapper assignmentMapper;
+
+    @Autowired
+    private StudentAnswerMapper studentAnswerMapper;
+
+    @Autowired
+    private StudentScoreMapper studentScoreMapper;
 
     @Override
     public PageInfo<StudentAssignment> getStudentAssignment(String userId, String courseId,String chapterId, String sectionId, Integer status,String name, Integer perPage, Integer page) {
@@ -148,6 +164,39 @@ public class AssignmentServiceImpl implements AssignmentService {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public void updateEndAssignment(String nowTime) {
+        try {
+            List<AssignmentEntity> endAssignmentEntityList = assignmentMapper.getEndAssignment(nowTime);
+            DateTimeFormatter timeDtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String committedTime = UTCTimeUtils.getUTCTimeStr();
+            endAssignmentEntityList.forEach(x -> {
+                String assignmentId = x.getId();
+                List<String> userIdList = assignmentMapper.getUsers(assignmentId);
+                userIdList.forEach(u -> {
+                    if(assignmentMapper.ifStudentAnswer(u, assignmentId)){
+                        studentAnswerMapper.modifyStudentAnswerStatus(1, committedTime, assignmentId, u);
+                    }else{
+                        List<StudentAnswerEntity> newStudentAnswerEntity = assignmentMapper.getQuestionBackByAssignment(assignmentId);
+                        newStudentAnswerEntity.forEach(n -> {
+                            n.setUserId(u);
+                            n.setCommittedAt(LocalDateTime.parse(committedTime, timeDtf));
+                        });
+                        studentAnswerMapper.addStudentAnswerList(newStudentAnswerEntity);
+                        StudentScoreEntity studentScoreEntity = new StudentScoreEntity();
+                        studentScoreEntity.setUserId(u);
+                        studentScoreEntity.setAssignmentId(assignmentId);
+                        studentScoreEntity.setStatus(1);
+                        studentScoreEntity.setScore(0);
+                        studentScoreMapper.addStudentScore(studentScoreEntity);
+                    };
+                });
+            });
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
 }

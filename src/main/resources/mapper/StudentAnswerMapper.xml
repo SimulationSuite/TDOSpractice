@@ -67,8 +67,8 @@
         values
         <foreach collection="studentAnswerList" item="item" separator=",">
             (
-            #{item.questionId},
-            #{item.assignmentId},
+            #{item.questionId}::uuid,
+            #{item.assignmentId}::uuid,
             #{item.userId},
             #{item.answer},
             #{item.score}
@@ -79,23 +79,30 @@
     <update id="modifyStudentAnswerScore">
         update student_answer
         set score = #{score}
-        where question_id=#{questionId}::uuid and assignment_id = #{assignmentId}::uuid and user_id = #{userId}::uuid;
+        where question_id=#{questionId}::uuid and assignment_id = #{assignmentId}::uuid and user_id = #{userId};
     </update>
 
     <update id="modifyStudentAnswerStatus">
         update student_answer
-        set status = #{status}, committed_at = #{committedAt}
-        where assignment_id = #{assignmentId}::uuid and user_id = #{userId}::uuid;
+        set status = #{status}, committed_at = #{committedAt}::timestamp
+        where assignment_id = #{assignmentId}::uuid and user_id = #{userId};
     </update>
 
     <delete id="deleteStudentAnswerByAssignmentUserId">
-        delete from student_answer where assignment_id = #{assignmentId}::uuid and user_id = #{userId}::uuid;
+        delete from student_answer where assignment_id = #{assignmentId}::uuid and user_id = #{userId};
     </delete>
 
     <select  id="getQuestionBackTypeByAssignment" resultType="org.tdos.tdospractice.type.StudentQuestionAnswer">
-        select distinct qb.type = 0
-        from question_back qb
+        select distinct qb.type
+        from question_back_assignment qba
+        inner join question_back qb on qb.id = qba.question_id
         where qba.assignment_id =#{assignmentId} ::uuid
+    </select>
+
+    <select id="ifStudentAnswer"  resultType="Boolean">
+        select case when count(*) > 0 then true else false end
+        from student_answer
+        where assignment_id = #{assignmentId}::uuid and user_id = #{userId};
     </select>
 
 </mapper>

@@ -101,7 +101,7 @@
     <insert id="addCourseware" useGeneratedKeys="true" keyProperty="id">
         insert into courseware (name, kind, type, url, duration, size, category_id)
         values
-        (#{name}, #{kind}, #{type}, #{url}, #{duration}, #{size}, #{categoryId});
+        (#{name}, #{kind}, #{type}, #{url}, #{duration}, #{size}, #{categoryId}::uuid);
     </insert>
 
     <select id="ifSectionCourseware"  resultType="Boolean">
@@ -131,5 +131,9 @@
         values
         (#{sectionId}::uuid, #{chapterId}::uuid, #{coursewareId}::uuid);
     </insert>
+
+    <select id="hasCoursewareMapperNameExist"  resultType="int">
+        select count(*) from courseware where name=#{name}
+    </select>
 
 </mapper>

@@ -15,7 +15,7 @@
     </select>
 
     <select id="findChildCategory" resultType="org.tdos.tdospractice.entity.CategoryEntity">
-        select * from category where parent_category_id = #{parent_category_id}
+        select * from category where parent_category_id = #{parent_category_id}::uuid
     </select>
 
     <select id="findCategory" resultType="org.tdos.tdospractice.entity.CategoryEntity">

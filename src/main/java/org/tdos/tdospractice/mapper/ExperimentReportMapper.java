@@ -18,4 +18,6 @@ public interface ExperimentReportMapper {
 
     boolean updateExperimentReportByEndtime();
 
+    ExperimentReportEntity findExperimentReportByExperimentAndUserId(@Param("experiment_id")String experiment_id,@Param("user_id")String user_id);
+
 }

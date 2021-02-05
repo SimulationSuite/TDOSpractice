@@ -2,8 +2,11 @@ package org.tdos.tdospractice.service.Impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 import org.tdos.tdospractice.body.QuestionBack;
 import org.tdos.tdospractice.entity.QuestionBackEntity;
 import org.tdos.tdospractice.body.QuestionBackAssignment;
@@ -50,7 +53,28 @@ public class QuestionBackServiceImpl implements QuestionBackService {
     }
 
     @Override
-    public QuestionBackEntity addQuestionBack(QuestionBack questionBack) {
+    @Transactional(rollbackFor = {RuntimeException.class, Error.class})
+    public Pair<Boolean, Object> addQuestionBack(QuestionBack questionBack) {
+        if (ObjectUtils.isEmpty(questionBack.type)) {
+            return new Pair<>(false, "题目类型不能为空。");
+        }
+        if (ObjectUtils.isEmpty(questionBack.content)) {
+            return new Pair<>(false, "题目内容不能为空。");
+        }
+        if (questionBackMapper.hasQuestionBackNameExist(questionBack.content) > 0) {
+            return new Pair<>(false, "题目内容已存在。");
+        }
+        if(questionBack.type == 0){
+            if (ObjectUtils.isEmpty(questionBack.choice)) {
+                return new Pair<>(false, "题目选择不能为空。");
+            }
+        }
+        if (ObjectUtils.isEmpty(questionBack.answer)) {
+            return new Pair<>(false, "题目答案不能为空。");
+        }
+        if (ObjectUtils.isEmpty(questionBack.categoryId)) {
+            return new Pair<>(false, "题目分类不能为空。");
+        }
         QuestionBackEntity questionBackEntity = new QuestionBackEntity();
         questionBackEntity.setType(questionBack.type);
         questionBackEntity.setContent(questionBack.content);
@@ -62,9 +86,9 @@ public class QuestionBackServiceImpl implements QuestionBackService {
         try {
             questionBackMapper.addQuestionBack(questionBackEntity);
         } catch (Exception e) {
-            return questionBackEntity;
+            return new Pair<>(false, e);
         }
-        return questionBackEntity;
+        return new Pair<>(true, questionBackEntity);
     }
 
     @Override

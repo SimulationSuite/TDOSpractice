@@ -2,8 +2,10 @@ package org.tdos.tdospractice.service.Impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.tdos.tdospractice.entity.CoursewareEntity;
 import org.tdos.tdospractice.entity.ChapterSectionCoursewareEntity;
 import org.tdos.tdospractice.mapper.CoursewareMapper;
@@ -94,7 +96,28 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
     }
 
     @Override
-    public CoursewareEntity addCourseware(Courseware courseware) {
+    public Pair<Boolean, Object> addCourseware(Courseware courseware) {
+        if (ObjectUtils.isEmpty(courseware.name)) {
+            return new Pair<>(false, "课件名称不能为空。");
+        }
+        if (coursewareMapper.hasCoursewareMapperNameExist(courseware.name) > 0) {
+            return new Pair<>(false, "课件名称已存在。");
+        }
+        if (ObjectUtils.isEmpty(courseware.type)) {
+            return new Pair<>(false, "课件类型不能为空。");
+        }
+        if (ObjectUtils.isEmpty(courseware.kind)) {
+            return new Pair<>(false, "课件种类不能为空。");
+        }
+        if (ObjectUtils.isEmpty(courseware.url)) {
+            return new Pair<>(false, "课件链接地址不能为空。");
+        }
+        if (ObjectUtils.isEmpty(courseware.size)) {
+            return new Pair<>(false, "课件大小不能为空。");
+        }
+        if (ObjectUtils.isEmpty(courseware.categoryId)) {
+            return new Pair<>(false, "课件分类不能为空。");
+        }
         CoursewareEntity coursewareEntity = new CoursewareEntity();
         coursewareEntity.setName(courseware.name);
         coursewareEntity.setKind(courseware.kind);
@@ -106,9 +129,9 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
         try {
             coursewareMapper.addCourseware(coursewareEntity);
         } catch (Exception e) {
-            return coursewareEntity;
+            return new Pair<>(false, e);
         }
-        return coursewareEntity;
+        return new Pair<>(true, coursewareEntity);
     }
 
     @Override

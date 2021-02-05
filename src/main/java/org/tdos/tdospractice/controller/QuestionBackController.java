@@ -1,6 +1,7 @@
 package org.tdos.tdospractice.controller;
 
 import com.github.pagehelper.PageInfo;
+import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.*;
@@ -50,8 +51,12 @@ public class QuestionBackController {
     }
 
     @PostMapping(value = "/addQuestionBack")
-    public Response<QuestionBackEntity> addQuestionBack(@RequestBody QuestionBack qestionBack) {
-        return Response.success(questionBackService.addQuestionBack(qestionBack));
+    public Response<Object> addQuestionBack(@RequestBody QuestionBack qestionBack) {
+        Pair<Boolean, Object> pair = questionBackService.addQuestionBack(qestionBack);
+        if (pair.getKey()) {
+            return Response.success(pair.getValue());
+        }
+        return Response.error((String) pair.getValue());
     }
 
     @PostMapping(value = "/modifyQuestionBackById")

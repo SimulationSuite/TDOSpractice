@@ -12,6 +12,7 @@ import org.tdos.tdospractice.mapper.StudentAnswerMapper;
 import org.tdos.tdospractice.mapper.StudentScoreMapper;
 import org.tdos.tdospractice.service.StudentAnswerService;
 import org.tdos.tdospractice.type.StudentQuestionAnswer;
+import org.tdos.tdospractice.utils.UTCTimeUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -121,6 +122,12 @@ public class StudentAnswerServiceImpl implements StudentAnswerService {
         });
 
         try {
+            String assignmentId = studentAnswerEntityList.get(0).getAssignmentId();
+            String userId = studentAnswerEntityList.get(0).getUserId();
+            if(studentAnswerMapper.ifStudentAnswer(assignmentId, userId))
+            {
+                studentAnswerMapper.deleteStudentAnswerByAssignmentUserId(assignmentId, userId);
+            }
             studentAnswerMapper.addStudentAnswerList(studentAnswerEntityList);
         } catch (Exception e) {
             System.out.println(e);
@@ -134,6 +141,7 @@ public class StudentAnswerServiceImpl implements StudentAnswerService {
         try {
             String assignmentId = studentAnswer.assignmentId;
             String userId = studentAnswer.userId;
+            String committedAt = UTCTimeUtils.getUTCTimeStr();
             List<StudentQuestionAnswer> list = studentAnswerMapper.getQuestionBackTypeByAssignment(assignmentId);
             if(list.size() == 1 && list.get(0).getType() == 0){
                 List<StudentQuestionAnswer> studentQuestionAnswerList = studentAnswerMapper.getStudentAnswerByAssignmentUserId(assignmentId, userId);
@@ -146,7 +154,7 @@ public class StudentAnswerServiceImpl implements StudentAnswerService {
                 studentScoreEntity.setStatus(score);
                 studentScoreMapper.addStudentScore(studentScoreEntity);
             }
-            studentAnswerMapper.modifyStudentAnswerStatus(1, new Date(), assignmentId, userId);
+            studentAnswerMapper.modifyStudentAnswerStatus(1, committedAt, assignmentId, userId);
         } catch (Exception e) {
             return false;
         }

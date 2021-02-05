@@ -1,6 +1,7 @@
 package org.tdos.tdospractice.service;
 
 import com.github.pagehelper.PageInfo;
+import javafx.util.Pair;
 import org.tdos.tdospractice.body.QuestionBack;
 import org.tdos.tdospractice.body.QuestionBackAssignment;
 import org.tdos.tdospractice.entity.QuestionBackEntity;
@@ -16,7 +17,7 @@ public interface QuestionBackService {
 
     Map<String, Object> deleteQuestionBackById(List<String> id);
 
-    QuestionBackEntity addQuestionBack(QuestionBack questionBack);
+    Pair<Boolean, Object> addQuestionBack(QuestionBack questionBack);
 
     Boolean modifyQuestionBackById(QuestionBack questionBack);
 

@@ -7,6 +7,7 @@ import org.tdos.tdospractice.mapper.ExperimentReportMapper;
 import org.tdos.tdospractice.service.ExperimentReportService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ExperimentReportServiceImpl implements ExperimentReportService {
@@ -32,5 +33,10 @@ public class ExperimentReportServiceImpl implements ExperimentReportService {
     @Override
     public boolean updateExperimentReportByEndtime() {
         return experimentReportMapper.updateExperimentReportByEndtime();
+    }
+
+    @Override
+    public Optional<ExperimentReportEntity> findExperimentReportByExperimentAndUserId(String experiment_id, String user_id) {
+        return Optional.ofNullable(experimentReportMapper.findExperimentReportByExperimentAndUserId(experiment_id, user_id));
     }
 }

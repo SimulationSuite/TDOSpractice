@@ -12,13 +12,11 @@ import java.util.Date;
 @Builder
 public class ExperimentReportEntity {
 
-    private String id;
-
     private String experiment_id;
 
     private String user_id;
 
-    private String url;
+    private String info;
 
     private String score;
 
