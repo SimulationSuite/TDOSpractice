@@ -93,9 +93,10 @@
     </delete>
 
     <select  id="getQuestionBackTypeByAssignment" resultType="org.tdos.tdospractice.type.StudentQuestionAnswer">
-        select distinct qb.type = 0
-        from question_back qb
-        where qb.assignment_id =#{assignmentId} ::uuid
+        select distinct qb.type
+        from question_back_assignment qba
+        inner join question_back qb on qb.id = qba.question_id
+        where qba.assignment_id =#{assignmentId} ::uuid
     </select>
 
     <select id="ifStudentAnswer"  resultType="Boolean">
