@@ -4,8 +4,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.tdos.tdospractice.entity.ClassEntity;
-import org.tdos.tdospractice.entity.UserEntity;
 import org.tdos.tdospractice.type.ClassNumber;
+import org.tdos.tdospractice.body.ClassIdList;
+import org.tdos.tdospractice.type.ClassStudents;
 
 import java.util.List;
 
@@ -25,4 +26,6 @@ public interface ClassMapper {
     ClassEntity findClassByClasses(String name);
 
     int findClassCountByClassId(String classId);
+
+    List<ClassStudents> findStudentsByClass(List<String> classIds);
 }
