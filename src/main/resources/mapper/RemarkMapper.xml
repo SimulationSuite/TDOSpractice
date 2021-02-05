@@ -62,7 +62,12 @@ WHERE
     </select>
 
     <delete id="deleteRemark">
-        delete from courseware_remark where id = #{remarkId}::uuid
+        delete from courseware_remark
+        WHERE
+        courseware_remark.id  IN
+        <foreach collection="remarkIdList" item="recordId" open="(" close=")" separator=",">
+            #{recordId}::uuid
+        </foreach>
     </delete>
 
 

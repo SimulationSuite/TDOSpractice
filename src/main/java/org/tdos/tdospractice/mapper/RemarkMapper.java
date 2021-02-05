@@ -16,5 +16,5 @@ public interface RemarkMapper {
 
     List<CoursewareRemark> getCoursewareRemarkList(String userId, @Param("courseId") String courseId, String title);
 
-    int deleteRemark(String remarkId);
+    int deleteRemark(@Param("remarkIdList") List<String> remarkIdList);
 }

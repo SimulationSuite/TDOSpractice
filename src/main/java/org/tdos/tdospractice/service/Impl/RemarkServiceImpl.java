@@ -79,7 +79,7 @@ public class RemarkServiceImpl implements RemarkService {
 
     @Override
     public Pair<Boolean, String> deleteRemark(DeleteRemark deleteRemark) {
-        remarkMapper.deleteRemark(deleteRemark.remarkId);
+        remarkMapper.deleteRemark(deleteRemark.remarkIdList);
         return new Pair<>(true,"");
     }
 
