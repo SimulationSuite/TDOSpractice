@@ -33,4 +33,6 @@ public interface QuestionBackMapper {
 
     int addQuestionBackAssignmentList(@Param("questionBackAssignmentList") List<QuestionBackAssignmentEntity> questionBackAssignmentList);
 
+    int hasQuestionBackNameExist(@Param("content") String content);
+
 }
