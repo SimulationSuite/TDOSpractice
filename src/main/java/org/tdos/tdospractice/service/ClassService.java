@@ -1,5 +1,6 @@
 package org.tdos.tdospractice.service;
 
+import com.github.pagehelper.PageInfo;
 import org.tdos.tdospractice.body.ClassIdList;
 import org.tdos.tdospractice.entity.ClassEntity;
 import org.tdos.tdospractice.type.ClassStudents;
@@ -13,5 +14,5 @@ public interface ClassService {
 
     int findClassCountByClassId(String classId);
 
-    List<ClassStudents> findStudentsByClass(List<String> classIds);
+    PageInfo<ClassStudents> findStudentsByClass(List<String> classIds, int page, int per_page);
 }
