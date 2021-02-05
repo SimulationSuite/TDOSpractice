@@ -10,6 +10,7 @@
         <result column="title" property="title"/>
         <result column="content" property="content"/>
         <result column="type" property="type"/>
+        <result column="url" property="url"/>
         <result column="remark_page" property="remarkPage"/>
         <result column="remark_at" property="remarkAt"/>
         <result column="created_at" property="createdAt"/>
@@ -46,6 +47,7 @@
 	courseware_remark.title,
 	courseware_remark."content",
 	courseware_remark."type",
+    courseware.url,
 	courseware_remark."remark_page",
 	courseware_remark."remark_at",
 	courseware_remark."created_at"

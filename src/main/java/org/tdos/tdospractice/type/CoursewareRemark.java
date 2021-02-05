@@ -18,6 +18,8 @@ public class CoursewareRemark {
 
     public int type;
 
+    public String url;
+
     @JsonProperty("remark_page")
     public int remarkPage;
 
