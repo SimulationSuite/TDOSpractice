@@ -9,11 +9,9 @@ import org.springframework.stereotype.Service;
 import org.tdos.tdospractice.entity.CategoryEntity;
 import org.tdos.tdospractice.entity.ExperimentEntity;
 import org.tdos.tdospractice.mapper.ChapterMapper;
+import org.tdos.tdospractice.mapper.ExperimentImageMapper;
 import org.tdos.tdospractice.mapper.ExperimentMapper;
-import org.tdos.tdospractice.service.CategoryService;
-import org.tdos.tdospractice.service.ChapterSectionExperimentService;
-import org.tdos.tdospractice.service.CourseService;
-import org.tdos.tdospractice.service.ExperimentService;
+import org.tdos.tdospractice.service.*;
 import org.tdos.tdospractice.type.Chapter;
 import org.tdos.tdospractice.type.Course;
 import org.tdos.tdospractice.type.Response;
@@ -43,6 +41,9 @@ public class ExperimentServiceImpl implements ExperimentService {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private ExperimentImageService experimentImageService;
 
     @Override
     public int insert(ExperimentEntity experimentEntity) {
@@ -148,7 +149,9 @@ public class ExperimentServiceImpl implements ExperimentService {
 
     @Override
     public ExperimentEntity findById(String id) {
-        return experimentMapper.findById(id);
+        ExperimentEntity experimentEntity = experimentMapper.findById(id);
+        experimentEntity.setImagesinfo(experimentImageService.findImageByExperiment(id));
+        return experimentEntity;
     }
 
     @Override

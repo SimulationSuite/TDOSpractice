@@ -13,9 +13,9 @@ public interface ChapterSectionExperimentMapper {
 
     int insert(@Param("list") List<ChapterSectionExperimentEntity> list);
 
-    List<String> getExperimentIds(@Param("section_ids")List<String> section_ids);
+    List<String> getExperimentIds(@Param("section_ids") List<String> section_ids);
 
-    boolean deleteChapterSectionExperiment(String id);
+    boolean deleteChapterSectionExperiment(@Param("section_id") String section_id, @Param("experiment_id") String experiment_id);
 
     int getExperimentNumberbySection(String section_id);
 
