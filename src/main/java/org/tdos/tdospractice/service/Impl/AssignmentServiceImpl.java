@@ -215,4 +215,19 @@ public class AssignmentServiceImpl implements AssignmentService {
         }
     }
 
+    @Override
+    public Map<String, Object> deleteQuestionBackAssignmentById(List<String> id) {
+        Map<String, Object> map = new HashMap<>();
+        try{
+            id.forEach(x -> assignmentMapper.deleteQuestionBackAssignmentById(x));
+            map.put("isDelete", true);
+        }
+        catch (Exception e)
+        {
+            map.put("isDelete", false);
+            map.put("reason", e.toString());
+        }
+        return map;
+    }
+
 }

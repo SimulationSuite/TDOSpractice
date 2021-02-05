@@ -129,7 +129,7 @@
 
     <select  id="getAssignmentBySectionId" resultType="org.tdos.tdospractice.type.AssignmentQuestionBack">
         select qb.id, a.section_id as sectionId, a.name, a.end_at as endAt, a.qualified_score as qualifiedScore,
-        qb.type, qb.content, qb.choice, qb.answer, qb.pic_url as picUrl, a.status, qba.score
+        qb.type, qb.content, qb.choice, qb.answer, qb.pic_url as picUrl, a.status, qba.score, qba.id as questionBackAssignmentId
         from assignment a
         inner join question_back_assignment qba on qba.assignment_id = a.id
         inner join question_back qb on qb.id = qba.question_id
@@ -197,5 +197,9 @@
     <select id="hasAssignmentNameExist"  resultType="int">
         select count(*) from assignment where name=#{name}
     </select>
+
+    <delete id="deleteQuestionBackAssignmentById">
+        delete from question_back_assignment where id=#{id}::uuid;
+    </delete>
 
 </mapper>

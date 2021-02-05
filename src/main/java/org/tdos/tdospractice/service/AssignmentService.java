@@ -39,4 +39,6 @@ public interface AssignmentService {
 
     void updateEndAssignment(String nowTime);
 
+    Map<String, Object> deleteQuestionBackAssignmentById(List<String> id);
+
 }
