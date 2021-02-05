@@ -97,9 +97,9 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
-    public PageInfo<AssignmentQuestionBack> getAssignmentBySectionId(String sectionId, Integer perPage, Integer page) {
+    public PageInfo<AssignmentQuestionBack> getAssignmentBySectionId(String sectionId, Integer type, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        List<AssignmentQuestionBack> list = assignmentMapper.getAssignmentBySectionId(sectionId);
+        List<AssignmentQuestionBack> list = assignmentMapper.getAssignmentBySectionId(sectionId, type);
         return new PageInfo<>(list);
     }
 

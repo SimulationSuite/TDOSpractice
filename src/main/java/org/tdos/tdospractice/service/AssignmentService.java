@@ -25,7 +25,7 @@ public interface AssignmentService {
 
     PageInfo<AssignmentEntity> getAssignmentByChapterId(String chapterId, Integer perPage,Integer page);
 
-    PageInfo<AssignmentQuestionBack> getAssignmentBySectionId(String sectionId, Integer perPage, Integer page);
+    PageInfo<AssignmentQuestionBack> getAssignmentBySectionId(String sectionId, Integer type, Integer perPage, Integer page);
 
     AssignmentEntity getAssignmentNameBySectionId(String sectionId);
 

@@ -21,8 +21,6 @@ public class AssignmentQuestionBack {
 
     private int qualifiedScore;
 
-    private int kind;
-
     private int type;
 
     private String content;

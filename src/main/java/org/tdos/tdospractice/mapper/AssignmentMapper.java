@@ -28,7 +28,7 @@ public interface AssignmentMapper {
 
     List<AssignmentEntity> getAssignmentByChapterId(@Param("chapterId") String chapterId);
 
-    List<AssignmentQuestionBack> getAssignmentBySectionId(@Param("sectionId") String sectionId);
+    List<AssignmentQuestionBack> getAssignmentBySectionId(@Param("sectionId") String sectionId, @Param("type") Integer type);
 
     AssignmentEntity getAssignmentNameBySectionId(@Param("sectionId") String sectionId);
 

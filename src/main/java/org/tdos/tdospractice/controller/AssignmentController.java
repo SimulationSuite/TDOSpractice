@@ -76,9 +76,10 @@ public class AssignmentController {
 
     @GetMapping(value = "/getAssignmentBySectionId")
     public Response<PageInfo<AssignmentQuestionBack>> getAssignmentBySectionId(@RequestParam(value = "sectionId") String sectionId,
+                                                                               @RequestParam(value = "type", required = false) Integer type,
                                                                                @RequestParam(value = "perPage") Integer perPage,
                                                                                @RequestParam(value = "page") Integer page) {
-        return Response.success(assignmentService.getAssignmentBySectionId(sectionId, perPage, page));
+        return Response.success(assignmentService.getAssignmentBySectionId(sectionId, type, perPage, page));
     }
 
     @GetMapping(value = "/getAssignmentNameBySectionId")
