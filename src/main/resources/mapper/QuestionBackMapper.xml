@@ -9,7 +9,7 @@
         qb.category_id as categoryId, qb.created_at as createdAt, qb.updated_at as updatedAt
         from question_back qb
         where qb.id is not null
-        <if test="content != null" >
+        <if test="content != null and content != ''" >
             and qb.content like  concat('%',#{content},'%')
         </if>
         <if test="type != null" >
