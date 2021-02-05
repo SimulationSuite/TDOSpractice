@@ -84,7 +84,7 @@
 
     <update id="modifyStudentAnswerStatus">
         update student_answer
-        set status = #{status}, committed_at = #{committedAt}
+        set status = #{status}, committed_at = #{committedAt}::timestamp
         where assignment_id = #{assignmentId}::uuid and user_id = #{userId};
     </update>
 

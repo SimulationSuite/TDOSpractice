@@ -16,9 +16,13 @@ import org.tdos.tdospractice.service.AssignmentService;
 import org.tdos.tdospractice.type.AssignmentQuestionBack;
 import org.tdos.tdospractice.type.AssignmentStatistics;
 import org.tdos.tdospractice.type.StudentAssignment;
+import org.tdos.tdospractice.utils.UTCTimeUtils;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -166,7 +170,8 @@ public class AssignmentServiceImpl implements AssignmentService {
     public void updateEndAssignment(String nowTime) {
         try {
             List<AssignmentEntity> endAssignmentEntityList = assignmentMapper.getEndAssignment(nowTime);
-            Date committedTime = new Date();
+            DateTimeFormatter timeDtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            String committedTime = UTCTimeUtils.getUTCTimeStr();
             endAssignmentEntityList.forEach(x -> {
                 String assignmentId = x.getId();
                 List<String> userIdList = assignmentMapper.getUsers(assignmentId);
@@ -177,7 +182,7 @@ public class AssignmentServiceImpl implements AssignmentService {
                         List<StudentAnswerEntity> newStudentAnswerEntity = assignmentMapper.getQuestionBackByAssignment(assignmentId);
                         newStudentAnswerEntity.forEach(n -> {
                             n.setUserId(u);
-                            n.setCommittedAt(committedTime.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+                            n.setCommittedAt(LocalDateTime.parse(committedTime, timeDtf));
                         });
                         studentAnswerMapper.addStudentAnswerList(newStudentAnswerEntity);
                         StudentScoreEntity studentScoreEntity = new StudentScoreEntity();
