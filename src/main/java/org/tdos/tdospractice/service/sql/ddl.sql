@@ -197,13 +197,13 @@ alter table question_back add constraint question_back_content unique (content);
 create trigger t_name before update on question_back for each row execute procedure upd_timestamp();
 
 create table if not exists question_back_assignment(
+    id UUID primary key DEFAULT uuid_generate_v4(),
     assignment_id UUID references "assignment"("id") on delete cascade NOT NULL,
     question_id UUID references "question_back"("id") on delete cascade NOT NULL,
     "order" int4 NOT NULL,
     score int4 DEFAULT NULL,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    CONSTRAINT "question_back_assignment_pk" PRIMARY KEY ( "assignment_id", "question_id")
+    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
 
 
