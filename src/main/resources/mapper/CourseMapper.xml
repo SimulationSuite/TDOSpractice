@@ -43,7 +43,7 @@
 
     <select  id="getAdminCourseList" resultMap="CourseResult">
         SELECT
-        c.id :: "varchar" AS course_id,
+        c.id :: varchar AS course_id,
         c.NAME AS course_name,
         c.pic_url,
         c.owner_id,
@@ -63,7 +63,7 @@
 
     <select  id="getAdminCourseListPerfect" resultMap="CourseResult">
         SELECT
-        c.id :: "varchar" AS course_id,
+        c.id :: varchar AS course_id,
         c.NAME AS course_name,
         c.pic_url,
         c.owner_id,
@@ -74,10 +74,10 @@
         c."type",
         c.model_id,
         cc.class_id,
-        chapter.id :: "varchar" AS chapter_id,
+        chapter.id :: varchar AS chapter_id,
         chapter.NAME AS chapter_name,
         chapter."order" AS chapter_order,
-        section.id :: "varchar" AS section_id,
+        section.id :: varchar AS section_id,
         section.NAME AS section_name,
         section."order" AS section_order
         FROM course c
@@ -94,7 +94,7 @@
 
     <select  id="getAdminUnpublishedCourseList" resultMap="CourseResult">
         SELECT
-        c.id :: "varchar" AS course_id,
+        c.id :: varchar AS course_id,
         c.NAME AS course_name,
         c.pic_url,
         c.owner_id,
@@ -115,7 +115,7 @@
 
     <select  id="getAdminUnpublishedCourseListPerfect" resultMap="CourseResult">
         SELECT
-        c.id :: "varchar" AS course_id,
+        c.id :: varchar AS course_id,
         c.NAME AS course_name,
         c.pic_url,
         c.owner_id,
@@ -126,10 +126,10 @@
         c."type",
         c.model_id,
         cc.class_id,
-        chapter.id :: "varchar" AS chapter_id,
+        chapter.id :: varchar AS chapter_id,
         chapter.NAME AS chapter_name,
         chapter."order" AS chapter_order,
-        section.id :: "varchar" AS section_id,
+        section.id :: varchar AS section_id,
         section.NAME AS section_name,
         section."order" AS section_order
         FROM course c
@@ -150,7 +150,7 @@
 
     <select  id="getCourseByCourseId" resultMap="CourseResult">
 SELECT
-	c.id :: "varchar" AS course_id,
+	c.id :: varchar AS course_id,
 	c.NAME AS course_name,
 	c.pic_url,
 	c.owner_id,
@@ -161,13 +161,13 @@ SELECT
 	c."type",
 	c.model_id,
 	cc.class_id,
-	chapter.id :: "varchar" AS chapter_id,
+	chapter.id :: varchar AS chapter_id,
 	chapter.NAME AS chapter_name,
 	chapter."order" AS chapter_order,
-	section.id :: "varchar" AS section_id,
+	section.id :: varchar AS section_id,
 	section.NAME AS section_name,
 	section.ORDER AS section_order,
-	small_section.id :: "varchar" AS small_section_id,
+	small_section.id :: varchar AS small_section_id,
 	small_section.NAME AS small_section_name,
 	small_section.ORDER AS small_section_order
 FROM
@@ -387,7 +387,7 @@ FROM
 
     <select  id="getAdminCourseListByClassId" resultMap="CourseResult">
 SELECT
-	c.id :: "varchar" AS course_id,
+	c.id :: varchar AS course_id,
 	c.NAME AS course_name,
 	c.pic_url,
 	c.owner_id,
@@ -407,7 +407,7 @@ Where c.type = 1
 
     <select  id="getAdminCourseListByClassIdPerfect" resultMap="CourseResult">
 SELECT
-	c.id :: "varchar" AS course_id,
+	c.id :: varchar AS course_id,
 	c.NAME AS course_name,
 	c.pic_url,
 	c.owner_id,
@@ -418,10 +418,10 @@ SELECT
 	c."type",
 	c.model_id,
 	cc.class_id,
-	chapter.id :: "varchar" AS chapter_id,
+	chapter.id :: varchar AS chapter_id,
 	chapter.NAME AS chapter_name,
 	chapter."order" AS chapter_order,
-	section.id :: "varchar" AS section_id,
+	section.id :: varchar AS section_id,
 	section.NAME AS section_name,
 	section."order" AS section_order
 FROM course c
@@ -438,7 +438,7 @@ WHERE
 
     <select  id="getCourseById" resultMap="CourseResult">
 SELECT
-	c.id :: "varchar" AS course_id,
+	c.id :: varchar AS course_id,
 	c.NAME AS course_name,
 	c.pic_url,
 	c.owner_id,
@@ -449,15 +449,15 @@ SELECT
 	c."type",
 	c.model_id,
 	cc.class_id,
-	chapter.id :: "varchar" AS chapter_id,
+	chapter.id :: varchar AS chapter_id,
 	chapter.NAME AS chapter_name,
 	chapter."order" AS chapter_order,
 	case  WHEN courseware.kind = 0 THEN 1 else 0 END as chapter_has_video,
 	case  WHEN courseware.kind = 1 THEN 1 else 0 END as chapter_has_pdf,
-	section.id :: "varchar" AS section_id,
+	section.id :: varchar AS section_id,
 	section.NAME AS section_name,
 	section."order" AS section_order,
-	small_section.id :: "varchar" AS small_section_id,
+	small_section.id :: varchar AS small_section_id,
 	small_section.NAME AS small_section_name,
 	small_section.ORDER AS small_section_order,
 	case  WHEN cs.kind = 0 THEN 1 else 0 END as section_has_video,
