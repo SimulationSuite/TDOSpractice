@@ -98,25 +98,25 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
     @Override
     public Pair<Boolean, Object> addCourseware(Courseware courseware) {
         if (ObjectUtils.isEmpty(courseware.name)) {
-            return new Pair<>(false, "name can not be null");
+            return new Pair<>(false, "课件名称不能为空。");
         }
         if (coursewareMapper.hasCoursewareMapperNameExist(courseware.name) > 0) {
-            return new Pair<>(false, "name has been existed");
+            return new Pair<>(false, "课件名称已存在。");
         }
         if (ObjectUtils.isEmpty(courseware.type)) {
-            return new Pair<>(false, "type can not be null");
+            return new Pair<>(false, "课件类型不能为空。");
         }
         if (ObjectUtils.isEmpty(courseware.kind)) {
-            return new Pair<>(false, "kind can not be null");
+            return new Pair<>(false, "课件种类不能为空。");
         }
         if (ObjectUtils.isEmpty(courseware.url)) {
-            return new Pair<>(false, "url can not be null");
+            return new Pair<>(false, "课件链接地址不能为空。");
         }
         if (ObjectUtils.isEmpty(courseware.size)) {
-            return new Pair<>(false, "size can not be null");
+            return new Pair<>(false, "课件大小不能为空。");
         }
         if (ObjectUtils.isEmpty(courseware.categoryId)) {
-            return new Pair<>(false, "categoryId can not be null");
+            return new Pair<>(false, "课件分类不能为空。");
         }
         CoursewareEntity coursewareEntity = new CoursewareEntity();
         coursewareEntity.setName(courseware.name);

@@ -56,22 +56,24 @@ public class QuestionBackServiceImpl implements QuestionBackService {
     @Transactional(rollbackFor = {RuntimeException.class, Error.class})
     public Pair<Boolean, Object> addQuestionBack(QuestionBack questionBack) {
         if (ObjectUtils.isEmpty(questionBack.type)) {
-            return new Pair<>(false, "type can not be null");
+            return new Pair<>(false, "题目类型不能为空。");
         }
         if (ObjectUtils.isEmpty(questionBack.content)) {
-            return new Pair<>(false, "content  can not be null");
+            return new Pair<>(false, "题目内容不能为空。");
         }
         if (questionBackMapper.hasQuestionBackNameExist(questionBack.content) > 0) {
-            return new Pair<>(false, "content has been existed");
+            return new Pair<>(false, "题目内容已存在。");
         }
-        if (ObjectUtils.isEmpty(questionBack.choice)) {
-            return new Pair<>(false, "choice  can not be null");
+        if(questionBack.type == 0){
+            if (ObjectUtils.isEmpty(questionBack.choice)) {
+                return new Pair<>(false, "题目选择不能为空。");
+            }
         }
         if (ObjectUtils.isEmpty(questionBack.answer)) {
-            return new Pair<>(false, "answer can not be null");
+            return new Pair<>(false, "题目答案不能为空。");
         }
         if (ObjectUtils.isEmpty(questionBack.categoryId)) {
-            return new Pair<>(false, "categoryId can not be null");
+            return new Pair<>(false, "题目分类不能为空。");
         }
         QuestionBackEntity questionBackEntity = new QuestionBackEntity();
         questionBackEntity.setType(questionBack.type);
@@ -82,7 +84,7 @@ public class QuestionBackServiceImpl implements QuestionBackService {
         questionBackEntity.setModelId(questionBack.modelId);
         questionBackEntity.setCategoryId(questionBack.categoryId);
         try {
-            int result = questionBackMapper.addQuestionBack(questionBackEntity);
+            questionBackMapper.addQuestionBack(questionBackEntity);
         } catch (Exception e) {
             return new Pair<>(false, e);
         }
