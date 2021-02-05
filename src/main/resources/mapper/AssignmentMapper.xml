@@ -134,6 +134,9 @@
         inner join question_back_assignment qba on qba.assignment_id = a.id
         inner join question_back qb on qb.id = qba.question_id
         where a.section_id =#{sectionId} ::uuid
+        <if test="type != null and type != ''" >
+            and qb.type = #{type}
+        </if>
     </select>
 
     <delete id="deleteAssignmentById">
@@ -153,7 +156,7 @@
     </update>
 
     <insert id="addAssignment" useGeneratedKeys="true" keyProperty="id">
-        insert into assignment (section_id, name, end_at, qualified_score) values (#{sectionId}::uuid, #{name}, #{endAt}, #{qualifiedScore});
+        insert into assignment (section_id, name, end_at, qualified_score) values (#{sectionId}::uuid, #{name}, #{endAt}::timestamp , #{qualifiedScore});
     </insert>
 
     <update id="modifyAssignmentStatusById">
@@ -189,6 +192,10 @@
         from question_back qb
         inner join question_back_assignment qba on qba.question_id = qb.id
         where qba.assignment_id =#{assignmentId} ::uuid
+    </select>
+
+    <select id="hasAssignmentNameExist"  resultType="int">
+        select count(*) from assignment where name=#{name}
     </select>
 
 </mapper>

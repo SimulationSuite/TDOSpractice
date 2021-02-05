@@ -13,4 +13,8 @@
             )
         </foreach>
     </insert>
+
+    <select id="findImageByExperiment" resultType="org.tdos.tdospractice.entity.ExperimentImageEntity">
+        select * from experiment_image where experiment_id = #{experiment_id}::uuid
+    </select>
 </mapper>

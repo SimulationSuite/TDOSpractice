@@ -20,7 +20,7 @@ public class Assignment {
     public Integer status;
 
     @JsonProperty("end_at")
-    public LocalDateTime endAt;
+    public String endAt;
 
     @JsonProperty("qualified_score")
     public Integer qualifiedScore;

@@ -28,7 +28,7 @@ public interface AssignmentMapper {
 
     List<AssignmentEntity> getAssignmentByChapterId(@Param("chapterId") String chapterId);
 
-    List<AssignmentQuestionBack> getAssignmentBySectionId(@Param("sectionId") String sectionId);
+    List<AssignmentQuestionBack> getAssignmentBySectionId(@Param("sectionId") String sectionId, @Param("type") Integer type);
 
     AssignmentEntity getAssignmentNameBySectionId(@Param("sectionId") String sectionId);
 
@@ -51,5 +51,7 @@ public interface AssignmentMapper {
     boolean ifStudentAnswer(@Param("userId") String userId, @Param("assignmentId") String assignmentId);
 
     List<StudentAnswerEntity> getQuestionBackByAssignment(@Param("assignmentId") String assignmentId);
+
+    int hasAssignmentNameExist(@Param("name") String name);
 
 }

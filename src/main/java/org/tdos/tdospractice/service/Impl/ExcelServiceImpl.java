@@ -1,8 +1,10 @@
 package org.tdos.tdospractice.service.Impl;
 
+import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 import org.tdos.tdospractice.entity.CategoryEntity;
 import org.tdos.tdospractice.entity.ClassEntity;
 import org.tdos.tdospractice.entity.QuestionBackEntity;
@@ -123,18 +125,39 @@ public class ExcelServiceImpl implements ExcelService {
         List<QuestionBackEntity> questionBackEntityList =  utils.parseQuestionBack(utils.read(0, 1, end));
         if(questionBackEntityList.size() < 1)
         {
-            Response.error("无题目内容。");
+            return Response.error("无题目内容。");
         }
         List<CategoryEntity> categoryEntityList = categoryMapper.findAllChildCategory();
         for (QuestionBackEntity q : questionBackEntityList) {
             List<String> categoryId = categoryEntityList.stream().filter(x -> x.getName().equals(q.getCategoryId())).map(CategoryEntity::getId).collect(Collectors.toList());
             try{
                 q.setCategoryId(categoryId.get(0));
+                if (ObjectUtils.isEmpty(q.getType())) {
+                    return Response.error("存在题目类型为空。");
+                }
+                if (ObjectUtils.isEmpty(q.getContent())) {
+                    return Response.error("存在题目内容为空。");
+                }
+                if(q.getType() == 0){
+                    if (ObjectUtils.isEmpty(q.getChoice())) {
+                        return Response.error("题目选择不能为空。");
+                    }
+                }
+                if (ObjectUtils.isEmpty(q.getAnswer())) {
+                    return Response.error("题目答案不能为空。");
+                }
+                if (ObjectUtils.isEmpty(q.getCategoryId())) {
+                    return Response.error("题目分类不能为空。");
+                }
+                if(questionBackMapper.hasQuestionBackNameExist(q.getContent())>0)
+                {
+                    return Response.error("存在题目详情重复。");
+                }
                 questionBackMapper.addQuestionBack(q);
             }
             catch (Exception e)
             {
-                Response.error(e.toString());
+                return Response.error(e.toString());
             }
         }
         return Response.success("success");

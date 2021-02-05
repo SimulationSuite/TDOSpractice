@@ -19,7 +19,7 @@ public class AssignmentEntity {
 
     private Integer status;
 
-    private LocalDateTime endAt;
+    private String endAt;
 
     private int qualifiedScore;
 

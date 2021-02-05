@@ -327,6 +327,7 @@ create table if not exists experiment_report(
     end_at TIMESTAMP(0)  without time zone,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
+    submit_at TIMESTAMP(0)  without time zone
     CONSTRAINT "experiment_report_pk" PRIMARY KEY ( "experiment_id", "user_id")
 );
 

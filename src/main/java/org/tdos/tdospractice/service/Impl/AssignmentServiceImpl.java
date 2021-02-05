@@ -2,8 +2,10 @@ package org.tdos.tdospractice.service.Impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.tdos.tdospractice.body.Assignment;
 import org.tdos.tdospractice.body.StudentScore;
 import org.tdos.tdospractice.entity.AssignmentEntity;
@@ -95,9 +97,9 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
-    public PageInfo<AssignmentQuestionBack> getAssignmentBySectionId(String sectionId, Integer perPage, Integer page) {
+    public PageInfo<AssignmentQuestionBack> getAssignmentBySectionId(String sectionId, Integer type, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        List<AssignmentQuestionBack> list = assignmentMapper.getAssignmentBySectionId(sectionId);
+        List<AssignmentQuestionBack> list = assignmentMapper.getAssignmentBySectionId(sectionId, type);
         return new PageInfo<>(list);
     }
 
@@ -132,7 +134,21 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
-    public AssignmentEntity addAssignment(Assignment assignment) {
+    public Pair<Boolean, Object> addAssignment(Assignment assignment) {
+        if (ObjectUtils.isEmpty(assignment.sectionId)) {
+            return new Pair<>(false, "作业绑定的节不能为空。");
+        }
+        if (ObjectUtils.isEmpty(assignment.endAt)) {
+            return new Pair<>(false, "作业截至不能为空。");
+        }
+        if (assignment.qualifiedScore != 100) {
+            return new Pair<>(false, "作业分数不为100。");
+        }
+        if (ObjectUtils.isEmpty(assignment.name)) {
+            return new Pair<>(false, "作业名称不能为空。");
+        }if (assignmentMapper.hasAssignmentNameExist(assignment.name) > 0) {
+            return new Pair<>(false, "作业名称已存在。");
+        }
         AssignmentEntity assignmentEntity = new AssignmentEntity();
         assignmentEntity.setSectionId(assignment.sectionId);
         assignmentEntity.setName(assignment.name);
@@ -141,9 +157,9 @@ public class AssignmentServiceImpl implements AssignmentService {
         try {
             assignmentMapper.addAssignment(assignmentEntity);
         } catch (Exception e) {
-            return assignmentEntity;
+            return new Pair<>(false, e);
         }
-        return assignmentEntity;
+        return new Pair<>(true, assignmentEntity);
     }
 
     @Override

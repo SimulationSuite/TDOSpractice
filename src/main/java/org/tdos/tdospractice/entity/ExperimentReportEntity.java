@@ -18,7 +18,7 @@ public class ExperimentReportEntity {
 
     private String info;
 
-    private String score;
+    private int score;
 
     private int status; //0. 未提交 1.已提交
 
@@ -29,5 +29,7 @@ public class ExperimentReportEntity {
     private LocalDateTime created_at;
 
     private LocalDateTime updated_at;
+
+    private LocalDateTime submit_at;
 
 }
