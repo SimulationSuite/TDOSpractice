@@ -25,6 +25,10 @@ public class StudentExperimentReport {
 
     private String className;
 
+    private String name;
+
+    private LocalDateTime end_at;
+
     private LocalDateTime submit_at;
 
 }

@@ -324,7 +324,6 @@ create table if not exists experiment_report(
     score int4 DEFAULT NULL,
     status int4 default 0,
     isCorrect int4 default 0,
-    end_at TIMESTAMP(0)  without time zone,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     submit_at TIMESTAMP(0)  without time zone
