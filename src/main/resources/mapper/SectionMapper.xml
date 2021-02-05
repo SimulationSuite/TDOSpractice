@@ -33,10 +33,10 @@
 
     <select id="getSection" resultMap="SectionResult">
 SELECT
-	section.id :: "varchar" AS section_id,
+	section.id :: varchar AS section_id,
 	section.NAME AS section_name,
 	section.ORDER AS section_order,
-	small_section.id :: "varchar" AS small_section_id,
+	small_section.id :: varchar AS small_section_id,
 	small_section.NAME AS small_section_name,
 	small_section.ORDER AS small_section_order
 FROM "section"

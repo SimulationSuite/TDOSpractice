@@ -42,13 +42,13 @@
 
     <select id="getChapter" resultMap="ChapterResult">
         SELECT
-	chapter.id :: "varchar" AS chapter_id,
+	chapter.id :: varchar AS chapter_id,
 	chapter.NAME AS chapter_name,
 	chapter."order" AS chapter_order,
-	section.id :: "varchar" AS section_id,
+	section.id :: varchar AS section_id,
 	section.NAME AS section_name,
 	section.ORDER AS section_order,
-	small_section.id :: "varchar" AS small_section_id,
+	small_section.id :: varchar AS small_section_id,
 	small_section.NAME AS small_section_name,
 	small_section.ORDER AS small_section_order
 FROM "chapter"
@@ -60,13 +60,13 @@ FROM "chapter"
 
     <select id="getSlightChapter" resultMap="ChapterResult">
         SELECT
-	chapter.id :: "varchar" AS chapter_id,
+	chapter.id :: varchar AS chapter_id,
 	chapter.NAME AS chapter_name,
 	chapter."order" AS chapter_order,
-	section.id :: "varchar" AS section_id,
+	section.id :: varchar AS section_id,
 	section.NAME AS section_name,
 	section.ORDER AS section_order,
-	small_section.id :: "varchar" AS small_section_id,
+	small_section.id :: varchar AS small_section_id,
 	small_section.NAME AS small_section_name,
 	small_section.ORDER AS small_section_order,
 	case  WHEN courseware.kind = 0 THEN 1 else 0 END as section_has_video,
