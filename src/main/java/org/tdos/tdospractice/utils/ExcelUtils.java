@@ -189,8 +189,7 @@ public class ExcelUtils {
             questionBackEntity.setContent(x.get(1));
             questionBackEntity.setChoice(x.get(2));
             questionBackEntity.setAnswer(x.get(3));
-            questionBackEntity.setPicUrl(x.get(4));
-            questionBackEntity.setCategoryId(x.get(5));
+            questionBackEntity.setCategoryId(x.get(4));
             return questionBackEntity;
         }).collect(Collectors.toList());
     }
