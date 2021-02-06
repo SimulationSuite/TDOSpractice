@@ -6,7 +6,7 @@ import org.tdos.tdospractice.body.UploadFile;
 
 public interface FileService {
 
-    Pair<Boolean,String> upload(MultipartFile file, int type);
+    Pair<Boolean,UploadFile> upload(MultipartFile file, int type);
 
     boolean download();
 
