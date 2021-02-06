@@ -34,7 +34,7 @@ public interface CoursewareMapper {
 
     boolean ifSectionCoursewarePub(String id);
 
-    int addChapterSectionCourseware(ChapterSectionCoursewareEntity chapterSectionCoursewareEntity);
+    int addChapterSectionCourseware(List<ChapterSectionCoursewareEntity> chapterSectionCoursewareEntityList);
 
     int hasSectionCoursewareId(String id);
 

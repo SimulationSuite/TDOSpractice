@@ -3,6 +3,7 @@ package org.tdos.tdospractice.service;
 import com.github.pagehelper.PageInfo;
 import javafx.util.Pair;
 import org.apache.ibatis.annotations.Param;
+import org.tdos.tdospractice.body.ChapterSectionCoursewareList;
 import org.tdos.tdospractice.entity.CoursewareEntity;
 import org.tdos.tdospractice.body.Courseware;
 import org.tdos.tdospractice.entity.ChapterSectionCoursewareEntity;
@@ -28,7 +29,7 @@ public interface CoursewareService {
 
     Map<String, Object> modifyCoursewareNameById(Courseware courseware);
 
-    ChapterSectionCoursewareEntity addChapterSectionCourseware(ChapterSectionCourseware chapterSectionCourseware);
+    List<ChapterSectionCoursewareEntity> addChapterSectionCourseware(List<ChapterSectionCourseware> chapterSectionCoursewareList);
 
     Map<String, Object> deleteChapterSectionCourseById(List<ChapterSectionCourseware> chapterSectionCoursewareList);
 }
