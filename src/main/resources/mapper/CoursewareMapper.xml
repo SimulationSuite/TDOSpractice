@@ -131,9 +131,9 @@
         values
         <foreach collection="chapterSectionCoursewareEntityList" item="item" separator=",">
         (
-            #{sectionId}::uuid,
-            #{chapterId}::uuid,
-            #{coursewareId}::uuid
+            #{item.sectionId}::uuid,
+            #{item.chapterId}::uuid,
+            #{item.coursewareId}::uuid
         )
         </foreach>
     </insert>
