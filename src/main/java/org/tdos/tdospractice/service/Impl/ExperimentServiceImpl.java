@@ -67,7 +67,7 @@ public class ExperimentServiceImpl implements ExperimentService {
                 sectionid_list.add(section.id);
             });
         });
-        if (sectionid_list.size() == 0){
+        if (sectionid_list.size() == 0) {
             return new PageInfo<>(new ArrayList<>());
         }
         List<String> list = chapterSectionExperimentService.getExperimentIds(sectionid_list);
@@ -81,7 +81,7 @@ public class ExperimentServiceImpl implements ExperimentService {
         chapter.getSections().forEach(section -> {
             sectionid_list.add(section.id);
         });
-        if (sectionid_list.size() == 0){
+        if (sectionid_list.size() == 0) {
             return new PageInfo<>(new ArrayList<>());
         }
         List<String> list = chapterSectionExperimentService.getExperimentIds(sectionid_list);
@@ -92,7 +92,7 @@ public class ExperimentServiceImpl implements ExperimentService {
     public PageInfo<ExperimentEntity> findAllBySectionId(String section_id, Integer perPage, Integer page) {
         List<String> sectionid_list = new ArrayList<>();
         sectionid_list.add(section_id);
-        if (sectionid_list.size() == 0){
+        if (sectionid_list.size() == 0) {
             return new PageInfo<>(new ArrayList<>());
         }
         List<String> list = chapterSectionExperimentService.getExperimentIds(sectionid_list);
@@ -102,7 +102,7 @@ public class ExperimentServiceImpl implements ExperimentService {
     @Override
     public PageInfo<ExperimentEntity> findAllByIds(List<String> section_ids, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        if (section_ids.size() == 0){
+        if (section_ids.size() == 0) {
             return new PageInfo<>(new ArrayList<>());
         }
         List<ExperimentEntity> list = experimentMapper.findAllByIds(section_ids);
@@ -110,13 +110,13 @@ public class ExperimentServiceImpl implements ExperimentService {
     }
 
     @Override
-    public PageInfo<ExperimentEntity> findSelectedExperimentByCategory(String category_id, String section_id, String name, Integer perPage, Integer page) {
+    public PageInfo<ExperimentEntity> findSelectedExperimentByCategory(String f_category_id, String c_category_id, String section_id, String name, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
         List<String> category_ids = new ArrayList<>();
         List<String> section_ids = new ArrayList<>();
         List<ExperimentEntity> list = experimentService.findExperiment(category_ids, name, perPage, page).getList();
         section_ids.add(section_id);
-        if (category_id.equals("")) {
+        if (f_category_id.equals("") && c_category_id.equals("")) {
             experimentService.findExperiment(category_ids, name, perPage, page).getList().forEach(experimentEntity -> {
                 experimentMapper.findAllByIds(section_ids).forEach(e -> {
                     if (e.getId().equals(experimentEntity.getId())) {
@@ -125,24 +125,21 @@ public class ExperimentServiceImpl implements ExperimentService {
                 });
             });
         } else {
-            Optional<CategoryEntity> categoryEntity = categoryService.findCategory(category_id);
             List<String> ids = new ArrayList<>();
-            if (categoryEntity.isPresent()) {
-                if (categoryEntity.get().getParent_category_id() == null) {
-                    categoryService.findChildCategory(category_id).forEach(c -> {
-                        ids.add(c.getId());
-                    });
-                } else {
-                    ids.add(category_id);
-                }
-                experimentService.findExperiment(category_ids, name, perPage, page).getList().forEach(experimentEntity -> {
-                    experimentMapper.findAllByIds(section_ids).forEach(e -> {
-                        if (e.getId().equals(experimentEntity.getId())) {
-                            list.remove(experimentEntity);
-                        }
-                    });
+            if (c_category_id.equals("")) {
+                categoryService.findChildCategory(f_category_id).forEach(c -> {
+                    ids.add(c.getId());
                 });
+            } else {
+                ids.add(c_category_id);
             }
+            experimentService.findExperiment(ids, name, perPage, page).getList().forEach(experimentEntity -> {
+                experimentMapper.findAllByIds(section_ids).forEach(e -> {
+                    if (e.getId().equals(experimentEntity.getId())) {
+                        list.remove(experimentEntity);
+                    }
+                });
+            });
         }
         return new PageInfo<>(list);
     }

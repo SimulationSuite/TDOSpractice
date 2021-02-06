@@ -19,7 +19,7 @@ public interface ExperimentService {
 
     PageInfo<ExperimentEntity> findAllByIds(List<String> section_id, Integer perPage, Integer page);
 
-    PageInfo<ExperimentEntity> findSelectedExperimentByCategory(String category_id, String section_id, String name, Integer perPage, Integer page);
+    PageInfo<ExperimentEntity> findSelectedExperimentByCategory(String f_category_id,String c_category_id, String section_id, String name, Integer perPage, Integer page);
 
     ExperimentEntity findById(String id);
 
