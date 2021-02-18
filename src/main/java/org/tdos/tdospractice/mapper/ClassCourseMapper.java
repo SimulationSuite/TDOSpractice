@@ -15,4 +15,6 @@ public interface ClassCourseMapper {
 
     int deleteByCourseId(String courseId);
 
+    List<ClassCourse> findListByCourseId(String courseId);
+
 }

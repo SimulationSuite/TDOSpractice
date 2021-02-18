@@ -37,7 +37,7 @@ public class Course {
 
     public Integer numbers;
 
-    public String classId;
+    public List<Classes> classesList;
 
     @JsonProperty("chapter_number")
     public int chapterNumber;

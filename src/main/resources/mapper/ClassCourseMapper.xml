@@ -5,6 +5,7 @@
 <mapper namespace="org.tdos.tdospractice.mapper.ClassCourseMapper">
 
     <resultMap id="ClassCourseResult" type="org.tdos.tdospractice.entity.ClassCourse">
+        <result column="user_id" property="userId"/>
         <result column="class_id" property="classId"/>
         <result column="course_id" property="courseId"/>
         <result column="created_at" property="createdAt"/>
@@ -28,6 +29,10 @@
             ) on conflict(user_id, course_id)
             DO UPDATE SET updated_at = now() at time zone 'utc';
     </insert>
+
+    <select  id="findListByCourseId" resultMap="ClassCourseResult">
+        select * from class_course where course_id=#{courseId}
+    </select>
 
 
 </mapper>
