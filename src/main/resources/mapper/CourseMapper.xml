@@ -92,7 +92,7 @@
         </foreach>
     </select>
 
-    <select  id="getAdminUnpublishedCourseList" resultMap="CourseResult">
+    <select  id="getAdminCourseListByStatus" resultMap="CourseResult">
         SELECT
         c.id :: varchar AS course_id,
         c.NAME AS course_name,
@@ -106,7 +106,9 @@
         c.model_id
         FROM course c
         Where c.type = 0
-        AND c.STATUS = 0
+        <if test="status !=null" >
+            AND c.status = #{status}
+        </if>
         <if test="name != null and name != ''" >
             AND c.NAME LIKE concat('%',#{name},'%')
         </if>

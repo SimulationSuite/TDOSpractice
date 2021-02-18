@@ -42,7 +42,7 @@ public interface CourseMapper {
 
     List<Course> getCourseListPerfect(@Param("courseIds") List<String> courseIds);
 
-    List<Course> getAdminUnpublishedCourseList(String userId, String name);
+    List<Course> getAdminCourseListByStatus(String userId, String name, Integer status);
 
     List<Course> getAdminUnpublishedCourseListPerfect(@Param("courseIds") List<String> courseIds);
 

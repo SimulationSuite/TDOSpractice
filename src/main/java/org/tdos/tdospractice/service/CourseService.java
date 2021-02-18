@@ -21,7 +21,7 @@ public interface CourseService {
 
     Pair<Boolean, String> modifyCourseStatus(ModifyCourseStatus modifyCourseStatus);
     // 1
-    PageInfo<Course> getAdminUnpublishedCourseList(String userId, Integer perPage, Integer page, String name);
+    PageInfo<Course> getAdminCourseListByStatus(String userId, Integer perPage, Integer page, String name, Integer status);
     // 1
     PageInfo<Course> getCourseList(String userId,String name, String start, String end, Integer perPage, Integer page);
 
