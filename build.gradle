@@ -70,6 +70,10 @@ dependencies {
     // https://mvnrepository.com/artifact/commons-net/commons-net
     compile group: 'commons-net', name: 'commons-net', version: '3.6'
     compile group: 'commons-io', name: 'commons-io', version: '2.4'
+    // https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox
+    compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '1.8.11'
+    // https://mvnrepository.com/artifact/ws.schild/jave-all-deps
+    compile group: 'ws.schild', name: 'jave-all-deps', version: '2.7.3'
 }
 
 
