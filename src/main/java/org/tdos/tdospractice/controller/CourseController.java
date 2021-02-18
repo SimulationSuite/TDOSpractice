@@ -25,8 +25,8 @@ public class CourseController {
 
     @GetMapping(value = "/get_admin_course_list_by_class_id")
     public Response<Object> getAdminCourseList(@RequestParam(value = "class_id") String classId,
-                                                         @RequestParam(value = "per_page") Integer perPage,
-                                                         @RequestParam(value = "page") Integer page) {
+                                               @RequestParam(value = "per_page") Integer perPage,
+                                               @RequestParam(value = "page") Integer page) {
         Pair<Boolean, Object> pair = courseService.getAdminCourseListByClassId(classId, perPage, page);
         if (pair.getKey()) {
             return Response.success(null);
@@ -93,13 +93,14 @@ public class CourseController {
         return Response.error(pair.getValue());
     }
 
-    // 获取管理员未发布的课程
-    @GetMapping(value = "/get_admin_unpublished_course_list")
-    public Response<PageInfo<Course>> getAdminUnpublishedCourseList(@RequestParam(value = "user_id") String userId,
-                                                                    @RequestParam(value = "per_page") Integer perPage,
-                                                                    @RequestParam(value = "page") Integer page,
-                                                                    @RequestParam(value = "name", required = false) String name) {
-        return Response.success(courseService.getAdminUnpublishedCourseList(userId, perPage, page, name));
+    // 获取管理员未发布的课程 0 未发布 1 已发布
+    @GetMapping(value = "/get_admin_course_list_by_status")
+    public Response<PageInfo<Course>> getAdminCourseListByType(@RequestParam(value = "user_id") String userId,
+                                                         @RequestParam(value = "per_page") Integer perPage,
+                                                         @RequestParam(value = "page") Integer page,
+                                                         @RequestParam(value = "name", required = false) String name,
+                                                         @RequestParam(value = "status", required = false) Integer status) {
+        return Response.success(courseService.getAdminCourseListByStatus(userId, perPage, page, name, status));
     }
 
     // 归档课程
@@ -135,10 +136,9 @@ public class CourseController {
                                                     @RequestParam(value = "per_page") Integer perPage,
                                                     @RequestParam(value = "page") Integer page) {
 
-        PageInfo<Course> courses = courseService.getCourseList(userId,name, start, end, perPage, page);
+        PageInfo<Course> courses = courseService.getCourseList(userId, name, start, end, perPage, page);
         return Response.success(courses);
     }
-
 
 
     @GetMapping(value = "/get_course_by_id")

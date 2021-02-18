@@ -246,10 +246,10 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public PageInfo<Course> getAdminUnpublishedCourseList(String userId, Integer perPage, Integer page, String name) {
+    public PageInfo<Course> getAdminCourseListByStatus(String userId, Integer perPage, Integer page, String name, Integer status) {
         PageHelper.startPage(page, perPage, true, true);
         PageHelper.orderBy("c.created_at desc");
-        List<Course> courses = courseMapper.getAdminUnpublishedCourseList(userId, name);
+        List<Course> courses = courseMapper.getAdminCourseListByStatus(userId, name, status);
         PageInfo<Course> list = new PageInfo<>(courses);
         if (list.getList().size() > 0) {
             List<Course> coursesList = courseMapper.getAdminUnpublishedCourseListPerfect(list.getList().stream().map(x -> x.id).collect(Collectors.toList()));
@@ -257,7 +257,6 @@ public class CourseServiceImpl implements CourseService {
                 x.chapters.forEach(s -> s.sections = s.sections.stream().sorted(Comparator.comparing(Section::getOrder)).collect(Collectors.toList()));
                 x.chapters = x.chapters.stream().sorted(Comparator.comparing(Chapter::getOrder)).collect(Collectors.toList());
             });
-            coursesList = coursesList.stream().sorted(Comparator.comparing(x -> x.name)).collect(Collectors.toList());
             List<ClassNumber> classNumbers = classMapper.findClassNumber();
             coursesList.forEach(x -> classNumbers.forEach(classNumber -> {
                 if (!ObjectUtils.isEmpty(x.classId) && x.classId.equals(classNumber.classId)) {
