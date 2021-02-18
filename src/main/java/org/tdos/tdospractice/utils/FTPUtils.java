@@ -11,7 +11,6 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
-import org.tdos.tdospractice.body.UploadFile;
 
 @Data
 @Slf4j(topic = "tfp")
@@ -59,7 +58,7 @@ public class FTPUtils {
                         remotePath = "/data2/video";
                         break;
                     case 2:
-                        remotePath = "/data2/pdf";
+                        remotePath = "/data2/courseware";
                         break;
                 }
                 ftpClient.changeWorkingDirectory(remotePath);
@@ -123,6 +122,29 @@ public class FTPUtils {
         return download;
     }
 
+    public  boolean deleteFile(String filePath, String filename){
+        boolean delete = false;
+        try {
+            if (connectServer(this.ip, this.user, this.pwd)) {
+                try {
+                    ftpClient.changeWorkingDirectory(filePath);
+                    ftpClient.dele(filename);
+                    delete = true;
+                } catch (IOException e) {
+                    log.error("删除异常", e);
+                } finally {
+                    ftpClient.disconnect();
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("删除失败");
+        }
+
+        return delete;
+    }
+
+
+
     public static Pair<Boolean,String> uploadFile(File file, int type) throws IOException {
         FTPUtils ftpUtil = new FTPUtils(ftpIp, 21, ftpUser, ftpPass);
         log.info("开始连接ftp服务器");
@@ -131,6 +153,6 @@ public class FTPUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println(System.getProperty("user.dir"));
+
     }
 }
