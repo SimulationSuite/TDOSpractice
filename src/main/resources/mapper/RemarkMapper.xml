@@ -7,6 +7,7 @@
     <resultMap id="CoursewareRemark" type="org.tdos.tdospractice.type.CoursewareRemark">
         <result column="id" property="id"/>
         <result column="name" property="coursewareName"/>
+        <result column="courseware_id" property="coursewareId"/>
         <result column="title" property="title"/>
         <result column="content" property="content"/>
         <result column="type" property="type"/>
@@ -44,6 +45,7 @@
         SELECT
     courseware_remark.id,
 	courseware.NAME,
+    courseware.id as courseware_id,
 	courseware_remark.title,
 	courseware_remark."content",
 	courseware_remark."type",

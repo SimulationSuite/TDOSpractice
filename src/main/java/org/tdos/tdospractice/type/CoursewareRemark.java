@@ -12,6 +12,9 @@ public class CoursewareRemark {
     @JsonProperty("courseware_name")
     public String coursewareName;
 
+    @JsonProperty("courseware_id")
+    public String coursewareId;
+
     public String title;
 
     public String content;

@@ -15,7 +15,6 @@
         <result column="status" property="status"/>
         <result column="type" property="type"/>
         <result column="model_id" property="modelId"/>
-        <result column="class_id" property="classId"/>
         <result column="created_at" property="createdAt"/>
         <collection property="chapters" ofType="org.tdos.tdospractice.type.Chapter">
             <id column="chapter_id" property="id"/>
@@ -73,7 +72,6 @@
         c.STATUS,
         c."type",
         c.model_id,
-        cc.class_id,
         chapter.id :: varchar AS chapter_id,
         chapter.NAME AS chapter_name,
         chapter."order" AS chapter_order,
@@ -127,7 +125,6 @@
         c.STATUS,
         c."type",
         c.model_id,
-        cc.class_id,
         chapter.id :: varchar AS chapter_id,
         chapter.NAME AS chapter_name,
         chapter."order" AS chapter_order,
@@ -162,7 +159,6 @@ SELECT
 	c.STATUS,
 	c."type",
 	c.model_id,
-	cc.class_id,
 	chapter.id :: varchar AS chapter_id,
 	chapter.NAME AS chapter_name,
 	chapter."order" AS chapter_order,
@@ -221,7 +217,6 @@ FROM
         c.STATUS,
         c."type",
         c.model_id,
-        cc.class_id,
         chapter.id AS chapter_id,
         chapter.NAME AS chapter_name,
         chapter."order" AS chapter_order,
@@ -312,7 +307,6 @@ FROM
         c.STATUS,
         c."type",
         c.model_id,
-        cc.class_id,
         chapter.id AS chapter_id,
         chapter.NAME AS chapter_name,
         chapter."order" AS chapter_order,
@@ -419,7 +413,6 @@ SELECT
 	c.STATUS,
 	c."type",
 	c.model_id,
-	cc.class_id,
 	chapter.id :: varchar AS chapter_id,
 	chapter.NAME AS chapter_name,
 	chapter."order" AS chapter_order,
@@ -450,7 +443,6 @@ SELECT
 	c.STATUS,
 	c."type",
 	c.model_id,
-	cc.class_id,
 	chapter.id :: varchar AS chapter_id,
 	chapter.NAME AS chapter_name,
 	chapter."order" AS chapter_order,
