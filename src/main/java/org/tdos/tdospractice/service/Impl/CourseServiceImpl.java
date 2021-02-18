@@ -131,7 +131,7 @@ public class CourseServiceImpl implements CourseService {
         course.startAt = null;
         course.endAt = null;
         writeCourse(course);
-        return new Pair<>(true, "");
+        return new Pair<>(true, course.id);
     }
 
     @Override
