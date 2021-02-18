@@ -39,7 +39,7 @@ public class CourseController {
     public Response<String> prepareCourse(@RequestBody PrepareCourse prepareCourse) {
         Pair<Boolean, String> pair = courseService.prepareCourse(prepareCourse);
         if (pair.getKey()) {
-            return Response.success(null);
+            return Response.success(pair.getValue());
         }
         return Response.error(pair.getValue());
     }
