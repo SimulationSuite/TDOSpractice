@@ -31,7 +31,7 @@
     </insert>
 
     <select  id="findListByCourseId" resultMap="ClassCourseResult">
-        select * from class_course where course_id=#{courseId}
+        select * from class_course where course_id=#{courseId}::uuid
     </select>
 
 
