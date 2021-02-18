@@ -22,6 +22,8 @@ public interface CoursewareMapper {
 
     List<CoursewareEntity> getCoursewareByCourseId(@Param("courseId") String courseId, @Param("kind") Integer kind, @Param("type") Integer type);
 
+    List<ChapterSectionCoursewareEntity> getChapterSectionCoursewareByCourseId(@Param("courseId") String courseId);
+
     int deleteCoursewareById(@Param("id") String id);
 
     int deleteChapterSectionCourseById(@Param("chapterId") String chapterId, @Param("sectionId") String sectionId, @Param("coursewareId") String coursewareId);
