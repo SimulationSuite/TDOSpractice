@@ -81,12 +81,13 @@ public class ExperimentController {
     }
 
     @GetMapping(value = "/findSelectedExperimentByCategory")
-    public Response findExperimentByCategory(@RequestParam(value = "category_id") String category_id,
+    public Response findExperimentByCategory(@RequestParam(value = "f_category_id") String f_category_id,
+                                             @RequestParam(value = "c_category_id") String c_category_id,
                                              @RequestParam(value = "section_id") String section_id,
                                              @RequestParam(value = "name") String name,
                                              @RequestParam(value = "perPage") Integer perPage,
                                              @RequestParam(value = "page") Integer page) {
-        return Response.success(experimentService.findSelectedExperimentByCategory(category_id, section_id, name, perPage, page));
+        return Response.success(experimentService.findSelectedExperimentByCategory(f_category_id, c_category_id, section_id, name, perPage, page));
     }
 
 
@@ -123,11 +124,11 @@ public class ExperimentController {
     public Response deleteExperiment(@RequestParam(value = "id") String id) {
         try {
             //TODO 判断课程是否已发布
-            if (chapterSectionExperimentService.getSectionNumberbyExperiment(id) == 0){
+            if (chapterSectionExperimentService.getSectionNumberbyExperiment(id) == 0) {
                 if (experimentService.deleteExperiment(id))
                     return Response.success();
                 return Response.error("删除失败");
-            }else {
+            } else {
                 return Response.error("删除失败,该实验与课程已绑定");
             }
         } catch (Exception e) {

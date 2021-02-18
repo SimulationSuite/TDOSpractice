@@ -172,24 +172,6 @@ public class UserServiceImpl extends Throwable implements UserService{
         if (owner == null) {
             return new Pair<>(false, "jwt user_id is exist");
         }
-        switch (owner.getRoleID()) {
-            case 0: {
-                boolean allExist = userIDs.stream().allMatch(x -> !StringUtils.isEmpty(x) && userMapper.findUserById(x).getRoleID() == 1);
-                if (!allExist) {
-                    return new Pair<>(false, "user_id is invalid");
-                }
-            }
-            break;
-            case 1: {
-                boolean allExist = userIDs.stream().allMatch(x -> !StringUtils.isEmpty(x) && userMapper.findUserById(x).getRoleID() == 2);
-                if (!allExist) {
-                    return new Pair<>(false, "user_id is invalid");
-                }
-            }
-            break;
-            default:
-                return new Pair<>(false, "jwt user_id cannot have power");
-        }
         userIDs.forEach(id -> {
             UserEntity user = userMapper.findUserById(id);
             if (user == null) {

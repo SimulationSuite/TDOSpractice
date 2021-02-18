@@ -18,4 +18,6 @@ public class UploadFile {
 
     private Long time;
 
+    private int pages;
+
 }

@@ -38,12 +38,9 @@ public class FileController {
         }else {
             return Response.error("type error");
         }
-        Pair<Boolean,String> pair = fileService.upload(multipartFile, type);
+        Pair<Boolean,UploadFile> pair = fileService.upload(multipartFile, type);
         if (pair.getKey()) {
-            return Response.success(UploadFile
-                    .builder()
-                    .size(multipartFile.getSize())
-                    .name(uppath + pair.getValue()).build());
+            return Response.success(pair.getValue());
         }else {
             return Response.error("上传失败");
         }

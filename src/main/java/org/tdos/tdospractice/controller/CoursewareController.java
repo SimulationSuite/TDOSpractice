@@ -96,8 +96,8 @@ public class CoursewareController {
     }
 
     @PostMapping(value = "/addChapterSectionCourseware")
-    public Response<ChapterSectionCoursewareEntity> addChapterSectionCourseware(@RequestBody ChapterSectionCourseware chapterSectionCourseware) {
-        return Response.success(coursewareService.addChapterSectionCourseware(chapterSectionCourseware));
+    public Response<List<ChapterSectionCoursewareEntity>> addChapterSectionCourseware(@RequestBody ChapterSectionCoursewareList chapterSectionCoursewareList) {
+        return Response.success(coursewareService.addChapterSectionCourseware(chapterSectionCoursewareList.chapterSectionCoursewareList));
     }
 
 }

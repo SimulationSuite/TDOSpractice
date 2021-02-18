@@ -61,20 +61,20 @@
     <update id="modifyQuestionBackNameById">
         update question_back
         set type = #{type}, content = #{content}, choice = #{choice}, answer = #{answer}, pic_url = #{picUrl},
-        model_id = #{modelId}, category_id = #{categoryId}
+        model_id = #{modelId}, category_id = #{categoryId}::uuid
         where id=#{id}::uuid;
     </update>
 
     <insert id="addQuestionBack" useGeneratedKeys="true" keyProperty="id">
         insert into question_back (type, content, choice, answer, pic_url, model_id, category_id)
         values
-        (#{type}, #{content}, #{choice}, #{answer}, #{picUrl}, #{modelId}, #{categoryId});
+        (#{type}, #{content}, #{choice}, #{answer}, #{picUrl}, #{modelId}, #{categoryId}::uuid);
     </insert>
 
     <insert id="addQuestionBackAssignment" useGeneratedKeys="true" keyProperty="id">
         insert into question_back_assignment (assignment_id, question_id, score)
         values
-        (#{assignmentId}, #{questionId}, #{score});
+        (#{assignmentId}::uuid, #{questionId}::uuid, #{score});
     </insert>
 
     <insert id="addQuestionBackAssignmentList" parameterType="java.util.List">
