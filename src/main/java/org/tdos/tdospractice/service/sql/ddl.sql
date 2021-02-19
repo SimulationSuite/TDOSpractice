@@ -171,8 +171,6 @@ create table if not exists assignment(
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
 
-alter table assignment add constraint  assignment_name unique ("name");
-
 create index if not exists assignment_section_id_index
     on assignment ("section_id");
 
