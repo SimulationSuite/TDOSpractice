@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.tdos.tdospractice.entity.AssignmentEntity;
+import org.tdos.tdospractice.entity.QuestionBackAssignmentEntity;
 import org.tdos.tdospractice.entity.StudentAnswerEntity;
 import org.tdos.tdospractice.type.StudentAssignment;
 import org.tdos.tdospractice.type.AssignmentQuestionBack;
@@ -41,6 +42,8 @@ public interface AssignmentMapper {
     int modifyAssignmentNameById(@Param("id") String id, @Param("name") String name);
 
     int addAssignment(AssignmentEntity assignment);
+
+    int addAssignmentList(@Param("assignmentList") List<AssignmentEntity> assignmentList);
 
     int modifyAssignmentStatusById(@Param("id") String id, @Param("status") Integer status);
 

@@ -29,6 +29,8 @@ public interface QuestionBackMapper {
 
     List<StudentQuestionAnswer> getStudentAnswerByAssignment(String userId, String assignmentId);
 
+    List<QuestionBackAssignmentEntity> getQuestionBackAssignmentByCourse(@Param("courseId") String courseId);
+
     int addQuestionBackAssignment(QuestionBackAssignmentEntity questionBackAssignment);
 
     int addQuestionBackAssignmentList(@Param("questionBackAssignmentList") List<QuestionBackAssignmentEntity> questionBackAssignmentList);
