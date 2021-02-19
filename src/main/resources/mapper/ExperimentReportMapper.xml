@@ -50,7 +50,8 @@
 
     <select id="findExperimentReportAll" resultType="org.tdos.tdospractice.type.StudentExperimentReport">
         select cse.experiment_id as experiment_id,su.id as user_id, su.name as userName,
-        c.name as className,er.status as status,er.iscorrect as iscorrect,er.submit_at submit_at,e.name as name,e.end_at as end_at,er.score as score
+        c.name as className,er.status as status,er.iscorrect as iscorrect,er.submit_at submit_at,e.name as name,e.end_at
+        as end_at,er.score as score
         FROM experiment_report er
         inner join sim_user su on su.id = er.user_id
         inner join chapter_section_experiment cse on cse.experiment_id = er.experiment_id
@@ -76,6 +77,9 @@
         </if>
         <if test="endTime != null and endTime != ''">
             and er.updated_at &lt;= #{endTime}::timestamp
+        </if>
+        <if test="user_id != null and user_id != ''">
+            and er.user_id = #{user_id}
         </if>
         group by su.id,cse.experiment_id,c."name",er.status,er.iscorrect,er.submit_at,e.name,e.end_at,er.score
     </select>
