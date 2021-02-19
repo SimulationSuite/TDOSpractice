@@ -143,6 +143,10 @@
         </foreach>
     </select>
 
+    <select  id="getModelCourse" resultType="String">
+        select id from course where model_id=#{id} and type = 1 and status = 0
+    </select>
+
     <select  id="hasCourseExist" resultType="int">
         select count(*) from course where id=#{id}::uuid
     </select>

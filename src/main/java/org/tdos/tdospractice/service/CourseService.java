@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import javafx.util.Pair;
 import org.tdos.tdospractice.body.*;
 import org.tdos.tdospractice.type.Course;
+import org.tdos.tdospractice.type.PrepareCourseReturn;
 
 public interface CourseService {
 
@@ -13,7 +14,7 @@ public interface CourseService {
 
     Pair<Boolean, Object> getAdminCourseListByClassId(String classId, Integer perPage, Integer page);
 
-    Pair<Boolean, String> prepareCourse(PrepareCourse prepareCourse);
+    Pair<Boolean, PrepareCourseReturn> prepareCourse(PrepareCourse prepareCourse);
 
     PageInfo<Course> getCourseListById(String userId, Integer perPage, Integer page,String name);
 

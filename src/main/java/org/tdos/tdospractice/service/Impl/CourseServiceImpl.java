@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.tdos.tdospractice.body.*;
 import org.tdos.tdospractice.entity.*;
 import org.tdos.tdospractice.mapper.*;
@@ -117,26 +118,40 @@ public class CourseServiceImpl implements CourseService {
 
 
     @Override
-    public Pair<Boolean, String> prepareCourse(PrepareCourse prepareCourse) {
+    public Pair<Boolean, PrepareCourseReturn> prepareCourse(PrepareCourse prepareCourse) {
+        PrepareCourseReturn prepareCourseReturn = new PrepareCourseReturn();
         if (ObjectUtils.isEmpty(prepareCourse.courseId)) {
-            return new Pair<>(false, "course_id can not be null");
+            prepareCourseReturn.setErrMessage("course_id can not be null");
+            return new Pair<>(false, prepareCourseReturn);
         }
         if (ObjectUtils.isEmpty(prepareCourse.userId)) {
-            return new Pair<>(false, "user_id  can not be null");
+            prepareCourseReturn.setErrMessage("user_id can not be null");
+            return new Pair<>(false, prepareCourseReturn);
         }
         if (!UUIDPattern.isValidUUID(prepareCourse.courseId)) {
-            return new Pair<>(false, "course_id is not be uuid");
+            prepareCourseReturn.setErrMessage("course_id is not be uuid");
+            return new Pair<>(false, prepareCourseReturn);
         }
         if (courseMapper.hasCourseExist(prepareCourse.courseId) == 0) {
-            return new Pair<>(false, "course is not exist");
+            prepareCourseReturn.setErrMessage("course is not exist");
+            return new Pair<>(false, prepareCourseReturn);
         }
         Course course = courseMapper.getCourseByCourseId(prepareCourse.courseId);
         if (course == null || ObjectUtils.isEmpty(course.id)) {
-            return new Pair<>(false, "select course is not exist");
+            prepareCourseReturn.setErrMessage("select course is not exist");
+            return new Pair<>(false, prepareCourseReturn);
         }
         if (course.type == 1) {
-            return new Pair<>(false, "select course is not admin public");
+            prepareCourseReturn.setErrMessage("select course is not admin public");
+            return new Pair<>(false, prepareCourseReturn);
         }
+        String modelId = courseMapper.getModelCourse(prepareCourse.courseId);
+        if (!ObjectUtils.isEmpty(modelId)) {
+            prepareCourseReturn.setExist(true);
+            prepareCourseReturn.setCourseId(modelId);
+            return new Pair<>(true, prepareCourseReturn);
+        }
+
         course.ownerId = prepareCourse.userId;
         course.type = 1;
         course.status = 0;
@@ -211,7 +226,9 @@ public class CourseServiceImpl implements CourseService {
         if (chapterSectionExperimentEntities.size() > 0) {
             chapterSectionExperimentMapper.insert(chapterSectionExperimentEntities);
         }
-        return new Pair<>(true, course.id);
+        prepareCourseReturn.setExist(true);
+        prepareCourseReturn.setCourseId(course.id);
+        return new Pair<>(true, prepareCourseReturn);
     }
 
     @Override
@@ -711,7 +728,7 @@ public class CourseServiceImpl implements CourseService {
         if (!course.ownerId.equals(modifyCourseName.ownerId)) {
             return new Pair<>(false, "course is not belong to owner_id: " + modifyCourseName.ownerId);
         }
-        courseMapper.modifyCourseName(modifyCourseName.courseId,modifyCourseName.courseName);
+        courseMapper.modifyCourseName(modifyCourseName.courseId, modifyCourseName.courseName);
         return new Pair<>(true, "");
     }
 

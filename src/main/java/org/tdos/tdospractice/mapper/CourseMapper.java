@@ -63,4 +63,6 @@ public interface CourseMapper {
     int removeCourse(String courseId);
 
     int modifyCourseName(String courseId, String courseName);
+
+    String getModelCourse(String courseId);
 }

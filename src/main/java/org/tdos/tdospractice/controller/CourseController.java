@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.tdos.tdospractice.body.*;
 import org.tdos.tdospractice.service.CourseService;
 import org.tdos.tdospractice.type.Course;
+import org.tdos.tdospractice.type.PrepareCourseReturn;
 import org.tdos.tdospractice.type.Response;
 
 @RestController
@@ -36,12 +37,12 @@ public class CourseController {
 
     // 老师备课
     @PostMapping(value = "/prepare_course")
-    public Response<String> prepareCourse(@RequestBody PrepareCourse prepareCourse) {
-        Pair<Boolean, String> pair = courseService.prepareCourse(prepareCourse);
+    public Response<PrepareCourseReturn> prepareCourse(@RequestBody PrepareCourse prepareCourse) {
+        Pair<Boolean, PrepareCourseReturn> pair = courseService.prepareCourse(prepareCourse);
         if (pair.getKey()) {
             return Response.success(pair.getValue());
         }
-        return Response.error(pair.getValue());
+        return Response.error(pair.getValue().errMessage);
     }
 
     @PostMapping(value = "/modify_course_name")
