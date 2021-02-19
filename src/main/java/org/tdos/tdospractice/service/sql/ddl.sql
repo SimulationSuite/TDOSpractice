@@ -54,9 +54,6 @@ create table if not exists course(
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
 
-
-alter table course add constraint course_name unique ("name");
-
 create index if not exists course_owner_id_index
     on course (owner_id);
 

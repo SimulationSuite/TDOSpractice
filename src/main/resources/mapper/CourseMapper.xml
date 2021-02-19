@@ -480,6 +480,10 @@ WHERE
         select count(*) from course where name=#{name} and type = 0
     </select>
 
+    <select  id="hasTeacherCourseNameExist" resultType="int">
+        select count(*) from course where name=#{name} and type = 1
+    </select>
+
 
     <select  id="getChangedList" resultMap="CourseResult">
         SELECT
