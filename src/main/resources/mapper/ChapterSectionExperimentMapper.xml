@@ -39,6 +39,13 @@
             WHERE experiment_id =  #{experiment}::uuid
     </select>
 
+    <select  id="getChapterSectionExperimentByCourse" resultType="org.tdos.tdospractice.entity.ChapterSectionExperimentEntity">
+        SELECT * FROM chapter_section_experiment
+        WHERE section_id in
+        (SELECT section_id FROM course_chapter_section WHERE course_id = #{course_id}::uuid)
+    </select>
+
+
 
 
 </mapper>

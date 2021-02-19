@@ -45,4 +45,9 @@ public class ChapterSectionExperimentServiceImpl implements ChapterSectionExperi
     public int getSectionNumberbyExperiment(String experiment_id) {
         return chapterSectionExperimentMapper.getSectionNumberbyExperiment(experiment_id);
     }
+
+    @Override
+    public List<ChapterSectionExperimentEntity> getChapterSectionExperimentByCourse(String course_id) {
+        return null;
+    }
 }
