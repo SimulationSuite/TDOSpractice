@@ -57,6 +57,15 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     private AssignmentMapper assignmentMapper;
 
+    @Autowired
+    private ExperimentMapper experimentMapper;
+
+    @Autowired
+    private ChapterSectionExperimentMapper chapterSectionExperimentMapper;
+
+    @Autowired
+    private ExperimentImageMapper experimentImageMapper;
+
 
     private static final String EMPTY_UUID = "fb0a1080-b11e-427c-8567-56ca6105ea07";
 
@@ -179,13 +188,36 @@ public class CourseServiceImpl implements CourseService {
         if (questionBackAssignmentEntityArrayList.size() > 0) {
             questionBackMapper.addQuestionBackAssignmentList(questionBackAssignmentEntityArrayList);
         }
+
+        //实验
+        List<ChapterSectionExperimentEntity> chapterSectionExperimentEntities =
+                chapterSectionExperimentMapper.getChapterSectionExperimentByCourse(prepareCourse.courseId);
+        chapterSectionExperimentEntities.forEach(chapterSectionExperimentEntity -> {
+            String preExperimentId = chapterSectionExperimentEntity.getExperiment_id();
+            List<ExperimentImageEntity> experimentImageEntities = experimentImageMapper
+                    .findImageByExperiment(preExperimentId);
+
+            ExperimentEntity experimentEntity = experimentMapper.findById(preExperimentId);
+            experimentMapper.insert(experimentEntity);
+
+            experimentImageEntities.forEach(experimentImageEntity ->
+                    experimentImageEntity.setExperiment_id(experimentEntity.getId()));
+            if (experimentImageEntities.size() > 0) {
+                experimentImageMapper.insertExperimentImages(experimentImageEntities);
+            }
+            chapterSectionExperimentEntity.setExperiment_id(experimentEntity.getId());
+            chapterSectionExperimentEntity.setSection_id(map.get(chapterSectionExperimentEntity.getSection_id()));
+        });
+        if (chapterSectionExperimentEntities.size() > 0) {
+            chapterSectionExperimentMapper.insert(chapterSectionExperimentEntities);
+        }
         return new Pair<>(true, course.id);
     }
 
     @Override
     public PageInfo<Course> getCourseListById(String userId, Integer perPage, Integer page, String name) {
 //        PageHelper.orderBy();
-        PageHelper.startPage(page, perPage,"c.created_at desc");
+        PageHelper.startPage(page, perPage, "c.created_at desc");
         List<Course> courses = courseMapper.getCourseListById(userId, name);
         PageInfo<Course> pageInfo = new PageInfo<>(courses);
         if (courses.size() > 0) {
