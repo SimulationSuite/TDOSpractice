@@ -702,4 +702,17 @@ public class CourseServiceImpl implements CourseService {
         return new Pair<>(true, "");
     }
 
+    @Override
+    public Pair<Boolean, String> modifyCourseName(ModifyCourseName modifyCourseName) {
+        if (courseMapper.hasCourseExist(modifyCourseName.courseId) == 0) {
+            return new Pair<>(false, "course is not exist");
+        }
+        Course course = courseMapper.getCourseByCourseId(modifyCourseName.courseId);
+        if (!course.ownerId.equals(modifyCourseName.ownerId)) {
+            return new Pair<>(false, "course is not belong to owner_id: " + modifyCourseName.ownerId);
+        }
+        courseMapper.modifyCourseName(modifyCourseName.courseId,modifyCourseName.courseName);
+        return new Pair<>(true, "");
+    }
+
 }

@@ -44,6 +44,15 @@ public class CourseController {
         return Response.error(pair.getValue());
     }
 
+    @PostMapping(value = "/modify_course_name")
+    public Response<String> modifyCourseName(@RequestBody ModifyCourseName modifyCourseName) {
+        Pair<Boolean, String> pair = courseService.modifyCourseName(modifyCourseName);
+        if (pair.getKey()) {
+            return Response.success(pair.getValue());
+        }
+        return Response.error(pair.getValue());
+    }
+
     // 老师查询自己所有的课程
     @GetMapping(value = "/get_course_list_by_user_id")
     public Response<PageInfo<Course>> getCourseListById(@RequestParam(value = "user_id") String userId,
@@ -52,6 +61,8 @@ public class CourseController {
                                                         @RequestParam(value = "name", required = false) String name) {
         return Response.success(courseService.getCourseListById(userId, perPage, page, name));
     }
+
+
 
     // 管理员添加内置课程
     @PostMapping(value = "/insert_course")

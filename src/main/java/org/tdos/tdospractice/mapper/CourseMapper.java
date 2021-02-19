@@ -61,4 +61,6 @@ public interface CourseMapper {
     List<Course> getChangedListPerfect(@Param("courseIds") List<String> courseIds);
 
     int removeCourse(String courseId);
+
+    int modifyCourseName(String courseId, String courseName);
 }

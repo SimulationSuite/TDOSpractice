@@ -266,6 +266,11 @@ FROM
         where id= #{courseId}::uuid
     </update>
 
+    <update id="modifyCourseName">
+        update course set name = #{courseName}
+        where id= #{courseId}::uuid
+    </update>
+
     <select  id="getCourseList" resultMap="CourseResult">
         SELECT
         c.id AS course_id,

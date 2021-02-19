@@ -38,4 +38,6 @@ public interface CourseService {
     PageInfo<Course> getChangedList(Integer perPage, Integer page, String name);
 
     Pair<Boolean, String> removeCourseById(DeleteCourse deleteCourse);
+
+    Pair<Boolean, String> modifyCourseName(ModifyCourseName modifyCourseName);
 }
