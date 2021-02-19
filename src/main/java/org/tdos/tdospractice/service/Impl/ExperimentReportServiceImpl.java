@@ -44,9 +44,9 @@ public class ExperimentReportServiceImpl implements ExperimentReportService {
     }
 
     @Override
-    public PageInfo<StudentExperimentReport> findExperimentReportAll(String courseId, int status, int isCorrect, String name, String startTime, String endTime, Integer perPage, Integer page) {
+    public PageInfo<StudentExperimentReport> findExperimentReportAll(String courseId, int status, int isCorrect, String name, String startTime, String endTime, String user_id, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        List<StudentExperimentReport> list = experimentReportMapper.findExperimentReportAll(courseId,status,isCorrect,name,startTime,endTime);
+        List<StudentExperimentReport> list = experimentReportMapper.findExperimentReportAll(courseId, status, isCorrect, name, startTime, endTime, user_id);
         return new PageInfo<>(list);
     }
 }
