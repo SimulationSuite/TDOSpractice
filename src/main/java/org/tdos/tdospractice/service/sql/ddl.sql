@@ -6,7 +6,7 @@ begin
 end
 $$
 language plpgsql;
-create extension "uuid-ossp";
+create extension if not exists "uuid-ossp";
 
 create table if not exists class(
     id UUID primary key DEFAULT uuid_generate_v4(),
@@ -122,6 +122,16 @@ create table if not exists course_chapter_section(
 
 create trigger t_name before update on course_chapter_section for each row execute procedure upd_timestamp();
 
+create table if not exists category(
+    id UUID primary key DEFAULT uuid_generate_v4(),
+    "name" varchar(255) NOT NULL,
+    parent_category_id UUID references "category"("id"),
+    created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
+    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
+);
+
+create trigger t_name before update on category for each row execute procedure upd_timestamp();
+
 create table if not exists courseware(
     id UUID primary key DEFAULT uuid_generate_v4(),
     "name" varchar(255) NOT NULL,
@@ -151,15 +161,7 @@ create table if not exists chapter_section_courseware(
 create trigger t_name before update on chapter_section_courseware for each row execute procedure upd_timestamp();
 
 
-create table if not exists category(
-    id UUID primary key DEFAULT uuid_generate_v4(),
-    "name" varchar(255) NOT NULL,
-    parent_category_id UUID references "category"("id"),
-    created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
-);
 
-create trigger t_name before update on category for each row execute procedure upd_timestamp();
 
 create table if not exists assignment(
     id UUID primary key DEFAULT uuid_generate_v4(),
@@ -172,7 +174,7 @@ create table if not exists assignment(
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
 
-alter table assignment add constraint assignment_name unique ("name");
+alter table assignment add constraint  assignment_name unique ("name");
 
 create index if not exists assignment_section_id_index
     on assignment ("section_id");
@@ -207,7 +209,7 @@ create table if not exists question_back_assignment(
 );
 
 
-CREATE SEQUENCE question_back_assignment_order_seq
+CREATE SEQUENCE if not exists question_back_assignment_order_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -326,7 +328,7 @@ create table if not exists experiment_report(
     isCorrect int4 default 0,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    submit_at TIMESTAMP(0)  without time zone
+    submit_at TIMESTAMP(0)  without time zone,
     CONSTRAINT "experiment_report_pk" PRIMARY KEY ( "experiment_id", "user_id")
 );
 
