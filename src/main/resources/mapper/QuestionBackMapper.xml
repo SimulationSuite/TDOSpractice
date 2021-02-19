@@ -41,7 +41,7 @@
         inner join assignment a on a.id = qba.assignment_id
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
         inner join course ci on ci.id = ccs.course_id
-        where ccs.course_id =#{CourseId} ::uuid
+        where ccs.course_id =#{courseId} ::uuid
     </select>
 
     <delete id="deleteQuestionBackById">
