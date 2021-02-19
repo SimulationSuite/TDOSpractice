@@ -22,19 +22,15 @@ public class FileController {
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
     public Response upload(int type, @RequestParam(value = "file") MultipartFile multipartFile) {
-        String uppath = "";
         if (type == 0) {//图片
             if (multipartFile.getSize() > PICSIZE)
                 return Response.error("图片超过最大尺寸");
-            uppath = "/pic/";
         } else if (type == 1) {//视频
             if (multipartFile.getSize() > VIDEOSIZE)
                 return Response.error("视频超过最大尺寸");
-            uppath = "/video/";
         } else if (type == 2) {//PDF
             if (multipartFile.getSize() > COURSEWARESIZE)
                 return Response.error("课件超过最大尺寸");
-            uppath = "/courseware/";
         }else {
             return Response.error("type error");
         }
