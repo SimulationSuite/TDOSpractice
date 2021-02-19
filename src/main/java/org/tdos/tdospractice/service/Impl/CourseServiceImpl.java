@@ -145,7 +145,7 @@ public class CourseServiceImpl implements CourseService {
             prepareCourseReturn.setErrMessage("select course is not admin public");
             return new Pair<>(false, prepareCourseReturn);
         }
-        String modelId = courseMapper.getModelCourse(prepareCourse.courseId);
+        String modelId = courseMapper.getModelCourse(prepareCourse.courseId, prepareCourse.userId);
         if (!ObjectUtils.isEmpty(modelId)) {
             prepareCourseReturn.setExist(true);
             prepareCourseReturn.setCourseId(modelId);

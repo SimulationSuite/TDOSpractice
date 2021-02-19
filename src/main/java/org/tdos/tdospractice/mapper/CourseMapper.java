@@ -64,5 +64,5 @@ public interface CourseMapper {
 
     int modifyCourseName(String courseId, String courseName);
 
-    String getModelCourse(String courseId);
+    String getModelCourse(String courseId,String ownerId);
 }
