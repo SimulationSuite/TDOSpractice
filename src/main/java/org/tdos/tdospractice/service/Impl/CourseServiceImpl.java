@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 import org.tdos.tdospractice.body.*;
+import org.tdos.tdospractice.entity.ChapterSectionCoursewareEntity;
 import org.tdos.tdospractice.entity.ClassCourse;
 import org.tdos.tdospractice.entity.CourseChapterSectionEntity;
 import org.tdos.tdospractice.entity.UserEntity;
@@ -20,10 +21,7 @@ import org.tdos.tdospractice.type.SmallSection;
 import org.tdos.tdospractice.utils.UUIDPattern;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,6 +50,9 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private CoursewareMapper coursewareMapper;
 
 
     private static final String EMPTY_UUID = "fb0a1080-b11e-427c-8567-56ca6105ea07";
@@ -102,9 +103,9 @@ public class CourseServiceImpl implements CourseService {
         return new Pair<>(true, pageInfo);
     }
 
+
     @Override
     public Pair<Boolean, String> prepareCourse(PrepareCourse prepareCourse) {
-
         if (ObjectUtils.isEmpty(prepareCourse.courseId)) {
             return new Pair<>(false, "course_id can not be null");
         }
@@ -130,8 +131,25 @@ public class CourseServiceImpl implements CourseService {
         course.modelId = course.id;
         course.startAt = null;
         course.endAt = null;
-        writeCourse(course);
-        return new Pair<>(true, course.id);
+        Map<String, String> map = new HashMap<>();
+        writeCourse(course, map);
+        // 课件
+        List<ChapterSectionCoursewareEntity> chapterSectionCoursewareEntityList =
+                coursewareMapper.getChapterSectionCoursewareByCourseId(prepareCourse.courseId);
+        List<ChapterSectionCoursewareEntity> list = new ArrayList<>();
+        chapterSectionCoursewareEntityList.forEach(chapterSectionCoursewareEntity -> {
+            if (!chapterSectionCoursewareEntity.getChapterId().equals(EMPTY_UUID)) {
+                String preChapterId = chapterSectionCoursewareEntity.getChapterId();
+                chapterSectionCoursewareEntity.setChapterId(map.get(preChapterId));
+                list.add(chapterSectionCoursewareEntity);
+            } else {
+                String preSectionId = chapterSectionCoursewareEntity.getSectionId();
+                chapterSectionCoursewareEntity.setSectionId(map.get(preSectionId));
+                list.add(chapterSectionCoursewareEntity);
+            }
+        });
+        coursewareMapper.addChapterSectionCourseware(list);
+        return new Pair<>(true, null);
     }
 
     @Override
@@ -220,7 +238,7 @@ public class CourseServiceImpl implements CourseService {
         if (!course.ownerId.equals(modifyCourseStatus.ownerId)) {
             return new Pair<>(false, "course is not belong to owner_id: " + modifyCourseStatus.ownerId);
         }
-        courseMapper.modifyCourseStatus(modifyCourseStatus.courseId, modifyCourseStatus.start, modifyCourseStatus.end);
+        courseMapper.modifyCourseStatus(modifyCourseStatus.courseId, modifyCourseStatus.status == null || modifyCourseStatus.status == 0 ? 0 : 1, modifyCourseStatus.start, modifyCourseStatus.end);
         if (modifyCourseStatus.userIds != null && modifyCourseStatus.userIds.size() > 0) {
             if (!modifyCourseStatus.userIds.stream().allMatch((userId -> userMapper.findUserById(userId) != null
                     && userMapper.findUserById(userId).getRoleID() == 2))) {
@@ -258,24 +276,87 @@ public class CourseServiceImpl implements CourseService {
         return list;
     }
 
+    private Course writeCourse(Course course, Map<String, String> map) {
+        courseMapper.insertCourse(course);
+        List<CourseChapterSectionEntity> list = new ArrayList<>();
+        course.chapters.forEach(x -> {
+            String preChapterId = x.id;
+            chapterMapper.insertChapter(x);
+            map.put(preChapterId, x.id);
+            if (x.sections.size() > 0) {
+                x.sections.forEach(section -> {
+                    String sectionId = section.id;
+                    sectionMapper.insertSection(section);
+                    map.put(sectionId, section.id);
+                    section.smallSections.forEach(smallSection -> {
+                        smallSectionMapper.insertSmallSection(smallSection);
+                        list.add(CourseChapterSectionEntity.builder().courseId(course.id)
+                                .chapterId(x.id)
+                                .sectionId(section.id)
+                                .smallSectionId(smallSection.id)
+                                .build());
+                    });
+                    list.add(CourseChapterSectionEntity.builder().courseId(course.id)
+                            .chapterId(x.id)
+                            .sectionId(section.id)
+                            .smallSectionId(EMPTY_UUID)
+                            .build());
+                });
+            }
+            list.add(CourseChapterSectionEntity.builder().courseId(course.id)
+                    .chapterId(x.id)
+                    .sectionId(EMPTY_UUID)
+                    .smallSectionId(EMPTY_UUID)
+                    .build());
+
+            if (list.size() > 0) {
+                courseChapterSectionMapper.insertCourseChapterSectionList(list);
+            }
+        });
+        if (list.size() > 0) {
+            courseChapterSectionMapper.insertCourseChapterSectionList(list);
+            course.chapters.forEach(c -> {
+                c.sections = c.sections.stream().sorted(Comparator.comparing(Section::getOrder)).collect(Collectors.toList());
+                c.sections.forEach(section -> section.smallSections = section.smallSections.stream().sorted(Comparator.comparing(SmallSection::getOrder)).collect(Collectors.toList()));
+            });
+            course.chapters = course.chapters.stream().sorted(Comparator.comparing(Chapter::getOrder)).collect(Collectors.toList());
+        }
+        return course;
+    }
+
 
     private Course writeCourse(Course course) {
         courseMapper.insertCourse(course);
         List<CourseChapterSectionEntity> list = new ArrayList<>();
         course.chapters.forEach(x -> {
             chapterMapper.insertChapter(x);
-            x.sections.forEach(section -> {
-                sectionMapper.insertSection(section);
-                section.smallSections.forEach(smallSection -> {
-                    smallSectionMapper.insertSmallSection(smallSection);
+            if (x.sections.size() > 0) {
+                x.sections.forEach(section -> {
+                    sectionMapper.insertSection(section);
+                    section.smallSections.forEach(smallSection -> {
+                        smallSectionMapper.insertSmallSection(smallSection);
+                        list.add(CourseChapterSectionEntity.builder().courseId(course.id)
+                                .chapterId(x.id)
+                                .sectionId(section.id)
+                                .smallSectionId(smallSection.id)
+                                .build());
+                    });
                     list.add(CourseChapterSectionEntity.builder().courseId(course.id)
                             .chapterId(x.id)
                             .sectionId(section.id)
-                            .smallSectionId(smallSection.id)
+                            .smallSectionId(EMPTY_UUID)
                             .build());
                 });
+            }
+            list.add(CourseChapterSectionEntity.builder().courseId(course.id)
+                    .chapterId(x.id)
+                    .sectionId(EMPTY_UUID)
+                    .smallSectionId(EMPTY_UUID)
+                    .build());
 
-            });
+            if (list.size() > 0) {
+                courseChapterSectionMapper.insertCourseChapterSectionList(list);
+            }
         });
         if (list.size() > 0) {
             courseChapterSectionMapper.insertCourseChapterSectionList(list);
