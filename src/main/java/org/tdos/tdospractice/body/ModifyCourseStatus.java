@@ -19,4 +19,6 @@ public class ModifyCourseStatus {
     @JsonProperty("user_id_list")
     public List<String> userIds;
 
+    public Integer status;
+
 }

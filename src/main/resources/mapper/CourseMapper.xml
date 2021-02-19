@@ -251,7 +251,7 @@ FROM
     </select>
 
     <update  id="modifyCourseStatus">
-        update course set status = 1
+        update course set status = #{status}
         <if test="start != null and start != ''">
             , start_at = #{start} :: timestamp
         </if>
