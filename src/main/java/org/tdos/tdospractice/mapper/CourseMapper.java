@@ -34,7 +34,7 @@ public interface CourseMapper {
 
     Integer findSmallSectionOrder(String sectionId);
 
-    int modifyCourseStatus(String courseId, String start, String end);
+    int modifyCourseStatus(String courseId,int status, String start, String end);
 
     int modifyExpiredCourseStatus(String courseId, int status);
 

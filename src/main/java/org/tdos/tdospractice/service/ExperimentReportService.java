@@ -19,6 +19,6 @@ public interface ExperimentReportService {
 
     Optional<ExperimentReportEntity> findExperimentReportByExperimentAndUserId(String experiment_id, String user_id);
 
-    PageInfo<StudentExperimentReport> findExperimentReportAll(String course_id, int status, int isCorrect, String name, String startTime, String endTime, Integer perPage, Integer page);
+    PageInfo<StudentExperimentReport> findExperimentReportAll(String course_id, int status, int isCorrect, String name, String startTime, String endTime, String user_id, Integer perPage, Integer page);
 
 }
