@@ -159,6 +159,19 @@
         insert into assignment (section_id, name, end_at, qualified_score) values (#{sectionId}::uuid, #{name}, #{endAt}::timestamp , #{qualifiedScore});
     </insert>
 
+    <insert id="addAssignmentList" parameterType="java.util.List">
+        insert into assignment (section_id, name, end_at, qualified_score)
+        values
+        <foreach collection="assignmentList" item="item" separator=",">
+            (
+            #{item.sectionId}::uuid,
+            #{item.name},
+            #{item.endAt}::timestamp,
+            #{item.qualifiedScore}
+            )
+        </foreach>
+    </insert>
+
     <update id="modifyAssignmentStatusById">
         update assignment set status = #{status} where id=#{id}::uuid;
     </update>
