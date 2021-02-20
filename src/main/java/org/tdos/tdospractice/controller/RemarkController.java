@@ -27,7 +27,7 @@ public class RemarkController {
     }
 
     @GetMapping(value = "/get_courseware_remark_list")
-    public Response<PageInfo<CoursewareRemark>> getCoursewareRemarkList(@RequestParam(value = "course_id") String courseId,
+    public Response<PageInfo<CoursewareRemark>> getCoursewareRemarkList(@RequestParam(value = "course_id", required = false) String courseId,
                                                                         @RequestParam(value = "user_id") String userId,
                                                                         @RequestParam(value = "per_page") Integer perPage,
                                                                         @RequestParam(value = "title", required = false) String title,
