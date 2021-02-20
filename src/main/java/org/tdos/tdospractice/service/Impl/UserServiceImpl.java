@@ -174,8 +174,8 @@ public class UserServiceImpl extends Throwable implements UserService{
         }
         userIDs.forEach(id -> {
             UserEntity user = userMapper.findUserById(id);
-            if (user == null) {
-                userMapper.updatePasswordById(id,password);
+            if (user != null) {
+                userMapper.updatePasswordById(password,id);
             }
         });
         return new Pair<>(true, "");

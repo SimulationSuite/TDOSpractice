@@ -60,10 +60,10 @@
             and (su.name like concat('%',#{name},'%') or sa.user_id like concat('%',#{name},'%'))
         </if>
         <if test="startTime != null and startTime != ''" >
-            and ss.update_time &gt;= #{startTime}::timestamp
+            and ss.updated_at &gt;= #{startTime}::timestamp
         </if>
         <if test="endTime != null and endTime != ''" >
-            and ss.update_time &lt;= #{endTime}::timestamp
+            and ss.updated_at &lt;= #{endTime}::timestamp
         </if>
         group by sa.user_id, sa.assignment_id, ss.status, sa.committed_at, su.name, a.name, c.name
     </select>

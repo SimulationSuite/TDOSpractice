@@ -21,6 +21,8 @@ import org.tdos.tdospractice.utils.ExcelUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,12 +52,36 @@ public class ExcelServiceImpl implements ExcelService {
         return result;
     }
 
+
+    //正则验证
+    public static boolean isCorrect(String rgx, String res)
+    {
+        Pattern p = Pattern.compile(rgx);
+
+        Matcher m = p.matcher(res);
+
+        return m.matches();
+    }
+
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Response<String> uploadExcel(String userID, InputStream in, String filename) throws IOException {
+
+        String rgxPhone = "^[1]\\d{10}$";
+        String rgxIdx = "^\\d{15}|^\\d{17}([0-9]|X|x)$";
         ExcelUtils utils = new ExcelUtils(in, filename);
         int end = utils.getRowCount(0);
         List<Personnel> personnel =  utils.parsePersonnel(utils.read(0, 1, end));
+        for(int i = 0;i<personnel.size();i++){
+            Personnel p = personnel.get(i);
+            if(!isCorrect(rgxPhone, p.getPhone())){
+                return Response.error("手机号错误");
+            }
+            if(!isCorrect(rgxIdx, p.getIdentificationNumber())){
+                return Response.error("身份证号错误");
+            }
+        }
         UserEntity owner = userMapper.findUserById(userID);
         if (owner == null) {
             return Response.error("user is not exist");
