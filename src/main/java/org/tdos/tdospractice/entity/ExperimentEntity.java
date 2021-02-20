@@ -28,6 +28,8 @@ public class ExperimentEntity {
 
     private String introduce;
 
+    private String report_requirement;
+
     private List<String> images;
 
     private LocalDateTime created_at;

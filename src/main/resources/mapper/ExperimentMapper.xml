@@ -17,7 +17,7 @@
             AND category_id IN
             <foreach collection="category_ids" item="id" index="index"
                      open="(" close=")" separator=",">
-                #{id}
+                #{id}::uuid
             </foreach>
         </if>
         <if test="name!=null and name!=''">
