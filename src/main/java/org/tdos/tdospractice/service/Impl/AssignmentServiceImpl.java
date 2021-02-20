@@ -211,7 +211,7 @@ public class AssignmentServiceImpl implements AssignmentService {
                 });
             });
         } catch (Exception e) {
-            System.out.println(e);
+            System.out.println(e.toString());
         }
     }
 
