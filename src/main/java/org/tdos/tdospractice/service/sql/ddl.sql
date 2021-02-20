@@ -335,7 +335,7 @@ create table if not exists courseware_remark(
     course_id UUID references "course"("id") on delete cascade NOT NULL,
     user_id varchar(255) NOT NULL,
     title varchar(255) DEFAULT null,
-    content varchar(255) DEFAULT NULL,
+    content text DEFAULT NULL,
     "type" int4 DEFAULT 0,
     remark_page int4 DEFAULT NULL,
     remark_at int8  DEFAULT NUll,
