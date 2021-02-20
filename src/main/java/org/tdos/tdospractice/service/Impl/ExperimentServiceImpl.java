@@ -106,6 +106,9 @@ public class ExperimentServiceImpl implements ExperimentService {
             return new PageInfo<>(new ArrayList<>());
         }
         List<ExperimentEntity> list = experimentMapper.findAllByIds(section_ids);
+        list.stream().forEach(experimentEntity -> {
+            experimentEntity.setImagesinfo(experimentImageService.findImageByExperiment(experimentEntity.getId()));
+        });
         return new PageInfo<>(list);
     }
 
