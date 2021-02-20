@@ -201,7 +201,6 @@ FROM
         c.model_id
         FROM
         course c
-        LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
         WHERE c.type = 1
         AND c.owner_id = #{userId}
         <if  test = "name != null and name != ''" >
