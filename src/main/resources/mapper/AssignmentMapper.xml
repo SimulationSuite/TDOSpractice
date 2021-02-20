@@ -14,7 +14,7 @@
         inner join class_course cc on cc.course_id = ci.id
         inner join sim_user su on su.class_id = cc.class_id
         left join student_score ss on ss.assignment_id = a.id and ss.user_id = su.id
-        left join student_answer sa on sa.assignment_id = a.id
+        left join student_answer sa on sa.assignment_id = a.id and sa.user_id = su.id
         where su.id = #{userId} and a.status = 1
         <if test="courseId != null and courseId != ''" >
             and ccs.course_id = #{courseId} ::uuid

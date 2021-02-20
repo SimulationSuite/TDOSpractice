@@ -144,14 +144,13 @@ public class StudentAnswerServiceImpl implements StudentAnswerService {
             String committedAt = UTCTimeUtils.getUTCTimeStr();
             List<StudentQuestionAnswer> list = studentAnswerMapper.getQuestionBackTypeByAssignment(assignmentId);
             if(list.size() == 1 && list.get(0).getType() == 0){
-                List<StudentQuestionAnswer> studentQuestionAnswerList = studentAnswerMapper.getStudentAnswerByAssignmentUserId(assignmentId, userId);
-                List<StudentQuestionAnswer> rightStudentQuestionAnswerList = studentQuestionAnswerList.stream().filter(x -> x.getAnswer() == x.getStudentAnswer()).collect(Collectors.toList());
-                int score = rightStudentQuestionAnswerList.stream().mapToInt(x->x.getScore()).sum();
+                List<StudentQuestionAnswer> studentQuestionAnswerList = studentAnswerMapper.getStudentAnswerByAssignmentUserId(userId, assignmentId);
+                int score = studentQuestionAnswerList.stream().mapToInt(x->x.getScore()).sum();
                 StudentScoreEntity studentScoreEntity = new StudentScoreEntity();
                 studentScoreEntity.setAssignmentId(assignmentId);
                 studentScoreEntity.setUserId(userId);
                 studentScoreEntity.setStatus(1);
-                studentScoreEntity.setStatus(score);
+                studentScoreEntity.setScore(score);
                 studentScoreMapper.addStudentScore(studentScoreEntity);
             }
             studentAnswerMapper.modifyStudentAnswerStatus(1, committedAt, assignmentId, userId);
