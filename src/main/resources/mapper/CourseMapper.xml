@@ -265,8 +265,8 @@ FROM
     </update>
 
     <update id="modifyExpiredCourseStatus">
-        update course set status = #{status}
-        where id= #{courseId}::uuid
+        update course set status = 2
+        where owner_id= #{ownerId} and status = 1 and type = 1 and end_at &gt;= now()
     </update>
 
     <update id="modifyCourseName">

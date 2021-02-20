@@ -662,26 +662,7 @@ public class CourseServiceImpl implements CourseService {
         if (ObjectUtils.isEmpty(modifyExpiredCourseStatus.ownerId)) {
             return new Pair<>(false, "owner_id can not be null");
         }
-        if (ObjectUtils.isEmpty(modifyExpiredCourseStatus.courseId)) {
-            return new Pair<>(false, "course_id  can not be null");
-        }
-        if (!UUIDPattern.isValidUUID(modifyExpiredCourseStatus.courseId)) {
-            return new Pair<>(false, "course_id is not be uuid");
-        }
-        if (courseMapper.hasCourseExist(modifyExpiredCourseStatus.courseId) == 0) {
-            return new Pair<>(false, "course is not exist");
-        }
-        Course course = courseMapper.getCourseByCourseId(modifyExpiredCourseStatus.courseId);
-        if (!course.ownerId.equals(modifyExpiredCourseStatus.ownerId)) {
-            return new Pair<>(false, "course is not belong to owner_id: " + modifyExpiredCourseStatus.ownerId);
-        }
-        if (course.endAt == null || !course.endAt.isBefore(LocalDateTime.now())) {
-            return new Pair<>(false, "end at is not been expired");
-        }
-        if (course.status != 1) {
-            return new Pair<>(false, "course has not been teacher published or has been changed");
-        }
-        courseMapper.modifyExpiredCourseStatus(modifyExpiredCourseStatus.courseId, 2);
+        courseMapper.modifyExpiredCourseStatus(modifyExpiredCourseStatus.ownerId);
         return new Pair<>(true, "");
     }
 

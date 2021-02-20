@@ -36,7 +36,7 @@ public interface CourseMapper {
 
     int modifyCourseStatus(String courseId,int status, String start, String end);
 
-    int modifyExpiredCourseStatus(String courseId, int status);
+    int modifyExpiredCourseStatus(String ownerId);
 
     List<Course> getCourseList(String userId, String name, String start, String end);
 

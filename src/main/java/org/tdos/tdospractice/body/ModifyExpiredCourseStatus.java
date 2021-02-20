@@ -7,7 +7,4 @@ public class ModifyExpiredCourseStatus {
     @JsonProperty("owner_id")
     public String ownerId;
 
-    @JsonProperty("course_id")
-    public String courseId;
-
 }
