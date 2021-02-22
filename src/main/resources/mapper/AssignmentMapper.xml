@@ -137,6 +137,7 @@
         <if test="type != null" >
             and qb.type = #{type}
         </if>
+        order by qb.type
     </select>
 
     <delete id="deleteAssignmentById">
