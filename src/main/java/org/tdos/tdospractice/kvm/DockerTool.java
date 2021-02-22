@@ -62,6 +62,7 @@ public class DockerTool implements CommonTool {
         initClient(certsPath, serverURL);
         this.IP = parseIP(serverURL);
         this.imageList = dockerClient.listImagesCmd().withShowAll(true).exec();
+        log.info("Connected successful " + this.serverName + " , Docker host is " + serverURL);
     }
 
     private void initClient(String certsPath, String serverURL) {
@@ -72,7 +73,6 @@ public class DockerTool implements CommonTool {
                 .withDockerConfig(certsPath)
                 .build();
         this.dockerClient = DockerClientBuilder.getInstance(config).build();
-        log.info("Connected successful " + this.serverName + " , Docker host is " + serverURL);
     }
 
     private String parseIP(String serverURL) {
@@ -278,15 +278,13 @@ public class DockerTool implements CommonTool {
         portBindings = new Ports();
         portBindings.bind(tcp, Ports.Binding.bindPort(port));
         CreateContainerResponse newContainer = dockerClient.createContainerCmd(imageContainer)
-                .withCmd("true")
+                .withCmd("sh", "-c", "/usr/start.sh")
                 .withName(containerName)
                 .withExposedPorts(tcp)
                 .withHostConfig(new HostConfig()
                         .withPortBindings(portBindings)
                         .withCapAdd(SYS_ADMIN))
-                .withEntrypoint("bash", "-c", "/usr/local/init.sh") //Start the novnc
                 .exec();
-
         return newContainer;
     }
 

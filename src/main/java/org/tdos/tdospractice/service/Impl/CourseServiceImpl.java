@@ -236,14 +236,14 @@ public class CourseServiceImpl implements CourseService {
 //        PageHelper.orderBy();
         PageHelper.startPage(page, perPage, "c.created_at desc");
         List<Course> courses = courseMapper.getCourseListById(userId, name);
-        courses.forEach(course -> {
-            if (course.endAt.isBefore(LocalDateTime.now())){
-                course.status = -1;
-            }
-        });
         PageInfo<Course> pageInfo = new PageInfo<>(courses);
         if (courses.size() > 0) {
             List<Course> coursesList = courseMapper.getCourseListByIdPerfect(pageInfo.getList().stream().map(x -> x.id).collect(Collectors.toList()));
+            coursesList.forEach(course -> {
+                if (course.endAt != null && course.endAt.isBefore(LocalDateTime.now())) {
+                    course.status = -1;
+                }
+            });
             List<ClassNumber> classNumbers = classMapper.findClassNumber();
             coursesList.forEach(x -> countCourseClass(x, classNumbers));
             coursesList.forEach(c -> {
