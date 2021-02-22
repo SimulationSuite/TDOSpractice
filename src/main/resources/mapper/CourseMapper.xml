@@ -202,7 +202,7 @@ FROM
         FROM
         course c
         WHERE c.type = 1
-        AND c.owner_id = #{userId}
+        AND c.owner_id = #{userId} AND c.status != 2
         <if  test = "name != null and name != ''" >
             AND c.NAME LIKE concat('%',#{name},'%')
         </if>
