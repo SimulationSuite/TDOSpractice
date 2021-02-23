@@ -101,7 +101,8 @@
         c.end_at,
         c.STATUS,
         c."type",
-        c.model_id
+        c.model_id,
+        c.created_at
         FROM course c
         Where c.type = 0
         <if test="status !=null" >
@@ -125,6 +126,7 @@
         c.STATUS,
         c."type",
         c.model_id,
+        c.created_at,
         chapter.id :: varchar AS chapter_id,
         chapter.NAME AS chapter_name,
         chapter."order" AS chapter_order,
@@ -140,7 +142,7 @@
         c.id  IN
         <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
             #{courseId}::uuid
-        </foreach>
+        </foreach> order by c.created_at desc
     </select>
 
     <select  id="getModelCourse" resultType="String">
@@ -332,6 +334,8 @@ FROM
         <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
             #{courseId}::uuid
         </foreach>
+        ORDER BY
+        c.created_at DESC
     </select>
 
     <select  id="getExpiredList" resultMap="CourseResult">
@@ -384,6 +388,8 @@ FROM
 <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
     #{courseId}::uuid
 </foreach>
+ORDER BY
+c.created_at DESC
     </select>
 
 
@@ -436,7 +442,7 @@ WHERE
     c.id  IN
 <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
     #{courseId}::uuid
-</foreach>
+</foreach> order by c.created_at desc
     </select>
 
     <select  id="getCourseById" resultMap="CourseResult">
@@ -541,6 +547,8 @@ WHERE
         <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
             #{courseId}::uuid
         </foreach>
+ORDER BY
+c.created_at DESC
     </select>
 
     <delete id="removeCourse">

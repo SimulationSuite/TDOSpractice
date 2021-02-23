@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.tdos.tdospractice.body.*;
 import org.tdos.tdospractice.entity.*;
 import org.tdos.tdospractice.mapper.*;
@@ -20,6 +19,7 @@ import org.tdos.tdospractice.utils.UUIDPattern;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -249,6 +249,10 @@ public class CourseServiceImpl implements CourseService {
             coursesList.forEach(c -> {
                 c.chapterNumber = c.chapters.size();
                 c.sectionNumber = c.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
+                AtomicInteger smallSectionNumber = new AtomicInteger();
+                c.chapters.forEach(chapter -> chapter.sections.forEach(section ->
+                        smallSectionNumber.set(smallSectionNumber.get() + section.smallSections.size())));
+                c.smallSectionNumber = smallSectionNumber.get();
             });
             pageInfo.setList(coursesList);
         }
@@ -342,8 +346,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public PageInfo<Course> getAdminCourseListByStatus(String userId, Integer perPage, Integer page, String name, Integer status) {
-        PageHelper.startPage(page, perPage, true, true);
-        PageHelper.orderBy("c.created_at desc");
+        PageHelper.startPage(page, perPage, "c.created_at desc");
         List<Course> courses = courseMapper.getAdminCourseListByStatus(userId, name, status);
         PageInfo<Course> list = new PageInfo<>(courses);
         if (list.getList().size() > 0) {
@@ -357,6 +360,10 @@ public class CourseServiceImpl implements CourseService {
             coursesList.forEach(c -> {
                 c.chapterNumber = c.chapters.size();
                 c.sectionNumber = c.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
+                AtomicInteger smallSectionNumber = new AtomicInteger();
+                c.chapters.forEach(chapter -> chapter.sections.forEach(section ->
+                        smallSectionNumber.set(smallSectionNumber.get() + section.smallSections.size())));
+                c.smallSectionNumber = smallSectionNumber.get();
             });
             list.setList(coursesList);
         }
@@ -462,6 +469,10 @@ public class CourseServiceImpl implements CourseService {
             list.forEach(c -> {
                 c.chapterNumber = c.chapters.size();
                 c.sectionNumber = c.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
+                AtomicInteger smallSectionNumber = new AtomicInteger();
+                c.chapters.forEach(chapter -> chapter.sections.forEach(section ->
+                        smallSectionNumber.set(smallSectionNumber.get() + section.smallSections.size())));
+                c.smallSectionNumber = smallSectionNumber.get();
             });
             pageInfo.setList(list);
         }
@@ -490,6 +501,10 @@ public class CourseServiceImpl implements CourseService {
 
             course.chapterNumber = course.chapters.size();
             course.sectionNumber = course.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
+            AtomicInteger smallSectionNumber = new AtomicInteger();
+            course.chapters.forEach(chapter -> chapter.sections.forEach(section ->
+                    smallSectionNumber.set(smallSectionNumber.get() + section.smallSections.size())));
+            course.smallSectionNumber = smallSectionNumber.get();
         }
         return new Pair<>(true, course);
     }
@@ -531,6 +546,10 @@ public class CourseServiceImpl implements CourseService {
             list.forEach(c -> {
                 c.chapterNumber = c.chapters.size();
                 c.sectionNumber = c.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
+                AtomicInteger smallSectionNumber = new AtomicInteger();
+                c.chapters.forEach(chapter -> chapter.sections.forEach(section ->
+                        smallSectionNumber.set(smallSectionNumber.get() + section.smallSections.size())));
+                c.smallSectionNumber = smallSectionNumber.get();
             });
             pageInfo.setList(list);
         }
@@ -678,6 +697,10 @@ public class CourseServiceImpl implements CourseService {
             list.forEach(c -> {
                 c.chapterNumber = c.chapters.size();
                 c.sectionNumber = c.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
+                AtomicInteger smallSectionNumber = new AtomicInteger();
+                c.chapters.forEach(chapter -> chapter.sections.forEach(section ->
+                        smallSectionNumber.set(smallSectionNumber.get() + section.smallSections.size())));
+                c.smallSectionNumber = smallSectionNumber.get();
             });
             pageInfo.setList(list);
         }
