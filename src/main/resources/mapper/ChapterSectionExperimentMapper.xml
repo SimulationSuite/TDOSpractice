@@ -45,6 +45,13 @@
         (SELECT section_id FROM course_chapter_section WHERE course_id = #{course_id}::uuid)
     </select>
 
+    <select  id="getChapterSectionExperimentBySection" resultType="org.tdos.tdospractice.entity.ChapterSectionExperimentEntity">
+        SELECT * FROM chapter_section_experiment
+        WHERE section_id = #{course_id}::uuid
+    </select>
+
+
+
 
 
 

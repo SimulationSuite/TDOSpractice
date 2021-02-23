@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.tdos.tdospractice.entity.CategoryEntity;
 import org.tdos.tdospractice.entity.ExperimentEntity;
 import org.tdos.tdospractice.mapper.ChapterMapper;
+import org.tdos.tdospractice.mapper.ChapterSectionExperimentMapper;
 import org.tdos.tdospractice.mapper.ExperimentImageMapper;
 import org.tdos.tdospractice.mapper.ExperimentMapper;
 import org.tdos.tdospractice.service.*;
@@ -44,6 +45,9 @@ public class ExperimentServiceImpl implements ExperimentService {
 
     @Autowired
     private ExperimentImageService experimentImageService;
+
+    @Autowired
+    private ChapterSectionExperimentMapper chapterSectionExperimentMapper;
 
     @Override
     public int insert(ExperimentEntity experimentEntity) {
@@ -121,11 +125,12 @@ public class ExperimentServiceImpl implements ExperimentService {
         section_ids.add(section_id);
         if (f_category_id.equals("") && c_category_id.equals("")) {
             experimentService.findExperiment(category_ids, name, perPage, page).getList().forEach(experimentEntity -> {
-                experimentMapper.findAllByIds(section_ids).forEach(e -> {
-                    if (e.getId().equals(experimentEntity.getId())) {
+                chapterSectionExperimentMapper.getChapterSectionExperimentBySection(section_id).stream().forEach(chapterSectionExperimentEntity -> {
+                    if (experimentEntity.getId().equals(chapterSectionExperimentEntity.getExperiment_id())){
                         list.remove(experimentEntity);
                     }
                 });
+
             });
         } else {
             List<String> ids = new ArrayList<>();
@@ -137,8 +142,13 @@ public class ExperimentServiceImpl implements ExperimentService {
                 ids.add(c_category_id);
             }
             experimentService.findExperiment(ids, name, perPage, page).getList().forEach(experimentEntity -> {
-                experimentMapper.findAllByIds(section_ids).forEach(e -> {
-                    if (e.getId().equals(experimentEntity.getId())) {
+//                experimentMapper.findAllByIds(section_ids).forEach(e -> {
+//                    if (e.getId().equals(experimentEntity.getId())) {
+//                        list.remove(experimentEntity);
+//                    }
+//                });
+                chapterSectionExperimentMapper.getChapterSectionExperimentBySection(section_id).stream().forEach(chapterSectionExperimentEntity -> {
+                    if (experimentEntity.getId().equals(chapterSectionExperimentEntity.getExperiment_id())){
                         list.remove(experimentEntity);
                     }
                 });
