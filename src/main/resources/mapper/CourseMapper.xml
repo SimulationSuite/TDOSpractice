@@ -495,7 +495,7 @@ WHERE
     </select>
 
     <select  id="hasTeacherCourseNameExist" resultType="int">
-        select count(*) from course where name=#{name} and type = 1 and status = 1
+        select count(*) from course where name=#{name} and type = 1 and status = 1 and and owner_id=#{ownerId}
     </select>
 
 

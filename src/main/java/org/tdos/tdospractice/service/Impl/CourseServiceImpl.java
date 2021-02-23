@@ -326,7 +326,7 @@ public class CourseServiceImpl implements CourseService {
         if (!course.ownerId.equals(modifyCourseStatus.ownerId)) {
             return new Pair<>(false, "course is not belong to owner_id: " + modifyCourseStatus.ownerId);
         }
-        if (modifyCourseStatus.status != null && courseMapper.hasTeacherCourseNameExist(course.name) > 0) {
+        if (modifyCourseStatus.status != null && courseMapper.hasTeacherCourseNameExist(course.name, modifyCourseStatus.ownerId) > 0) {
             return new Pair<>(false, "course name has been existed");
         }
         courseMapper.modifyCourseStatus(modifyCourseStatus.courseId, modifyCourseStatus.status == null || modifyCourseStatus.status == 0 ? 0 : 1, modifyCourseStatus.start, modifyCourseStatus.end);
