@@ -183,11 +183,11 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
-    public void updateEndAssignment(String nowTime) {
+    public void updateEndAssignment() {
         try {
-            List<AssignmentEntity> endAssignmentEntityList = assignmentMapper.getEndAssignment(nowTime);
-            DateTimeFormatter timeDtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             String committedTime = UTCTimeUtils.getUTCTimeStr();
+            List<AssignmentEntity> endAssignmentEntityList = assignmentMapper.getEndAssignment(committedTime);
+            DateTimeFormatter timeDtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             endAssignmentEntityList.forEach(x -> {
                 String assignmentId = x.getId();
                 List<String> userIdList = assignmentMapper.getUsers(assignmentId);
