@@ -134,7 +134,6 @@ public class QuestionBackServiceImpl implements QuestionBackService {
     @Override
     public List<QuestionBackAssignmentEntity> addQuestionBackAssignmentList(List<QuestionBackAssignment> questionBackAssignmentList) {
         List<QuestionBackAssignmentEntity> questionBackAssignmentEntityList = new ArrayList<QuestionBackAssignmentEntity>();
-
         long zeroScoreCount = questionBackAssignmentList.stream().filter(x->x.score==0).count();
         long scoreSum = questionBackAssignmentList.stream().mapToInt(x->x.score).sum();
         if(zeroScoreCount > 0)
@@ -159,6 +158,10 @@ public class QuestionBackServiceImpl implements QuestionBackService {
         try {
             String assignmentId = questionBackAssignmentEntityList.get(0).getAssignmentId();
             questionBackMapper.deleteQuestionBackAssignmentByAssignmentId(assignmentId);
+            if(questionBackAssignmentList.size() < 1)
+            {
+                return questionBackAssignmentEntityList;
+            }
             questionBackMapper.addQuestionBackAssignmentList(questionBackAssignmentEntityList);
         } catch (Exception e) {
             return questionBackAssignmentEntityList;
