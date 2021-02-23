@@ -149,5 +149,16 @@ public class UserController {
             return Response.error(pair.getValue());
         }
     }
+
+    @PostMapping("/logout")
+    public Response<String> logout(@RequestParam(value = "user_id") String userID) {
+        TDOSSessionListener.sessions.values().forEach(s -> {
+            String id = (String) s.getAttribute("user_id");
+            if (!StringUtils.isEmpty(id) && id.equals(userID)) {
+                s.invalidate();
+            }
+        });
+        return Response.success(null);
+    }
 }
 

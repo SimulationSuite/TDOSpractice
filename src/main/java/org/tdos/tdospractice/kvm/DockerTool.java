@@ -223,7 +223,7 @@ public class DockerTool implements CommonTool {
     }
 
     public void remove(String containerId, List<Integer> pubPorts) {
-        List<Container> containers = dockerClient.listContainersCmd().withIdFilter(Collections.singleton(containerId)).exec();
+        List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).withIdFilter(Collections.singleton(containerId)).exec();
         if (containers.size() > 0) {
             dockerClient.removeContainerCmd(containerId).exec();
             removePorts(pubPorts);
