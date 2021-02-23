@@ -723,7 +723,15 @@ public class CourseServiceImpl implements CourseService {
         if (!course.ownerId.equals(deleteCourse.ownerId)) {
             return new Pair<>(false, "course is not belong to owner_id: " + deleteCourse.ownerId);
         }
-        course.chapters.stream().filter(chapter -> !chapter.id.equals(EMPTY_UUID)).forEach(x -> chapterMapper.removeChapter(x.id));
+        course.chapters.stream().filter(chapter -> !chapter.id.equals(EMPTY_UUID)).forEach(chapter -> {
+            chapter.sections.stream().filter(section -> !section.id.equals(EMPTY_UUID)).forEach(section -> {
+                sectionMapper.removeSection(section.id);
+                section.smallSections.stream().filter(smallSection -> !smallSection.id.equals(EMPTY_UUID)).forEach(smallSection -> {
+                    smallSectionMapper.removeSmallSection(smallSection.id);
+                });
+            });
+            chapterMapper.removeChapter(chapter.id);
+        });
         courseMapper.removeCourse(deleteCourse.courseId);
         return new Pair<>(true, "");
     }
