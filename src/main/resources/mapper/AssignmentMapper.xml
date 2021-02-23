@@ -66,7 +66,7 @@
             and ss.updated_at &lt;= #{endTime}::timestamp
         </if>
         <if test="ownerId != null and ownerId != ''" >
-            and ci.owner_id &lt;= #{ownerId} ::uuid
+            and ci.owner_id = #{ownerId}
         </if>
         group by sa.user_id, sa.assignment_id, ss.status, sa.committed_at, su.name, a.name, c.name
         order by c.name
