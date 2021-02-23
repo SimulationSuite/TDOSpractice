@@ -82,4 +82,10 @@
         </foreach>
     </delete>
 
+
+    <select id="findByName" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
+        select * from experiment where name = #{name}
+    </select>
+
+
 </mapper>

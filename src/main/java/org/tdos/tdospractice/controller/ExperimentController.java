@@ -48,6 +48,8 @@ public class ExperimentController {
             int j = experimentImageService.insertExperimentImages(list);
             if (i == 1 && j == list.size())
                 return Response.success();
+            if (i == -1)
+                return Response.error("该实验已存在");
             return Response.error("新增失败");
         } catch (Exception e) {
             e.printStackTrace();
