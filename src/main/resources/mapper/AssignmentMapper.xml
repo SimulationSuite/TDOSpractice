@@ -120,7 +120,7 @@
 
     <select  id="getAssignmentNameBySectionId" resultType="org.tdos.tdospractice.entity.AssignmentEntity">
         select a.id, a.section_id as sectionId, a.name, a.end_at as endAt, a.qualified_score as qualifiedScore,
-        a.created_at as createdAt, a.updated_at as updatedAt
+        a.created_at as createdAt, a.updated_at as updatedAt, a.status as status
         from assignment a
         where a.section_id =#{sectionId} ::uuid
     </select>
