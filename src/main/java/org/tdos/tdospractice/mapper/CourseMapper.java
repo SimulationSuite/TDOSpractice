@@ -54,7 +54,7 @@ public interface CourseMapper {
 
     int hasCourseNameExist(String name);
 
-    int hasTeacherCourseNameExist(String name);
+    int hasTeacherCourseNameExist(String name,String ownerId);
 
     List<Course> getChangedList(@Param("name") String name);
 

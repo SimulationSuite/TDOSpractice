@@ -45,4 +45,10 @@ public class Course {
     @JsonProperty("section_number")
     public int sectionNumber;
 
+    @JsonProperty("small_section_number")
+    public int smallSectionNumber;
+
+    @JsonProperty("created_at")
+    public LocalDateTime createdAt;
+
 }
