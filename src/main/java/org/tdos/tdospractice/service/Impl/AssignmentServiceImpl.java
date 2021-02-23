@@ -14,11 +14,13 @@ import org.tdos.tdospractice.entity.StudentScoreEntity;
 import org.tdos.tdospractice.mapper.AssignmentMapper;
 import org.tdos.tdospractice.mapper.StudentAnswerMapper;
 import org.tdos.tdospractice.mapper.StudentScoreMapper;
+import org.tdos.tdospractice.mapper.QuestionBackMapper;
 import org.tdos.tdospractice.service.AssignmentService;
 import org.tdos.tdospractice.type.AssignmentQuestionBack;
 import org.tdos.tdospractice.type.AssignmentStatistics;
 import org.tdos.tdospractice.type.StudentAssignment;
 import org.tdos.tdospractice.utils.UTCTimeUtils;
+import org.tdos.tdospractice.type.StudentQuestionAnswer;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -39,6 +41,9 @@ public class AssignmentServiceImpl implements AssignmentService {
 
     @Autowired
     private StudentScoreMapper studentScoreMapper;
+
+    @Autowired
+    private QuestionBackMapper questionBackMapper;
 
     @Override
     public PageInfo<StudentAssignment> getStudentAssignment(String userId, String courseId,String chapterId, String sectionId, Integer status,String name, Integer perPage, Integer page) {
@@ -194,11 +199,20 @@ public class AssignmentServiceImpl implements AssignmentService {
                 userIdList.forEach(u -> {
                     if(assignmentMapper.ifStudentAnswer(u, assignmentId)){
                         studentAnswerMapper.modifyStudentAnswerStatus(1, committedTime, assignmentId, u);
+                        List<StudentQuestionAnswer> studentQuestionAnswerEntityList = questionBackMapper.getStudentAnswerByAssignment(u, assignmentId);
+                        int total = studentQuestionAnswerEntityList.stream().mapToInt(s->s.getScore()).sum();
+                        StudentScoreEntity studentScoreEntity = new StudentScoreEntity();
+                        studentScoreEntity.setUserId(u);
+                        studentScoreEntity.setAssignmentId(assignmentId);
+                        studentScoreEntity.setStatus(1);
+                        studentScoreEntity.setScore(total);
+                        studentScoreMapper.addStudentScore(studentScoreEntity);
                     }else{
                         List<StudentAnswerEntity> newStudentAnswerEntity = assignmentMapper.getQuestionBackByAssignment(assignmentId);
                         newStudentAnswerEntity.forEach(n -> {
                             n.setUserId(u);
                             n.setCommittedAt(LocalDateTime.parse(committedTime, timeDtf));
+                            n.setStatus(1);
                         });
                         studentAnswerMapper.addStudentAnswerList(newStudentAnswerEntity);
                         StudentScoreEntity studentScoreEntity = new StudentScoreEntity();

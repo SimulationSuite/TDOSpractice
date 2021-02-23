@@ -6,8 +6,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.tdos.tdospractice.service.AssignmentService;
 
-import java.time.LocalDateTime;
-
 @Configuration
 @EnableScheduling
 public class AssignmentTask {
