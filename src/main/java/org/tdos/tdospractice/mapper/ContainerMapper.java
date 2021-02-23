@@ -39,4 +39,6 @@ public interface ContainerMapper {
     ContainerEntity findContainerById(String containerId);
 
     List<ContainerEntity> findContainerByCourseIds(@Param("courseIds") List<String> courseIds);
+
+    List<ContainerEntity> findContainerByUserId(@Param("userIds") List<String> courseIds);
 }

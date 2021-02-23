@@ -116,5 +116,12 @@
         </foreach>
     </delete>
 
+    <select id="findContainerByUserId" parameterType="java.util.List" resultMap="ContainerMap">
+        select * from container c where c.user_id in
+        <foreach collection="userIds" open="(" separator="," close=")" item="item">
+            #{item}
+        </foreach>
+    </select>
+
 
 </mapper>
