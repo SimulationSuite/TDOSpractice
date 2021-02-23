@@ -7,7 +7,7 @@
     <select  id="getStudentAssignment" resultType="org.tdos.tdospractice.type.StudentAssignment">
         select distinct a.id as assignmentId, a.name as assignmentName, a.end_at as endAt,
         case when ss.score is null then -1 else ss.score end as score ,
-        case when sa.status is null then 0 else sa.status end as status
+        case when sa.status is null then -1 else sa.status end as status
         from assignment a
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
         inner join course ci on ci.id = ccs.course_id
