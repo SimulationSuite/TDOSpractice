@@ -83,8 +83,8 @@
     </delete>
 
 
-    <select id="findByName" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
-        select * from experiment where name = #{name}
+    <select id="hasExperimentByName" resultType="int">
+        select count(*) from experiment where name = #{name}
     </select>
 
 

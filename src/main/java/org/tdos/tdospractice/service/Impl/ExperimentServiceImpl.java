@@ -51,7 +51,7 @@ public class ExperimentServiceImpl implements ExperimentService {
 
     @Override
     public int insert(ExperimentEntity experimentEntity) {
-        if (experimentMapper.findByName(experimentEntity.getName()) == null){
+        if (experimentMapper.hasExperimentByName(experimentEntity.getName()) > 0){
             return experimentMapper.insert(experimentEntity);
         }else {
             return -1;
