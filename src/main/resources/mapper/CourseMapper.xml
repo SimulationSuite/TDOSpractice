@@ -447,7 +447,7 @@ WHERE
 
     <select  id="getCourseById" resultMap="CourseResult">
 SELECT
-	c.id :: varchar AS course_id,
+	c.id :: VARCHAR AS course_id,
 	c.NAME AS course_name,
 	c.pic_url,
 	c.owner_id,
@@ -457,35 +457,58 @@ SELECT
 	c.STATUS,
 	c."type",
 	c.model_id,
-	chapter.id :: varchar AS chapter_id,
+	chapter.id :: VARCHAR AS chapter_id,
 	chapter.NAME AS chapter_name,
 	chapter."order" AS chapter_order,
-	case  WHEN courseware.kind = 0 THEN 1 else 0 END as chapter_has_video,
-	case  WHEN courseware.kind = 1 THEN 1 else 0 END as chapter_has_pdf,
-	section.id :: varchar AS section_id,
+CASE
+		WHEN (SELECT count(*) from courseware cs
+		JOIN chapter_section_courseware cscs  ON cs."id" = cscs.courseware_id and cscs.section_id = chapter.id and cs.kind = 0 ) = 1  THEN
+		1 ELSE 0
+	END AS chapter_has_video,
+CASE
+		WHEN (SELECT count(*) from courseware cs
+		JOIN chapter_section_courseware cscs  ON cs."id" = cscs.courseware_id and cscs.section_id = chapter.id and cs.kind = 1 ) = 1  THEN
+		1 ELSE 0
+	END AS chapter_has_pdf,
+	section.id :: VARCHAR AS section_id,
 	section.NAME AS section_name,
 	section."order" AS section_order,
-	small_section.id :: varchar AS small_section_id,
+	small_section.id :: VARCHAR AS small_section_id,
 	small_section.NAME AS small_section_name,
 	small_section.ORDER AS small_section_order,
-	case  WHEN cs.kind = 0 THEN 1 else 0 END as section_has_video,
-	case  WHEN cs.kind = 1 THEN 1 else 0 END as section_has_pdf,
-	case  WHEN a.id IS not null THEN 1 else 0 END as section_has_assignment,
-	case  WHEN e.id IS not null THEN 1 else 0 END as section_has_experiment
+CASE
+		WHEN (SELECT count(*) from courseware cs
+		JOIN chapter_section_courseware cscs  ON cs."id" = cscs.courseware_id and cscs.section_id = section.id and cs.kind = 0 ) = 1  THEN
+		1 ELSE 0
+	END AS section_has_video,
+CASE
+		WHEN (SELECT count(*) from courseware cs
+		JOIN chapter_section_courseware cscs  ON cs."id" = cscs.courseware_id and cscs.section_id = section.id and cs.kind = 1 ) = 1  THEN
+		1 ELSE 0
+	END AS section_has_pdf,
+CASE
+
+		WHEN a.id IS NOT NULL THEN
+		1 ELSE 0
+	END AS section_has_assignment,
+CASE
+
+		WHEN e.id IS NOT NULL THEN
+		1 ELSE 0
+	END AS section_has_experiment
 FROM
 	course c
 	LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
 	LEFT JOIN course_chapter_section ccs ON ccs.course_id = c.id
-	LEFT JOIN chapter ON chapter.id = ccs.chapter_id and "chapter".order != -1
-	LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
-	LEFT JOIN "small_section" ON "small_section".id = ccs.small_section_id and "small_section".order != -1
-	LEFT JOIN chapter_section_courseware csc on csc.chapter_id = chapter.id
-    LEFT JOIN courseware on courseware."id" = csc.courseware_id
-    LEFT JOIN chapter_section_courseware cscs on cscs.section_id = section.id
-    LEFT JOIN courseware cs on cs."id" = cscs.courseware_id
-    LEFT JOIN "assignment" a on a.section_id = section.id
-	LEFT JOIN chapter_section_experiment cse on cse.section_id = section.id
-	LEFT JOIN experiment e on e.id = cse.experiment_id
+	LEFT JOIN chapter ON chapter.id = ccs.chapter_id
+	AND "chapter".ORDER != - 1
+	LEFT JOIN "section" ON "section".id = ccs.section_id
+	AND "section".ORDER != - 1
+	LEFT JOIN "small_section" ON "small_section".id = ccs.small_section_id
+	AND "small_section".ORDER != - 1
+	LEFT JOIN "assignment" a ON a.section_id = section.id
+	LEFT JOIN chapter_section_experiment cse ON cse.section_id = section.id
+	LEFT JOIN experiment e ON e.id = cse.experiment_id
 WHERE
     c.id = #{courseId} :: uuid
     </select>
