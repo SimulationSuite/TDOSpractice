@@ -489,11 +489,11 @@ public class CourseServiceImpl implements CourseService {
         }
         Course course = courseMapper.getCourseById(courseId);
         if (course != null) {
-            course.chapters = course.chapters.stream().filter(chapter -> chapter.id != null).collect(Collectors.toList());
+            course.chapters = course.chapters.stream().filter(chapter -> chapter.id != null).sorted(Comparator.comparing(x->x.order)).collect(Collectors.toList());
             course.chapters.forEach(chapter -> {
-                chapter.sections = chapter.sections.stream().filter(section -> section.id != null).collect(Collectors.toList());
+                chapter.sections = chapter.sections.stream().filter(section -> section.id != null).sorted(Comparator.comparing(x->x.order)).collect(Collectors.toList());
                 chapter.sections.forEach(section -> {
-                    section.smallSections = section.smallSections.stream().filter(smallSection -> smallSection.id != null).collect(Collectors.toList());
+                    section.smallSections = section.smallSections.stream().filter(smallSection -> smallSection.id != null).sorted(Comparator.comparing(x->x.order)).collect(Collectors.toList());
                 });
             });
             List<ClassNumber> classNumbers = classMapper.findClassNumber();
