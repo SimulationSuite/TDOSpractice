@@ -462,12 +462,12 @@ SELECT
 	chapter."order" AS chapter_order,
 CASE
 		WHEN (SELECT count(*) from courseware cs
-		JOIN chapter_section_courseware cscs  ON cs."id" = cscs.courseware_id and cscs.section_id = chapter.id and cs.kind = 0 ) = 1  THEN
+		JOIN chapter_section_courseware cscs  ON cs."id" = cscs.courseware_id and cscs.chapter_id = chapter.id and cs.kind = 0 ) = 1  THEN
 		1 ELSE 0
 	END AS chapter_has_video,
 CASE
 		WHEN (SELECT count(*) from courseware cs
-		JOIN chapter_section_courseware cscs  ON cs."id" = cscs.courseware_id and cscs.section_id = chapter.id and cs.kind = 1 ) = 1  THEN
+		JOIN chapter_section_courseware cscs  ON cs."id" = cscs.courseware_id and cscs.chapter_id = chapter.id and cs.kind = 1 ) = 1  THEN
 		1 ELSE 0
 	END AS chapter_has_pdf,
 	section.id :: VARCHAR AS section_id,
