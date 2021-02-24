@@ -40,4 +40,10 @@
         insert into student_score (assignment_id, user_id, score, status) values (#{assignmentId}::uuid, #{userId}, #{score}, #{status});
     </insert>
 
+    <select id="ifStudentScore"  resultType="int">
+        select count(*)
+        from student_score
+        where assignment_id = #{assignmentId}::uuid and user_id = #{userId};
+    </select>
+
 </mapper>

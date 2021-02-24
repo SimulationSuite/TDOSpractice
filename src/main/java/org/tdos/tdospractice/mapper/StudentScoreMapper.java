@@ -23,4 +23,6 @@ public interface StudentScoreMapper {
 
     List<StudentScoreEntity> getStudentScoreAll();
 
+    int ifStudentScore(@Param("userId") String userId, @Param("assignmentId") String assignmentId);
+
 }

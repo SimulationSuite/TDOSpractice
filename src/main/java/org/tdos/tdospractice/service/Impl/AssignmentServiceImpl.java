@@ -198,14 +198,17 @@ public class AssignmentServiceImpl implements AssignmentService {
                 userIdList.forEach(u -> {
                     if(assignmentMapper.ifStudentAnswer(u, assignmentId)>0){
                         studentAnswerMapper.modifyStudentAnswerStatus(1, committedTime, assignmentId, u);
-                        List<StudentQuestionAnswer> studentQuestionAnswerEntityList = questionBackMapper.getStudentAnswerByAssignment(u, assignmentId);
-                        int total = studentQuestionAnswerEntityList.stream().mapToInt(s->s.getScore()).sum();
-                        StudentScoreEntity studentScoreEntity = new StudentScoreEntity();
-                        studentScoreEntity.setUserId(u);
-                        studentScoreEntity.setAssignmentId(assignmentId);
-                        studentScoreEntity.setStatus(1);
-                        studentScoreEntity.setScore(total);
-                        studentScoreMapper.addStudentScore(studentScoreEntity);
+                        if(studentScoreMapper.ifStudentScore(u, assignmentId) < 1)
+                        {
+                            List<StudentQuestionAnswer> studentQuestionAnswerEntityList = questionBackMapper.getStudentAnswerByAssignment(u, assignmentId);
+                            int total = studentQuestionAnswerEntityList.stream().mapToInt(s->s.getScore()).sum();
+                            StudentScoreEntity studentScoreEntity = new StudentScoreEntity();
+                            studentScoreEntity.setUserId(u);
+                            studentScoreEntity.setAssignmentId(assignmentId);
+                            studentScoreEntity.setStatus(1);
+                            studentScoreEntity.setScore(total);
+                            studentScoreMapper.addStudentScore(studentScoreEntity);
+                        }
                     }else{
                         List<StudentAnswerEntity> newStudentAnswerEntity = assignmentMapper.getQuestionBackByAssignment(assignmentId);
                         newStudentAnswerEntity.forEach(n -> {
