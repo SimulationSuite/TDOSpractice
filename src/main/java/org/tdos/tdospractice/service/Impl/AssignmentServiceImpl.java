@@ -196,7 +196,7 @@ public class AssignmentServiceImpl implements AssignmentService {
                 String assignmentId = x.getId();
                 List<String> userIdList = assignmentMapper.getUsers(assignmentId);
                 userIdList.forEach(u -> {
-                    if(assignmentMapper.ifStudentAnswer(u, assignmentId)){
+                    if(assignmentMapper.ifStudentAnswer(u, assignmentId)>0){
                         studentAnswerMapper.modifyStudentAnswerStatus(1, committedTime, assignmentId, u);
                         List<StudentQuestionAnswer> studentQuestionAnswerEntityList = questionBackMapper.getStudentAnswerByAssignment(u, assignmentId);
                         int total = studentQuestionAnswerEntityList.stream().mapToInt(s->s.getScore()).sum();

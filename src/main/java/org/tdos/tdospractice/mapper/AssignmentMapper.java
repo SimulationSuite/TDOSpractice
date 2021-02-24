@@ -51,7 +51,7 @@ public interface AssignmentMapper {
 
     List<String> getUsers(@Param("assignmentId") String assignmentId);
 
-    boolean ifStudentAnswer(@Param("userId") String userId, @Param("assignmentId") String assignmentId);
+    int ifStudentAnswer(@Param("userId") String userId, @Param("assignmentId") String assignmentId);
 
     List<StudentAnswerEntity> getQuestionBackByAssignment(@Param("assignmentId") String assignmentId);
 
