@@ -189,19 +189,18 @@
     </select>
 
     <select  id="getUsers" resultType="String">
-        select distinct su.id
+        select distinct cc.user_id
         from assignment a
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
         inner join course ci on ci.id = ccs.course_id
         inner join class_course cc on cc.course_id = ci.id
-        inner join sim_user su on su.class_id = cc.class_id
-        where qba.assignment_id =#{assignmentId} ::uuid
+        where a.id =#{assignmentId} ::uuid
     </select>
 
     <select  id="ifStudentAnswer" resultType="Boolean">
         select case when count(*) > 0 then true else false end
         from student_answer
-        where assignment_id =#{assignmentId} ::uuid and user_id = #{userId} ::uuid
+        where assignment_id =#{assignmentId} ::uuid and user_id = #{userId}
     </select>
 
     <select  id="getQuestionBackByAssignment" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">

@@ -28,7 +28,7 @@ public class StudentAnswerEntity {
 
     private Integer status;
 
-    private LocalDateTime committedAt;
+    private String committedAt;
 
     private LocalDateTime createdAt;
 

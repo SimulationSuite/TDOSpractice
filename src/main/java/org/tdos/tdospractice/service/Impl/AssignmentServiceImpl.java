@@ -192,7 +192,6 @@ public class AssignmentServiceImpl implements AssignmentService {
         try {
             String committedTime = UTCTimeUtils.getUTCTimeStr();
             List<AssignmentEntity> endAssignmentEntityList = assignmentMapper.getEndAssignment(committedTime);
-            DateTimeFormatter timeDtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             endAssignmentEntityList.forEach(x -> {
                 String assignmentId = x.getId();
                 List<String> userIdList = assignmentMapper.getUsers(assignmentId);
@@ -211,7 +210,7 @@ public class AssignmentServiceImpl implements AssignmentService {
                         List<StudentAnswerEntity> newStudentAnswerEntity = assignmentMapper.getQuestionBackByAssignment(assignmentId);
                         newStudentAnswerEntity.forEach(n -> {
                             n.setUserId(u);
-                            n.setCommittedAt(LocalDateTime.parse(committedTime, timeDtf));
+                            n.setCommittedAt(committedTime);
                             n.setStatus(1);
                         });
                         studentAnswerMapper.addStudentAnswerList(newStudentAnswerEntity);
