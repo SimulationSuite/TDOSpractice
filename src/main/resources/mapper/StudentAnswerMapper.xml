@@ -63,7 +63,7 @@
     </insert>
 
     <insert id="addStudentAnswerList" parameterType="java.util.List">
-        insert into student_answer (question_id, assignment_id, user_id, answer, score, committed_at)
+        insert into student_answer (question_id, assignment_id, user_id, answer, score, status, committed_at)
         values
         <foreach collection="studentAnswerList" item="item" separator=",">
             (
@@ -72,6 +72,7 @@
             #{item.userId},
             #{item.answer},
             #{item.score},
+            #{item.status},
             #{item.committedAt}::timestamp
             )
         </foreach>
