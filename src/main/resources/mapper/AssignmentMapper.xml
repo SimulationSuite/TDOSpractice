@@ -15,7 +15,7 @@
         inner join sim_user su on su.class_id = cc.class_id
         left join student_score ss on ss.assignment_id = a.id and ss.user_id = su.id
         left join student_answer sa on sa.assignment_id = a.id and sa.user_id = su.id
-        where su.id = #{userId} and a.status = 1
+        where su.id = #{userId} and a.status = 1 and ci.status != 2
         <if test="courseId != null and courseId != ''" >
             and ccs.course_id = #{courseId} ::uuid
         </if>
@@ -43,7 +43,7 @@
         inner join class_course cc on cc.course_id = ci.id
         inner join class c on c.id = su.class_id
         left join student_score ss on ss.assignment_id = sa.assignment_id and ss.user_id = sa.user_id
-        where sa.status = 1
+        where sa.status = 1 and ci.status != 2
         <if test="classId != null and classId != ''" >
             and cc.class_id = #{classId} ::uuid
         </if>
@@ -148,16 +148,14 @@
         delete from assignment where id=#{id}::uuid;
     </delete>
 
-    <select id="ifSectionAssignmentByAssignmentId"  resultType="Boolean">
-        select ci.status = 0
+    <select id="ifSectionAssignmentByAssignmentId"  resultType="int">
+        select a.status
         from assignment a
-        inner join course_chapter_section ccs on ccs.section_id = a.section_id ::uuid
-        inner join course ci on ci.id = ccs.course_id
         where a.id =#{id}::uuid;
     </select>
 
     <update id="modifyAssignmentNameById">
-        update assignment set name = #{name} where id=#{id}::uuid;
+        update assignment set name = #{name}, end_at = #{endAt}::timestamp where id=#{id}::uuid;
     </update>
 
     <insert id="addAssignment" useGeneratedKeys="true" keyProperty="id">
@@ -189,19 +187,18 @@
     </select>
 
     <select  id="getUsers" resultType="String">
-        select distinct su.id
+        select distinct cc.user_id
         from assignment a
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
         inner join course ci on ci.id = ccs.course_id
         inner join class_course cc on cc.course_id = ci.id
-        inner join sim_user su on su.class_id = cc.class_id
-        where qba.assignment_id =#{assignmentId} ::uuid
+        where a.id =#{assignmentId} ::uuid
     </select>
 
-    <select  id="ifStudentAnswer" resultType="Boolean">
-        select case when count(*) > 0 then true else false end
+    <select  id="ifStudentAnswer" resultType="int">
+        select count(*)
         from student_answer
-        where assignment_id =#{assignmentId} ::uuid and user_id = #{userId} ::uuid
+        where assignment_id =#{assignmentId} ::uuid and user_id = #{userId}
     </select>
 
     <select  id="getQuestionBackByAssignment" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">

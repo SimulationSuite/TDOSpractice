@@ -104,4 +104,10 @@
         where qb.content =#{content};
     </select>
 
+    <select id="hasQuestionBackAssignment"  resultType="int">
+        select count(*)
+        from question_back_assignment
+        where assignment_id =#{assignmentId}::uuid;
+    </select>
+
 </mapper>

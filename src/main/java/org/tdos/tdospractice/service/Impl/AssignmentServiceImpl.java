@@ -123,12 +123,13 @@ public class AssignmentServiceImpl implements AssignmentService {
         Map<String, Object> map = new HashMap<>();
         List<String> sectionAssignment = new ArrayList<>();
         id.forEach(x -> {
-            if (!assignmentMapper.ifSectionAssignmentByAssignmentId(x)){
+            if (assignmentMapper.ifSectionAssignmentByAssignmentId(x) == 1){
                 sectionAssignment.add(x);
             }
         });
         if (sectionAssignment.size() > 0){
             map.put("isDelete", false);
+            map.put("reason", "作业已确认不能删除。");
             map.put("notDeleteId", sectionAssignment);
             return map;
         }
@@ -170,7 +171,7 @@ public class AssignmentServiceImpl implements AssignmentService {
     @Override
     public Boolean modifyAssignmentNameById(Assignment assignment) {
         try {
-            assignmentMapper.modifyAssignmentNameById(assignment.id, assignment.name);
+            assignmentMapper.modifyAssignmentNameById(assignment.id, assignment.name, assignment.endAt);
         } catch (Exception e) {
             return false;
         }
@@ -192,37 +193,42 @@ public class AssignmentServiceImpl implements AssignmentService {
         try {
             String committedTime = UTCTimeUtils.getUTCTimeStr();
             List<AssignmentEntity> endAssignmentEntityList = assignmentMapper.getEndAssignment(committedTime);
-            DateTimeFormatter timeDtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             endAssignmentEntityList.forEach(x -> {
                 String assignmentId = x.getId();
-                List<String> userIdList = assignmentMapper.getUsers(assignmentId);
-                userIdList.forEach(u -> {
-                    if(assignmentMapper.ifStudentAnswer(u, assignmentId)){
-                        studentAnswerMapper.modifyStudentAnswerStatus(1, committedTime, assignmentId, u);
-                        List<StudentQuestionAnswer> studentQuestionAnswerEntityList = questionBackMapper.getStudentAnswerByAssignment(u, assignmentId);
-                        int total = studentQuestionAnswerEntityList.stream().mapToInt(s->s.getScore()).sum();
-                        StudentScoreEntity studentScoreEntity = new StudentScoreEntity();
-                        studentScoreEntity.setUserId(u);
-                        studentScoreEntity.setAssignmentId(assignmentId);
-                        studentScoreEntity.setStatus(1);
-                        studentScoreEntity.setScore(total);
-                        studentScoreMapper.addStudentScore(studentScoreEntity);
-                    }else{
-                        List<StudentAnswerEntity> newStudentAnswerEntity = assignmentMapper.getQuestionBackByAssignment(assignmentId);
-                        newStudentAnswerEntity.forEach(n -> {
-                            n.setUserId(u);
-                            n.setCommittedAt(LocalDateTime.parse(committedTime, timeDtf));
-                            n.setStatus(1);
-                        });
-                        studentAnswerMapper.addStudentAnswerList(newStudentAnswerEntity);
-                        StudentScoreEntity studentScoreEntity = new StudentScoreEntity();
-                        studentScoreEntity.setUserId(u);
-                        studentScoreEntity.setAssignmentId(assignmentId);
-                        studentScoreEntity.setStatus(1);
-                        studentScoreEntity.setScore(0);
-                        studentScoreMapper.addStudentScore(studentScoreEntity);
-                    };
-                });
+                if(questionBackMapper.hasQuestionBackAssignment(assignmentId) > 0)
+                {
+                    List<String> userIdList = assignmentMapper.getUsers(assignmentId);
+                    userIdList.forEach(u -> {
+                        if(assignmentMapper.ifStudentAnswer(u, assignmentId)>0){
+                            studentAnswerMapper.modifyStudentAnswerStatus(1, committedTime, assignmentId, u);
+                            if(studentScoreMapper.ifStudentScore(u, assignmentId) < 1)
+                            {
+                                List<StudentQuestionAnswer> studentQuestionAnswerEntityList = questionBackMapper.getStudentAnswerByAssignment(u, assignmentId);
+                                int total = studentQuestionAnswerEntityList.stream().mapToInt(s->s.getScore()).sum();
+                                StudentScoreEntity studentScoreEntity = new StudentScoreEntity();
+                                studentScoreEntity.setUserId(u);
+                                studentScoreEntity.setAssignmentId(assignmentId);
+                                studentScoreEntity.setStatus(1);
+                                studentScoreEntity.setScore(total);
+                                studentScoreMapper.addStudentScore(studentScoreEntity);
+                            }
+                        }else{
+                            List<StudentAnswerEntity> newStudentAnswerEntity = assignmentMapper.getQuestionBackByAssignment(assignmentId);
+                            newStudentAnswerEntity.forEach(n -> {
+                                n.setUserId(u);
+                                n.setCommittedAt(committedTime);
+                                n.setStatus(1);
+                            });
+                            studentAnswerMapper.addStudentAnswerList(newStudentAnswerEntity);
+                            StudentScoreEntity studentScoreEntity = new StudentScoreEntity();
+                            studentScoreEntity.setUserId(u);
+                            studentScoreEntity.setAssignmentId(assignmentId);
+                            studentScoreEntity.setStatus(1);
+                            studentScoreEntity.setScore(0);
+                            studentScoreMapper.addStudentScore(studentScoreEntity);
+                        };
+                    });
+                }
             });
         } catch (Exception e) {
             System.out.println(e.toString());

@@ -120,4 +120,9 @@ public class AssignmentController {
         return Response.success(map);
     }
 
+    @PostMapping(value = "/updateEndAssignment")
+    public void updateEndAssignment() {
+        assignmentService.updateEndAssignment();
+    }
+
 }

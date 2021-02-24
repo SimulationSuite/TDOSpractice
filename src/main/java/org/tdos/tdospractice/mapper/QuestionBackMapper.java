@@ -37,4 +37,6 @@ public interface QuestionBackMapper {
 
     int hasQuestionBackNameExist(@Param("content") String content);
 
+    int hasQuestionBackAssignment(@Param("assignmentId") String assignmentId);
+
 }

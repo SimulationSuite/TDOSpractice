@@ -35,11 +35,11 @@ public interface AssignmentMapper {
 
     int deleteAssignmentById(@Param("id") String id);
 
-    boolean ifSectionAssignmentByAssignmentId(String id);
+    int ifSectionAssignmentByAssignmentId(String id);
 
     boolean ifAssignmentBySectionId(@Param("sectionId") String sectionId);
 
-    int modifyAssignmentNameById(@Param("id") String id, @Param("name") String name);
+    int modifyAssignmentNameById(@Param("id") String id, @Param("name") String name, @Param("endAt") String endAt);
 
     int addAssignment(AssignmentEntity assignment);
 
@@ -51,7 +51,7 @@ public interface AssignmentMapper {
 
     List<String> getUsers(@Param("assignmentId") String assignmentId);
 
-    boolean ifStudentAnswer(@Param("userId") String userId, @Param("assignmentId") String assignmentId);
+    int ifStudentAnswer(@Param("userId") String userId, @Param("assignmentId") String assignmentId);
 
     List<StudentAnswerEntity> getQuestionBackByAssignment(@Param("assignmentId") String assignmentId);
 
