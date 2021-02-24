@@ -170,7 +170,7 @@ public class AssignmentServiceImpl implements AssignmentService {
     @Override
     public Boolean modifyAssignmentNameById(Assignment assignment) {
         try {
-            assignmentMapper.modifyAssignmentNameById(assignment.id, assignment.name);
+            assignmentMapper.modifyAssignmentNameById(assignment.id, assignment.name, assignment.endAt);
         } catch (Exception e) {
             return false;
         }

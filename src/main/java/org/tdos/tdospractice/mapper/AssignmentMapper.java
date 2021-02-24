@@ -39,7 +39,7 @@ public interface AssignmentMapper {
 
     boolean ifAssignmentBySectionId(@Param("sectionId") String sectionId);
 
-    int modifyAssignmentNameById(@Param("id") String id, @Param("name") String name);
+    int modifyAssignmentNameById(@Param("id") String id, @Param("name") String name, @Param("endAt") String endAt);
 
     int addAssignment(AssignmentEntity assignment);
 

@@ -157,7 +157,7 @@
     </select>
 
     <update id="modifyAssignmentNameById">
-        update assignment set name = #{name} where id=#{id}::uuid;
+        update assignment set name = #{name}, end_at = #{endAt}::timestamp where id=#{id}::uuid;
     </update>
 
     <insert id="addAssignment" useGeneratedKeys="true" keyProperty="id">
