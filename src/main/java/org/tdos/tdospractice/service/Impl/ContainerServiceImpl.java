@@ -91,10 +91,10 @@ public class ContainerServiceImpl implements ContainerService {
             if (containerEntity == null) {
                 //create container
                 ContainerEntity c = kvmManager.createContainer(userId, experimentId, i);
-                if (courseId != null && !courseId.equals("")) {
-                    c.setCourseId(courseId);
-                }
                 if (c != null) {
+                    if (courseId != null && !courseId.equals("")) {
+                        c.setCourseId(courseId);
+                    }
                     containerMapper.insertContainer(c);
                 }
                 list.add(c);
@@ -144,5 +144,25 @@ public class ContainerServiceImpl implements ContainerService {
         List<ContainerEntity> cl = containerMapper.findContainerByIds(containerIds);
         kvmManager.removeContainers(cl);
         containerMapper.deleteByContainerIds(containerIds);
+    }
+
+    @Override
+    public ContainerEntity createAndRunContainers(String userId, String experimentId, String courseId, String imageId) {
+        ImageEntity imageEntity = imageMapper.findImageByImagesid(imageId);
+        ContainerEntity containerEntity = containerMapper.findContainerByName(String.format("%s@%s@%s", userId, experimentId, imageEntity.getId()));
+        if (containerEntity != null) {
+            return null;
+        }
+        //create container
+        ContainerEntity c = kvmManager.createContainer(userId, experimentId, imageEntity);
+        if (c != null) {
+            if (courseId != null && !courseId.equals("")) {
+                c.setCourseId(courseId);
+            }
+            kvmManager.execContainer(c.getContainerId(), c.getNodeOrder(), KvmManager.ExecType.START.ordinal());
+            c.setStatus(1);
+            containerMapper.insertContainer(c);
+        }
+        return c;
     }
 }

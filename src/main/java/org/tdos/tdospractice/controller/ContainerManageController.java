@@ -66,4 +66,11 @@ public class ContainerManageController {
                                                             @RequestParam(value = "courseId") String courseId) {
         return Response.success(containerService.createContainers(userId, experimentId, courseId));
     }
+
+    @GetMapping(value = "/createAndRunContainers")
+    public Response<ContainerEntity> createAndRunContainers(@RequestParam(value = "userId") String userId, @RequestParam(value = "experimentId") String experimentId,
+                                                            @RequestParam(value = "courseId") String courseId, @RequestParam(value = "imageId") String imageId) {
+        ContainerEntity containerEntity = containerService.createAndRunContainers(userId, experimentId, courseId, imageId);
+        return containerEntity == null ? Response.error() : Response.success(containerEntity);
+    }
 }
