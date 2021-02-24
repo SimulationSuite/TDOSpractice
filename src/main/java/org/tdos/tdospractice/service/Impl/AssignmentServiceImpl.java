@@ -123,12 +123,13 @@ public class AssignmentServiceImpl implements AssignmentService {
         Map<String, Object> map = new HashMap<>();
         List<String> sectionAssignment = new ArrayList<>();
         id.forEach(x -> {
-            if (!assignmentMapper.ifSectionAssignmentByAssignmentId(x)){
+            if (assignmentMapper.ifSectionAssignmentByAssignmentId(x) == 1){
                 sectionAssignment.add(x);
             }
         });
         if (sectionAssignment.size() > 0){
             map.put("isDelete", false);
+            map.put("reason", "作业已确认不能删除。");
             map.put("notDeleteId", sectionAssignment);
             return map;
         }

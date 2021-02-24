@@ -35,7 +35,7 @@ public interface AssignmentMapper {
 
     int deleteAssignmentById(@Param("id") String id);
 
-    boolean ifSectionAssignmentByAssignmentId(String id);
+    int ifSectionAssignmentByAssignmentId(String id);
 
     boolean ifAssignmentBySectionId(@Param("sectionId") String sectionId);
 

@@ -148,11 +148,9 @@
         delete from assignment where id=#{id}::uuid;
     </delete>
 
-    <select id="ifSectionAssignmentByAssignmentId"  resultType="Boolean">
-        select ci.status = 0
+    <select id="ifSectionAssignmentByAssignmentId"  resultType="int">
+        select a.status
         from assignment a
-        inner join course_chapter_section ccs on ccs.section_id = a.section_id ::uuid
-        inner join course ci on ci.id = ccs.course_id
         where a.id =#{id}::uuid;
     </select>
 
