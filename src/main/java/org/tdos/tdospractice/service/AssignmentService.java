@@ -37,7 +37,7 @@ public interface AssignmentService {
 
     Boolean modifyAssignmentStatusById(Assignment assignment);
 
-    void updateEndAssignment(String nowTime);
+    void updateEndAssignment();
 
     Map<String, Object> deleteQuestionBackAssignmentById(List<String> id);
 

@@ -36,18 +36,21 @@ public class ExperimentController {
     public Response insertExperiment(@RequestBody ExperimentEntity experimentEntity) {
         try {
             int i = experimentService.insert(experimentEntity);
-            List<ExperimentImageEntity> list = new ArrayList<>();
-            experimentEntity.getImages().forEach(image -> {
-                list.add(
-                        ExperimentImageEntity
-                                .builder()
-                                .experiment_id(experimentEntity.getId())
-                                .image_id(image)
-                                .build());
-            });
-            int j = experimentImageService.insertExperimentImages(list);
-            if (i == 1 && j == list.size())
-                return Response.success();
+            if (i == -1)
+                return Response.error("该实验已存在");
+            if (i == 1) {
+                List<ExperimentImageEntity> list = new ArrayList<>();
+                experimentEntity.getImages().forEach(image -> {
+                    list.add(
+                            ExperimentImageEntity
+                                    .builder()
+                                    .experiment_id(experimentEntity.getId())
+                                    .image_id(image)
+                                    .build());
+                });
+                if (experimentImageService.insertExperimentImages(list) == list.size())
+                    return Response.success();
+            }
             return Response.error("新增失败");
         } catch (Exception e) {
             e.printStackTrace();

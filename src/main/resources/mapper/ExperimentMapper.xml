@@ -82,4 +82,10 @@
         </foreach>
     </delete>
 
+
+    <select id="hasExperimentByName" resultType="int">
+        select count(*) from experiment where name = #{name}
+    </select>
+
+
 </mapper>

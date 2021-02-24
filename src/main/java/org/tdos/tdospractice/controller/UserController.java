@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import org.tdos.tdospractice.body.DeleteIdList;
 import org.tdos.tdospractice.config.TDOSSessionListener;
 import org.tdos.tdospractice.entity.ClassEntity;
+import org.tdos.tdospractice.entity.ContainerEntity;
 import org.tdos.tdospractice.entity.UserEntity;
+import org.tdos.tdospractice.kvm.KvmManager;
 import org.tdos.tdospractice.mapper.ClassMapper;
+import org.tdos.tdospractice.mapper.ContainerMapper;
 import org.tdos.tdospractice.mapper.UserMapper;
 import org.tdos.tdospractice.service.SecurityService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +30,9 @@ import org.tdos.tdospractice.utils.PageTool;
 import static org.tdos.tdospractice.utils.Constants.*;
 
 import javax.servlet.http.HttpSession;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.collectingAndThen;
@@ -44,6 +49,12 @@ public class UserController {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private ContainerMapper containerMapper;
+
+    @Autowired
+    private KvmManager kvmManager;
 
     @Autowired
     private SecurityService securityService;
@@ -118,13 +129,25 @@ public class UserController {
     @DeleteMapping(value = "/delete_user")
     public Response<String> deleteUser(@RequestBody DeleteIdList deleteIdList,
                                        @RequestHeader(JWT_HEADER_KEY) String jwt) {
-        String ownerID = securityService.getUserId(jwt);
-        int type =2;
-        Pair<Boolean, String> pair = userService.deleteUser(deleteIdList.deleteIdList,type, ownerID);
-        if (pair.getKey()) {
-            return Response.success(null);
+        try {
+            String ownerID = securityService.getUserId(jwt);
+            int type =2;
+            List<ContainerEntity> list = containerMapper.findContainerByUserId(deleteIdList.deleteIdList);
+            if(list.size() > 0){
+                List<String> containerIds = new ArrayList<>();
+                list.stream().map(x -> containerIds.add(x.getContainerId())).collect(Collectors.toList());
+                List<ContainerEntity> cl = containerMapper.findContainerByIds(containerIds);
+                kvmManager.removeContainers(cl);
+                containerMapper.deleteByContainerIds(containerIds);
+            }
+            Pair<Boolean, String> pair = userService.deleteUser(deleteIdList.deleteIdList,type, ownerID);
+            if (pair.getKey()) {
+                return Response.success(null);
+            }
+            return Response.error(pair.getValue());
+        }catch (Exception e){
+            return Response.error(e.toString());
         }
-        return Response.error(pair.getValue());
     }
 
     @PostMapping(value = "/modify_user")

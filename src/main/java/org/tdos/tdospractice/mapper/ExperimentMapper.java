@@ -26,4 +26,6 @@ public interface ExperimentMapper {
 
     long deleteExperimentList(List<String> ids);
 
+    int hasExperimentByName(@Param("name")String name);
+
 }

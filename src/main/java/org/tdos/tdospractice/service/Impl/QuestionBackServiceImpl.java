@@ -134,6 +134,7 @@ public class QuestionBackServiceImpl implements QuestionBackService {
     @Override
     public List<QuestionBackAssignmentEntity> addQuestionBackAssignmentList(List<QuestionBackAssignment> questionBackAssignmentList) {
         List<QuestionBackAssignmentEntity> questionBackAssignmentEntityList = new ArrayList<QuestionBackAssignmentEntity>();
+        List<QuestionBackAssignment> zeroQuestionBackAssignment = questionBackAssignmentList.stream().filter(x->x.score==0).collect(Collectors.toList());
         long zeroScoreCount = questionBackAssignmentList.stream().filter(x->x.score==0).count();
         long scoreSum = questionBackAssignmentList.stream().mapToInt(x->x.score).sum();
         if(zeroScoreCount > 0)
@@ -141,11 +142,15 @@ public class QuestionBackServiceImpl implements QuestionBackService {
             int perScore = Math.toIntExact((100 - scoreSum) / zeroScoreCount);
             int leftScore = 100 - Math.toIntExact(scoreSum + perScore * zeroScoreCount);
             questionBackAssignmentList.stream().filter(x->x.score==0).collect(Collectors.toList()).forEach(x -> {
-                if(questionBackAssignmentList.stream().filter(a->a.score==0).collect(Collectors.toList()).indexOf(x)==zeroScoreCount-1)
+                int index = (int) (zeroScoreCount-1);
+                if(zeroQuestionBackAssignment.get(index).questionId==x.questionId)
                 {
                     x.score = perScore + leftScore;
                 }
-                x.score = perScore;
+                else
+                {
+                    x.score = perScore;
+                }
             });
         }
         questionBackAssignmentList.forEach(x -> {

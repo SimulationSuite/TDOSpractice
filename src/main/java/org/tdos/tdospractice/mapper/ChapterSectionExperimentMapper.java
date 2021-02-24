@@ -23,4 +23,6 @@ public interface ChapterSectionExperimentMapper {
 
     List<ChapterSectionExperimentEntity> getChapterSectionExperimentByCourse(String course_id);
 
+    List<ChapterSectionExperimentEntity> getChapterSectionExperimentBySection(String section_id);
+
 }
