@@ -22,6 +22,8 @@ public interface ImageMapper {
 
     void deleteImages(@Param("imagesID") List<String> imagesID);
 
+    ImageEntity findImageByImagesid(String imagesID);
+
     List<String> findExperimentImageByImageids(@Param("imageids") List<String> imageids);
 
     List<ImageEntity> findImageByExperimentId(@Param("experimentId") String experimentId);

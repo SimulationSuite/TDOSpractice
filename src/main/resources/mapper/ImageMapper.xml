@@ -69,6 +69,10 @@
         ) group by e.image_id
     </select>
 
+    <select id="findImageByImagesid" resultType="org.tdos.tdospractice.entity.ImageEntity">
+        select * from image i where i.id=#{imagesID}::uuid
+    </select>
+
     <insert id="addImage" parameterType="org.tdos.tdospractice.entity.ImageEntity" useGeneratedKeys="true"
             keyProperty="id">
         insert into image (name,imageid,size,introduction,kind,url,type,parent_image_id) values (#{imageName},#{imageId},#{size},#{introduction},#{kind},#{url},#{type},#{parentImageId})
