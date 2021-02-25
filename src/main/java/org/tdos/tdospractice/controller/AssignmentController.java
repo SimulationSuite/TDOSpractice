@@ -45,7 +45,7 @@ public class AssignmentController {
                                                                   @RequestParam(value = "courseId",required = false) String courseId,
                                                                   @RequestParam(value = "chapterId",required = false) String chapterId,
                                                                   @RequestParam(value = "sectionId",required = false) String sectionId,
-                                                                  @RequestParam(value = "status",required = false) Integer status,
+                                                                  @RequestParam(value = "status",required = false) String status,
                                                                   @RequestParam(value = "name",required = false) String name,
                                                                   @RequestParam(value = "startTime",required = false) String startTime,
                                                                   @RequestParam(value = "endTime",required = false) String endTime,

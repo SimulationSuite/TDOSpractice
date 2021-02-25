@@ -17,7 +17,7 @@ public interface AssignmentService {
 
     AssignmentStatistics getAssignmentStatisticsBySectionId(String sectionId);
 
-    PageInfo<StudentAssignment> getAssignmentAll(String classId,String courseId,String chapterId, String sectionId, Integer status,String name,String startTime,String endTime, Integer perPage, Integer page,String ownerId);
+    PageInfo<StudentAssignment> getAssignmentAll(String classId,String courseId,String chapterId, String sectionId, String status,String name,String startTime,String endTime, Integer perPage, Integer page,String ownerId);
 
     PageInfo<AssignmentEntity> getAssignmentByClassId(String classId, Integer perPage,Integer page);
 

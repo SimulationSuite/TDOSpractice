@@ -21,7 +21,7 @@ public interface AssignmentMapper {
 
     List<StudentAnswerEntity> getSubStudentAssignmentBySectionId(@Param("sectionId") String sectionId);
 
-    List<StudentAssignment> getAssignmentAll(@Param("classId") String classId, @Param("courseId") String courseId, @Param("chapterId") String chapterId, @Param("sectionId") String sectionId, @Param("name") String name, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("ownerId") String ownerId);
+    List<StudentAssignment> getAssignmentAll(@Param("classId") String classId, @Param("courseId") String courseId, @Param("chapterId") String chapterId, @Param("sectionId") String sectionId, @Param("name") String name, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("ownerId") String ownerId, @Param("status") String status);
 
     List<AssignmentEntity> getAssignmentByClassId(@Param("classId") String classId);
 

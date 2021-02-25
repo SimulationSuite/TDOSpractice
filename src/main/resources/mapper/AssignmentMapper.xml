@@ -68,6 +68,12 @@
         <if test="ownerId != null and ownerId != ''" >
             and ci.owner_id = #{ownerId}
         </if>
+        <if test="status != '' and status != null and status == '0'.toString()" >
+            and (ss.status is null or ss.status = 0)
+        </if>
+        <if test="status != '' and status != null and status == '1'.toString()" >
+            and ss.status = 1
+        </if>
         group by sa.user_id, sa.assignment_id, ss.status, sa.committed_at, su.name, a.name, c.name
         order by c.name
     </select>
