@@ -91,7 +91,7 @@
         c.id  IN
         <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
             #{courseId}::uuid
-        </foreach>
+        </foreach> order by c.created_at desc
     </select>
 
     <select  id="getAdminCourseListByStatus" resultMap="CourseResult">
