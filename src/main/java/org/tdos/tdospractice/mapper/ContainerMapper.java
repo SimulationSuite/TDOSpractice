@@ -16,7 +16,7 @@ public interface ContainerMapper {
 
     List<Map<String, Object>> findContainerAll();
 
-    List<Map<String, Object>> findContainerByClass(String classId);
+    List<Map<String, Object>> findContainerByClass(@Param("classId") String classId);
 
     List<Map<String, Object>> findContainerByTeacher();
 
