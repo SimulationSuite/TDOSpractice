@@ -86,6 +86,10 @@ public class CourseServiceImpl implements CourseService {
             courses.forEach(c -> {
                 c.chapterNumber = c.chapters.size();
                 c.sectionNumber = c.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
+                AtomicInteger smallSectionNumber = new AtomicInteger();
+                c.chapters.forEach(chapter -> chapter.sections.forEach(section ->
+                        smallSectionNumber.set(smallSectionNumber.get() + section.smallSections.size())));
+                c.smallSectionNumber = smallSectionNumber.get();
             });
             pageInfo.setList(courses);
         }
