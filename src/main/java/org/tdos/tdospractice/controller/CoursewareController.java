@@ -24,8 +24,8 @@ public class CoursewareController {
 
     @GetMapping(value = "/getCoursewareAll")
     public Response<PageInfo<CoursewareEntity>> getCoursewareAll(@RequestParam(value = "name", required = false) String name,
-                                                                 @RequestParam(value = "kind", required = false) Integer kind,
-                                                                 @RequestParam(value = "type", required = false) Integer type,
+                                                                 @RequestParam(value = "kind", required = false) String kind,
+                                                                 @RequestParam(value = "type", required = false) String type,
                                                                  @RequestParam(value = "category_id", required = false) String categoryId,
                                                                  @RequestParam(value = "c_category_id", required = false) String cCategoryId,
                                                                  @RequestParam(value = "chapter_id", required = false) String chapterId,
@@ -44,8 +44,8 @@ public class CoursewareController {
 
     @GetMapping(value = "/getCoursewareBySectionId")
     public Response<PageInfo<CoursewareEntity>> getCoursewareBySectionId(@RequestParam(value = "sectionId") String sectionId,
-                                                                         @RequestParam(value = "kind", required = false) Integer kind,
-                                                                         @RequestParam(value = "type", required = false) Integer type,
+                                                                         @RequestParam(value = "kind", required = false) String kind,
+                                                                         @RequestParam(value = "type", required = false) String type,
                                                                          @RequestParam(value = "perPage") Integer perPage,
                                                                          @RequestParam(value = "page") Integer page) {
         return Response.success(coursewareService.getCoursewareBySectionId(sectionId, kind, type, perPage, page));
@@ -53,8 +53,8 @@ public class CoursewareController {
 
     @GetMapping(value = "/getCoursewareByChapterId")
     public Response<PageInfo<CoursewareEntity>> getCoursewareByChapterId(@RequestParam(value = "chapterId") String chapterId,
-                                                                         @RequestParam(value = "kind", required = false) Integer kind,
-                                                                         @RequestParam(value = "type", required = false) Integer type,
+                                                                         @RequestParam(value = "kind", required = false) String kind,
+                                                                         @RequestParam(value = "type", required = false) String type,
                                                                          @RequestParam(value = "perPage") Integer perPage,
                                                                          @RequestParam(value = "page") Integer page) {
         return Response.success(coursewareService.getCoursewareByChapterId(chapterId, kind, type, perPage, page));
@@ -62,8 +62,8 @@ public class CoursewareController {
 
     @GetMapping(value = "/getCoursewareByCourseId")
     public Response<PageInfo<CoursewareEntity>> getCoursewareByCourseId(@RequestParam(value = "courseId") String courseId,
-                                                                        @RequestParam(value = "kind", required = false) Integer kind,
-                                                                        @RequestParam(value = "type", required = false) Integer type,
+                                                                        @RequestParam(value = "kind", required = false) String kind,
+                                                                        @RequestParam(value = "type", required = false) String type,
                                                                         @RequestParam(value = "perPage") Integer perPage,
                                                                         @RequestParam(value = "page") Integer page) {
         return Response.success(coursewareService.getCoursewareByCourseId(courseId, kind, type, perPage, page));
