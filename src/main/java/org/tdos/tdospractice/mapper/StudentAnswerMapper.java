@@ -38,7 +38,7 @@ public interface StudentAnswerMapper {
 
     List<StudentQuestionAnswer> getQuestionBackTypeByAssignment(String assignmentId);
 
-    boolean ifStudentAnswer(@Param("assignmentId") String assignmentId, @Param("userId") String userId);
+    int ifStudentAnswer(@Param("assignmentId") String assignmentId, @Param("userId") String userId);
 
     int deleteStudentAnswerByAssignmentUserId(@Param("assignmentId") String assignmentId, @Param("userId") String userId);
 

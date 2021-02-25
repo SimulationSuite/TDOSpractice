@@ -13,7 +13,7 @@ public interface ContainerService {
 
     PageInfo<Map<String, Object>> getRunExperiment(int page, int perPage);
 
-    PageInfo<Map<String, Object>> getRunContainerByTeacher(String courseId, String filter, int page, int perPage);
+    PageInfo<Map<String, Object>> getRunContainerByTeacher(String courseId, String filter, String teacherId, int page, int perPage);
 
     boolean stopRunContainerList();
 
@@ -26,4 +26,6 @@ public interface ContainerService {
     void removeContainers(List<String> containerIds);
 
     ContainerEntity createAndRunContainers(String userId, String experimentId, String courseId, String imageId);
+
+    void stopExperiment(String userId, String experimentId);
 }

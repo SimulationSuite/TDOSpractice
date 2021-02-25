@@ -64,9 +64,9 @@ public class ContainerServiceImpl implements ContainerService {
     }
 
     @Override
-    public PageInfo<Map<String, Object>> getRunContainerByTeacher(String courseId, String filter, int page, int perPage) {
+    public PageInfo<Map<String, Object>> getRunContainerByTeacher(String courseId, String filter, String teacherId, int page, int perPage) {
         PageHelper.startPage(page, perPage);
-        return new PageInfo<>(containerMapper.findRunContainerByTeacher(courseId, filter));
+        return new PageInfo<>(containerMapper.findRunContainerByTeacher(courseId, filter, teacherId));
     }
 
     @Override
@@ -164,5 +164,17 @@ public class ContainerServiceImpl implements ContainerService {
             containerMapper.insertContainer(c);
         }
         return c;
+    }
+
+    @Override
+    public void stopExperiment(String userId, String experimentId) {
+        List<String> containerIds = new ArrayList<>();
+        containerMapper.findContainerByExperimentidAndUserid(userId, experimentId).stream().forEach(c -> {
+            kvmManager.execContainer(c.getContainerId(), c.getNodeOrder(), KvmManager.ExecType.STOP.ordinal());
+            containerIds.add(c.getContainerId());
+        });
+        if (containerIds.size() > 0) {
+            containerMapper.updateContainerByIds(2, containerIds);
+        }
     }
 }

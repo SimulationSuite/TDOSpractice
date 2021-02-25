@@ -26,24 +26,66 @@
     </select>
 
     <select id="findContainerByClass" resultType="java.util.HashMap">
-        select c.*,s.name as user_name,e.name as experiment_name from container c
-        left join sim_user s on c.user_id=s.id
-        left join class l on s.class_id=l.id
-        left join experiment e on c.experiment_id=e.id
-        where s.role_id=2 and c.status=1
+        SELECT
+            t.user_id,
+            s.NAME AS user_name,
+            t.experiment_id,
+            e.NAME AS experiment_name
+        FROM
+            (
+        SELECT
+            c.user_id,
+            c.experiment_id
+        FROM
+            container c
+        WHERE
+            c.STATUS = 1
+        GROUP BY
+            c.user_id,
+            c.experiment_id
+            ) t
+            LEFT JOIN sim_user s ON t.user_id = s.id
+            LEFT JOIN class l ON s.class_id = l.id
+            LEFT JOIN experiment e ON t.experiment_id = e.id
+        WHERE
+            s.role_id = 2
         <if test="classId != null and classId!=''">
-            and l.id=#{classId}::uuid
+            AND l.id = #{classId}::uuid
         </if>
     </select>
 
     <select id="findRunContainerByTeacher" resultType="java.util.HashMap">
-        select c.*,s.name as user_name,s.id,e.name as experiment_name from container c
-        left join sim_user s on c.user_id=s.id
-        left join experiment e on c.experiment_id=e.id
-        where c.status=1 and c.course_id=#{courseId}::uuid
+        SELECT
+            t.user_id,
+            s.NAME AS user_name,
+            t.experiment_id,
+            e.NAME AS experiment_name
+        FROM
+            (
+        SELECT
+            c.user_id,
+            c.experiment_id
+        FROM
+            container c
+        WHERE
+            c.STATUS = 1
+        <choose>
+            <when test="courseId != null and courseId!=''">
+                AND c.course_id = #{courseId}
+            </when>
+            <otherwise>
+                AND c.course_id IN ( SELECT o.id FROM course o WHERE o.owner_id = #{teacherId} )
+            </otherwise>
+        </choose>
+        GROUP BY
+            c.user_id,
+            c.experiment_id
+            ) t
+            LEFT JOIN sim_user s ON t.user_id = s.id
+            LEFT JOIN experiment e ON t.experiment_id = e.id
         <if test="filter != null and filter!=''">
-            and (s.name like concat('%',#{filter},'%') or s.id like concat('%',#{filter},'%') or e.name like
-            concat('%',#{filter},'%'))
+            WHERE s.name like concat('%',#{filter},'%') or s.id like concat('%',#{filter},'%') or e.name like
+            concat('%',#{filter},'%')
         </if>
     </select>
 
@@ -59,17 +101,51 @@
     </select>
 
     <select id="findContainerByTeacher" resultType="java.util.HashMap">
-        select c.*,s.name as user_name,e.name as experiment_name from container c
-        left join sim_user s on c.user_id=s.id
-        left join experiment e on c.experiment_id=e.id
-        where s.role_id=1 and c.status=1 order by c.created_at
+        SELECT
+            t.user_id,
+            s.NAME AS user_name,
+            t.experiment_id,
+            e.NAME AS experiment_name
+        FROM
+            (
+        SELECT
+            c.user_id,
+            c.experiment_id
+        FROM
+            container c
+        WHERE
+            c.STATUS = 1
+        GROUP BY
+            c.user_id,
+            c.experiment_id
+            ) t
+            LEFT JOIN sim_user s ON t.user_id = s.id
+            LEFT JOIN experiment e ON t.experiment_id = e.id
+        WHERE
+            s.role_id =1
     </select>
 
     <select id="findContainerAll" resultType="java.util.HashMap">
-        select c.*,s.name as user_name,e.name as experiment_name from container c
-        left join sim_user s on c.user_id=s.id
-        left join experiment e on c.experiment_id=e.id
-        where c.status=1 order by c.created_at
+        SELECT
+            t.user_id,
+            s.NAME AS user_name,
+            t.experiment_id,
+            e.NAME AS experiment_name
+        FROM
+            (
+        SELECT
+            c.user_id,
+            c.experiment_id
+        FROM
+            container c
+        WHERE
+            c.STATUS = 1
+        GROUP BY
+            c.user_id,
+            c.experiment_id
+            ) t
+            LEFT JOIN sim_user s ON t.user_id = s.id
+            LEFT JOIN experiment e ON t.experiment_id = e.id
     </select>
 
     <select id="findContainerByName" parameterType="java.lang.String" resultMap="ContainerMap">
@@ -123,5 +199,8 @@
         </foreach>
     </select>
 
+    <select id="findContainerByExperimentidAndUserid" resultType="org.tdos.tdospractice.entity.ContainerEntity">
+        select * from container c where c.status=1 c.user_id=#{userId} and c.experiment_id=#{experimentId}::uuid
+    </select>
 
 </mapper>
