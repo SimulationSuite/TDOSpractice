@@ -494,22 +494,23 @@ CASE
 	small_section.ORDER AS small_section_order,
 CASE
 		WHEN (SELECT count(*) from courseware cs
-		JOIN chapter_section_courseware cscs  ON cs."id" = cscs.courseware_id and cscs.section_id = section.id and cs.kind = 0 ) = 1  THEN
+		JOIN chapter_section_courseware cscs  ON cs."id" = cscs.courseware_id and cscs.section_id = section.id and cs.kind = 0 ) >= 1  THEN
 		1 ELSE 0
 	END AS section_has_video,
 CASE
 		WHEN (SELECT count(*) from courseware cs
-		JOIN chapter_section_courseware cscs  ON cs."id" = cscs.courseware_id and cscs.section_id = section.id and cs.kind = 1 ) = 1  THEN
+		JOIN chapter_section_courseware cscs  ON cs."id" = cscs.courseware_id and cscs.section_id = section.id and cs.kind = 1 ) >= 1  THEN
 		1 ELSE 0
 	END AS section_has_pdf,
 CASE
 
-		WHEN a.id IS NOT NULL THEN
+		WHEN (SELECT count(*) from assignment a where a.section_id = section.id) >= 1 THEN
 		1 ELSE 0
 	END AS section_has_assignment,
 CASE
 
-		WHEN e.id IS NOT NULL THEN
+		WHEN (SELECT count(*) from experiment e
+		JOIN chapter_section_experiment cse  ON e.id = cse.experiment_id and cse.section_id = section.id) >= 1 THEN
 		1 ELSE 0
 	END AS section_has_experiment
 FROM
@@ -522,9 +523,6 @@ FROM
 	AND "section".ORDER != - 1
 	LEFT JOIN "small_section" ON "small_section".id = ccs.small_section_id
 	AND "small_section".ORDER != - 1
-	LEFT JOIN "assignment" a ON a.section_id = section.id
-	LEFT JOIN chapter_section_experiment cse ON cse.section_id = section.id
-	LEFT JOIN experiment e ON e.id = cse.experiment_id
 WHERE
     c.id = #{courseId} :: uuid
     </select>
