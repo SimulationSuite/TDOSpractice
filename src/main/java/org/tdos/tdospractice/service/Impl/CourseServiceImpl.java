@@ -266,7 +266,7 @@ public class CourseServiceImpl implements CourseService {
             return new Pair<>(false, "章名不存在");
         }
         if (courseMapper.hasCourseNameExist(addCourse.name) > 0) {
-            return new Pair<>(false, "课程不存在");
+            return new Pair<>(false, "课程已存在");
         }
         if (ObjectUtils.isEmpty(addCourse.picUrl)) {
             return new Pair<>(false, "图片链接不存在");
