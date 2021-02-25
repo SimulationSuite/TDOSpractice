@@ -191,6 +191,7 @@ public class CourseServiceImpl implements CourseService {
         assignmentEntityList.forEach(assignmentEntity -> {
             String preSectionId = assignmentEntity.getSectionId();
             String preAssignmentId = assignmentEntity.getId();
+            assignmentEntity.setStatus(0);
             assignmentEntity.setSectionId(map.get(preSectionId));
             assignmentMapper.addAssignment(assignmentEntity);
             assignmentMap.put(preAssignmentId, assignmentEntity.getId());
