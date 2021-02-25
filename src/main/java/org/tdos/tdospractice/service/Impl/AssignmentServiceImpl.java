@@ -169,13 +169,16 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
-    public Boolean modifyAssignmentNameById(Assignment assignment) {
+    public Pair<Boolean, Object> modifyAssignmentNameById(Assignment assignment) {
         try {
+            if (assignmentMapper.hasAssignmentNameExist(assignment.name) > 0) {
+                return new Pair<>(false, "作业名称已存在。");
+            }
             assignmentMapper.modifyAssignmentNameById(assignment.id, assignment.name, assignment.endAt);
         } catch (Exception e) {
-            return false;
+            return new Pair<>(false, e);
         }
-        return true;
+        return new Pair<>(true, assignment);
     }
 
     @Override

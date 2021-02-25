@@ -33,7 +33,7 @@ public interface AssignmentService {
 
     Pair<Boolean, Object> addAssignment(Assignment assignment);
 
-    Boolean modifyAssignmentNameById(Assignment assignment);
+    Pair<Boolean, Object> modifyAssignmentNameById(Assignment assignment);
 
     Boolean modifyAssignmentStatusById(Assignment assignment);
 
