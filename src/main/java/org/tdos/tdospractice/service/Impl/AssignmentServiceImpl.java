@@ -46,13 +46,9 @@ public class AssignmentServiceImpl implements AssignmentService {
     private QuestionBackMapper questionBackMapper;
 
     @Override
-    public PageInfo<StudentAssignment> getStudentAssignment(String userId, String courseId,String chapterId, String sectionId, Integer status,String name, Integer perPage, Integer page) {
+    public PageInfo<StudentAssignment> getStudentAssignment(String userId, String courseId,String chapterId, String sectionId, String status,String name, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        List<StudentAssignment> list = assignmentMapper.getStudentAssignment(userId, courseId, chapterId, sectionId, name);
-        if(status != null)
-        {
-            list = list.stream().filter(x -> x.getStatus() == status).collect(Collectors.toList());
-        }
+        List<StudentAssignment> list = assignmentMapper.getStudentAssignment(userId, courseId, chapterId, sectionId, name, status);
         return new PageInfo<>(list);
     }
 

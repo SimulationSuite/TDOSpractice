@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 public interface AssignmentMapper {
 
-    List<StudentAssignment> getStudentAssignment(@Param("userId") String userId, @Param("courseId") String courseId, @Param("chapterId") String chapterId, @Param("sectionId") String sectionId, @Param("name") String name);
+    List<StudentAssignment> getStudentAssignment(@Param("userId") String userId, @Param("courseId") String courseId, @Param("chapterId") String chapterId, @Param("sectionId") String sectionId, @Param("name") String name, @Param("status") String status);
 
     List<StudentAnswerEntity> getAllStudentAssignmentBySectionId(@Param("sectionId") String sectionId);
 
