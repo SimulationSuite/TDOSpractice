@@ -105,8 +105,12 @@ public class AssignmentController {
     }
 
     @PostMapping(value = "/modifyAssignmentNameById")
-    public Response<Boolean> modifyAssignmentNameById(@RequestBody Assignment assignment) {
-        return Response.success(assignmentService.modifyAssignmentNameById(assignment));
+    public Response<Object> modifyAssignmentNameById(@RequestBody Assignment assignment) {
+        Pair<Boolean, Object> pair = assignmentService.modifyAssignmentNameById(assignment);
+        if (pair.getKey()) {
+            return Response.success(pair.getValue());
+        }
+        return Response.error((String) pair.getValue());
     }
 
     @PostMapping(value = "/modifyAssignmentStatusById")
