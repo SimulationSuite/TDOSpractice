@@ -12,15 +12,15 @@ import java.util.List;
 @Mapper
 @Repository
 public interface CoursewareMapper {
-    List<CoursewareEntity> getCoursewareAll(@Param("name") String name, @Param("kind") Integer kind, @Param("type") Integer type, @Param("categoryId") String categoryId, @Param("cCategoryId") String cCategoryId, @Param("chapterId") String chapterId, @Param("sectionId") String sectionId);
+    List<CoursewareEntity> getCoursewareAll(@Param("name") String name, @Param("kind") String kind, @Param("type") String type, @Param("categoryId") String categoryId, @Param("cCategoryId") String cCategoryId, @Param("chapterId") String chapterId, @Param("sectionId") String sectionId);
 
     List<CoursewareEntity> getCoursewareByClassId(@Param("classId") String classId);
 
-    List<CoursewareEntity> getCoursewareBySectionId(@Param("sectionId") String sectionId, @Param("kind") Integer kind, @Param("type") Integer type);
+    List<CoursewareEntity> getCoursewareBySectionId(@Param("sectionId") String sectionId, @Param("kind") String kind, @Param("type") String type);
 
-    List<CoursewareEntity> getCoursewareByChapterId(@Param("chapterId") String chapterId, @Param("kind") Integer kind, @Param("type") Integer type);
+    List<CoursewareEntity> getCoursewareByChapterId(@Param("chapterId") String chapterId, @Param("kind") String kind, @Param("type") String type);
 
-    List<CoursewareEntity> getCoursewareByCourseId(@Param("courseId") String courseId, @Param("kind") Integer kind, @Param("type") Integer type);
+    List<CoursewareEntity> getCoursewareByCourseId(@Param("courseId") String courseId, @Param("kind") String kind, @Param("type") String type);
 
     List<ChapterSectionCoursewareEntity> getChapterSectionCoursewareByCourseId(@Param("courseId") String courseId);
 

@@ -46,13 +46,9 @@ public class AssignmentServiceImpl implements AssignmentService {
     private QuestionBackMapper questionBackMapper;
 
     @Override
-    public PageInfo<StudentAssignment> getStudentAssignment(String userId, String courseId,String chapterId, String sectionId, Integer status,String name, Integer perPage, Integer page) {
+    public PageInfo<StudentAssignment> getStudentAssignment(String userId, String courseId,String chapterId, String sectionId, String status,String name, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        List<StudentAssignment> list = assignmentMapper.getStudentAssignment(userId, courseId, chapterId, sectionId, name);
-        if(status != null)
-        {
-            list = list.stream().filter(x -> x.getStatus() == status).collect(Collectors.toList());
-        }
+        List<StudentAssignment> list = assignmentMapper.getStudentAssignment(userId, courseId, chapterId, sectionId, name, status);
         return new PageInfo<>(list);
     }
 
@@ -70,13 +66,9 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
-    public PageInfo<StudentAssignment> getAssignmentAll(String classId, String courseId, String chapterId, String sectionId, Integer status, String name,String startTime,String endTime, Integer perPage, Integer page,String ownerId) {
+    public PageInfo<StudentAssignment> getAssignmentAll(String classId, String courseId, String chapterId, String sectionId, String status, String name,String startTime,String endTime, Integer perPage, Integer page,String ownerId) {
         PageHelper.startPage(page, perPage);
-        List<StudentAssignment> list = assignmentMapper.getAssignmentAll(classId, courseId, chapterId, sectionId, name, startTime, endTime, ownerId);
-        if(status != null)
-        {
-            list = list.stream().filter(x -> x.getStatus() == status).collect(Collectors.toList());
-        }
+        List<StudentAssignment> list = assignmentMapper.getAssignmentAll(classId, courseId, chapterId, sectionId, name, startTime, endTime, ownerId, status);
         return new PageInfo<>(list);
     }
 
@@ -169,13 +161,16 @@ public class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
-    public Boolean modifyAssignmentNameById(Assignment assignment) {
+    public Pair<Boolean, Object> modifyAssignmentNameById(Assignment assignment) {
         try {
+            if (assignmentMapper.hasAssignmentNameExist(assignment.name) > 0) {
+                return new Pair<>(false, "作业名称已存在。");
+            }
             assignmentMapper.modifyAssignmentNameById(assignment.id, assignment.name, assignment.endAt);
         } catch (Exception e) {
-            return false;
+            return new Pair<>(false, e);
         }
-        return true;
+        return new Pair<>(true, assignment);
     }
 
     @Override

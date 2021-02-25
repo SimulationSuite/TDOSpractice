@@ -23,4 +23,7 @@ public class StudentAnswer {
     @JsonProperty("score")
     public Integer score;
 
+    @JsonProperty("status")
+    public Integer status;
+
 }

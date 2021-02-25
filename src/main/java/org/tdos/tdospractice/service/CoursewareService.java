@@ -13,15 +13,15 @@ import java.util.List;
 import java.util.Map;
 
 public interface CoursewareService {
-    PageInfo<CoursewareEntity> getCoursewareAll(String name, Integer kind, Integer type, String categoryId,String cCategoryId, String chapterId, String sectionId, Integer perPage, Integer page);
+    PageInfo<CoursewareEntity> getCoursewareAll(String name, String kind, String type, String categoryId,String cCategoryId, String chapterId, String sectionId, Integer perPage, Integer page);
 
     PageInfo<CoursewareEntity> getCoursewareByClassId(String classId, Integer perPage, Integer page);
 
-    PageInfo<CoursewareEntity> getCoursewareBySectionId(String sectionId, Integer kind, Integer type, Integer perPage, Integer page);
+    PageInfo<CoursewareEntity> getCoursewareBySectionId(String sectionId, String kind, String type, Integer perPage, Integer page);
 
-    PageInfo<CoursewareEntity> getCoursewareByChapterId(String chapterId, Integer kind, Integer type, Integer perPage,Integer page);
+    PageInfo<CoursewareEntity> getCoursewareByChapterId(String chapterId, String kind, String type, Integer perPage,Integer page);
 
-    PageInfo<CoursewareEntity> getCoursewareByCourseId(String courseId, Integer kind, Integer type, Integer perPage,Integer page);
+    PageInfo<CoursewareEntity> getCoursewareByCourseId(String courseId, String kind, String type, Integer perPage,Integer page);
 
     Map<String, Object> deleteCoursewareById(List<String> id);
 

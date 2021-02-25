@@ -27,7 +27,7 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
     private CoursewareMapper coursewareMapper;
 
     @Override
-    public PageInfo<CoursewareEntity> getCoursewareAll(String name, Integer kind, Integer type, String categoryId,String cCategoryId, String chapterId, String sectionId, Integer perPage,Integer page) {
+    public PageInfo<CoursewareEntity> getCoursewareAll(String name, String kind, String type, String categoryId,String cCategoryId, String chapterId, String sectionId, Integer perPage,Integer page) {
         PageHelper.startPage(page, perPage);
         List<CoursewareEntity> list = coursewareMapper.getCoursewareAll(name, kind, type, categoryId,cCategoryId, chapterId, sectionId);
         return new PageInfo<>(list);
@@ -41,21 +41,21 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
     }
 
     @Override
-    public PageInfo<CoursewareEntity> getCoursewareBySectionId(String sectionId, Integer kind, Integer type, Integer perPage,Integer page) {
+    public PageInfo<CoursewareEntity> getCoursewareBySectionId(String sectionId, String kind, String type, Integer perPage,Integer page) {
         PageHelper.startPage(page, perPage);
         List<CoursewareEntity> list = coursewareMapper.getCoursewareBySectionId(sectionId, kind, type);
         return new PageInfo<>(list);
     }
 
     @Override
-    public PageInfo<CoursewareEntity> getCoursewareByChapterId(String chapterId, Integer kind, Integer type, Integer perPage,Integer page) {
+    public PageInfo<CoursewareEntity> getCoursewareByChapterId(String chapterId, String kind, String type, Integer perPage,Integer page) {
         PageHelper.startPage(page, perPage);
         List<CoursewareEntity> list = coursewareMapper.getCoursewareByChapterId(chapterId, kind, type);
         return new PageInfo<>(list);
     }
 
     @Override
-    public PageInfo<CoursewareEntity> getCoursewareByCourseId(String courseId, Integer kind, Integer type, Integer perPage,Integer page) {
+    public PageInfo<CoursewareEntity> getCoursewareByCourseId(String courseId, String kind, String type, Integer perPage,Integer page) {
         PageHelper.startPage(page, perPage);
         List<CoursewareEntity> list = coursewareMapper.getCoursewareByCourseId(courseId, kind, type);
         return new PageInfo<>(list);

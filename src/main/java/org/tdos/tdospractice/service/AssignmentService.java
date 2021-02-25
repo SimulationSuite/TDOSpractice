@@ -13,11 +13,11 @@ import java.util.Map;
 
 public interface AssignmentService {
 
-    PageInfo<StudentAssignment> getStudentAssignment(String userId, String courseId,String chapterId, String sectionId, Integer status,String name, Integer perPage, Integer page);
+    PageInfo<StudentAssignment> getStudentAssignment(String userId, String courseId,String chapterId, String sectionId, String status,String name, Integer perPage, Integer page);
 
     AssignmentStatistics getAssignmentStatisticsBySectionId(String sectionId);
 
-    PageInfo<StudentAssignment> getAssignmentAll(String classId,String courseId,String chapterId, String sectionId, Integer status,String name,String startTime,String endTime, Integer perPage, Integer page,String ownerId);
+    PageInfo<StudentAssignment> getAssignmentAll(String classId,String courseId,String chapterId, String sectionId, String status,String name,String startTime,String endTime, Integer perPage, Integer page,String ownerId);
 
     PageInfo<AssignmentEntity> getAssignmentByClassId(String classId, Integer perPage,Integer page);
 
@@ -33,7 +33,7 @@ public interface AssignmentService {
 
     Pair<Boolean, Object> addAssignment(Assignment assignment);
 
-    Boolean modifyAssignmentNameById(Assignment assignment);
+    Pair<Boolean, Object> modifyAssignmentNameById(Assignment assignment);
 
     Boolean modifyAssignmentStatusById(Assignment assignment);
 

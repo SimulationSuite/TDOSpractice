@@ -28,7 +28,7 @@ public class AssignmentController {
                                                                   @RequestParam(value = "courseId",required = false) String courseId,
                                                                   @RequestParam(value = "chapterId",required = false) String chapterId,
                                                                   @RequestParam(value = "sectionId",required = false) String sectionId,
-                                                                  @RequestParam(value = "status",required = false) Integer status,
+                                                                  @RequestParam(value = "status",required = false) String status,
                                                                   @RequestParam(value = "name",required = false) String name,
                                                                   @RequestParam(value = "perPage") Integer perPage,
                                                                   @RequestParam(value = "page") Integer page) {
@@ -45,7 +45,7 @@ public class AssignmentController {
                                                                   @RequestParam(value = "courseId",required = false) String courseId,
                                                                   @RequestParam(value = "chapterId",required = false) String chapterId,
                                                                   @RequestParam(value = "sectionId",required = false) String sectionId,
-                                                                  @RequestParam(value = "status",required = false) Integer status,
+                                                                  @RequestParam(value = "status",required = false) String status,
                                                                   @RequestParam(value = "name",required = false) String name,
                                                                   @RequestParam(value = "startTime",required = false) String startTime,
                                                                   @RequestParam(value = "endTime",required = false) String endTime,
@@ -105,8 +105,12 @@ public class AssignmentController {
     }
 
     @PostMapping(value = "/modifyAssignmentNameById")
-    public Response<Boolean> modifyAssignmentNameById(@RequestBody Assignment assignment) {
-        return Response.success(assignmentService.modifyAssignmentNameById(assignment));
+    public Response<Object> modifyAssignmentNameById(@RequestBody Assignment assignment) {
+        Pair<Boolean, Object> pair = assignmentService.modifyAssignmentNameById(assignment);
+        if (pair.getKey()) {
+            return Response.success(pair.getValue());
+        }
+        return Response.error((String) pair.getValue());
     }
 
     @PostMapping(value = "/modifyAssignmentStatusById")

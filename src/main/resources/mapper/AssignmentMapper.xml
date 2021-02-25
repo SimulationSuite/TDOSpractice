@@ -28,6 +28,12 @@
         <if test="name != null and name != ''">
             and a.name like concat('%',#{name},'%')
         </if>
+        <if test="status != '' and status != null and status == '0'.toString()" >
+            and (sa.status is null or sa.status = 0)
+        </if>
+        <if test="status != '' and status != null and status == '1'.toString()" >
+            and sa.status = 1
+        </if>
         group by a.id, a.name, a.end_at, ss.score, sa.status
     </select>
 
@@ -68,6 +74,12 @@
         <if test="ownerId != null and ownerId != ''" >
             and ci.owner_id = #{ownerId}
         </if>
+        <if test="status != '' and status != null and status == '0'.toString()" >
+            and (ss.status is null or ss.status = 0)
+        </if>
+        <if test="status != '' and status != null and status == '1'.toString()" >
+            and ss.status = 1
+        </if>
         group by sa.user_id, sa.assignment_id, ss.status, sa.committed_at, su.name, a.name, c.name
         order by c.name
     </select>
@@ -102,7 +114,7 @@
     </select>
 
     <select  id="getAssignmentByCourseId" resultType="org.tdos.tdospractice.entity.AssignmentEntity">
-        select a.id, a.section_id as sectionId, a.name, a.end_at as endAt, a.qualified_score as qualifiedScore,
+        select DISTINCT a.id, a.section_id as sectionId, a.name, a.end_at as endAt, a.qualified_score as qualifiedScore,
         a.created_at as createdAt, a.updated_at as updatedAt
         from assignment a
         inner join course_chapter_section ccs on ccs.section_id = a.section_id

@@ -118,13 +118,14 @@ public class StudentAnswerServiceImpl implements StudentAnswerService {
             studentAnswerEntity.setUserId(x.userId);
             studentAnswerEntity.setAnswer(x.answer);
             studentAnswerEntity.setScore(x.score);
+            studentAnswerEntity.setStatus(x.status);
             studentAnswerEntityList.add(studentAnswerEntity);
         });
 
         try {
             String assignmentId = studentAnswerEntityList.get(0).getAssignmentId();
             String userId = studentAnswerEntityList.get(0).getUserId();
-            if(studentAnswerMapper.ifStudentAnswer(assignmentId, userId))
+            if(studentAnswerMapper.ifStudentAnswer(assignmentId, userId) > 0)
             {
                 studentAnswerMapper.deleteStudentAnswerByAssignmentUserId(assignmentId, userId);
             }
