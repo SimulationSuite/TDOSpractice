@@ -101,8 +101,8 @@
         where qba.assignment_id =#{assignmentId} ::uuid
     </select>
 
-    <select id="ifStudentAnswer"  resultType="Boolean">
-        select case when count(*) > 0 then true else false end
+    <select id="ifStudentAnswer"  resultType="int">
+        select count(*)
         from student_answer
         where assignment_id = #{assignmentId}::uuid and user_id = #{userId};
     </select>
