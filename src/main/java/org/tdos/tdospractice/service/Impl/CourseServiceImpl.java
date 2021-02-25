@@ -270,7 +270,7 @@ public class CourseServiceImpl implements CourseService {
             return new Pair<>(false, "章名不存在");
         }
         if (courseMapper.hasCourseNameExist(addCourse.name) > 0) {
-            return new Pair<>(false, "课程已存在");
+            return new Pair<>(false, "课程名程已存在");
         }
         if (ObjectUtils.isEmpty(addCourse.picUrl)) {
             return new Pair<>(false, "图片链接不存在");
@@ -331,7 +331,7 @@ public class CourseServiceImpl implements CourseService {
             return new Pair<>(false, "课程不属于拥有者: " + modifyCourseStatus.ownerId);
         }
         if (modifyCourseStatus.status != null && courseMapper.hasTeacherCourseNameExist(course.name, modifyCourseStatus.ownerId) > 0) {
-            return new Pair<>(false, "课程名已存在");
+            return new Pair<>(false, "课程名程已存在");
         }
         courseMapper.modifyCourseStatus(modifyCourseStatus.courseId, modifyCourseStatus.status == null || modifyCourseStatus.status == 0 ? 0 : 1, modifyCourseStatus.start, modifyCourseStatus.end);
         if (modifyCourseStatus.userIds != null && modifyCourseStatus.userIds.size() > 0) {
