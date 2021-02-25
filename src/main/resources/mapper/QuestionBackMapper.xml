@@ -36,7 +36,7 @@
     </select>
 
     <select  id="getQuestionBackAssignmentByCourse" resultType="org.tdos.tdospractice.entity.QuestionBackAssignmentEntity">
-        select qba.assignment_id as assignmentId, qba.question_id as questionId, qba.score as score
+        select distinct  qba.assignment_id as assignmentId, qba.question_id as questionId, qba.score as score
         from question_back_assignment qba
         inner join assignment a on a.id = qba.assignment_id
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
