@@ -230,7 +230,7 @@
     <select id="hasAssignmentNameExist"  resultType="int">
         select count(*) from assignment where name=#{name}
         <if test="assignmentId != null and assignmentId != ''" >
-            and assignment_id != #{assignmentId} ::uuid
+            and id != #{assignmentId} ::uuid
         </if>
     </select>
 
