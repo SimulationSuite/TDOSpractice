@@ -71,7 +71,7 @@
             c.STATUS = 1
         <choose>
             <when test="courseId != null and courseId!=''">
-                AND c.course_id = #{courseId}
+                AND c.course_id = #{courseId}::uuid
             </when>
             <otherwise>
                 AND c.course_id IN ( SELECT o.id FROM course o WHERE o.owner_id = #{teacherId} )
