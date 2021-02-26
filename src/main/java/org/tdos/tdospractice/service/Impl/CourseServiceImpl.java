@@ -335,7 +335,7 @@ public class CourseServiceImpl implements CourseService {
             return new Pair<>(false, "课程名程已存在");
         }
         courseMapper.modifyCourseStatus(modifyCourseStatus.courseId, modifyCourseStatus.status == null || modifyCourseStatus.status == 0 ? 0 : 1, modifyCourseStatus.start, modifyCourseStatus.end);
-        if (modifyCourseStatus.userIds != null || modifyCourseStatus.userIds.size() > 0) {
+        if (modifyCourseStatus.userIds != null && modifyCourseStatus.userIds.size() > 0) {
             if (!modifyCourseStatus.userIds.stream().allMatch((userId -> userMapper.findUserById(userId) != null
                     && userMapper.findUserById(userId).getRoleID() == 2))) {
                 return new Pair<>(false, "学生列表不存在或者不全是学生");
