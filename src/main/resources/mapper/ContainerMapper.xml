@@ -199,8 +199,8 @@
         </foreach>
     </select>
 
-    <select id="findContainerByExperimentidAndUserid" resultType="org.tdos.tdospractice.entity.ContainerEntity">
-        select * from container c where c.status=1 c.user_id=#{userId} and c.experiment_id=#{experimentId}::uuid
+    <select id="findContainerByExperimentidAndUserid" resultMap="ContainerMap">
+        select * from container c where c.status=1 and c.user_id=#{userId} and c.experiment_id=#{experimentId}::uuid
     </select>
 
 </mapper>
