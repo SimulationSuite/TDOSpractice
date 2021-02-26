@@ -21,15 +21,7 @@ import org.tdos.tdospractice.type.AssignmentStatistics;
 import org.tdos.tdospractice.type.StudentAssignment;
 import org.tdos.tdospractice.utils.UTCTimeUtils;
 import org.tdos.tdospractice.body.StudentAnswer;
-import org.tdos.tdospractice.type.StudentQuestionAnswer;
-
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class AssignmentServiceImpl implements AssignmentService {
