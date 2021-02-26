@@ -140,7 +140,7 @@ public class AssignmentServiceImpl implements AssignmentService {
         }
         if (ObjectUtils.isEmpty(assignment.name)) {
             return new Pair<>(false, "作业名称不能为空。");
-        }if (assignmentMapper.hasAssignmentNameExist(assignment.name) > 0) {
+        }if (assignmentMapper.hasAssignmentNameExist(assignment.id, assignment.name) > 0) {
             return new Pair<>(false, "作业名称已存在。");
         }
         AssignmentEntity assignmentEntity = new AssignmentEntity();
@@ -159,7 +159,7 @@ public class AssignmentServiceImpl implements AssignmentService {
     @Override
     public Pair<Boolean, Object> modifyAssignmentNameById(Assignment assignment) {
         try {
-            if (assignmentMapper.hasAssignmentNameExist(assignment.name) > 0) {
+            if (assignmentMapper.hasAssignmentNameExist(assignment.id, assignment.name) > 0) {
                 return new Pair<>(false, "作业名称已存在。");
             }
             assignmentMapper.modifyAssignmentNameById(assignment.id, assignment.name, assignment.endAt);

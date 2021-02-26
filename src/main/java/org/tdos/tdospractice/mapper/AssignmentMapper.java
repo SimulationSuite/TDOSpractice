@@ -56,7 +56,7 @@ public interface AssignmentMapper {
 
     List<StudentAnswerEntity> getQuestionBackByAssignment(@Param("assignmentId") String assignmentId);
 
-    int hasAssignmentNameExist(@Param("name") String name);
+    int hasAssignmentNameExist(@Param("assignmentId") String assignmentId, @Param("name") String name);
 
     int deleteQuestionBackAssignmentById(@Param("id") String id);
 
