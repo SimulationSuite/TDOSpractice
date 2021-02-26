@@ -69,7 +69,7 @@
         ) group by e.image_id
     </select>
 
-    <select id="findImageByImagesid" resultType="org.tdos.tdospractice.entity.ImageEntity">
+    <select id="findImageByImagesid" resultMap="ImageMap">
         select * from image i where i.id=#{imagesID}::uuid
     </select>
 
