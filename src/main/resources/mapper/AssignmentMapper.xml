@@ -214,7 +214,7 @@
     </select>
 
     <select  id="studentAnswerStatus" resultType="int">
-        select distinct status
+        select distinct case when status is null then 0 else status end as status
         from student_answer
         where assignment_id =#{assignmentId} ::uuid and user_id = #{userId}
     </select>
