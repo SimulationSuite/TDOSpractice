@@ -53,6 +53,8 @@ public interface AssignmentMapper {
 
     int ifStudentAnswer(@Param("userId") String userId, @Param("assignmentId") String assignmentId);
 
+    int studentAnswerStatus(@Param("userId") String userId, @Param("assignmentId") String assignmentId);
+
     List<StudentAnswerEntity> getQuestionBackByAssignment(@Param("assignmentId") String assignmentId);
 
     int hasAssignmentNameExist(@Param("name") String name);

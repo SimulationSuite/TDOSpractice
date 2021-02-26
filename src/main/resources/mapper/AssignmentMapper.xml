@@ -213,6 +213,12 @@
         where assignment_id =#{assignmentId} ::uuid and user_id = #{userId}
     </select>
 
+    <select  id="studentAnswerStatus" resultType="int">
+        select distinct status
+        from student_answer
+        where assignment_id =#{assignmentId} ::uuid and user_id = #{userId}
+    </select>
+
     <select  id="getQuestionBackByAssignment" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">
         select qb.id as questionId, qba.assignment_id as assignmentId, qb.content as name, '' as anwser,
         0 as score, 1 as status
