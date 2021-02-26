@@ -94,7 +94,7 @@ public class ExcelServiceImpl implements ExcelService {
                 Personnel p = personnel.get(j);
                 UserEntity user = userMapper.findUserById(p.getId());
                 if (user != null) {
-                    return Response.error("用户不存在");
+                    return Response.error("用户已存在");
                 }
                 switch (p.getType()) {
                     // 学生
