@@ -58,7 +58,7 @@
         inner join course_chapter_section ccs on ccs.section_id = cse.section_id
         inner join course ci on ci.id = ccs.course_id
         inner join class_course cc on cc.course_id = ci.id
-        inner join class c on c.id = cc.class_id
+        inner join class c on c.id = su.class_id
         inner join experiment e ON e.id = er.experiment_id
         <if test="course_id != null and course_id != ''">
             and ccs.course_id = #{course_id} ::uuid
@@ -81,7 +81,8 @@
         <if test="user_id != null and user_id != ''">
             and er.user_id = #{user_id}
         </if>
-        group by su.id,cse.experiment_id,c."name",er.status,er.iscorrect,er.submit_at,e.name,e.end_at,er.score
+        group by cse.experiment_id,su.id,c."name",er.status,er.iscorrect,er.submit_at,e.name,e.end_at,er.score
+        order by c."name"
     </select>
 
 
