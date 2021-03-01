@@ -1,5 +1,6 @@
 package org.tdos.tdospractice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -33,8 +34,10 @@ public class ContainerEntity {
 
     private int status;// 0 created/1 running/2 exited
 
+    @JsonIgnore
     private LocalDateTime createdAt;
 
+    @JsonIgnore
     private LocalDateTime updatedAt;
 
     public List<Integer> getPubPorts() {

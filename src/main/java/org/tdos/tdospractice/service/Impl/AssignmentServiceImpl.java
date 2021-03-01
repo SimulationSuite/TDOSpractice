@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.tdos.tdospractice.body.Assignment;
-import org.tdos.tdospractice.body.StudentScore;
 import org.tdos.tdospractice.entity.AssignmentEntity;
 import org.tdos.tdospractice.entity.StudentAnswerEntity;
 import org.tdos.tdospractice.entity.StudentScoreEntity;
@@ -15,23 +14,20 @@ import org.tdos.tdospractice.mapper.AssignmentMapper;
 import org.tdos.tdospractice.mapper.StudentAnswerMapper;
 import org.tdos.tdospractice.mapper.StudentScoreMapper;
 import org.tdos.tdospractice.mapper.QuestionBackMapper;
+import org.tdos.tdospractice.service.StudentAnswerService;
 import org.tdos.tdospractice.service.AssignmentService;
 import org.tdos.tdospractice.type.AssignmentQuestionBack;
 import org.tdos.tdospractice.type.AssignmentStatistics;
 import org.tdos.tdospractice.type.StudentAssignment;
 import org.tdos.tdospractice.utils.UTCTimeUtils;
-import org.tdos.tdospractice.type.StudentQuestionAnswer;
-
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+import org.tdos.tdospractice.body.StudentAnswer;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class AssignmentServiceImpl implements AssignmentService {
+
+    @Autowired
+    private StudentAnswerService studentAnswerService;
 
     @Autowired
     private AssignmentMapper assignmentMapper;
@@ -144,7 +140,7 @@ public class AssignmentServiceImpl implements AssignmentService {
         }
         if (ObjectUtils.isEmpty(assignment.name)) {
             return new Pair<>(false, "作业名称不能为空。");
-        }if (assignmentMapper.hasAssignmentNameExist(assignment.name) > 0) {
+        }if (assignmentMapper.hasAssignmentNameExist(assignment.id, assignment.name) > 0) {
             return new Pair<>(false, "作业名称已存在。");
         }
         AssignmentEntity assignmentEntity = new AssignmentEntity();
@@ -163,7 +159,7 @@ public class AssignmentServiceImpl implements AssignmentService {
     @Override
     public Pair<Boolean, Object> modifyAssignmentNameById(Assignment assignment) {
         try {
-            if (assignmentMapper.hasAssignmentNameExist(assignment.name) > 0) {
+            if (assignmentMapper.hasAssignmentNameExist(assignment.id, assignment.name) > 0) {
                 return new Pair<>(false, "作业名称已存在。");
             }
             assignmentMapper.modifyAssignmentNameById(assignment.id, assignment.name, assignment.endAt);
@@ -195,17 +191,11 @@ public class AssignmentServiceImpl implements AssignmentService {
                     List<String> userIdList = assignmentMapper.getUsers(assignmentId);
                     userIdList.forEach(u -> {
                         if(assignmentMapper.ifStudentAnswer(u, assignmentId)>0){
-                            studentAnswerMapper.modifyStudentAnswerStatus(1, committedTime, assignmentId, u);
-                            if(studentScoreMapper.ifStudentScore(u, assignmentId) < 1)
-                            {
-                                List<StudentQuestionAnswer> studentQuestionAnswerEntityList = questionBackMapper.getStudentAnswerByAssignment(u, assignmentId);
-                                int total = studentQuestionAnswerEntityList.stream().mapToInt(s->s.getScore()).sum();
-                                StudentScoreEntity studentScoreEntity = new StudentScoreEntity();
-                                studentScoreEntity.setUserId(u);
-                                studentScoreEntity.setAssignmentId(assignmentId);
-                                studentScoreEntity.setStatus(1);
-                                studentScoreEntity.setScore(total);
-                                studentScoreMapper.addStudentScore(studentScoreEntity);
+                            if(assignmentMapper.studentAnswerStatus(u, assignmentId) == 0){
+                                StudentAnswer studentAnswer = new StudentAnswer();
+                                studentAnswer.userId = u;
+                                studentAnswer.assignmentId = assignmentId;
+                                studentAnswerService.modifyStudentAnswerStatusById(studentAnswer);
                             }
                         }else{
                             List<StudentAnswerEntity> newStudentAnswerEntity = assignmentMapper.getQuestionBackByAssignment(assignmentId);

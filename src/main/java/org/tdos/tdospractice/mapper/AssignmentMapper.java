@@ -4,7 +4,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import org.tdos.tdospractice.entity.AssignmentEntity;
-import org.tdos.tdospractice.entity.QuestionBackAssignmentEntity;
 import org.tdos.tdospractice.entity.StudentAnswerEntity;
 import org.tdos.tdospractice.type.StudentAssignment;
 import org.tdos.tdospractice.type.AssignmentQuestionBack;
@@ -53,9 +52,11 @@ public interface AssignmentMapper {
 
     int ifStudentAnswer(@Param("userId") String userId, @Param("assignmentId") String assignmentId);
 
+    int studentAnswerStatus(@Param("userId") String userId, @Param("assignmentId") String assignmentId);
+
     List<StudentAnswerEntity> getQuestionBackByAssignment(@Param("assignmentId") String assignmentId);
 
-    int hasAssignmentNameExist(@Param("name") String name);
+    int hasAssignmentNameExist(@Param("assignmentId") String assignmentId, @Param("name") String name);
 
     int deleteQuestionBackAssignmentById(@Param("id") String id);
 

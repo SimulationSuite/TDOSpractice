@@ -15,4 +15,6 @@ public class ClassStudents {
     private String grade;
 
     private String name;
+
+    private String classId;
 }

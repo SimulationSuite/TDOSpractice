@@ -172,10 +172,10 @@ public class ExcelUtils {
                 type = 1;
             } else if (x.get(1).equals("学生")) {
                 type = 2;
-            }else {
+            } else {
                 type = 0;
             }
-            return new Personnel(x.get(0), type, x.get(2), gender, x.get(4), x.get(5), x.get(6), x.get(7),x.get(8),x.get(9));
+            return new Personnel(x.get(0), type, x.get(2), gender, x.get(4), x.get(5), x.get(6), x.get(7), x.get(8), x.get(9));
         }).collect(Collectors.toList());
     }
 

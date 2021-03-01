@@ -21,8 +21,10 @@
 
     <select id="findExperimentCount" resultType="java.util.HashMap">
         select * from experiment e right join (
-        select c.experiment_id,count(*) from container c
-        where c.status=1 group by c.experiment_id) as c on e.id=c.experiment_id
+        select t.experiment_id,count(*) from (
+        select c.experiment_id,c.user_id from container c
+        where c.status=1 group by c.experiment_id,c.user_id) as t
+        group by t.experiment_id ) as c on e.id=c.experiment_id
     </select>
 
     <select id="findContainerByClass" resultType="java.util.HashMap">
@@ -71,7 +73,7 @@
             c.STATUS = 1
         <choose>
             <when test="courseId != null and courseId!=''">
-                AND c.course_id = #{courseId}
+                AND c.course_id = #{courseId}::uuid
             </when>
             <otherwise>
                 AND c.course_id IN ( SELECT o.id FROM course o WHERE o.owner_id = #{teacherId} )
@@ -199,8 +201,15 @@
         </foreach>
     </select>
 
-    <select id="findContainerByExperimentidAndUserid" resultType="org.tdos.tdospractice.entity.ContainerEntity">
-        select * from container c where c.status=1 c.user_id=#{userId} and c.experiment_id=#{experimentId}::uuid
+    <select id="findContainerByExperimentidAndUserid" resultMap="ContainerMap">
+        select * from container c where c.status=1 and c.user_id=#{userId} and c.experiment_id=#{experimentId}::uuid
+    </select>
+
+    <select id="findContainerByImagesIds" resultMap="ContainerMap">
+        select * from container c where c.image_id in
+        <foreach collection="imagesIds" open="(" separator="," close=")" item="item">
+            #{item}
+        </foreach>
     </select>
 
 </mapper>

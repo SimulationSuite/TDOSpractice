@@ -17,10 +17,14 @@ public class ClassEntity {
     private String grade;
 
     private String major;
-    
+
+    private String classId;
+
     private String department;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private int count;
 }

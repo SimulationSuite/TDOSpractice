@@ -14,6 +14,6 @@ public interface ImageService {
 
     int addImage(String imageName, String introduction, int kind, String url);
 
-    int deleteImages(List<String> imagesID);
+    String deleteImages(List<String> imagesID);
 
 }

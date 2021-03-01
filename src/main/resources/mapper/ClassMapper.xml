@@ -4,7 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tdos.tdospractice.mapper.ClassMapper">
     <select id="findAll" resultType="org.tdos.tdospractice.entity.ClassEntity">
-        select * from class;
+        select c.* ,sa.count from class c left join (
+        select count(*) as count,class_id from sim_user group by class_id ) sa on sa.class_id = c.id
     </select>
 
     <select id="findClassById" resultMap="class">
@@ -44,14 +45,13 @@
     </select>
 
     <select id="findStudentsByClass" resultType="org.tdos.tdospractice.type.ClassStudents">
-        select s.id as userId,s.name as userName, s.gender,c.department, c.grade,c.name from class c
+        select s.id as userId,s.name as userName, s.gender,c.department, c.grade,c.name,c.id as classId from class c
         inner JOIN sim_user s on c.id = s.class_id where c.id in
         <foreach collection="list" item="id" index="index"
                  open="(" close=")" separator=",">
             #{id}::uuid
         </foreach>
     </select>
-
 
     <resultMap type="org.tdos.tdospractice.type.ClassNumber" id="classNumber">
         <result column="class_id" property="classId"/>

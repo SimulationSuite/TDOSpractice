@@ -1,5 +1,6 @@
 package org.tdos.tdospractice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import java.io.Serializable;
@@ -30,7 +31,9 @@ public class ImageEntity implements Serializable {
 
     private String parentImageId;
 
+    @JsonIgnore
     private LocalDateTime createdAt;
 
+    @JsonIgnore
     private LocalDateTime updatedAt;
 }

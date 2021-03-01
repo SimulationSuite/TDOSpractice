@@ -30,6 +30,7 @@ import org.tdos.tdospractice.utils.PageTool;
 import static org.tdos.tdospractice.utils.Constants.*;
 
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.GET;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -173,7 +174,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/logout")
+    @GetMapping("/logout")
     public Response<String> logout(@RequestParam(value = "user_id") String userID) {
         TDOSSessionListener.sessions.values().forEach(s -> {
             String id = (String) s.getAttribute("user_id");

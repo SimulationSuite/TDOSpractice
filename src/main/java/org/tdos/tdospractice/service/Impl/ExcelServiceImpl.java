@@ -72,75 +72,66 @@ public class ExcelServiceImpl implements ExcelService {
         String rgxIdx = "^\\d{15}|^\\d{17}([0-9]|X|x)$";
         ExcelUtils utils = new ExcelUtils(in, filename);
         int end = utils.getRowCount(0);
-        List<Personnel> personnel =  utils.parsePersonnel(utils.read(0, 1, end));
-        for(int i = 0;i<personnel.size();i++){
-            Personnel p = personnel.get(i);
-            if(!isCorrect(rgxPhone, p.getPhone())){
-                return Response.error("手机号错误");
+        try {
+            List<Personnel> personnel =  utils.parsePersonnel(utils.read(0, 1, end));
+            if(personnel == null || personnel.size() == 0){
+                return Response.error("用户列表不能为空");
             }
-            if(!isCorrect(rgxIdx, p.getIdentificationNumber())){
-                return Response.error("身份证号错误");
+            for(int i = 0;i<personnel.size();i++){
+                Personnel p = personnel.get(i);
+                if(!isCorrect(rgxPhone, p.getPhone())){
+                    return Response.error("手机号错误");
+                }
+                if(!isCorrect(rgxIdx, p.getIdentificationNumber())){
+                    return Response.error("身份证号错误");
+                }
             }
+            UserEntity owner = userMapper.findUserById(userID);
+            if (owner == null) {
+                return Response.error("用户不存在");
+            }
+            for ( int j=0 ;j <personnel.size();j++){
+                Personnel p = personnel.get(j);
+                UserEntity user = userMapper.findUserById(p.getId());
+                if (user != null) {
+                    return Response.error("用户已存在");
+                }
+                switch (p.getType()) {
+                    // 学生
+                    case 2:
+                        String id;
+                        ClassEntity findClass = classMapper.findClassByClasses(p.getClasses());
+                        if(findClass == null){
+                            ClassEntity classEntity = new ClassEntity();
+                            classEntity.setGrade(p.getGrade());
+                            classEntity.setDepartment(p.getDepartment());
+                            classEntity.setMajor(p.getMajor());
+                            classEntity.setName(p.getClasses());
+                            classMapper.insertClassByUser(classEntity);
+                            id = classEntity.getId();
+                        }else {
+                            id = findClass.getId();
+                        }
+                        userMapper.insertUserById(p.getId(),p.getName(),p.getGender(),"12345678",2,id,p.getPhone(),p.getIdentificationNumber());
+                        break;
+                    // 教师
+                    case 1:
+                        if (user == null) {
+                            userMapper.insertUserById(p.getId(),p.getName(),p.getGender(),"12345678",1,"fb0a1080-b11e-427c-8567-56ca6105ea07",p.getPhone(),p.getIdentificationNumber());
+                        }
+                        break;
+                    //管理员
+                    case 0:
+                        if (user == null) {
+                            userMapper.insertUserById(p.getId(),p.getName(),p.getGender(),"12345678",0,"fb0a1080-b11e-427c-8567-56ca6105ea07",p.getPhone(),p.getIdentificationNumber());
+                        }
+                        break;
+                }
+            }
+            return Response.success("success");
+        }catch (Exception e){
+            return Response.error("用户列表错误");
         }
-        UserEntity owner = userMapper.findUserById(userID);
-        if (owner == null) {
-            return Response.error("user is not exist");
-        }
-//        } else {
-//            switch (owner.getRoleID()) {
-//                case 0:
-//                    if (personnel.stream().anyMatch(p -> p.getType() != 1)) {
-//                        return Response.error("excel data error,manager only import teachers");
-//                    }
-//                    break;
-//                case 1:
-//                    if (personnel.stream().anyMatch(p -> p.getType() != 0 || StringUtils.isEmpty(p.getClasses()) || StringUtils.isEmpty(p.getGrade()) || StringUtils.isEmpty(p.getDepartment()))) {
-//                        return  Response.error("excel data error,teacher only import students and students must have classes, grade, major, department");
-//                    }
-//                    break;
-//                case 2:
-//                    return  Response.error("excel data error");
-//            }
-//        }
-        for ( int j=0 ;j <personnel.size();j++){
-            Personnel p = personnel.get(j);
-            UserEntity user = userMapper.findUserById(p.getId());
-            if (user != null) {
-                return Response.error("user is exist");
-            }
-            switch (p.getType()) {
-                // 学生
-                case 2:
-                    String id;
-                    ClassEntity findClass = classMapper.findClassByClasses(p.getClasses());
-                    if(findClass == null){
-                        ClassEntity classEntity = new ClassEntity();
-                        classEntity.setGrade(p.getGrade());
-                        classEntity.setDepartment(p.getDepartment());
-                        classEntity.setMajor(p.getMajor());
-                        classEntity.setName(p.getClasses());
-                        classMapper.insertClassByUser(classEntity);
-                        id = classEntity.getId();
-                    }else {
-                        id = findClass.getId();
-                    }
-                     userMapper.insertUserById(p.getId(),p.getName(),p.getGender(),"12345678",2,id,p.getPhone(),p.getIdentificationNumber());
-                    break;
-                // 教师
-                case 1:
-                    if (user == null) {
-                        userMapper.insertUserById(p.getId(),p.getName(),p.getGender(),"12345678",1,"fb0a1080-b11e-427c-8567-56ca6105ea07",p.getPhone(),p.getIdentificationNumber());
-                    }
-                    break;
-                 //管理员
-                case 0:
-                    if (user == null) {
-                        userMapper.insertUserById(p.getId(),p.getName(),p.getGender(),"12345678",0,"fb0a1080-b11e-427c-8567-56ca6105ea07",p.getPhone(),p.getIdentificationNumber());
-                    }
-                    break;
-            }
-        }
-        return Response.success("success");
     }
 
     @Override

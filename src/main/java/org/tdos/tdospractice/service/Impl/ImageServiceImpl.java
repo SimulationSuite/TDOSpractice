@@ -5,12 +5,14 @@ import com.github.pagehelper.PageInfo;
 import lombok.SneakyThrows;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.commons.codec.binary.Hex;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.tdos.tdospractice.entity.ImageEntity;
 import org.tdos.tdospractice.kvm.KvmManager;
+import org.tdos.tdospractice.mapper.ContainerMapper;
 import org.tdos.tdospractice.mapper.ImageMapper;
 import org.tdos.tdospractice.service.ImageService;
 import org.tdos.tdospractice.utils.JsonUtils;
@@ -23,6 +25,9 @@ public class ImageServiceImpl implements ImageService {
 
     @Autowired
     private ImageMapper imageMapper;
+
+    @Autowired
+    private ContainerMapper containerMapper;
 
     @Autowired
     private JmsMessagingTemplate jmsMessagingTemplate;
@@ -66,20 +71,20 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public int deleteImages(List<String> imagesID) {
+    public String deleteImages(List<String> imagesID) {
         List<String> getlist = imageMapper.findExperimentImageByImageids(imagesID);
         if (getlist.size() > 0) {
-            return -1;
+            return "该镜像已经被实验引用，无法删除";
         }
         if (!kvmManager.isExistImageID(imagesID)) {
-            return -1;
+            return "该镜像异常与服务器中，无法删除";
         }
-        if (kvmManager.isQuoteContainer(imagesID)) {
-            return -1;
+        if (kvmManager.isQuoteContainer(imagesID) || containerMapper.findContainerByImagesIds(imagesID).size() > 0) {
+            return "该镜像已被创建或与运行，无法删除";
         }
         imageMapper.deleteImages(imagesID);
         kvmManager.removeImages(imagesID);
-        return 0;
+        return null;
     }
 
 }

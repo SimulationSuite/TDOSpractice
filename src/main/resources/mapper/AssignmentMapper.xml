@@ -213,6 +213,12 @@
         where assignment_id =#{assignmentId} ::uuid and user_id = #{userId}
     </select>
 
+    <select  id="studentAnswerStatus" resultType="int">
+        select distinct case when status is null then 0 else status end as status
+        from student_answer
+        where assignment_id =#{assignmentId} ::uuid and user_id = #{userId}
+    </select>
+
     <select  id="getQuestionBackByAssignment" resultType="org.tdos.tdospractice.entity.StudentAnswerEntity">
         select qb.id as questionId, qba.assignment_id as assignmentId, qb.content as name, '' as anwser,
         0 as score, 1 as status
@@ -223,6 +229,9 @@
 
     <select id="hasAssignmentNameExist"  resultType="int">
         select count(*) from assignment where name=#{name}
+        <if test="assignmentId != null and assignmentId != ''" >
+            and id != #{assignmentId} ::uuid
+        </if>
     </select>
 
     <delete id="deleteQuestionBackAssignmentById">
