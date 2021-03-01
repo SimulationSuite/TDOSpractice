@@ -40,6 +40,8 @@ public interface ContainerMapper {
 
     ContainerEntity findContainerById(String containerId);
 
+    List<ContainerEntity> findContainerByImagesIds(@Param("imagesIds") List<String> imagesIds);
+
     List<ContainerEntity> findContainerByCourseIds(@Param("courseIds") List<String> courseIds);
 
     List<ContainerEntity> findContainerByUserId(@Param("userIds") List<String> courseIds);

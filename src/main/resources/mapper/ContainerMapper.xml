@@ -27,28 +27,28 @@
 
     <select id="findContainerByClass" resultType="java.util.HashMap">
         SELECT
-            t.user_id,
-            s.NAME AS user_name,
-            t.experiment_id,
-            e.NAME AS experiment_name
+        t.user_id,
+        s.NAME AS user_name,
+        t.experiment_id,
+        e.NAME AS experiment_name
         FROM
-            (
+        (
         SELECT
-            c.user_id,
-            c.experiment_id
+        c.user_id,
+        c.experiment_id
         FROM
-            container c
+        container c
         WHERE
-            c.STATUS = 1
+        c.STATUS = 1
         GROUP BY
-            c.user_id,
-            c.experiment_id
-            ) t
-            LEFT JOIN sim_user s ON t.user_id = s.id
-            LEFT JOIN class l ON s.class_id = l.id
-            LEFT JOIN experiment e ON t.experiment_id = e.id
+        c.user_id,
+        c.experiment_id
+        ) t
+        LEFT JOIN sim_user s ON t.user_id = s.id
+        LEFT JOIN class l ON s.class_id = l.id
+        LEFT JOIN experiment e ON t.experiment_id = e.id
         WHERE
-            s.role_id = 2
+        s.role_id = 2
         <if test="classId != null and classId!=''">
             AND l.id = #{classId}::uuid
         </if>
@@ -56,19 +56,19 @@
 
     <select id="findRunContainerByTeacher" resultType="java.util.HashMap">
         SELECT
-            t.user_id,
-            s.NAME AS user_name,
-            t.experiment_id,
-            e.NAME AS experiment_name
+        t.user_id,
+        s.NAME AS user_name,
+        t.experiment_id,
+        e.NAME AS experiment_name
         FROM
-            (
+        (
         SELECT
-            c.user_id,
-            c.experiment_id
+        c.user_id,
+        c.experiment_id
         FROM
-            container c
+        container c
         WHERE
-            c.STATUS = 1
+        c.STATUS = 1
         <choose>
             <when test="courseId != null and courseId!=''">
                 AND c.course_id = #{courseId}::uuid
@@ -78,11 +78,11 @@
             </otherwise>
         </choose>
         GROUP BY
-            c.user_id,
-            c.experiment_id
-            ) t
-            LEFT JOIN sim_user s ON t.user_id = s.id
-            LEFT JOIN experiment e ON t.experiment_id = e.id
+        c.user_id,
+        c.experiment_id
+        ) t
+        LEFT JOIN sim_user s ON t.user_id = s.id
+        LEFT JOIN experiment e ON t.experiment_id = e.id
         <if test="filter != null and filter!=''">
             WHERE s.name like concat('%',#{filter},'%') or s.id like concat('%',#{filter},'%') or e.name like
             concat('%',#{filter},'%')
@@ -201,6 +201,13 @@
 
     <select id="findContainerByExperimentidAndUserid" resultMap="ContainerMap">
         select * from container c where c.status=1 and c.user_id=#{userId} and c.experiment_id=#{experimentId}::uuid
+    </select>
+
+    <select id="findContainerByImagesIds" resultMap="ContainerMap">
+        select * from container c where c.image_id in
+        <foreach collection="imagesIds" open="(" separator="," close=")" item="item">
+            #{item}
+        </foreach>
     </select>
 
 </mapper>

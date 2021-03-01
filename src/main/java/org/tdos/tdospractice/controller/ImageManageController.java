@@ -43,11 +43,11 @@ public class ImageManageController {
     @PostMapping(value = "/deleteImages")
     public Response<String> deleteImages(@RequestParam(value = "imagesID") List<String> imagesID) {
         if (imagesID.isEmpty() || imagesID.size() == 0) {
-            return Response.error();
+            return Response.error("系统异常，请稍后再试");
         }
-        int result = imageService.deleteImages(imagesID);
-        if (result < 0) {
-            return Response.error();
+        String result = imageService.deleteImages(imagesID);
+        if (result != null) {
+            return Response.error(result);
         }
         return Response.success();
     }
