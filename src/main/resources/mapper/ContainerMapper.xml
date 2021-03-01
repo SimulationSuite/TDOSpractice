@@ -21,10 +21,10 @@
 
     <select id="findExperimentCount" resultType="java.util.HashMap">
         select * from experiment e right join (
-        select c.experiment_id,count(*) from container c
-        where c.status=1 group by c.experiment_id,c.user_id
-        HAVING COUNT(*)>0) as c
-        on e.id=c.experiment_id
+        select t.experiment_id,count(*) from (
+        select c.experiment_id,c.user_id from container c
+        where c.status=1 group by c.experiment_id,c.user_id) as t
+        group by t.experiment_id ) as c on e.id=c.experiment_id
     </select>
 
     <select id="findContainerByClass" resultType="java.util.HashMap">
