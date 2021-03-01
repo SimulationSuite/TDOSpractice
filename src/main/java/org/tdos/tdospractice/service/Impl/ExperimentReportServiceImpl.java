@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.tdos.tdospractice.entity.ExperimentReportEntity;
 import org.tdos.tdospractice.mapper.ExperimentReportMapper;
 import org.tdos.tdospractice.service.ExperimentReportService;
-import org.tdos.tdospractice.type.StudentExperimentReport;
+import org.tdos.tdospractice.type.AllExperimentReport;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,9 +44,16 @@ public class ExperimentReportServiceImpl implements ExperimentReportService {
     }
 
     @Override
-    public PageInfo<StudentExperimentReport> findExperimentReportAll(String courseId, int status, int isCorrect, String name, String startTime, String endTime, String user_id, Integer perPage, Integer page) {
+    public PageInfo<AllExperimentReport> findExperimentReportAll(String courseId, int status, int isCorrect, String name, String startTime, String endTime, String user_id, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        List<StudentExperimentReport> list = experimentReportMapper.findExperimentReportAll(courseId, status, isCorrect, name, startTime, endTime, user_id);
+        List<AllExperimentReport> list = experimentReportMapper.findExperimentReportAll(courseId, status, isCorrect, name, startTime, endTime, user_id);
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public PageInfo<AllExperimentReport> findStudentExperimentReport(String course_id, int isCorrect, String name,String user_id, Integer perPage, Integer page) {
+        PageHelper.startPage(page, perPage);
+        List<AllExperimentReport> list = experimentReportMapper.findStudentExperimentReport(course_id,isCorrect,name,user_id);
         return new PageInfo<>(list);
     }
 }

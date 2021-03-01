@@ -73,7 +73,7 @@ public class ExperimentReportController {
                                               @RequestParam(value = "user_id") String user_id,
                                               @RequestParam(value = "perPage") Integer perPage,
                                               @RequestParam(value = "page") Integer page) {
-        return Response.success(experimentReportService.findExperimentReportAll(course_id, status, isCorrect, name, startTime, endTime,user_id, perPage, page));
+        return Response.success(experimentReportService.findExperimentReportAll(course_id, status, isCorrect, name, startTime, endTime, user_id, perPage, page));
     }
 
     @GetMapping(value = "/findExperimentReportByExperimentAndUserId")
@@ -81,4 +81,15 @@ public class ExperimentReportController {
                                                               @RequestParam(value = "user_id") String user_id) {
         return Response.success(experimentReportService.findExperimentReportByExperimentAndUserId(experiment_id, user_id).get());
     }
+
+    @GetMapping(value = "/findStudentExperimentReport")
+    public Response findStudentExperimentReport(@RequestParam(value = "course_id") String course_id,
+                                                @RequestParam(value = "isCorrect") int isCorrect,
+                                                @RequestParam(value = "name") String name,
+                                                @RequestParam(value = "user_id") String user_id,
+                                                @RequestParam(value = "perPage") Integer perPage,
+                                                @RequestParam(value = "page") Integer page) {
+        return Response.success(experimentReportService.findStudentExperimentReport(course_id, isCorrect, name, user_id, perPage, page));
+    }
+
 }
