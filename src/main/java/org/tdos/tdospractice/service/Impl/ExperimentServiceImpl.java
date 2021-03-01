@@ -128,10 +128,11 @@ public class ExperimentServiceImpl implements ExperimentService {
         List<ExperimentEntity> list = experimentService.findExperiment(category_ids, name, perPage, page).getList();
         section_ids.add(section_id);
         if (f_category_id.equals("") && c_category_id.equals("")) {
+            List<ExperimentEntity> finalList1 = list;
             experimentService.findExperiment(category_ids, name, perPage, page).getList().forEach(experimentEntity -> {
                 chapterSectionExperimentMapper.getChapterSectionExperimentBySection(section_id).stream().forEach(chapterSectionExperimentEntity -> {
                     if (experimentEntity.getId().equals(chapterSectionExperimentEntity.getExperiment_id())){
-                        list.remove(experimentEntity);
+                        finalList1.remove(experimentEntity);
                     }
                 });
 
@@ -145,7 +146,9 @@ public class ExperimentServiceImpl implements ExperimentService {
             } else {
                 ids.add(c_category_id);
             }
-            experimentService.findExperiment(ids, name, perPage, page).getList().forEach(experimentEntity -> {
+            list =  experimentService.findExperiment(ids, name, perPage, page).getList();
+            List<ExperimentEntity> finalList = list;
+            list.forEach(experimentEntity -> {
 //                experimentMapper.findAllByIds(section_ids).forEach(e -> {
 //                    if (e.getId().equals(experimentEntity.getId())) {
 //                        list.remove(experimentEntity);
@@ -153,7 +156,7 @@ public class ExperimentServiceImpl implements ExperimentService {
 //                });
                 chapterSectionExperimentMapper.getChapterSectionExperimentBySection(section_id).stream().forEach(chapterSectionExperimentEntity -> {
                     if (experimentEntity.getId().equals(chapterSectionExperimentEntity.getExperiment_id())){
-                        list.remove(experimentEntity);
+                        finalList.remove(experimentEntity);
                     }
                 });
             });
