@@ -494,6 +494,9 @@ public class CourseServiceImpl implements CourseService {
         }
         Course course = courseMapper.getCourseById(courseId);
         if (course != null) {
+            if (course.status != 0 && course.endAt != null && course.endAt.isBefore(LocalDateTime.now())) {
+                course.status = -1;
+            }
             course.chapters = course.chapters.stream().filter(chapter -> chapter.id != null).sorted(Comparator.comparing(x->x.order)).collect(Collectors.toList());
             course.chapters.forEach(chapter -> {
                 chapter.sections = chapter.sections.stream().filter(section -> section.id != null).sorted(Comparator.comparing(x->x.order)).collect(Collectors.toList());
