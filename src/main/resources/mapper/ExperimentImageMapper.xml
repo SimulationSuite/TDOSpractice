@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tdos.tdospractice.mapper.ExperimentImageMapper">
-    <insert id = "insertExperimentImages" parameterType="java.util.List" useGeneratedKeys="false">
+    <insert id="insertExperimentImages" parameterType="java.util.List" useGeneratedKeys="false">
         insert into
         experiment_image(experiment_id, image_id) values
         <foreach collection="list" item="item" index="index" separator=",">
@@ -15,6 +15,9 @@
     </insert>
 
     <select id="findImageByExperiment" resultType="org.tdos.tdospractice.entity.ExperimentImageEntity">
-        select * from experiment_image where experiment_id = #{experiment_id}::uuid
+        select i.name as name,i.size as size,i.kind as kind,i.introduction as introduction,ei.experiment_id as experiment_id,ei.image_id as image_id
+        from experiment_image ei
+        LEFT JOIN image i on  ei.image_id = i."id"
+        where ei.experiment_id = #{experiment_id}::uuid
     </select>
 </mapper>
