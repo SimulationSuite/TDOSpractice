@@ -21,7 +21,7 @@
         <foreach collection="section_ids" item="id" index="index"
                  open="(" close=")" separator=",">
             #{id}::uuid
-        </foreach>;
+        </foreach>
     </select>
 
     <delete id="deleteChapterSectionExperiment">
