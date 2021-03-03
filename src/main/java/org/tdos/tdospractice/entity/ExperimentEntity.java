@@ -39,4 +39,6 @@ public class ExperimentEntity {
     private String section_id; //只用于接收参数
 
     private List<ExperimentImageEntity> imagesinfo;
+
+    private Integer image_count;
 }
