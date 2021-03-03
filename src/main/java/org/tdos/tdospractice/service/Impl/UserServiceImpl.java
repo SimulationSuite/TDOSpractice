@@ -40,6 +40,11 @@ public class UserServiceImpl extends Throwable implements UserService{
     }
 
     @Override
+    public UserEntity findUserById(String id) {
+        return userMapper.findUserById(id);
+    }
+
+    @Override
     public UserEntity findUserByIdAndPwd(String id, String password) {
         return userMapper.findUserByIdAndPwd(id,password);
     }
@@ -93,19 +98,11 @@ public class UserServiceImpl extends Throwable implements UserService{
     private List<UserEntity> getList(String search, int role,String classesId,int page,int per_page) {
         List<UserEntity> list;
         PageHelper.startPage(page,per_page);
-        if (!StringUtils.hasText(search) && !StringUtils.hasText(classesId)) {
-            list = userMapper.findAllByRoleID(role);
-        } else if (!StringUtils.hasText(search) && StringUtils.hasText(classesId)){
-            list = userMapper.findAllByRoleIDAndClasses(role,classesId);
-        } else if(StringUtils.hasText(search) && StringUtils.hasText(classesId)) {
-            list = userMapper.findAllByRoleIDAndClasses(role,classesId).stream()
-                    .filter(x -> x.getId().contains(search) || x.getName().contains(search))
-                    .collect(Collectors.toList());
+        if (!StringUtils.hasText(classesId)) {
+            list = userMapper.findAllByRoleID(role,search);
         } else {
-            list = userMapper.findAllByRoleID(role).stream()
-                    .filter(x -> x.getId().contains(search) || x.getName().contains(search))
-                    .collect(Collectors.toList());
-       }
+            list = userMapper.findAllByRoleIDAndClasses(role,classesId,search);
+        }
         return list;
     }
 
