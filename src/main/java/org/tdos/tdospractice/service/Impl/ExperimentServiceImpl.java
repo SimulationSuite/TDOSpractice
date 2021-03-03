@@ -49,6 +49,9 @@ public class ExperimentServiceImpl implements ExperimentService {
     @Autowired
     private ChapterSectionExperimentMapper chapterSectionExperimentMapper;
 
+    @Autowired
+    private ExperimentImageMapper experimentImageMapper;
+
     @Override
     public int insert(ExperimentEntity experimentEntity) {
         if (experimentMapper.hasExperimentByName(experimentEntity.getName()) == 0){
@@ -62,6 +65,13 @@ public class ExperimentServiceImpl implements ExperimentService {
     public PageInfo<ExperimentEntity> findExperiment(List<String> category_ids, String name, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
         List<ExperimentEntity> list = experimentMapper.findExperiment(category_ids, name);
+        list.stream().forEach(experimentEntity -> {
+            if (experimentImageMapper.findImageByExperiment(experimentEntity.getId()) == null){
+                experimentEntity.setImage_count(0);
+            }else {
+                experimentEntity.setImage_count(experimentImageMapper.findImageByExperiment(experimentEntity.getId()).size());
+            }
+        });
         return new PageInfo<>(list);
     }
 
