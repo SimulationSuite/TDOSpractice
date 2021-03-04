@@ -136,7 +136,7 @@ public class ExperimentController {
             if (chapterSectionExperimentService.getSectionNumberbyExperiment(id) == 0) {
                 ExperimentEntity experimentEntity = experimentService.findById(id);
                 String image = experimentEntity.getPic_url();
-                fileService.delete("/data/"+image.split("/")[1],"/"+image.split("/")[2]);
+                fileService.delete(image);
                 if (experimentService.deleteExperiment(id)){
                     return Response.success();
                 }

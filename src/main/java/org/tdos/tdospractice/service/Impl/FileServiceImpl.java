@@ -88,9 +88,9 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public boolean delete(String path, String fileName) {
+    public boolean delete(String path) {
         try {
-            return FTPUtils.deleteFile(path,fileName,ftpIp,ftpUser,ftpPass);
+            return FTPUtils.deleteFile("/data/"+path.split("/")[1],path.split("/")[2],ftpIp,ftpUser,ftpPass);
         } catch (IOException e) {
             e.printStackTrace();
             return false;

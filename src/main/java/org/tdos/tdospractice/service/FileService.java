@@ -10,6 +10,6 @@ public interface FileService {
 
     boolean download();
 
-    boolean delete(String path, String fileName);
+    boolean delete(String path);
 
 }
