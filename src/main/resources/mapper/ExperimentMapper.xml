@@ -109,12 +109,12 @@
     </select>
 
     <select  id="getParentIds" resultType="String">
-        select parent_id from experiment where type = 0
+        select parent_id from experiment where type = 1
         <if test="ids != null and ids.size > 0">
-            AND id NOT IN
+            AND id IN
             <foreach collection="ids" item="id" index="index"
                      open="(" close=")" separator=",">
-                #{id}
+                #{id}::uuid
             </foreach>
         </if>
     </select>
