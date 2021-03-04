@@ -49,24 +49,34 @@ public class ExperimentServiceImpl implements ExperimentService {
     @Autowired
     private ChapterSectionExperimentMapper chapterSectionExperimentMapper;
 
+    @Autowired
+    private ExperimentImageMapper experimentImageMapper;
+
     @Override
     public int insert(ExperimentEntity experimentEntity) {
-        if (experimentMapper.hasExperimentByName(experimentEntity.getName()) == 0){
+        if (experimentMapper.hasExperimentByName(experimentEntity.getName()) == 0) {
             return experimentMapper.insert(experimentEntity);
-        }else {
+        } else {
             return -1;
         }
     }
 
     @Override
-    public PageInfo<ExperimentEntity> findExperiment(List<String> category_ids, String name, Integer perPage, Integer page) {
+    public PageInfo<ExperimentEntity> findExperiment(List<String> category_ids, String name, Integer type, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        List<ExperimentEntity> list = experimentMapper.findExperiment(category_ids, name);
+        List<ExperimentEntity> list = experimentMapper.findExperiment(category_ids, name, type);
+        list.stream().forEach(experimentEntity -> {
+            if (experimentImageMapper.findImageByExperiment(experimentEntity.getId()) == null) {
+                experimentEntity.setImage_count(0);
+            } else {
+                experimentEntity.setImage_count(experimentImageMapper.findImageByExperiment(experimentEntity.getId()).size());
+            }
+        });
         return new PageInfo<>(list);
     }
 
     @Override
-    public PageInfo<ExperimentEntity> findAllByCourseId(String course_id, Integer perPage, Integer page) {
+    public PageInfo<ExperimentEntity> findAllByCourseId(String course_id, Integer type, Integer perPage, Integer page) {
         Pair<Boolean, Object> pair = courseService.getCourseById(course_id);
         List<String> sectionid_list = new ArrayList<>();
         Course course = (Course) pair.getValue();
@@ -79,11 +89,11 @@ public class ExperimentServiceImpl implements ExperimentService {
             return new PageInfo<>(new ArrayList<>());
         }
         List<String> list = chapterSectionExperimentService.getExperimentIds(sectionid_list);
-        return findAllByIds(list, perPage, page);
+        return findAllByIds(list, type, perPage, page);
     }
 
     @Override
-    public PageInfo<ExperimentEntity> findAllByChapterId(String chapter_id, Integer perPage, Integer page) {
+    public PageInfo<ExperimentEntity> findAllByChapterId(String chapter_id, Integer type, Integer perPage, Integer page) {
         Chapter chapter = chapterMapper.getChapter(chapter_id);
         List<String> sectionid_list = new ArrayList<>();
         chapter.getSections().forEach(section -> {
@@ -93,27 +103,27 @@ public class ExperimentServiceImpl implements ExperimentService {
             return new PageInfo<>(new ArrayList<>());
         }
         List<String> list = chapterSectionExperimentService.getExperimentIds(sectionid_list);
-        return findAllByIds(list, perPage, page);
+        return findAllByIds(list, type, perPage, page);
     }
 
     @Override
-    public PageInfo<ExperimentEntity> findAllBySectionId(String section_id, Integer perPage, Integer page) {
+    public PageInfo<ExperimentEntity> findAllBySectionId(String section_id, Integer type, Integer perPage, Integer page) {
         List<String> sectionid_list = new ArrayList<>();
         sectionid_list.add(section_id);
         if (sectionid_list.size() == 0) {
             return new PageInfo<>(new ArrayList<>());
         }
         List<String> list = chapterSectionExperimentService.getExperimentIds(sectionid_list);
-        return findAllByIds(list, perPage, page);
+        return findAllByIds(list, type, perPage, page);
     }
 
     @Override
-    public PageInfo<ExperimentEntity> findAllByIds(List<String> section_ids, Integer perPage, Integer page) {
+    public PageInfo<ExperimentEntity> findAllByIds(List<String> section_ids, Integer type, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
         if (section_ids.size() == 0) {
             return new PageInfo<>(new ArrayList<>());
         }
-        List<ExperimentEntity> list = experimentMapper.findAllByIds(section_ids);
+        List<ExperimentEntity> list = experimentMapper.findAllByIds(section_ids, type);
         list.stream().forEach(experimentEntity -> {
             experimentEntity.setImagesinfo(experimentImageService.findImageByExperiment(experimentEntity.getId()));
         });
@@ -121,17 +131,18 @@ public class ExperimentServiceImpl implements ExperimentService {
     }
 
     @Override
-    public PageInfo<ExperimentEntity> findSelectedExperimentByCategory(String f_category_id, String c_category_id, String section_id, String name, Integer perPage, Integer page) {
+    public PageInfo<ExperimentEntity> findSelectedExperimentByCategory(String f_category_id, String c_category_id, String section_id, String name, Integer type, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
         List<String> category_ids = new ArrayList<>();
         List<String> section_ids = new ArrayList<>();
-        List<ExperimentEntity> list = experimentService.findExperiment(category_ids, name, perPage, page).getList();
+        List<ExperimentEntity> list = experimentService.findExperiment(category_ids, name, type, perPage, page).getList();
         section_ids.add(section_id);
         if (f_category_id.equals("") && c_category_id.equals("")) {
-            experimentService.findExperiment(category_ids, name, perPage, page).getList().forEach(experimentEntity -> {
+            List<ExperimentEntity> finalList1 = list;
+            experimentService.findExperiment(category_ids, name, type, perPage, page).getList().forEach(experimentEntity -> {
                 chapterSectionExperimentMapper.getChapterSectionExperimentBySection(section_id).stream().forEach(chapterSectionExperimentEntity -> {
-                    if (experimentEntity.getId().equals(chapterSectionExperimentEntity.getExperiment_id())){
-                        list.remove(experimentEntity);
+                    if (experimentEntity.getId().equals(chapterSectionExperimentEntity.getExperiment_id())) {
+                        finalList1.remove(experimentEntity);
                     }
                 });
 
@@ -145,15 +156,17 @@ public class ExperimentServiceImpl implements ExperimentService {
             } else {
                 ids.add(c_category_id);
             }
-            experimentService.findExperiment(ids, name, perPage, page).getList().forEach(experimentEntity -> {
+            list = experimentService.findExperiment(ids, name, type, perPage, page).getList();
+            List<ExperimentEntity> finalList = list;
+            list.forEach(experimentEntity -> {
 //                experimentMapper.findAllByIds(section_ids).forEach(e -> {
 //                    if (e.getId().equals(experimentEntity.getId())) {
 //                        list.remove(experimentEntity);
 //                    }
 //                });
                 chapterSectionExperimentMapper.getChapterSectionExperimentBySection(section_id).stream().forEach(chapterSectionExperimentEntity -> {
-                    if (experimentEntity.getId().equals(chapterSectionExperimentEntity.getExperiment_id())){
-                        list.remove(experimentEntity);
+                    if (experimentEntity.getId().equals(chapterSectionExperimentEntity.getExperiment_id())) {
+                        finalList.remove(experimentEntity);
                     }
                 });
             });

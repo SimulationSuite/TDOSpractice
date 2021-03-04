@@ -9,8 +9,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Builder
-public class StudentExperimentReport {
+public class AllExperimentReport {
+
     private String experiment_id;
+
+    private String user_id;
 
     private int score;
 
@@ -18,8 +21,14 @@ public class StudentExperimentReport {
 
     private int isCorrect;
 
+    private String userName;
+
+    private String className;
+
     private String name;
 
     private LocalDateTime end_at;
+
+    private LocalDateTime submit_at;
 
 }

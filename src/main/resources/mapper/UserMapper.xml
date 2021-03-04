@@ -21,10 +21,16 @@
 
     <select id="findAllByRoleID" resultMap="user">
         select * from sim_user where role_id = #{role_id}
+        <if test = "name != null and name != ''" >
+            AND (name LIKE concat('%',#{name},'%') or id LIKE concat('%',#{name},'%'))
+        </if>
     </select>
 
     <select id="findAllByRoleIDAndClasses" resultMap="user">
         select  * from sim_user where role_id = #{role_id} and class_id = #{class_id}::uuid
+        <if test = "name != null and name != ''" >
+            AND (name LIKE concat('%',#{name},'%') or id LIKE concat('%',#{name},'%'))
+        </if>
     </select>
 
     <delete id="deleteUserById">

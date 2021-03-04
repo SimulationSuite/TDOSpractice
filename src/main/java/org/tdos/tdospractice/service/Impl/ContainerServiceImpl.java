@@ -87,10 +87,10 @@ public class ContainerServiceImpl implements ContainerService {
         }
         List<ContainerEntity> list = new ArrayList<>();
         imageEntityList.forEach(i -> {
-            ContainerEntity containerEntity = containerMapper.findContainerByName(String.format("%s@%s@%s", userId, experimentId, i.getId()));
+            ContainerEntity containerEntity = containerMapper.findContainerByName(String.format("%s@%s@%s@%s", userId, experimentId, i.getId(), courseId));
             if (containerEntity == null) {
                 //create container
-                ContainerEntity c = kvmManager.createContainer(userId, experimentId, i);
+                ContainerEntity c = kvmManager.createContainer(userId, experimentId, i, courseId);
                 if (c != null) {
                     if (courseId != null && !courseId.equals("")) {
                         c.setCourseId(courseId);
@@ -149,12 +149,12 @@ public class ContainerServiceImpl implements ContainerService {
     @Override
     public ContainerEntity createAndRunContainers(String userId, String experimentId, String courseId, String imageId) {
         ImageEntity imageEntity = imageMapper.findImageByImagesid(imageId);
-        ContainerEntity containerEntity = containerMapper.findContainerByName(String.format("%s@%s@%s", userId, experimentId, imageEntity.getId()));
+        ContainerEntity containerEntity = containerMapper.findContainerByName(String.format("%s@%s@%s@%s", userId, experimentId, imageEntity.getId(), courseId));
         if (containerEntity != null) {
             return null;
         }
         //create container
-        ContainerEntity c = kvmManager.createContainer(userId, experimentId, imageEntity);
+        ContainerEntity c = kvmManager.createContainer(userId, experimentId, imageEntity, courseId);
         if (c != null) {
             if (courseId != null && !courseId.equals("")) {
                 c.setCourseId(courseId);

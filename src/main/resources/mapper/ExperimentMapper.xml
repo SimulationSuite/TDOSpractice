@@ -7,12 +7,12 @@
     <insert id="insert" parameterType="org.tdos.tdospractice.entity.ExperimentEntity" useGeneratedKeys="true"
             keyProperty="id">
         insert into
-        experiment(name,pic_url,end_at,step,duration,category_id,introduce)
-        values(#{name},#{pic_url},#{end_at},#{step},#{duration},#{category_id}::uuid,#{introduce})
+        experiment(name,pic_url,end_at,step,duration,category_id,introduce,type)
+        values(#{name},#{pic_url},#{end_at},#{step},#{duration},#{category_id}::uuid,#{introduce},#{type})
     </insert>
 
     <select id="findExperiment" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
-        select * from experiment where 1 = 1
+        select * from experiment where type = #{type}
         <if test="category_ids != null and category_ids.size > 0">
             AND category_id IN
             <foreach collection="category_ids" item="id" index="index"
@@ -23,11 +23,12 @@
         <if test="name!=null and name!=''">
             AND "name" like concat('%',#{name},'%')
         </if>
+        order by created_at desc
     </select>
 
     <select id="findAllByIds" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
         SELECT * FROM experiment
-        WHERE id IN
+        WHERE type = #{type} and id IN
         <foreach collection="section_ids" item="id" index="index"
                  open="(" close=")" separator=",">
             #{id}::uuid
@@ -85,6 +86,21 @@
 
     <select id="hasExperimentByName" resultType="int">
         select count(*) from experiment where name = #{name}
+    </select>
+
+    <select id="findExperimentNotSelected" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
+        select * from experiment where type = #{type}
+        <if test="category_ids != null and category_ids.size > 0">
+            AND category_id IN
+            <foreach collection="category_ids" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}::uuid
+            </foreach>
+        </if>
+        <if test="name!=null and name!=''">
+            AND "name" like concat('%',#{name},'%')
+        </if>
+        order by created_at desc
     </select>
 
 

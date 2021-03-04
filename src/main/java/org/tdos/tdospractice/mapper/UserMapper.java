@@ -18,9 +18,9 @@ public interface UserMapper {
 
     int findAllUserByRoleId(int role_id);
 
-    List<UserEntity> findAllByRoleID(@Param("role_id") int role_id);
+    List<UserEntity> findAllByRoleID(@Param("role_id") int role_id ,@Param("name") String name);
 
-    List<UserEntity> findAllByRoleIDAndClasses(@Param("role_id") int role_id, @Param("class_id") String class_id);
+    List<UserEntity> findAllByRoleIDAndClasses(@Param("role_id") int role_id, @Param("class_id") String class_id,@Param("name") String name);
 
     int deleteUserById(String id);
 

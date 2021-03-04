@@ -11,6 +11,8 @@ import java.util.List;
 public interface UserService {
     List<UserEntity> findAll();
 
+    UserEntity findUserById(String id);
+
     UserEntity findUserByIdAndPwd(String id,String password);
 
     List<OnlineStudent> getOnlineStudents(List<String> ids);

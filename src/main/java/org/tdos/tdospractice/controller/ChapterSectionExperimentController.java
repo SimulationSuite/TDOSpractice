@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.tdos.tdospractice.body.BindExperiments;
 import org.tdos.tdospractice.entity.ChapterSectionExperimentEntity;
+import org.tdos.tdospractice.entity.ExperimentEntity;
+import org.tdos.tdospractice.mapper.ExperimentMapper;
 import org.tdos.tdospractice.service.ChapterSectionExperimentService;
 import org.tdos.tdospractice.type.Response;
 
@@ -20,11 +22,21 @@ public class ChapterSectionExperimentController {
     @Autowired
     private ChapterSectionExperimentService chapterSectionExperimentService;
 
+    @Autowired
+    private ExperimentMapper experimentMapper;
+
     @PostMapping(value = "/bindExperiments")
     public Response insertExperiment(@RequestBody BindExperiments bindExperiments) {
         try {
+            List<String> ids = new ArrayList<>();
+            bindExperiments.getExperiment_id().stream().forEach(id -> {
+                ExperimentEntity experimentEntity = experimentMapper.findById(id);
+                experimentEntity.setType(1);
+                experimentMapper.insert(experimentEntity);
+                ids.add(experimentEntity.getId());
+            });
             List<ChapterSectionExperimentEntity> list = new ArrayList<>();
-            bindExperiments.getExperiment_id().forEach(b -> {
+            ids.forEach(b -> {
                 list.add(ChapterSectionExperimentEntity
                         .builder()
                         .experiment_id(b)

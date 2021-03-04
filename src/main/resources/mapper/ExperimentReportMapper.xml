@@ -48,8 +48,8 @@
         select * from experiment_report where experiment_id = #{experiment_id}::uuid AND user_id = #{user_id}
     </select>
 
-    <select id="findExperimentReportAll" resultType="org.tdos.tdospractice.type.StudentExperimentReport">
-        select cse.experiment_id as experiment_id,su.id as user_id, su.name as userName,
+    <select id="findExperimentReportAll" resultType="org.tdos.tdospractice.type.AllExperimentReport">
+        select er.experiment_id as experiment_id,su.id as user_id, su.name as userName,
         c.name as className,er.status as status,er.iscorrect as iscorrect,er.submit_at submit_at,e.name as name,e.end_at
         as end_at,er.score as score
         FROM experiment_report er
@@ -78,11 +78,33 @@
         <if test="endTime != null and endTime != ''">
             and er.updated_at &lt;= #{endTime}::timestamp
         </if>
+        <if test="ownerId != null and ownerId != ''" >
+            and ci.owner_id = #{ownerId}
+        </if>
+        group by er.experiment_id,su.id,c."name",er.status,er.iscorrect,er.submit_at,e.name,e.end_at,er.score,c.id
+        order by c.id
+    </select>
+
+    <select id="findStudentExperimentReport" resultType="org.tdos.tdospractice.type.StudentExperimentReport">
+        SELECT er.experiment_id as experiment_id,er.isCorrect as isCorrect,er.score as score ,er.status as status,e."name" as name,e.end_at as end_at
+        FROM experiment_report er
+        INNER JOIN experiment e ON e.id = er.experiment_id
+        INNER JOIN chapter_section_experiment cse on cse.experiment_id = er.experiment_id
+        INNER JOIN course_chapter_section ccs on ccs.section_id = cse.section_id
+        WHERE 1 = 1
+        <if test="course_id != null and course_id != ''">
+            and ccs.course_id = #{course_id} ::uuid
+        </if>
+        <if test="isCorrect != -1">
+            and er.isCorrect = #{isCorrect}
+        </if>
+        <if test="name != null and name != ''">
+            and e."name" like concat('%',#{name},'%')
+        </if>
         <if test="user_id != null and user_id != ''">
             and er.user_id = #{user_id}
         </if>
-        group by cse.experiment_id,su.id,c."name",er.status,er.iscorrect,er.submit_at,e.name,e.end_at,er.score
-        order by c."name"
+        GROUP BY er.experiment_id,er.isCorrect,er.score,er.status,e."name",e.end_at
     </select>
 
 

@@ -30,6 +30,8 @@ public class ExperimentEntity {
 
     private String report_requirement;
 
+    private Integer type;// 0.管理员内置 1.教师开设
+
     private List<String> images;
 
     private LocalDateTime created_at;
@@ -39,4 +41,6 @@ public class ExperimentEntity {
     private String section_id; //只用于接收参数
 
     private List<ExperimentImageEntity> imagesinfo;
+
+    private Integer image_count;
 }

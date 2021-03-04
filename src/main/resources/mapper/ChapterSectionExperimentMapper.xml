@@ -21,7 +21,7 @@
         <foreach collection="section_ids" item="id" index="index"
                  open="(" close=")" separator=",">
             #{id}::uuid
-        </foreach>;
+        </foreach>
     </select>
 
     <delete id="deleteChapterSectionExperiment">
@@ -47,7 +47,7 @@
 
     <select  id="getChapterSectionExperimentBySection" resultType="org.tdos.tdospractice.entity.ChapterSectionExperimentEntity">
         SELECT * FROM chapter_section_experiment
-        WHERE section_id = #{course_id}::uuid
+        WHERE section_id = #{section_id}::uuid
     </select>
 
 
