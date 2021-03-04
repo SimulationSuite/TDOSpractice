@@ -29,7 +29,7 @@ public class ChapterSectionExperimentController {
     public Response insertExperiment(@RequestBody BindExperiments bindExperiments) {
         try {
             List<String> ids = new ArrayList<>();
-            bindExperiments.getExperiment_id().stream().forEach( id ->{
+            bindExperiments.getExperiment_id().stream().forEach(id -> {
                 ExperimentEntity experimentEntity = experimentMapper.findById(id);
                 experimentEntity.setType(1);
                 experimentMapper.insert(experimentEntity);
