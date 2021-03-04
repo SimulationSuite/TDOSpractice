@@ -22,13 +22,12 @@ public interface ExperimentMapper {
 
     boolean deleteExperiment(String id);
 
-    int hasExperiment(String section_id);
+    int hasExperiment(String parent_id);
 
     long deleteExperimentList(List<String> ids);
 
     int hasExperimentByName(@Param("name") String name);
 
     List<ExperimentEntity> findExperimentNotSelected(@Param("category_ids") List<String> category_ids, @Param("name") String name, @Param("type") Integer type, @Param("ids") List<String> ids, Integer perPage, Integer page);
-
 
 }

@@ -133,7 +133,7 @@ public class ExperimentController {
     @PostMapping(value = "/deleteExperiment")
     public Response deleteExperiment(@RequestParam(value = "id") String id) {
         try {
-            if (chapterSectionExperimentService.getSectionNumberbyExperiment(id) == 0) {
+            if (experimentService.hasExperiment(id) == 0) {
                 ExperimentEntity experimentEntity = experimentService.findById(id);
                 String image = experimentEntity.getPic_url();
                 fileService.delete(image);
