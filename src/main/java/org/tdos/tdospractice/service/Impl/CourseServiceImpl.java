@@ -218,6 +218,7 @@ public class CourseServiceImpl implements CourseService {
                     .findImageByExperiment(preExperimentId);
 
             ExperimentEntity experimentEntity = experimentMapper.findById(preExperimentId);
+            experimentEntity.setType(1);
             experimentMapper.insert(experimentEntity);
 
             experimentImageEntities.forEach(experimentImageEntity ->

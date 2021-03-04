@@ -62,11 +62,12 @@ public class ExperimentController {
     @GetMapping(value = "/findExperimentByCategory")
     public Response findExperimentByCategory(@RequestParam(value = "category_id") String category_id,
                                              @RequestParam(value = "name") String name,
+                                             @RequestParam(value = "type") Integer type,
                                              @RequestParam(value = "perPage") Integer perPage,
                                              @RequestParam(value = "page") Integer page) {
         List<String> list = new ArrayList<>();
         if (category_id.equals("")) {
-            return Response.success(experimentService.findExperiment(list, name, perPage, page));
+            return Response.success(experimentService.findExperiment(list, name, type, perPage, page));
         } else {
             Optional<CategoryEntity> categoryEntity = categoryService.findCategory(category_id);
             if (categoryEntity.isPresent()) {
@@ -77,36 +78,38 @@ public class ExperimentController {
                 } else {
                     list.add(category_id);
                 }
-                return Response.success(experimentService.findExperiment(list, name, perPage, page));
+                return Response.success(experimentService.findExperiment(list, name, type, perPage, page));
             }
         }
         return Response.error("找不到该分类");
     }
 
     @GetMapping(value = "/findSelectedExperimentByCategory")
-    public Response findExperimentByCategory(@RequestParam(value = "f_category_id") String f_category_id,
-                                             @RequestParam(value = "c_category_id") String c_category_id,
-                                             @RequestParam(value = "section_id") String section_id,
-                                             @RequestParam(value = "name") String name,
-                                             @RequestParam(value = "perPage") Integer perPage,
-                                             @RequestParam(value = "page") Integer page) {
-        return Response.success(experimentService.findSelectedExperimentByCategory(f_category_id, c_category_id, section_id, name, perPage, page));
+    public Response findSelectedExperimentByCategory(@RequestParam(value = "f_category_id") String f_category_id,
+                                                     @RequestParam(value = "c_category_id") String c_category_id,
+                                                     @RequestParam(value = "section_id") String section_id,
+                                                     @RequestParam(value = "name") String name,
+                                                     @RequestParam(value = "type") Integer type,
+                                                     @RequestParam(value = "perPage") Integer perPage,
+                                                     @RequestParam(value = "page") Integer page) {
+        return Response.success(experimentService.findSelectedExperimentByCategory(f_category_id, c_category_id, section_id, name, type, perPage, page));
     }
 
 
     @GetMapping(value = "/findAllByType")
     public Response findAllByType(@RequestParam(value = "id") String id,
-                                  @RequestParam(value = "type") int type,
+                                  @RequestParam(value = "type") Integer type,
+                                  @RequestParam(value = "experiment_type") Integer experiment_type,
                                   @RequestParam(value = "perPage") Integer perPage,
                                   @RequestParam(value = "page") Integer page) {
         if (type == 0) {
             return Response.success(experimentService.findById(id));
         } else if (type == 1) {//通过课程查询
-            return Response.success(experimentService.findAllByCourseId(id, perPage, page));
+            return Response.success(experimentService.findAllByCourseId(id, experiment_type, perPage, page));
         } else if (type == 2) {//通过章查询
-            return Response.success(experimentService.findAllByChapterId(id, perPage, page));
+            return Response.success(experimentService.findAllByChapterId(id, experiment_type, perPage, page));
         } else if (type == 3) {//通过节查询
-            return Response.success(experimentService.findAllBySectionId(id, perPage, page));
+            return Response.success(experimentService.findAllBySectionId(id, experiment_type, perPage, page));
         }
         return Response.error("类型错误");
     }

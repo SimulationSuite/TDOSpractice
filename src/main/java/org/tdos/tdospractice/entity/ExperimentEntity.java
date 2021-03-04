@@ -30,6 +30,8 @@ public class ExperimentEntity {
 
     private String report_requirement;
 
+    private Integer type;// 0.管理员内置 1.教师开设
+
     private List<String> images;
 
     private LocalDateTime created_at;
