@@ -81,7 +81,7 @@
         <if test="ownerId != null and ownerId != ''" >
             and ci.owner_id = #{ownerId}
         </if>
-        group by er.experiment_id,su.id,c."name",er.status,er.iscorrect,er.submit_at,e.name,e.end_at,er.score
+        group by er.experiment_id,su.id,c."name",er.status,er.iscorrect,er.submit_at,e.name,e.end_at,er.score,c.id
         order by c.id
     </select>
 
