@@ -100,6 +100,14 @@
         <if test="name!=null and name!=''">
             AND "name" like concat('%',#{name},'%')
         </if>
+        <if test="ids != null and ids.size > 0">
+            AND id NOT IN
+            <foreach collection="ids" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}::uuid
+            </foreach>
+        </if>
+
         order by created_at desc
     </select>
 

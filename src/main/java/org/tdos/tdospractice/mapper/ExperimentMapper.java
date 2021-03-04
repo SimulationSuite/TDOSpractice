@@ -14,7 +14,7 @@ public interface ExperimentMapper {
 
     List<ExperimentEntity> findExperiment(@Param("category_ids") List<String> category_ids, @Param("name") String name, @Param("type") Integer type);
 
-    List<ExperimentEntity> findAllByIds(@Param("section_ids") List<String> section_ids,@Param("type") Integer type);
+    List<ExperimentEntity> findAllByIds(@Param("section_ids") List<String> section_ids, @Param("type") Integer type);
 
     ExperimentEntity findById(String id);
 
@@ -27,5 +27,8 @@ public interface ExperimentMapper {
     long deleteExperimentList(List<String> ids);
 
     int hasExperimentByName(@Param("name") String name);
+
+    List<ExperimentEntity> findExperimentNotSelected(@Param("category_ids") List<String> category_ids, @Param("name") String name, @Param("type") Integer type, @Param("ids") List<String> ids, Integer perPage, Integer page);
+
 
 }
