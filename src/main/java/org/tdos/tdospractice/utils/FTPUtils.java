@@ -50,13 +50,13 @@ public class FTPUtils {
                 String remotePath = null;
                 switch (type) {
                     case 0:
-                        remotePath = "/data2/pic";
+                        remotePath = "/data/pic";
                         break;
                     case 1:
-                        remotePath = "/data2/video";
+                        remotePath = "/data/video";
                         break;
                     case 2:
-                        remotePath = "/data2/courseware";
+                        remotePath = "/data/courseware";
                         break;
                 }
                 ftpClient.changeWorkingDirectory(remotePath);
