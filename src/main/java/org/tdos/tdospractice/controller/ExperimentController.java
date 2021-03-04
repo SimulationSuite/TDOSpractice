@@ -35,6 +35,7 @@ public class ExperimentController {
     @PostMapping(value = "/insertExperiment")
     public Response insertExperiment(@RequestBody ExperimentEntity experimentEntity) {
         try {
+            experimentEntity.setType(0);
             int i = experimentService.insert(experimentEntity);
             if (i == -1)
                 return Response.error("该实验已存在");
