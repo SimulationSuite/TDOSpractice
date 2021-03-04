@@ -2,6 +2,7 @@ package org.tdos.tdospractice.service.Impl;
 
 import javafx.util.Pair;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.tdos.tdospractice.body.UploadFile;
@@ -18,35 +19,14 @@ import java.util.UUID;
 @Service
 public class FileServiceImpl implements FileService {
 
-//    @Override
-//    public Pair<Boolean,String> upload(MultipartFile file, String path, int type) {
-//        if (!file.isEmpty()) {
-//            String fileName=file.getOriginalFilename();
-//            String fileExtensionName=fileName.substring(fileName.lastIndexOf(".")+1);
-//            String uploadFileName= UUID.randomUUID().toString()+"."+fileExtensionName;
-//            File fileDir=new File(path);
-//            if (!fileDir.exists()){
-//                fileDir.setWritable(true);
-//                fileDir.mkdirs();
-//            }
-//            File targetFile=new File(path,uploadFileName);
-//            try {
-//                file.transferTo(targetFile);
-//                //file upload successful
-//
-//                // upload targetFile to my FTP server
-//                FTPUtils.uploadFile(targetFile,type);
-//                //  delete the file in upload folder after uploaded
-//                targetFile.delete();
-//                return true;
-//            } catch (IOException e) {
-////                log.error("文件上传异常",e);
-//                return false;
-//            }
-//        } else  {
-//            return false;
-//        }
-//    }
+    @Value("${ftp.ftpIp}")
+    private static String ftpIp;
+
+    @Value("${ftp.ftpUser}")
+    private static String ftpUser;
+
+    @Value("${ftp.ftpPass}")
+    private static String ftpPass;
 
     @Override
     public Pair<Boolean, UploadFile> upload(MultipartFile file, int type) {
@@ -68,7 +48,7 @@ public class FileServiceImpl implements FileService {
                 Long time = 0L;
                 if (type == 0) {//图片
                     uppath = "/pic/";
-                } else if (type == 1) {//视频
+                } else if (type == 1) {//视频findSelectedExperimentByCategory
                     uppath = "/video/";
                     time = getVideoTime(targetFile);
                 } else if (type == 2) {//PDF
@@ -79,11 +59,11 @@ public class FileServiceImpl implements FileService {
                 //file upload successful
 
                 // upload targetFile to my FTP server
-                if (FTPUtils.uploadFile(targetFile, type).getKey()) {
+                if (FTPUtils.uploadFile(targetFile, type,ftpIp,ftpUser,ftpPass).getKey()) {
                     Pair<Boolean, UploadFile> pair = new Pair<>(true, UploadFile
                             .builder()
                             .size(file.getSize())
-                            .name(uppath + FTPUtils.uploadFile(targetFile, type).getValue())
+                            .name(uppath + FTPUtils.uploadFile(targetFile, type,ftpIp,ftpUser,ftpPass).getValue())
                             .pages(pages)
                             .time(time)
                             .build());
@@ -106,6 +86,17 @@ public class FileServiceImpl implements FileService {
     public boolean download() {
         return false;
     }
+
+    @Override
+    public boolean delete(String path, String fileName) {
+        try {
+            return FTPUtils.deleteFile(path,fileName,ftpIp,ftpUser,ftpPass);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
     public Long getVideoTime(File file) {
         try {

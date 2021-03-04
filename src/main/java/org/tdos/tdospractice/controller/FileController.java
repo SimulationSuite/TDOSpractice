@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.tdos.tdospractice.body.UploadFile;
 import org.tdos.tdospractice.service.FileService;
 import org.tdos.tdospractice.type.Response;
+import org.tdos.tdospractice.utils.FTPUtils;
 
 @RestController
 public class FileController {
