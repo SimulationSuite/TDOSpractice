@@ -55,16 +55,17 @@ public class KvmManager {
      * @param userId
      * @param experimentId
      * @param imageEntity
+     * @param courseId
      * @return
      */
-    public ContainerEntity createContainer(String userId, String experimentId, ImageEntity imageEntity) {
+    public ContainerEntity createContainer(String userId, String experimentId, ImageEntity imageEntity, String courseId) {
         int dockerIndex = randomDocker();
         DockerTool dockerTool = dockerTools.get(dockerIndex);
         List<Integer> ports = getFreePorts(dockerTool);
         if (ports.size() == 0) {
             return null;
         }
-        String containerName = userId + separator + experimentId + separator + imageEntity.getId();
+        String containerName = userId + separator + experimentId + separator + imageEntity.getId() + separator + courseId;
         CreateContainerResponse ccr = dockerTool.creatContainer(imageEntity.getImageName(), HashUtils.encodesha3(containerName), imageEntity.getKind(), ports);
         if (ccr == null) {
             return null;
