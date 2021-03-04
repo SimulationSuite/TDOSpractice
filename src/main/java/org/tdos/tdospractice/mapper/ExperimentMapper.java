@@ -30,4 +30,6 @@ public interface ExperimentMapper {
 
     List<ExperimentEntity> findExperimentNotSelected(@Param("category_ids") List<String> category_ids, @Param("name") String name, @Param("type") Integer type, @Param("ids") List<String> ids, Integer perPage, Integer page);
 
+    List<String> getParentIds(@Param("ids") List<String> ids);
+
 }

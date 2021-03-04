@@ -98,7 +98,7 @@
             AND "name" like concat('%',#{name},'%')
         </if>
         <if test="ids != null and ids.size > 0">
-            AND parent_id NOT IN
+            AND id NOT IN
             <foreach collection="ids" item="id" index="index"
                      open="(" close=")" separator=",">
                 #{id}
@@ -108,5 +108,15 @@
         order by created_at desc
     </select>
 
+    <select  id="getParentIds" resultType="String">
+        select parent_id from experiment where type = 0
+        <if test="ids != null and ids.size > 0">
+            AND id NOT IN
+            <foreach collection="ids" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+    </select>
 
 </mapper>

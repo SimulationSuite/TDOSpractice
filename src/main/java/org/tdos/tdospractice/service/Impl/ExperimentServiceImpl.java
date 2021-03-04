@@ -147,7 +147,8 @@ public class ExperimentServiceImpl implements ExperimentService {
 //                });
 //            });
             List<String> ids = chapterSectionExperimentMapper.getExperimentIds(section_ids);
-            list = experimentMapper.findExperimentNotSelected(category_ids, name, type, ids, perPage, page);
+
+            list = experimentMapper.findExperimentNotSelected(category_ids, name, type, experimentMapper.getParentIds(ids), perPage, page);
         } else {
             List<String> ids = new ArrayList<>();
             if (c_category_id.equals("")) {
@@ -171,7 +172,7 @@ public class ExperimentServiceImpl implements ExperimentService {
 //                    }
 //                });
 //            });
-            list = experimentMapper.findExperimentNotSelected(category_ids, name, type, ids, perPage, page);
+            list = experimentMapper.findExperimentNotSelected(category_ids, name, type, experimentMapper.getParentIds(ids), perPage, page);
         }
         return new PageInfo<>(list);
     }
