@@ -12,7 +12,7 @@
     </insert>
 
     <select id="findExperiment" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
-        select * from experiment where 1 = 1
+        select * from experiment where type = #{type}
         <if test="category_ids != null and category_ids.size > 0">
             AND category_id IN
             <foreach collection="category_ids" item="id" index="index"
@@ -28,7 +28,7 @@
 
     <select id="findAllByIds" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
         SELECT * FROM experiment
-        WHERE id IN
+        WHERE type = #{type} and id IN
         <foreach collection="section_ids" item="id" index="index"
                  open="(" close=")" separator=",">
             #{id}::uuid

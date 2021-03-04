@@ -70,10 +70,10 @@ public class ExperimentReportController {
                                               @RequestParam(value = "name") String name,
                                               @RequestParam(value = "startTime") String startTime,
                                               @RequestParam(value = "endTime") String endTime,
-                                              @RequestParam(value = "user_id") String user_id,
+                                              @RequestParam(value = "ownerId") String ownerId,
                                               @RequestParam(value = "perPage") Integer perPage,
                                               @RequestParam(value = "page") Integer page) {
-        return Response.success(experimentReportService.findExperimentReportAll(course_id, status, isCorrect, name, startTime, endTime, user_id, perPage, page));
+        return Response.success(experimentReportService.findExperimentReportAll(course_id, status, isCorrect, name, startTime, endTime, ownerId, perPage, page));
     }
 
     @GetMapping(value = "/findExperimentReportByExperimentAndUserId")

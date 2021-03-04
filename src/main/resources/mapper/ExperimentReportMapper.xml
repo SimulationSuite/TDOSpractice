@@ -78,11 +78,11 @@
         <if test="endTime != null and endTime != ''">
             and er.updated_at &lt;= #{endTime}::timestamp
         </if>
-        <if test="user_id != null and user_id != ''">
-            and er.user_id = #{user_id}
+        <if test="ownerId != null and ownerId != ''" >
+            and ci.owner_id = #{ownerId}
         </if>
         group by er.experiment_id,su.id,c."name",er.status,er.iscorrect,er.submit_at,e.name,e.end_at,er.score
-        order by c."name"
+        order by c.id
     </select>
 
     <select id="findStudentExperimentReport" resultType="org.tdos.tdospractice.type.StudentExperimentReport">

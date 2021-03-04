@@ -255,6 +255,7 @@ create table if not exists experiment(
     category_id UUID references "category"("id") NOT null,
     introduce varchar(255) DEFAULT null,
     report_requirement varchar(255) DEFAULT null,
+    type int8 DEFAULT 0,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
