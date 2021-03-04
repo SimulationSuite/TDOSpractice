@@ -39,7 +39,7 @@ public class ChapterSectionExperimentController {
             bindExperiments.getExperiment_id().stream().forEach(id -> {
                 ExperimentEntity experimentEntity = experimentMapper.findById(id);
                 experimentEntity.setType(1);
-                experimentEntity.setParent_id(id);
+                experimentEntity.setParent_id(experimentEntity.getParent_id());
                 experimentMapper.insert(experimentEntity);
                 List<ExperimentImageEntity> list = new ArrayList<>();
                 experimentImageService.findImageByExperiment(id).stream().forEach(images -> {

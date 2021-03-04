@@ -219,7 +219,7 @@ public class CourseServiceImpl implements CourseService {
 
             ExperimentEntity experimentEntity = experimentMapper.findById(preExperimentId);
             experimentEntity.setType(1);
-            experimentEntity.setParent_id(preExperimentId);
+            experimentEntity.setParent_id(experimentEntity.getParent_id());
             experimentMapper.insert(experimentEntity);
 
             experimentImageEntities.forEach(experimentImageEntity ->
