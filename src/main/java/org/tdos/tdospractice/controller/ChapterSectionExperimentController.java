@@ -28,13 +28,15 @@ public class ChapterSectionExperimentController {
     @PostMapping(value = "/bindExperiments")
     public Response insertExperiment(@RequestBody BindExperiments bindExperiments) {
         try {
-            bindExperiments.getExperiment_id().stream().forEach( id ->{
+            List<String> ids = new ArrayList<>();
+            bindExperiments.getExperiment_id().stream().forEach(id -> {
                 ExperimentEntity experimentEntity = experimentMapper.findById(id);
                 experimentEntity.setType(1);
                 experimentMapper.insert(experimentEntity);
+                ids.add(experimentEntity.getId());
             });
             List<ChapterSectionExperimentEntity> list = new ArrayList<>();
-            bindExperiments.getExperiment_id().forEach(b -> {
+            ids.forEach(b -> {
                 list.add(ChapterSectionExperimentEntity
                         .builder()
                         .experiment_id(b)
