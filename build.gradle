@@ -74,6 +74,10 @@ dependencies {
     compile group: 'org.apache.pdfbox', name: 'pdfbox', version: '1.8.11'
     // https://mvnrepository.com/artifact/ws.schild/jave-all-deps
     compile group: 'ws.schild', name: 'jave-all-deps', version: '2.7.3'
+
+    compile 'com.github.kevinsawicki:http-request:6.0'
+
+    compile 'com.alibaba:fastjson:1.2.68'
 }
 
 
