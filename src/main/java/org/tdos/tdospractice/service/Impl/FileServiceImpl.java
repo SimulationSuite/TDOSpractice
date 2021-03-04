@@ -20,13 +20,13 @@ import java.util.UUID;
 public class FileServiceImpl implements FileService {
 
     @Value("${ftp.ftpIp}")
-    private static String ftpIp;
+    private String ftpIp;
 
     @Value("${ftp.ftpUser}")
-    private static String ftpUser;
+    private String ftpUser;
 
     @Value("${ftp.ftpPass}")
-    private static String ftpPass;
+    private String ftpPass;
 
     @Override
     public Pair<Boolean, UploadFile> upload(MultipartFile file, int type) {
