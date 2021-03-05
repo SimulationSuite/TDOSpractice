@@ -32,6 +32,9 @@ public class ExperimentController {
     @Autowired
     private ChapterSectionExperimentService chapterSectionExperimentService;
 
+    @Autowired
+    private FileService fileService;
+
     @PostMapping(value = "/insertExperiment")
     public Response insertExperiment(@RequestBody ExperimentEntity experimentEntity) {
         try {
@@ -130,10 +133,13 @@ public class ExperimentController {
     @PostMapping(value = "/deleteExperiment")
     public Response deleteExperiment(@RequestParam(value = "id") String id) {
         try {
-            //TODO 判断课程是否已发布
-            if (chapterSectionExperimentService.getSectionNumberbyExperiment(id) == 0) {
-                if (experimentService.deleteExperiment(id))
+            if (experimentService.hasExperiment(id) == 0) {
+                ExperimentEntity experimentEntity = experimentService.findById(id);
+                String image = experimentEntity.getPic_url();
+                fileService.delete(image);
+                if (experimentService.deleteExperiment(id)){
                     return Response.success();
+                }
                 return Response.error("删除失败");
             } else {
                 return Response.error("删除失败,该实验与课程已绑定");

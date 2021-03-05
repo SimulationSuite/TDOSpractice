@@ -11,13 +11,11 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
+import org.springframework.beans.factory.annotation.Value;
 
 @Data
-@Slf4j(topic = "tfp")
+@Slf4j(topic = "ftp")
 public class FTPUtils {
-    private static String ftpIp = "192.168.1.228";
-    private static String ftpUser = "test";
-    private static String ftpPass = "123456";
     private String ip;
     private int port;
     private String user;
@@ -43,22 +41,22 @@ public class FTPUtils {
         return isSuccess;
     }
 
-    private Pair<Boolean,String> uploadFile(int type, File file) throws IOException {
+    private Pair<Boolean, String> uploadFile(int type, File file, String ftpIp, String ftpUser, String ftpPass) throws IOException {
         Boolean upload = true;
         FileInputStream fileInputStream = null;
         //connect to ftpServer
-        if (connectServer(this.ip, this.user, this.pwd)) {
+        if (connectServer(ftpIp, ftpUser, ftpPass)) {
             try {
                 String remotePath = null;
-                switch (type){
+                switch (type) {
                     case 0:
-                        remotePath = "/data2/pic";
+                        remotePath = "/data/pic";
                         break;
                     case 1:
-                        remotePath = "/data2/video";
+                        remotePath = "/data/video";
                         break;
                     case 2:
-                        remotePath = "/data2/courseware";
+                        remotePath = "/data/courseware";
                         break;
                 }
                 ftpClient.changeWorkingDirectory(remotePath);
@@ -76,7 +74,7 @@ public class FTPUtils {
                 ftpClient.disconnect();
             }
         }
-        return new Pair<>(upload,file.getName());
+        return new Pair<>(upload, file.getName());
     }
 
     public boolean downLoadFile(String filePath, String fileName, String downPath) {
@@ -122,14 +120,19 @@ public class FTPUtils {
         return download;
     }
 
-    public  boolean deleteFile(String filePath, String filename){
+    public boolean delete(String filePath, String filename, String ftpIp, String ftpUser, String ftpPass) {
         boolean delete = false;
         try {
-            if (connectServer(this.ip, this.user, this.pwd)) {
+            if (connectServer(ftpIp, ftpUser, ftpPass)) {
                 try {
                     ftpClient.changeWorkingDirectory(filePath);
-                    ftpClient.dele(filename);
-                    delete = true;
+                    FTPFile[] files = ftpClient.listFiles();
+                    for (FTPFile file : files) {
+                        if (file.getName().equals(filename)) {
+                            ftpClient.dele(filename);
+                            delete = true;
+                        }
+                    }
                 } catch (IOException e) {
                     log.error("删除异常", e);
                 } finally {
@@ -144,15 +147,27 @@ public class FTPUtils {
     }
 
 
-
-    public static Pair<Boolean,String> uploadFile(File file, int type) throws IOException {
+    public static Pair<Boolean, String> uploadFile(File file, int type, String ftpIp, String ftpUser, String ftpPass) throws IOException {
         FTPUtils ftpUtil = new FTPUtils(ftpIp, 21, ftpUser, ftpPass);
         log.info("开始连接ftp服务器");
         log.info("开始连接ftp服务器，结束上传，上传结果{}");
-        return ftpUtil.uploadFile(type, file);
+        return ftpUtil.uploadFile(type, file, ftpIp, ftpUser, ftpPass);
     }
 
-    public static void main(String[] args) {
-
+    public static boolean deleteFile(String filePath, String filename, String ftpIp, String ftpUser, String ftpPass) throws IOException {
+        FTPUtils ftpUtil = new FTPUtils(ftpIp, 21, ftpUser, ftpPass);
+        log.info("开始连接ftp服务器");
+        return ftpUtil.delete(filePath, filename, ftpIp, ftpUser, ftpPass);
     }
+
+
+//    public static void main(String[] args) {
+//
+//        FTPUtils ftpUtil = new FTPUtils("192.168.1.228", 21, "test", "123456");
+//        if (ftpUtil.delete("data/", "test.png")) {
+//            System.out.println("true");
+//        } else {
+//            System.out.println("false");
+//        }
+//    }
 }

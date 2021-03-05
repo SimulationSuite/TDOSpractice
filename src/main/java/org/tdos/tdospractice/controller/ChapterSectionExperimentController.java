@@ -9,12 +9,16 @@ import org.springframework.web.bind.annotation.RestController;
 import org.tdos.tdospractice.body.BindExperiments;
 import org.tdos.tdospractice.entity.ChapterSectionExperimentEntity;
 import org.tdos.tdospractice.entity.ExperimentEntity;
+import org.tdos.tdospractice.entity.ExperimentImageEntity;
 import org.tdos.tdospractice.mapper.ExperimentMapper;
 import org.tdos.tdospractice.service.ChapterSectionExperimentService;
+import org.tdos.tdospractice.service.ExperimentImageService;
 import org.tdos.tdospractice.type.Response;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class ChapterSectionExperimentController {
@@ -25,6 +29,9 @@ public class ChapterSectionExperimentController {
     @Autowired
     private ExperimentMapper experimentMapper;
 
+    @Autowired
+    private ExperimentImageService experimentImageService;
+
     @PostMapping(value = "/bindExperiments")
     public Response insertExperiment(@RequestBody BindExperiments bindExperiments) {
         try {
@@ -32,7 +39,17 @@ public class ChapterSectionExperimentController {
             bindExperiments.getExperiment_id().stream().forEach(id -> {
                 ExperimentEntity experimentEntity = experimentMapper.findById(id);
                 experimentEntity.setType(1);
+                experimentEntity.setParent_id(experimentEntity.getParent_id());
                 experimentMapper.insert(experimentEntity);
+                List<ExperimentImageEntity> list = new ArrayList<>();
+                experimentImageService.findImageByExperiment(id).stream().forEach(images -> {
+                    list.add(ExperimentImageEntity
+                            .builder()
+                            .experiment_id(experimentEntity.getId())
+                            .image_id(images.getImage_id())
+                            .build());
+                });
+                experimentImageService.insertExperimentImages(list);
                 ids.add(experimentEntity.getId());
             });
             List<ChapterSectionExperimentEntity> list = new ArrayList<>();

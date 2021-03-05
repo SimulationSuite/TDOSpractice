@@ -32,6 +32,8 @@ public class ExperimentEntity {
 
     private Integer type;// 0.管理员内置 1.教师开设
 
+    private String parent_id; //父ID
+
     private List<String> images;
 
     private LocalDateTime created_at;

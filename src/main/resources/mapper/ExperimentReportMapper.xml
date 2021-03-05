@@ -35,6 +35,9 @@
             <if test="info != null">
                 info = #{info},
             </if>
+            <if test="submit_at != null">
+                submit_at = #{submit_at},
+            </if>
         </set>
         where experiment_id = #{experiment_id}::uuid AND user_id = #{user_id}
     </update>
