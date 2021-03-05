@@ -3,7 +3,6 @@ package org.tdos.tdospractice;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.kevinsawicki.http.HttpRequest;
-import org.apache.poi.ss.formula.functions.T;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.tdos.tdospractice.body.AddChapter;
@@ -188,21 +187,53 @@ public class CourseTests {
         PrepareCourseTest prepareCourseTest = new PrepareCourseTest();
         prepareCourseTest.course_id = id;
         prepareCourseTest.user_id = "123123";
-        HttpRequest.post(nodeTool + "/prepare_course")
+        String body = HttpRequest.post(nodeTool + "/prepare_course")
                 .connectTimeout(5000)
                 .readTimeout(5000)
                 .contentType(HttpRequest.CONTENT_TYPE_JSON)
                 .send(JSON.toJSONString(prepareCourseTest))
                 .body();
-        return id;
+        JSONObject jo = JSONObject.parseObject(body);
+        if (jo.getInteger("code") == 200) {
+            return jo.getJSONObject("data").getString("course_id");
+        }
+        return "";
     }
 
     // 老师备课多门课程
     @Test
     void addMorePrepareTeacherCourse() {
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             getPrepareTeacherCourse();
         }
+    }
+
+    // 老师发布多门课程
+    @Test
+    void addMorePublicTeacherCourse() {
+        List<String> ids = new ArrayList<>();
+        for (int i = 0; i < 1; i++) {
+            String id = getPrepareTeacherCourse();
+            ids.add(id);
+            System.out.println("老师新建课程id：" + id);
+        }
+        ids.forEach(id -> {
+            ModifyCourseStatusTest modifyCourseStatusTest = new ModifyCourseStatusTest();
+            modifyCourseStatusTest.owner_id = "123123"; // 老師的id
+            modifyCourseStatusTest.status = 1;
+            modifyCourseStatusTest.course_id = id;
+            modifyCourseStatusTest.start = "2021-02-22 07:46:37";
+            modifyCourseStatusTest.end = "2021-03-22 07:46:37";
+            List<String> userList = new ArrayList<>();
+            userList.add("1000000"); // 添加学生
+            modifyCourseStatusTest.user_id_list = userList;
+            HttpRequest.post(nodeTool + "/modify_course_status")
+                    .connectTimeout(5000)
+                    .readTimeout(5000)
+                    .contentType(HttpRequest.CONTENT_TYPE_JSON)
+                    .send(JSON.toJSONString(modifyCourseStatusTest))
+                    .body();
+        });
     }
 
 
