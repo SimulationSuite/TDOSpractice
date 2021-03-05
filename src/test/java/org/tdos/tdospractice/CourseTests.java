@@ -3,6 +3,7 @@ package org.tdos.tdospractice;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.kevinsawicki.http.HttpRequest;
+import org.apache.poi.ss.formula.functions.T;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.tdos.tdospractice.body.AddChapter;
@@ -67,8 +68,7 @@ public class CourseTests {
         public int order;
     }
 
-    @Test
-    String addAdminCourse() {
+    String getAdminCourse() {
         AddCourseTest addCourse = new AddCourseTest();
         addCourse.name = "课程" + UUID.randomUUID();
         addCourse.pic_url = "3231312312313";
@@ -120,6 +120,11 @@ public class CourseTests {
         return "";
     }
 
+    @Test
+    void addAdminCourse() {
+        getAdminCourse();
+    }
+
     static class ModifyCourseStatusTest {
 
         public String owner_id;
@@ -136,11 +141,26 @@ public class CourseTests {
 
     }
 
+    String getPublicAdminCourse() {
+        String id = getAdminCourse();
+        ModifyCourseStatusTest modifyCourseStatusTest = new ModifyCourseStatusTest();
+        modifyCourseStatusTest.course_id = id;
+        modifyCourseStatusTest.status = 1;
+        modifyCourseStatusTest.owner_id = "3234234";
+        HttpRequest.post(nodeTool + "/modify_course_status")
+                .connectTimeout(5000)
+                .readTimeout(5000)
+                .contentType(HttpRequest.CONTENT_TYPE_JSON)
+                .send(JSON.toJSONString(modifyCourseStatusTest))
+                .body();
+        return id;
+    }
+
     // 添加多门管理员内置课程
     @Test
-    void addMoreAdminCourse() {
-        for (int i = 0; i < 1; i++) {
-            String id = addAdminCourse();
+    void addMorePublicAdminCourse() {
+        for (int i = 0; i < 10; i++) {
+            String id = getPublicAdminCourse();
             ModifyCourseStatusTest modifyCourseStatusTest = new ModifyCourseStatusTest();
             modifyCourseStatusTest.course_id = id;
             modifyCourseStatusTest.status = 1;
@@ -151,6 +171,37 @@ public class CourseTests {
                     .contentType(HttpRequest.CONTENT_TYPE_JSON)
                     .send(JSON.toJSONString(modifyCourseStatusTest))
                     .body();
+        }
+    }
+
+    static class PrepareCourseTest {
+
+        public String course_id;
+
+        public String user_id;
+
+    }
+
+    // 老师备课课程
+    String getPrepareTeacherCourse() {
+        String id = getPublicAdminCourse();
+        PrepareCourseTest prepareCourseTest = new PrepareCourseTest();
+        prepareCourseTest.course_id = id;
+        prepareCourseTest.user_id = "123123";
+        HttpRequest.post(nodeTool + "/prepare_course")
+                .connectTimeout(5000)
+                .readTimeout(5000)
+                .contentType(HttpRequest.CONTENT_TYPE_JSON)
+                .send(JSON.toJSONString(prepareCourseTest))
+                .body();
+        return id;
+    }
+
+    // 老师备课多门课程
+    @Test
+    void addMorePrepareTeacherCourse() {
+        for (int i = 0; i < 2; i++) {
+            getPrepareTeacherCourse();
         }
     }
 
