@@ -138,17 +138,13 @@ public class ExperimentServiceImpl implements ExperimentService {
         List<ExperimentEntity> list = new ArrayList<>();
         section_ids.add(section_id);
         if (f_category_id.equals("") && c_category_id.equals("")) {
-//            List<ExperimentEntity> finalList1 = list;
-//            experimentService.findExperiment(category_ids, name, type, perPage, page).getList().forEach(experimentEntity -> {
-//                chapterSectionExperimentMapper.getChapterSectionExperimentBySection(section_id).stream().forEach(chapterSectionExperimentEntity -> {
-//                    if (experimentEntity.getId().equals(chapterSectionExperimentEntity.getExperiment_id())) {
-//                        finalList1.remove(experimentEntity);
-//                    }
-//                });
-//            });
-            List<String> ids = chapterSectionExperimentMapper.getExperimentIds(section_ids);
-
-            list = experimentMapper.findExperimentNotSelected(category_ids, name, type, experimentMapper.getParentIds(ids), perPage, page);
+            List<String> ids = new ArrayList<>();
+            ids = chapterSectionExperimentMapper.getExperimentIds(section_ids);
+            if (ids.size() == 0){
+                list = experimentMapper.findExperiment(category_ids, name, type);
+            }else {
+                list = experimentMapper.findExperimentNotSelected(category_ids, name, type, experimentMapper.getParentIds(ids));
+            }
         } else {
             List<String> ids = new ArrayList<>();
             if (c_category_id.equals("")) {
@@ -158,21 +154,11 @@ public class ExperimentServiceImpl implements ExperimentService {
             } else {
                 ids.add(c_category_id);
             }
-//            list = experimentService.findExperiment(ids, name, type, perPage, page).getList();
-//            List<ExperimentEntity> finalList = list;
-//            list.forEach(experimentEntity -> {
-////                experimentMapper.findAllByIds(section_ids).forEach(e -> {
-////                    if (e.getId().equals(experimentEntity.getId())) {
-////                        list.remove(experimentEntity);
-////                    }
-////                });
-//                chapterSectionExperimentMapper.getChapterSectionExperimentBySection(section_id).stream().forEach(chapterSectionExperimentEntity -> {
-//                    if (experimentEntity.getId().equals(chapterSectionExperimentEntity.getExperiment_id())) {
-//                        finalList.remove(experimentEntity);
-//                    }
-//                });
-//            });
-            list = experimentMapper.findExperimentNotSelected(category_ids, name, type, experimentMapper.getParentIds(ids), perPage, page);
+            if (ids.size() == 0){
+                list = experimentMapper.findExperiment(category_ids, name, type);
+            }else {
+                list = experimentMapper.findExperimentNotSelected(category_ids, name, type, experimentMapper.getParentIds(ids));
+            }
         }
         return new PageInfo<>(list);
     }
