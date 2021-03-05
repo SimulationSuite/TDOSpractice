@@ -136,14 +136,14 @@ public class ExperimentServiceImpl implements ExperimentService {
         List<String> category_ids = new ArrayList<>();
         List<String> section_ids = new ArrayList<>();
         List<ExperimentEntity> list = new ArrayList<>();
+        List<String> experimentIds_ids = new ArrayList<>();
         section_ids.add(section_id);
         if (f_category_id.equals("") && c_category_id.equals("")) {
-            List<String> ids = new ArrayList<>();
-            ids = chapterSectionExperimentMapper.getExperimentIds(section_ids);
-            if (ids.size() == 0){
+            experimentIds_ids = chapterSectionExperimentMapper.getExperimentIds(section_ids);
+            if (experimentIds_ids.size() == 0){
                 list = experimentMapper.findExperiment(category_ids, name, type);
             }else {
-                list = experimentMapper.findExperimentNotSelected(category_ids, name, type, experimentMapper.getParentIds(ids));
+                list = experimentMapper.findExperimentNotSelected(category_ids, name, type, experimentMapper.getParentIds(experimentIds_ids));
             }
         } else {
             List<String> ids = new ArrayList<>();
@@ -157,7 +157,7 @@ public class ExperimentServiceImpl implements ExperimentService {
             if (ids.size() == 0){
                 list = experimentMapper.findExperiment(category_ids, name, type);
             }else {
-                list = experimentMapper.findExperimentNotSelected(category_ids, name, type, experimentMapper.getParentIds(ids));
+                list = experimentMapper.findExperimentNotSelected(ids, name, type, experimentMapper.getParentIds(experimentIds_ids));
             }
         }
         return new PageInfo<>(list);
