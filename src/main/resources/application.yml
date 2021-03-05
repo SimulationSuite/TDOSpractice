@@ -48,4 +48,10 @@ kvm:
       - "E://certs"
       - "E://certs//31"
 
+ftp:
+  ftpIp: 192.168.1.228
+  ftpUser: test
+  ftpPass: 123456
+
+
 

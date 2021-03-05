@@ -7,8 +7,8 @@
     <insert id="insert" parameterType="org.tdos.tdospractice.entity.ExperimentEntity" useGeneratedKeys="true"
             keyProperty="id">
         insert into
-        experiment(name,pic_url,end_at,step,duration,category_id,introduce,type)
-        values(#{name},#{pic_url},#{end_at},#{step},#{duration},#{category_id}::uuid,#{introduce},#{type})
+        experiment(name,pic_url,end_at,step,duration,category_id,introduce,type,parent_id)
+        values(#{name},#{pic_url},#{end_at},#{step},#{duration},#{category_id}::uuid,#{introduce},#{type},#{parent_id})
     </insert>
 
     <select id="findExperiment" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
@@ -40,10 +40,7 @@
     </select>
 
     <select  id="hasExperiment" resultType="int">
-        select count(*) from
-            INNER JOIN chapter_section_experiment c
-            ON e.id = c.experiment_id
-            WHERE c.section_id =  #{section_id}::uuid
+        select count(*) from experiment where parent_id = #{parent_id}
     </select>
 
     <update id="updateExperiment">
@@ -100,8 +97,26 @@
         <if test="name!=null and name!=''">
             AND "name" like concat('%',#{name},'%')
         </if>
+        <if test="ids != null and ids.size > 0">
+            AND id NOT IN
+            <foreach collection="ids" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}
+            </foreach>
+        </if>
+
         order by created_at desc
     </select>
 
+    <select  id="getParentIds" resultType="String">
+        select parent_id from experiment where type = 1
+        <if test="ids != null and ids.size > 0">
+            AND id IN
+            <foreach collection="ids" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}::uuid
+            </foreach>
+        </if>
+    </select>
 
 </mapper>

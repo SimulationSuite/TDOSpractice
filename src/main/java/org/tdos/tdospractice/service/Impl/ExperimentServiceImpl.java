@@ -135,18 +135,20 @@ public class ExperimentServiceImpl implements ExperimentService {
         PageHelper.startPage(page, perPage);
         List<String> category_ids = new ArrayList<>();
         List<String> section_ids = new ArrayList<>();
-        List<ExperimentEntity> list = experimentService.findExperiment(category_ids, name, type, perPage, page).getList();
+        List<ExperimentEntity> list = new ArrayList<>();
         section_ids.add(section_id);
         if (f_category_id.equals("") && c_category_id.equals("")) {
-            List<ExperimentEntity> finalList1 = list;
-            experimentService.findExperiment(category_ids, name, type, perPage, page).getList().forEach(experimentEntity -> {
-                chapterSectionExperimentMapper.getChapterSectionExperimentBySection(section_id).stream().forEach(chapterSectionExperimentEntity -> {
-                    if (experimentEntity.getId().equals(chapterSectionExperimentEntity.getExperiment_id())) {
-                        finalList1.remove(experimentEntity);
-                    }
-                });
+//            List<ExperimentEntity> finalList1 = list;
+//            experimentService.findExperiment(category_ids, name, type, perPage, page).getList().forEach(experimentEntity -> {
+//                chapterSectionExperimentMapper.getChapterSectionExperimentBySection(section_id).stream().forEach(chapterSectionExperimentEntity -> {
+//                    if (experimentEntity.getId().equals(chapterSectionExperimentEntity.getExperiment_id())) {
+//                        finalList1.remove(experimentEntity);
+//                    }
+//                });
+//            });
+            List<String> ids = chapterSectionExperimentMapper.getExperimentIds(section_ids);
 
-            });
+            list = experimentMapper.findExperimentNotSelected(category_ids, name, type, experimentMapper.getParentIds(ids), perPage, page);
         } else {
             List<String> ids = new ArrayList<>();
             if (c_category_id.equals("")) {
@@ -156,20 +158,21 @@ public class ExperimentServiceImpl implements ExperimentService {
             } else {
                 ids.add(c_category_id);
             }
-            list = experimentService.findExperiment(ids, name, type, perPage, page).getList();
-            List<ExperimentEntity> finalList = list;
-            list.forEach(experimentEntity -> {
-//                experimentMapper.findAllByIds(section_ids).forEach(e -> {
-//                    if (e.getId().equals(experimentEntity.getId())) {
-//                        list.remove(experimentEntity);
+//            list = experimentService.findExperiment(ids, name, type, perPage, page).getList();
+//            List<ExperimentEntity> finalList = list;
+//            list.forEach(experimentEntity -> {
+////                experimentMapper.findAllByIds(section_ids).forEach(e -> {
+////                    if (e.getId().equals(experimentEntity.getId())) {
+////                        list.remove(experimentEntity);
+////                    }
+////                });
+//                chapterSectionExperimentMapper.getChapterSectionExperimentBySection(section_id).stream().forEach(chapterSectionExperimentEntity -> {
+//                    if (experimentEntity.getId().equals(chapterSectionExperimentEntity.getExperiment_id())) {
+//                        finalList.remove(experimentEntity);
 //                    }
 //                });
-                chapterSectionExperimentMapper.getChapterSectionExperimentBySection(section_id).stream().forEach(chapterSectionExperimentEntity -> {
-                    if (experimentEntity.getId().equals(chapterSectionExperimentEntity.getExperiment_id())) {
-                        finalList.remove(experimentEntity);
-                    }
-                });
-            });
+//            });
+            list = experimentMapper.findExperimentNotSelected(category_ids, name, type, experimentMapper.getParentIds(ids), perPage, page);
         }
         return new PageInfo<>(list);
     }
@@ -200,4 +203,5 @@ public class ExperimentServiceImpl implements ExperimentService {
     public long deleteExperimentList(List<String> ids) {
         return experimentMapper.deleteExperimentList(ids);
     }
+
 }

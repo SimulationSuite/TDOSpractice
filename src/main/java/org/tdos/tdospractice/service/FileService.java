@@ -6,8 +6,10 @@ import org.tdos.tdospractice.body.UploadFile;
 
 public interface FileService {
 
-    Pair<Boolean,UploadFile> upload(MultipartFile file, int type);
+    Pair<Boolean, UploadFile> upload(MultipartFile file, int type);
 
     boolean download();
+
+    boolean delete(String path);
 
 }

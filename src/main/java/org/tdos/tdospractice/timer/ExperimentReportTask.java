@@ -16,8 +16,8 @@ public class ExperimentReportTask {
     @Autowired
     private ExperimentReportService experimentReportService;
 
-//    @Scheduled(cron = "0 0 0 * * ?")
-//    private void configureTasks() {
-//        experimentReportService.updateExperimentReportByEndtime();
-//    }
+    @Scheduled(cron = "0 0 0 * * ?")
+    private void configureTasks() {
+        experimentReportService.updateExperimentReportByEndtime();
+    }
 }

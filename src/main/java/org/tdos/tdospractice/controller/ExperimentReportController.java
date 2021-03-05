@@ -58,7 +58,7 @@ public class ExperimentReportController {
     public Response hasExperimentReport(@RequestParam(value = "experiment_id") String experiment_id,
                                         @RequestParam(value = "user_id") String user_id) {
         if (experimentReportService.findExperimentReportByExperimentAndUserId(experiment_id, user_id).isPresent()) {
-            return Response.success("该实验报告已存在");
+            return Response.success(experimentReportService.findExperimentReportByExperimentAndUserId(experiment_id, user_id));
         }
         return Response.error("该实验报告不存在");
     }

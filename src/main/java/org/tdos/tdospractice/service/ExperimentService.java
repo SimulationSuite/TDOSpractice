@@ -27,7 +27,7 @@ public interface ExperimentService {
 
     boolean deleteExperiment(String id);
 
-    int hasExperiment(String section_id);
+    int hasExperiment(String parent_id);
 
     long deleteExperimentList(List<String> ids);
 }
