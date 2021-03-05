@@ -2,10 +2,12 @@ package org.tdos.tdospractice;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.kevinsawicki.http.HttpRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.tdos.tdospractice.body.AddChapter;
+import org.tdos.tdospractice.body.ChapterSectionCourseware;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +69,36 @@ public class CourseTests {
         public int order;
     }
 
+    static class AddCourseWareTest{
+        public String id;
+
+        public String name;
+
+        public Integer type;
+
+        public Integer kind;
+
+        public String url;
+
+        public Integer duration;
+
+        public Integer size;
+
+        public String categoryId;
+    }
+
+    static class AddChapterSectionCourseWareTest{
+        public List<ChapterSectionCourseware> chapterSectionCoursewareList;
+    }
+
+    static class ChapterSectionCourseware{
+        public String chapterId;
+
+        public String sectionId;
+
+        public String coursewareId;
+    }
+
     @Test
     String addAdminCourse() {
         AddCourseTest addCourse = new AddCourseTest();
@@ -91,6 +123,35 @@ public class CourseTests {
                 addChapterTest.name = "第" + (i + 1) + "章";
                 addChapterTest.order = i + 1;
                 addChapterTest.sections = new ArrayList<>();
+                AddCourseWareTest addCourseWare = new AddCourseWareTest();
+                addCourseWare.name = "课件"+UUID.randomUUID();
+                addCourseWare.type = 0;
+                addCourseWare.kind = 0;
+                addCourseWare.url = "/video/3ec310c5-7767-4cc6-a2e1-896b39307018.mp4";
+                addCourseWare.duration = 122;
+                addCourseWare.size = 12231;
+                addCourseWare.categoryId = "73cab2fb-3aa6-4031-b3f4-e9da75ba1cf7";
+                String coursewareBody = HttpRequest.post(nodeTool + "/addCourseware")
+                        .connectTimeout(5000)
+                        .readTimeout(5000)
+                        .contentType(HttpRequest.CONTENT_TYPE_JSON)
+                        .send(JSON.toJSONString(addCourseWare))
+                        .body();
+                JSONObject courseWare = JSONObject.parseObject(coursewareBody);
+                if (courseWare.getInteger("code") == 200) {
+                    String courseWareId = courseWare.getJSONObject("data").getString("id");
+                    AddChapterSectionCourseWareTest addChapterSectionCourseWare = new AddChapterSectionCourseWareTest();
+                    ChapterSectionCourseware chapterSectionCourseware = new ChapterSectionCourseware();
+                    chapterSectionCourseware.chapterId = courseId;
+                    chapterSectionCourseware.sectionId = "fb0a1080-b11e-427c-8567-56ca6105ea07";
+                    chapterSectionCourseware.coursewareId = courseWareId;
+                    HttpRequest.post(nodeTool + "/addChapterSectionCourseware")
+                            .connectTimeout(5000)
+                            .readTimeout(5000)
+                            .contentType(HttpRequest.CONTENT_TYPE_JSON)
+                            .send(JSON.toJSONString(addChapterSectionCourseWare))
+                            .body();
+                }
                 for (int j = 0; j < 10; j++) {
                     AddSectionTest addSectionTest = new AddSectionTest();
                     addSectionTest.name = "第" + (j + 1) + "节";
