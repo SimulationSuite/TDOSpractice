@@ -132,13 +132,13 @@ public class ExperimentServiceImpl implements ExperimentService {
 
     @Override
     public PageInfo<ExperimentEntity> findSelectedExperimentByCategory(String f_category_id, String c_category_id, String section_id, String name, Integer type, Integer perPage, Integer page) {
-        PageHelper.startPage(page, perPage);
         List<String> category_ids = new ArrayList<>();
         List<String> section_ids = new ArrayList<>();
         List<ExperimentEntity> list = new ArrayList<>();
         List<String> experimentIds_ids = new ArrayList<>();
         section_ids.add(section_id);
         experimentIds_ids = chapterSectionExperimentMapper.getExperimentIds(section_ids);
+        PageHelper.startPage(page, perPage);
         if (f_category_id.equals("") && c_category_id.equals("")) {
             if (experimentIds_ids.size() == 0){
                 list = experimentMapper.findExperiment(category_ids, name, type);
@@ -181,8 +181,8 @@ public class ExperimentServiceImpl implements ExperimentService {
     }
 
     @Override
-    public int hasExperiment(String section_id) {
-        return 0;
+    public int hasExperiment(String parent_id) {
+        return experimentMapper.hasExperiment(parent_id);
     }
 
     @Override
