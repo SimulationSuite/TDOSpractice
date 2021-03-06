@@ -72,6 +72,7 @@ public class ChapterSectionExperimentController {
     @PostMapping(value = "/unbindExperiments")
     public Response unbindExperiments(@RequestParam(value = "section_id") String section_id, @RequestParam(value = "experiment_id") String experiment_id) {
         Pair<Boolean, String> pair = chapterSectionExperimentService.deleteChapterSectionExperiment(section_id, experiment_id);
+        experimentMapper.deleteExperiment(experiment_id);
         if (pair.getKey()) {
             return Response.success();
         } else {

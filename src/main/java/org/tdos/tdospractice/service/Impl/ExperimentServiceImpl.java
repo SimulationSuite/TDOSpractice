@@ -138,13 +138,11 @@ public class ExperimentServiceImpl implements ExperimentService {
         List<String> experimentIds_ids = new ArrayList<>();
         section_ids.add(section_id);
         experimentIds_ids = chapterSectionExperimentMapper.getExperimentIds(section_ids);
-        PageHelper.startPage(page, perPage);
         if (f_category_id.equals("") && c_category_id.equals("")) {
-            if (experimentIds_ids.size() == 0){
-                list = experimentMapper.findExperiment(category_ids, name, type);
-            }else {
-                list = experimentMapper.findExperimentNotSelected(category_ids, name, type, experimentMapper.getParentIds(experimentIds_ids));
-            }
+            List<String> experimentIds_list = experimentMapper.getParentIds(experimentIds_ids);
+            PageHelper.startPage(page, perPage);
+            list = experimentMapper.findExperimentNotSelected(category_ids, name, type, experimentIds_ids.size() == 0 ? experimentIds_ids : experimentIds_list);
+
         } else {
             List<String> ids = new ArrayList<>();
             if (c_category_id.equals("")) {
@@ -154,11 +152,16 @@ public class ExperimentServiceImpl implements ExperimentService {
             } else {
                 ids.add(c_category_id);
             }
-            if (ids.size() == 0){
+            if (ids.size() == 0) {
+                PageHelper.startPage(page, perPage);
                 list = experimentMapper.findExperiment(category_ids, name, type);
-            }else {
-                list = experimentMapper.findExperimentNotSelected(ids, name, type, experimentMapper.getParentIds(experimentIds_ids));
+            } else {
+                List<String> parentIds = experimentMapper.getParentIds(experimentIds_ids);
+                PageHelper.startPage(page, perPage);
+                list = experimentMapper.findExperimentNotSelected(ids, name, type, experimentIds_ids.size() == 0 ? experimentIds_ids : parentIds);
             }
+
+
         }
         return new PageInfo<>(list);
     }
