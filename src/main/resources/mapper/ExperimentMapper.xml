@@ -101,7 +101,7 @@
             AND id NOT IN
             <foreach collection="ids" item="id" index="index"
                      open="(" close=")" separator=",">
-                #{id}
+                #{id}::uuid
             </foreach>
         </if>
 

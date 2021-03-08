@@ -53,7 +53,7 @@
 
     <select id="findExperimentReportAll" resultType="org.tdos.tdospractice.type.AllExperimentReport">
         select er.experiment_id as experiment_id,su.id as user_id, su.name as userName,
-        c.name as className,er.status as status,er.iscorrect as iscorrect,er.submit_at submit_at,e.name as name,e.end_at
+        c.name as className,er.status as status,er.iscorrect as iscorrect,er.submit_at as submit_at,e.name as name,e.end_at
         as end_at,er.score as score
         FROM experiment_report er
         inner join sim_user su on su.id = er.user_id

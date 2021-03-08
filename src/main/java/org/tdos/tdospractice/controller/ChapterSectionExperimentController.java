@@ -39,7 +39,7 @@ public class ChapterSectionExperimentController {
             bindExperiments.getExperiment_id().stream().forEach(id -> {
                 ExperimentEntity experimentEntity = experimentMapper.findById(id);
                 experimentEntity.setType(1);
-                experimentEntity.setParent_id(experimentEntity.getParent_id());
+                experimentEntity.setParent_id(id);
                 experimentMapper.insert(experimentEntity);
                 List<ExperimentImageEntity> list = new ArrayList<>();
                 experimentImageService.findImageByExperiment(id).stream().forEach(images -> {
@@ -72,6 +72,7 @@ public class ChapterSectionExperimentController {
     @PostMapping(value = "/unbindExperiments")
     public Response unbindExperiments(@RequestParam(value = "section_id") String section_id, @RequestParam(value = "experiment_id") String experiment_id) {
         Pair<Boolean, String> pair = chapterSectionExperimentService.deleteChapterSectionExperiment(section_id, experiment_id);
+        experimentMapper.deleteExperiment(experiment_id);
         if (pair.getKey()) {
             return Response.success();
         } else {

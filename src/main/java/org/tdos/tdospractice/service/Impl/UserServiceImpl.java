@@ -113,30 +113,30 @@ public class UserServiceImpl extends Throwable implements UserService{
         if (user == null) {
             return new Pair<>(false, "jwt user_id is exist");
         }
-        switch (type) {
-            case 0: {
-                boolean allExist = userIDs.stream().allMatch(x -> !StringUtils.isEmpty(userMapper.findUserById(x)) && userMapper.findUserById(x).getRoleID() == 0);
-                if (!allExist) {
-                    return new Pair<>(false, "user_id is invalid");
-                }
-            }
-            break;
-            case 1: {
-                boolean allExist = userIDs.stream().allMatch(x -> !StringUtils.isEmpty(userMapper.findUserById(x)) && userMapper.findUserById(x).getRoleID() == 1);
-                if (!allExist) {
-                    return new Pair<>(false, "user_id is invalid");
-                }
-            }
-            break;
-            case 2: {
-                boolean allExist = userIDs.stream().allMatch(x -> !StringUtils.isEmpty(userMapper.findUserById(x)) && userMapper.findUserById(x).getRoleID() == 2);
-                if (!allExist) {
-                    return new Pair<>(false, "user_id is invalid");
-                }
-            }
-            break;
-            default:
-        }
+//        switch (type) {
+//            case 0: {
+//                boolean allExist = userIDs.stream().allMatch(x -> !StringUtils.isEmpty(userMapper.findUserById(x)) && userMapper.findUserById(x).getRoleID() == 0);
+//                if (!allExist) {
+//                    return new Pair<>(false, "user_id is invalid");
+//                }
+//            }
+//            break;
+//            case 1: {
+//                boolean allExist = userIDs.stream().allMatch(x -> !StringUtils.isEmpty(userMapper.findUserById(x)) && userMapper.findUserById(x).getRoleID() == 1);
+//                if (!allExist) {
+//                    return new Pair<>(false, "user_id is invalid");
+//                }
+//            }
+//            break;
+//            case 2: {
+//                boolean allExist = userIDs.stream().allMatch(x -> !StringUtils.isEmpty(userMapper.findUserById(x)) && userMapper.findUserById(x).getRoleID() == 2);
+//                if (!allExist) {
+//                    return new Pair<>(false, "user_id is invalid");
+//                }
+//            }
+//            break;
+//            default:
+//        }
         userIDs.forEach(x -> userMapper.deleteUserById(x));
         return new Pair<>(true,"");
     }
