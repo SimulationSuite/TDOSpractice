@@ -8,7 +8,7 @@
             keyProperty="id">
         insert into
         experiment(name,pic_url,end_at,step,duration,category_id,introduce,type,parent_id)
-        values(#{name},#{pic_url},#{end_at},#{step},#{duration},#{category_id}::uuid,#{introduce},#{type},#{parent_id})
+        values(#{name},#{pic_url},#{end_at},#{step},#{duration},#{category_id}::uuid,#{introduce},#{type},#{parent_id}::uuid)
     </insert>
 
     <select id="findExperiment" resultType="org.tdos.tdospractice.entity.ExperimentEntity">
