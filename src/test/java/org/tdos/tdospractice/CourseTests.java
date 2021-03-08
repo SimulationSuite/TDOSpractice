@@ -99,7 +99,7 @@ public class CourseTests {
         public String coursewareId;
     }
 
-    String getAdminCourse() {
+    String getPublicAdminCourse() {
         AddCourseTest addCourse = new AddCourseTest();
         addCourse.name = "课程" + UUID.randomUUID();
         addCourse.pic_url = "3231312312313";
@@ -182,7 +182,7 @@ public class CourseTests {
 
     @Test
     void addAdminCourse() {
-        getAdminCourse();
+        getPublicAdminCourse();
     }
 
     static class ModifyCourseStatusTest {
