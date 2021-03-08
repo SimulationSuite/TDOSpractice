@@ -61,12 +61,14 @@
             t.user_id,
             s.NAME AS user_name,
             t.experiment_id,
-            e.NAME AS experiment_name
+            e.NAME AS experiment_name,
+            t.course_id
         FROM
             (
         SELECT
             c.user_id,
-            c.experiment_id
+            c.experiment_id,
+            c.course_id
         FROM
             container c
         WHERE
@@ -81,7 +83,8 @@
         </choose>
         GROUP BY
             c.user_id,
-            c.experiment_id
+            c.experiment_id,
+            c.course_id
             ) t
             LEFT JOIN sim_user s ON t.user_id = s.id
             LEFT JOIN experiment e ON t.experiment_id = e.id
