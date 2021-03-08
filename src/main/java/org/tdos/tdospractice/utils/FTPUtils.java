@@ -42,7 +42,7 @@ public class FTPUtils {
     }
 
     private Pair<Boolean, String> uploadFile(int type, File file, String ftpIp, String ftpUser, String ftpPass) throws IOException {
-        Boolean upload = true;
+        Boolean upload = false;
         FileInputStream fileInputStream = null;
         //connect to ftpServer
         if (connectServer(ftpIp, ftpUser, ftpPass)) {
@@ -66,6 +66,7 @@ public class FTPUtils {
                 ftpClient.enterLocalPassiveMode();
                 fileInputStream = new FileInputStream(file);
                 ftpClient.storeFile(file.getName(), fileInputStream);
+                upload = true;
             } catch (IOException e) {
                 log.error("上传文件异常", e);
                 upload = false;
