@@ -110,6 +110,9 @@ public class ContainerServiceImpl implements ContainerService {
         if (type < KvmManager.ExecType.START.ordinal() || KvmManager.ExecType.RESTART.ordinal() < type) {
             return Response.error("异常操作");
         }
+        if (containerIds.size() == 0) {
+            return Response.error("异常操作");
+        }
         List<ContainerEntity> containers = containerMapper.findContainerByIds(containerIds);
         if (containers.size() != containerIds.size()) {
             return Response.error("未知实验");
