@@ -43,7 +43,7 @@
     </update>
 
     <update id="updateExperimentReportByEndtime">
-        update experiment_report SET score = 0 , iscorrect = 1 , status = 1 WHERE end_at &lt; current_date AND status = 0 AND iscorrect = 0
+        UPDATE experiment_report as er SET score = 0 , iscorrect = 1 , status = 1  from experiment e where er.experiment_id = e.id  and e.end_at  &lt; current_date AND er.status = 0 AND er.iscorrect = 0
     </update>
 
     <select id="findExperimentReportByExperimentAndUserId"
