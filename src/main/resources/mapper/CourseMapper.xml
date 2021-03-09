@@ -355,13 +355,17 @@ FROM
         chapter."order" AS chapter_order,
         section.id AS section_id,
         section.NAME AS section_name,
-        section.ORDER AS section_order
+        section.ORDER AS section_order,
+        small_section.id :: varchar AS small_section_id,
+        small_section.NAME AS small_section_name,
+        small_section.ORDER AS small_section_order
         FROM
         course c
         LEFT JOIN course_chapter_section ccs ON  ccs.course_id = c.id
         LEFT JOIN chapter ON chapter.id = ccs.chapter_id and "chapter".order != -1
         LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
         LEFT JOIN class_course cc ON cc.course_id = ccs.course_id
+        LEFT JOIN "small_section" ON "small_section".id = ccs.small_section_id and "small_section".order != -1
         WHERE
         c.id  IN
         <foreach collection="courseIds" item="courseId" open="(" close=")" separator=",">
