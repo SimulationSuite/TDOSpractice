@@ -173,4 +173,13 @@
         select count(*) from courseware where name=#{name}
     </select>
 
+    <select id="getUrlByCoursewareId"  resultType="String">
+        select url
+        from courseware
+        where id in
+        <foreach collection="idList" item="item" separator=",">
+            #{item}::uuid
+        </foreach>
+    </select>
+
 </mapper>
