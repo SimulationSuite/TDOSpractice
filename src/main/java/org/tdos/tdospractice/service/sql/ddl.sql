@@ -283,7 +283,8 @@ create table if not exists image(
     "type" int4 DEFAULT 0,
     parent_image_id varchar(255) DEFAULT NULL,
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
-    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
+    updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
+    CONSTRAINT "name" UNIQUE ("name")
 );
 
 create trigger t_name before update on image for each row execute procedure upd_timestamp();
