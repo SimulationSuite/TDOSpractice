@@ -218,6 +218,27 @@ FROM
         </if>
     </select>
 
+    <select  id="getPublicCourseListById" resultMap="CourseResult">
+        SELECT
+        c.id AS course_id,
+        c.NAME AS course_name,
+        c.pic_url,
+        c.owner_id,
+        c.introduction AS course_introduction,
+        c.start_at,
+        c.end_at,
+        c.STATUS,
+        c."type",
+        c.model_id
+        FROM
+        course c
+        WHERE c.type = 1
+        AND c.owner_id = #{userId} AND c.status = 1
+        <if  test = "name != null and name != ''" >
+            AND c.NAME LIKE concat('%',#{name},'%')
+        </if>
+    </select>
+
     <select  id="getCourseListByIdPerfect" resultMap="CourseResult">
         SELECT
         c.id AS course_id,

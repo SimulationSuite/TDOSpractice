@@ -41,4 +41,6 @@ public interface CourseService {
     Pair<Boolean, String> removeCourseById(DeleteCourse deleteCourse);
 
     Pair<Boolean, String> modifyCourseName(ModifyCourseName modifyCourseName);
+
+    PageInfo<Course> getPublicCourseListById(String userId, Integer perPage, Integer page, String name);
 }

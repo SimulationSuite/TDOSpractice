@@ -173,4 +173,10 @@
         select count(*) from courseware where name=#{name}
     </select>
 
+    <select id="getUrlByCoursewareId"  resultType="String">
+        select url
+        from courseware
+        where id = #{id}::uuid
+    </select>
+
 </mapper>

@@ -63,6 +63,15 @@ public class CourseController {
         return Response.success(courseService.getCourseListById(userId, perPage, page, name));
     }
 
+    // 老师查询自己已经开课的课程
+    @GetMapping(value = "/get_public_course_list_by_user_id")
+    public Response<PageInfo<Course>> getPublicCourseListById(@RequestParam(value = "user_id") String userId,
+                                                        @RequestParam(value = "per_page") Integer perPage,
+                                                        @RequestParam(value = "page") Integer page,
+                                                        @RequestParam(value = "name", required = false) String name) {
+        return Response.success(courseService.getPublicCourseListById(userId, perPage, page, name));
+    }
+
 
 
     // 管理员添加内置课程

@@ -11,6 +11,7 @@ import org.tdos.tdospractice.body.*;
 import org.tdos.tdospractice.entity.*;
 import org.tdos.tdospractice.mapper.*;
 import org.tdos.tdospractice.service.CourseService;
+import org.tdos.tdospractice.service.FileService;
 import org.tdos.tdospractice.type.*;
 import org.tdos.tdospractice.type.Chapter;
 import org.tdos.tdospractice.type.Section;
@@ -69,6 +70,9 @@ public class CourseServiceImpl implements CourseService {
 
 
     private static final String EMPTY_UUID = "fb0a1080-b11e-427c-8567-56ca6105ea07";
+
+    @Autowired
+    private FileService fileService;
 
     @Override
     public PageInfo<Course> getAdminCourseList(Integer perPage, Integer page, String name) {
@@ -743,6 +747,8 @@ public class CourseServiceImpl implements CourseService {
             chapterMapper.removeChapter(chapter.id);
         });
         courseMapper.removeCourse(deleteCourse.courseId);
+        // 删除课程图片
+        fileService.delete(course.picUrl);
         return new Pair<>(true, "");
     }
 
@@ -757,6 +763,33 @@ public class CourseServiceImpl implements CourseService {
         }
         courseMapper.modifyCourseName(modifyCourseName.courseId, modifyCourseName.courseName);
         return new Pair<>(true, "");
+    }
+
+    @Override
+    public PageInfo<Course> getPublicCourseListById(String userId, Integer perPage, Integer page, String name) {
+        PageHelper.startPage(page, perPage, "c.created_at desc");
+        List<Course> courses = courseMapper.getPublicCourseListById(userId, name);
+        PageInfo<Course> pageInfo = new PageInfo<>(courses);
+        if (courses.size() > 0) {
+            List<Course> coursesList = courseMapper.getCourseListByIdPerfect(pageInfo.getList().stream().map(x -> x.id).collect(Collectors.toList()));
+            coursesList.forEach(course -> {
+                if (course.status != 0 && course.endAt != null && course.endAt.isBefore(LocalDateTime.now())) {
+                    course.status = -1;
+                }
+            });
+            List<ClassNumber> classNumbers = classMapper.findClassNumber();
+            coursesList.forEach(x -> countCourseClass(x, classNumbers));
+            coursesList.forEach(c -> {
+                c.chapterNumber = c.chapters.size();
+                c.sectionNumber = c.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
+                AtomicInteger smallSectionNumber = new AtomicInteger();
+                c.chapters.forEach(chapter -> chapter.sections.forEach(section ->
+                        smallSectionNumber.set(smallSectionNumber.get() + section.smallSections.size())));
+                c.smallSectionNumber = smallSectionNumber.get();
+            });
+            pageInfo.setList(coursesList);
+        }
+        return pageInfo;
     }
 
 }

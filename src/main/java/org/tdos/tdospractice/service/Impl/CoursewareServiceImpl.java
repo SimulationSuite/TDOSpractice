@@ -6,12 +6,11 @@ import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import org.tdos.tdospractice.body.ChapterSectionCoursewareList;
 import org.tdos.tdospractice.entity.CoursewareEntity;
 import org.tdos.tdospractice.entity.ChapterSectionCoursewareEntity;
-import org.tdos.tdospractice.entity.QuestionBackAssignmentEntity;
 import org.tdos.tdospractice.mapper.CoursewareMapper;
 import org.tdos.tdospractice.service.CoursewareService;
+import org.tdos.tdospractice.service.FileService;
 import org.tdos.tdospractice.body.Courseware;
 import org.tdos.tdospractice.body.ChapterSectionCourseware;
 
@@ -25,6 +24,9 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
 
     @Autowired
     private CoursewareMapper coursewareMapper;
+
+    @Autowired
+    private FileService fileService;
 
     @Override
     public PageInfo<CoursewareEntity> getCoursewareAll(String name, String kind, String type, String categoryId,String cCategoryId, String chapterId, String sectionId, Integer perPage,Integer page) {
@@ -77,6 +79,8 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
             return map;
         }
         id.forEach(x -> {
+            String url = coursewareMapper.getUrlByCoursewareId(x);
+            fileService.delete(url);
             coursewareMapper.deleteCoursewareById(x);
         });
         map.put("isDelete", true);
