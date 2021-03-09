@@ -11,6 +11,7 @@ import org.tdos.tdospractice.body.*;
 import org.tdos.tdospractice.entity.*;
 import org.tdos.tdospractice.mapper.*;
 import org.tdos.tdospractice.service.CourseService;
+import org.tdos.tdospractice.service.FileService;
 import org.tdos.tdospractice.type.*;
 import org.tdos.tdospractice.type.Chapter;
 import org.tdos.tdospractice.type.Section;
@@ -69,6 +70,9 @@ public class CourseServiceImpl implements CourseService {
 
 
     private static final String EMPTY_UUID = "fb0a1080-b11e-427c-8567-56ca6105ea07";
+
+    @Autowired
+    private FileService fileService;
 
     @Override
     public PageInfo<Course> getAdminCourseList(Integer perPage, Integer page, String name) {
@@ -743,6 +747,8 @@ public class CourseServiceImpl implements CourseService {
             chapterMapper.removeChapter(chapter.id);
         });
         courseMapper.removeCourse(deleteCourse.courseId);
+        // 删除课程图片
+        fileService.delete(course.picUrl);
         return new Pair<>(true, "");
     }
 
