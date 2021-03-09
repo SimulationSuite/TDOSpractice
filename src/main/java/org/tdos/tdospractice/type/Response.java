@@ -64,7 +64,10 @@ public class Response<T> {
     public enum Code {
         SUCCESS(200, "success"),
 
+        JWT_INVALID(400, "jwt is invalid"),
+
         INTERNAL_ERROR(500, "internal error");
+
 
         public final int code;
 
