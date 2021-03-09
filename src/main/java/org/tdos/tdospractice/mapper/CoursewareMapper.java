@@ -43,4 +43,7 @@ public interface CoursewareMapper {
     int hasChapterSectionCoursewareId(String coursewareId);
 
     int hasCoursewareMapperNameExist(@Param("name") String name);
+
+    List<String> getUrlByCoursewareId(@Param("idList") List<String> idList);
+
 }
