@@ -26,6 +26,8 @@ public interface CourseMapper {
 
     List<Course> getCourseListById(String userId, @Param("name") String name);
 
+    List<Course> getPublicCourseListById(String userId, @Param("name") String name);
+
     List<Course> getCourseListByIdPerfect(@Param("courseIds") List<String> courseIds);
 
     Integer findCourseChapterOrder(String courseId);

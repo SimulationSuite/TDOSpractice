@@ -759,4 +759,31 @@ public class CourseServiceImpl implements CourseService {
         return new Pair<>(true, "");
     }
 
+    @Override
+    public PageInfo<Course> getPublicCourseListById(String userId, Integer perPage, Integer page, String name) {
+        PageHelper.startPage(page, perPage, "c.created_at desc");
+        List<Course> courses = courseMapper.getPublicCourseListById(userId, name);
+        PageInfo<Course> pageInfo = new PageInfo<>(courses);
+        if (courses.size() > 0) {
+            List<Course> coursesList = courseMapper.getCourseListByIdPerfect(pageInfo.getList().stream().map(x -> x.id).collect(Collectors.toList()));
+            coursesList.forEach(course -> {
+                if (course.status != 0 && course.endAt != null && course.endAt.isBefore(LocalDateTime.now())) {
+                    course.status = -1;
+                }
+            });
+            List<ClassNumber> classNumbers = classMapper.findClassNumber();
+            coursesList.forEach(x -> countCourseClass(x, classNumbers));
+            coursesList.forEach(c -> {
+                c.chapterNumber = c.chapters.size();
+                c.sectionNumber = c.chapters.stream().mapToInt(chapter -> chapter.getSections().size()).sum();
+                AtomicInteger smallSectionNumber = new AtomicInteger();
+                c.chapters.forEach(chapter -> chapter.sections.forEach(section ->
+                        smallSectionNumber.set(smallSectionNumber.get() + section.smallSections.size())));
+                c.smallSectionNumber = smallSectionNumber.get();
+            });
+            pageInfo.setList(coursesList);
+        }
+        return pageInfo;
+    }
+
 }
