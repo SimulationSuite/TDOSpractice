@@ -44,6 +44,6 @@ public interface CoursewareMapper {
 
     int hasCoursewareMapperNameExist(@Param("name") String name);
 
-    List<String> getUrlByCoursewareId(@Param("idList") List<String> idList);
+    String getUrlByCoursewareId(@Param("id") String id);
 
 }

@@ -176,10 +176,7 @@
     <select id="getUrlByCoursewareId"  resultType="String">
         select url
         from courseware
-        where id in
-        <foreach collection="idList" item="item" separator=",">
-            #{item}::uuid
-        </foreach>
+        where id = #{id}::uuid
     </select>
 
 </mapper>

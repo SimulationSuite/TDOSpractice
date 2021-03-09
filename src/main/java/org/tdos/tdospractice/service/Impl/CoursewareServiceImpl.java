@@ -79,11 +79,8 @@ public class CoursewareServiceImpl extends Throwable implements CoursewareServic
             return map;
         }
         id.forEach(x -> {
-            List<String> urlList = coursewareMapper.getUrlByCoursewareId(id);
-            urlList.forEach(u -> {
-                fileService.delete(u);
-                }
-            );
+            String url = coursewareMapper.getUrlByCoursewareId(x);
+            fileService.delete(url);
             coursewareMapper.deleteCoursewareById(x);
         });
         map.put("isDelete", true);
