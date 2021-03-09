@@ -81,7 +81,7 @@ public class UserController {
         return Response.success(map);
     }
 
-    @PostMapping("/createToken")
+    @PostMapping(value = "/createToken")
     public Response<String> createToken(@RequestParam(value = "id") String id) {
         return Response.success(securityService.createJWT(id));
     }
