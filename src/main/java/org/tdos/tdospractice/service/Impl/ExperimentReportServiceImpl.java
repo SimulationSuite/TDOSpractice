@@ -9,6 +9,7 @@ import org.tdos.tdospractice.mapper.ExperimentReportMapper;
 import org.tdos.tdospractice.service.ExperimentReportService;
 import org.tdos.tdospractice.type.AllExperimentReport;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +36,7 @@ public class ExperimentReportServiceImpl implements ExperimentReportService {
 
     @Override
     public boolean updateExperimentReportByEndtime() {
-        return experimentReportMapper.updateExperimentReportByEndtime();
+        return experimentReportMapper.updateExperimentReportByEndtime(LocalDateTime.now());
     }
 
     @Override
