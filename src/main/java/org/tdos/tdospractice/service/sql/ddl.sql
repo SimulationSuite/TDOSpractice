@@ -243,6 +243,9 @@ create table if not exists student_score(
     CONSTRAINT "student_score_pk" PRIMARY KEY ( "assignment_id", "user_id")
 );
 
+create index if not exists student_score_user_id_index
+    on student_score (user_id);
+
 create trigger t_name before update on student_score for each row execute procedure upd_timestamp();
 
 create table if not exists experiment(
@@ -304,6 +307,9 @@ create table if not exists container(
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
 
+create index if not exists container_user_id_index
+    on container (user_id);
+
 create trigger t_name before update on container for each row execute procedure upd_timestamp();
 
 create table if not exists experiment_image(
@@ -346,6 +352,9 @@ create table if not exists courseware_remark(
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
 
+create index if not exists courseware_remark_user_id_index
+    on courseware_remark (user_id);
+
 create trigger t_name before update on courseware_remark for each row execute procedure upd_timestamp();
 
 
@@ -358,6 +367,9 @@ create table if not exists user_serve(
     created_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc'),
     updated_at TIMESTAMP(0)  without time zone default (now() at time zone 'utc')
 );
+
+create index if not exists user_serve_user_id_index
+    on user_serve (user_id);
 
 create trigger t_name before update on user_serve for each row execute procedure upd_timestamp();
 
