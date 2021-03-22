@@ -1,7 +1,7 @@
 spring:
   datasource:
-    url: jdbc:postgresql://192.168.1.138:5432/tdsspr
-    username: postgres
+    url: jdbc:postgresql://192.168.1.188:5422/test
+    username: test
     password: 123456
   redis:
     host: 127.0.0.1
@@ -42,11 +42,12 @@ kvm:
     start-port: 10000
     count: 500
     server-info:
-      - 'node1@tcp://192.168.1.28:2375'
+      - 'node1@tcp://192.168.1.179:2375'
 #      - 'node2@tcp://192.168.1.31:2375'
     cert-path:
-      - "E://certs"
-      - "E://certs//31"
+      - "//home//yongyang//certs"
+#      - "E://certs"
+#      - "E://certs//31"
 
 ftp:
   ftpIp: 192.168.1.228
