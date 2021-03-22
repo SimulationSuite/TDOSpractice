@@ -12,7 +12,7 @@
         inner join course_chapter_section ccs on ccs.section_id = a.section_id
         inner join course ci on ci.id = ccs.course_id
         inner join class_course cc on cc.course_id = ci.id
-        inner join sim_user su on su.class_id = cc.class_id
+        inner join sim_user su on su.id = cc.user_id
         left join student_score ss on ss.assignment_id = a.id and ss.user_id = su.id
         left join student_answer sa on sa.assignment_id = a.id and sa.user_id = su.id
         where su.id = #{userId} and a.status = 1 and ci.status != 2
