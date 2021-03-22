@@ -195,7 +195,7 @@
         select a.id, a.section_id as sectionId, a.end_at as endAt, a.qualified_score as qualifiedScore,
         a.created_at as createdAt, a.updated_at as updatedAt
         from assignment a
-        where a.end_at &lt;= #{endTime}::timestamp
+        where a.end_at &lt;= #{endTime}::timestamp and a.status = 1
     </select>
 
     <select  id="getUsers" resultType="String">
