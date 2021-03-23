@@ -45,8 +45,8 @@ kvm:
       - 'node1@tcp://192.168.1.179:2375'
 #      - 'node2@tcp://192.168.1.31:2375'
     cert-path:
-      - "//home//yongyang//certs"
-#      - "E://certs"
+#      - "//home//yongyang//certs"
+      - "E://certs"
 #      - "E://certs//31"
 
 ftp:
