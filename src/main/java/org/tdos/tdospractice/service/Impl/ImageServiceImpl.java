@@ -79,7 +79,8 @@ public class ImageServiceImpl implements ImageService {
         if (!kvmManager.isExistImageID(imagesID)) {
             return "该镜像异常与服务器中，无法删除";
         }
-        if (kvmManager.isQuoteContainer(imagesID) || containerMapper.findContainerByImagesIds(imagesID).size() > 0) {
+        List<String> imagesIDs = imageMapper.findImagesByImageids(imagesID);
+        if (kvmManager.isQuoteContainer(imagesID) || containerMapper.findContainerByImagesIds(imagesIDs).size() > 0) {
             return "该镜像已被创建或与运行，无法删除";
         }
         imageMapper.deleteImages(imagesID);
