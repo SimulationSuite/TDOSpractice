@@ -84,7 +84,7 @@ public class ExperimentReportController {
 
     @GetMapping(value = "/findStudentExperimentReport")
     public Response findStudentExperimentReport(@RequestParam(value = "course_id") String course_id,
-                                                @RequestParam(value = "isCorrect") int status,
+                                                @RequestParam(value = "status") int status,
                                                 @RequestParam(value = "name") String name,
                                                 @RequestParam(value = "user_id") String user_id,
                                                 @RequestParam(value = "perPage") Integer perPage,

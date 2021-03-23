@@ -21,6 +21,14 @@ public class InterceptorConfig  implements WebMvcConfigurer {
         registration.excludePathPatterns("/login");
         //将这个controller放行
         registration.excludePathPatterns("/createToken");
+        //将这个controller放行
+        registration.excludePathPatterns("/download_excel");
+        //将这个controller放行
+        registration.excludePathPatterns("/download_qb_excel");
+        //将这个controller放行
+        registration.excludePathPatterns("/upload_excel");
+        //将这个controller放行
+        registration.excludePathPatterns("/upload_qb_excel");
         //拦截全部
         registration.addPathPatterns("/**");
     }
