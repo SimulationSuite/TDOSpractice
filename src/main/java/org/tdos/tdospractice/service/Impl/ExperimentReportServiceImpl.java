@@ -52,9 +52,9 @@ public class ExperimentReportServiceImpl implements ExperimentReportService {
     }
 
     @Override
-    public PageInfo<AllExperimentReport> findStudentExperimentReport(String course_id, int isCorrect, String name,String user_id, Integer perPage, Integer page) {
+    public PageInfo<AllExperimentReport> findStudentExperimentReport(String course_id, int status, String name,String user_id, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        List<AllExperimentReport> list = experimentReportMapper.findStudentExperimentReport(course_id,isCorrect,name,user_id);
+        List<AllExperimentReport> list = experimentReportMapper.findStudentExperimentReport(course_id,status,name,user_id);
         return new PageInfo<>(list);
     }
 }
