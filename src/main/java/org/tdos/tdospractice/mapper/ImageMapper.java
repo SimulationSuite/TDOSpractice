@@ -24,6 +24,8 @@ public interface ImageMapper {
 
     ImageEntity findImageByImagesid(String imagesID);
 
+    List<String> findImagesByImageids(@Param("imageids") List<String> imageids);
+
     List<String> findExperimentImageByImageids(@Param("imageids") List<String> imageids);
 
     List<ImageEntity> findImageByExperimentId(@Param("experimentId") String experimentId);

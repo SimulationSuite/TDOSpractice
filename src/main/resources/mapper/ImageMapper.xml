@@ -69,6 +69,13 @@
         ) group by e.image_id
     </select>
 
+    <select id="findImagesByImageids" resultType="java.lang.String" parameterType="java.lang.String">
+        select i.id from image i where i.imageid in
+        <foreach collection="imageids" open="(" separator="," close=")" item="item">
+            #{item}
+        </foreach>
+    </select>
+
     <select id="findImageByImagesid" resultMap="ImageMap">
         select * from image i where i.id=#{imagesID}::uuid
     </select>

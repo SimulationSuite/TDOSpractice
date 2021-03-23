@@ -43,7 +43,6 @@ kvm:
     count: 500
     server-info:
       - 'node1@tcp://192.168.2.41:2375'
-#      - 'node2@tcp://192.168.1.31:2375'
     cert-path:
       - "/home/certs"
 

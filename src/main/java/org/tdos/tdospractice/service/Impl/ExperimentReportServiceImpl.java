@@ -9,6 +9,7 @@ import org.tdos.tdospractice.mapper.ExperimentReportMapper;
 import org.tdos.tdospractice.service.ExperimentReportService;
 import org.tdos.tdospractice.type.AllExperimentReport;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +36,7 @@ public class ExperimentReportServiceImpl implements ExperimentReportService {
 
     @Override
     public boolean updateExperimentReportByEndtime() {
-        return experimentReportMapper.updateExperimentReportByEndtime();
+        return experimentReportMapper.updateExperimentReportByEndtime(LocalDateTime.now());
     }
 
     @Override
@@ -51,9 +52,9 @@ public class ExperimentReportServiceImpl implements ExperimentReportService {
     }
 
     @Override
-    public PageInfo<AllExperimentReport> findStudentExperimentReport(String course_id, int isCorrect, String name,String user_id, Integer perPage, Integer page) {
+    public PageInfo<AllExperimentReport> findStudentExperimentReport(String course_id, int status, String name,String user_id, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        List<AllExperimentReport> list = experimentReportMapper.findStudentExperimentReport(course_id,isCorrect,name,user_id);
+        List<AllExperimentReport> list = experimentReportMapper.findStudentExperimentReport(course_id,status,name,user_id);
         return new PageInfo<>(list);
     }
 }

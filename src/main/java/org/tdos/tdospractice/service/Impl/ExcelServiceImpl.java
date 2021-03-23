@@ -90,12 +90,16 @@ public class ExcelServiceImpl implements ExcelService {
             if (owner == null) {
                 return Response.error("用户不存在");
             }
-            for ( int j=0 ;j <personnel.size();j++){
+            for ( int j=0 ;j <personnel.size();j++) {
                 Personnel p = personnel.get(j);
                 UserEntity user = userMapper.findUserById(p.getId());
                 if (user != null) {
                     return Response.error("用户已存在");
                 }
+            }
+            for ( int j=0 ;j <personnel.size();j++){
+                Personnel p = personnel.get(j);
+                UserEntity user = userMapper.findUserById(p.getId());
                 switch (p.getType()) {
                     // 学生
                     case 2:

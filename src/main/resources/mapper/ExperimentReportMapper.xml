@@ -43,7 +43,7 @@
     </update>
 
     <update id="updateExperimentReportByEndtime">
-        UPDATE experiment_report as er SET score = 0 , iscorrect = 1 , status = 1  from experiment e where er.experiment_id = e.id  and e.end_at  &lt; current_date AND er.status = 0 AND er.iscorrect = 0
+        UPDATE experiment_report as er SET score = 0 , iscorrect = 1 , status = 1 , submit_at = #{date}  from experiment e where er.experiment_id = e.id  and e.end_at  &lt; current_date AND er.status = 0 AND er.iscorrect = 0
     </update>
 
     <select id="findExperimentReportByExperimentAndUserId"
@@ -99,7 +99,7 @@
             and ccs.course_id = #{course_id} ::uuid
         </if>
         <if test="isCorrect != -1">
-            and er.isCorrect = #{isCorrect}
+            and er.status = #{status}
         </if>
         <if test="name != null and name != ''">
             and e."name" like concat('%',#{name},'%')

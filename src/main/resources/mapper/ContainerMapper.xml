@@ -211,7 +211,7 @@
     <select id="findContainerByImagesIds" resultMap="ContainerMap">
         select * from container c where c.image_id in
         <foreach collection="imagesIds" open="(" separator="," close=")" item="item">
-            #{item}
+            #{item}::uuid
         </foreach>
     </select>
 

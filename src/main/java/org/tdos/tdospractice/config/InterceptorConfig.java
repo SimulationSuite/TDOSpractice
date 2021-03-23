@@ -15,7 +15,22 @@ public class InterceptorConfig  implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new MyInterceptor()).excludePathPatterns("/login","/createToken");
+        //添加拦截器
+        InterceptorRegistration registration = registry.addInterceptor(loginInterceptor());
+        //排除的路径
+        registration.excludePathPatterns("/login");
+        //将这个controller放行
+        registration.excludePathPatterns("/createToken");
+        //将这个controller放行
+        registration.excludePathPatterns("/download_excel");
+        //将这个controller放行
+        registration.excludePathPatterns("/download_qb_excel");
+        //将这个controller放行
+        registration.excludePathPatterns("/upload_excel");
+        //将这个controller放行
+        registration.excludePathPatterns("/upload_qb_excel");
+        //拦截全部
+        registration.addPathPatterns("/**");
     }
 
     @Bean

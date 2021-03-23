@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import org.tdos.tdospractice.entity.ExperimentReportEntity;
 import org.tdos.tdospractice.type.AllExperimentReport;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -17,7 +18,7 @@ public interface ExperimentReportMapper {
 
     boolean updateExperimentReport(ExperimentReportEntity experimentEntity);
 
-    boolean updateExperimentReportByEndtime();
+    boolean updateExperimentReportByEndtime(LocalDateTime date);
 
     ExperimentReportEntity findExperimentReportByExperimentAndUserId(@Param("experiment_id") String experiment_id, @Param("user_id") String user_id);
 
