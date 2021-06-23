@@ -21,5 +21,8 @@ public interface CategoryMapper {
 
     List<CategoryEntity> findAllChildCategory();
 
-    CategoryEntity findCategoryByName(String name);
+    CategoryEntity findCategoryByName(@Param("name")String name);
+
+    int updateCategory(@Param("id")String id,@Param("name")String name);
+
 }

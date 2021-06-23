@@ -7,15 +7,15 @@
             keyProperty="id">
         insert into
         category("name",parent_category_id)
-        values(#{name},#{parent_category_id})
+        values(#{name},#{parent_category_id}::uuid)
     </insert>
 
     <select id="findParentCategory" resultType="org.tdos.tdospractice.entity.CategoryEntity">
-        select * from category where parent_category_id IS NULL
+        select * from category where parent_category_id IS NULL ORDER BY created_at
     </select>
 
     <select id="findChildCategory" resultType="org.tdos.tdospractice.entity.CategoryEntity">
-        select * from category where parent_category_id = #{parent_category_id}::uuid
+        select * from category where parent_category_id = #{parent_category_id}::uuid ORDER BY created_at
     </select>
 
     <select id="findCategory" resultType="org.tdos.tdospractice.entity.CategoryEntity">
@@ -29,4 +29,8 @@
     <select id="findCategoryByName" resultType="org.tdos.tdospractice.entity.CategoryEntity">
         select * from category where name = #{name}
     </select>
+
+    <update id="updateCategory">
+        update category set name=#{name} where id = #{id}::uuid
+    </update>
 </mapper>
