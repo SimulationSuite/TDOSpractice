@@ -46,11 +46,20 @@
 
     <select id="findStudentsByClass" resultType="org.tdos.tdospractice.type.ClassStudents">
         select s.id as userId,s.name as userName, s.gender,c.department, c.grade,c.name,c.id as classId from class c
-        inner JOIN sim_user s on c.id = s.class_id where c.id in
-        <foreach collection="list" item="id" index="index"
-                 open="(" close=")" separator=",">
-            #{id}::uuid
-        </foreach>
+        inner JOIN sim_user s on c.id = s.class_id where 1 = 1
+        <if test="class_ids!=null and class_ids.size > 0">
+             AND c.id in
+            <foreach collection="class_ids" item="id" index="index"
+                     open="(" close=")" separator=",">
+                #{id}::uuid
+            </foreach>
+        </if>
+        <if test="name!=null and name!=''">
+             AND s.name like concat('%',#{name},'%')
+        </if>
+        <if test="studentId!=null and studentId!=''">
+             AND s.id like concat('%',#{studentId},'%')
+        </if>
     </select>
 
     <resultMap type="org.tdos.tdospractice.type.ClassNumber" id="classNumber">

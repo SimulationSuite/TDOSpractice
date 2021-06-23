@@ -34,10 +34,10 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
-    public PageInfo<ClassStudents> findStudentsByClass(List<String> classIds, int page, int per_page) {
+    public PageInfo<ClassStudents> findStudentsByClass(List<String> classIds, String name,String studentId,int page, int per_page) {
         List<ClassStudents> list;
         PageHelper.startPage(page,per_page);
-        list = classMapper.findStudentsByClass(classIds);
+        list = classMapper.findStudentsByClass(classIds,name,studentId);
         return new PageInfo<ClassStudents>(list);
     }
 }

@@ -14,5 +14,5 @@ public interface ClassService {
 
     int findClassCountByClassId(String classId);
 
-    PageInfo<ClassStudents> findStudentsByClass(List<String> classIds, int page, int per_page);
+    PageInfo<ClassStudents> findStudentsByClass(List<String> classIds,String name,String studentId, int page, int per_page);
 }

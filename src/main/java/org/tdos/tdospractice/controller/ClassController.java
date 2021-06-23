@@ -35,8 +35,12 @@ public class ClassController {
     }
 
     @GetMapping(value = "/get_students_by_classes")
-    public Response<PageInfo<ClassStudents>> getStudentsByClasses(@RequestParam(value = "classIds") List<String> classIds, @RequestParam(value = "per_page") int perPage, @RequestParam(value = "page") int page) {
-        PageInfo<ClassStudents> list = classService.findStudentsByClass(classIds,page,perPage);
+    public Response<PageInfo<ClassStudents>> getStudentsByClasses(@RequestParam(value = "classIds" , required = false) List<String> classIds,
+                                                                  @RequestParam(value = "name" , required = false) String name,
+                                                                  @RequestParam(value = "studentId" , required = false) String studentId,
+                                                                  @RequestParam(value = "per_page") int perPage,
+                                                                  @RequestParam(value = "page") int page) {
+        PageInfo<ClassStudents> list = classService.findStudentsByClass(classIds,name,studentId,page,perPage);
         return Response.success(list);
     }
 }
