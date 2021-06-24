@@ -42,12 +42,8 @@ kvm:
     start-port: 10000
     count: 500
     server-info:
-      - 'node1@tcp://192.168.1.179:2375'
-#      - 'node2@tcp://192.168.1.31:2375'
-    cert-path:
-#      - "//home//yongyang//certs"
-      - "E://certs"
-#      - "E://certs//31"
+      - name: node1@tcp://192.168.1.179:2375
+        path: /Users/ym/ssh/179
 
 ftp:
   ftpIp: 192.168.1.228
