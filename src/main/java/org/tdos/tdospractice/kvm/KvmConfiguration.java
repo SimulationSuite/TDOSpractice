@@ -14,15 +14,21 @@ public class KvmConfiguration {
     private Docker docker;
 
     @Data
-    public static class Docker{
+    public static class Docker {
 
         private int startPort;
 
         private int count;
 
-        private String[] certPath;
+        private List<ServerInfo> serverInfo;
+    }
 
-        private List<String> serverInfo;
+    @Data
+    public static class ServerInfo {
+
+        private String name;
+
+        private String path;
     }
 
 

@@ -10,7 +10,9 @@ import org.tdos.tdospractice.entity.ImageEntity;
 import org.tdos.tdospractice.utils.HashUtils;
 
 import javax.annotation.PostConstruct;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -39,15 +41,17 @@ public class KvmManager {
     private void dockerInit() {
         this.dockerTools = new ArrayList<>();
         this.docker = kvmConfiguration.getDocker();
-        List<String> list = docker.getServerInfo();
+        List<KvmConfiguration.ServerInfo> list = docker.getServerInfo();
         if (list.size() <= 0) {
             throw new RuntimeException("No service failed to initialize");
         }
-        for (int x = 0; x < list.size(); x++) {
-            String[] s = list.get(x).split(separator);
-            DockerTool dockerTool = new DockerTool(docker.getCertPath()[x], s[0], s[1], x, docker.getStartPort(), docker.getCount());
+        int index = 0;
+        for (KvmConfiguration.ServerInfo serverInfo : list) {
+            String[] s = serverInfo.getName().split(separator);
+            DockerTool dockerTool = new DockerTool(serverInfo.getPath(), s[0], s[1], index, docker.getStartPort(), docker.getCount());
             dockerTool.addPortList();
             this.dockerTools.add(dockerTool);
+            index++;
         }
     }
 
