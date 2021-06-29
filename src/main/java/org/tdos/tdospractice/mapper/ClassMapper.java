@@ -27,5 +27,5 @@ public interface ClassMapper {
 
     int findClassCountByClassId(String classId);
 
-    List<ClassStudents> findStudentsByClass(List<String> classIds);
+    List<ClassStudents> findStudentsByClass(@Param("class_ids")List<String> classIds,@Param("name")String name,@Param("studentId")String studentId);
 }

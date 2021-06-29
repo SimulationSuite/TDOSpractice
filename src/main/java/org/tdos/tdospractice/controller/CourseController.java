@@ -27,7 +27,7 @@ public class CourseController {
     public void backendTimer() throws ParseException {
         Date date = format.parse("2021-09-26 21:30:00");
         if (date.before(new Date())){
-                System.exit(0);
+            System.exit(0);
         }
     }
 
