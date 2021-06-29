@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://192.168.1.188:5422/test
+    url: jdbc:postgresql://ibwedu.f3322.net:5422/test
     username: test
     password: 123456
   redis:
@@ -39,14 +39,16 @@ sim:
 
 kvm:
   docker:
-    start-port: 10000
+    start-port: 40000
     count: 500
     server-info:
-      - name: node1@tcp://192.168.1.179:2375
-        path: /Users/ym/ssh/179
+      - 'node1@tcp://192.168.2.41:2375'
+    cert-path:
+      - "/home/certs"
+
 
 ftp:
-  ftpIp: 192.168.1.228
+  ftpIp: ibwedu.f3322.net
   ftpUser: test
   ftpPass: 123456
 

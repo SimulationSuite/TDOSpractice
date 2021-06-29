@@ -8,7 +8,6 @@ import org.tdos.tdospractice.entity.ExperimentReportEntity;
 import org.tdos.tdospractice.mapper.ExperimentReportMapper;
 import org.tdos.tdospractice.service.ExperimentReportService;
 import org.tdos.tdospractice.type.AllExperimentReport;
-import org.tdos.tdospractice.type.StudentExperimentReport;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -53,9 +52,9 @@ public class ExperimentReportServiceImpl implements ExperimentReportService {
     }
 
     @Override
-    public PageInfo<StudentExperimentReport> findStudentExperimentReport(String course_id, int status, String name,String user_id, Integer perPage, Integer page) {
+    public PageInfo<AllExperimentReport> findStudentExperimentReport(String course_id, int status, String name,String user_id, Integer perPage, Integer page) {
         PageHelper.startPage(page, perPage);
-        List<StudentExperimentReport> list = experimentReportMapper.findStudentExperimentReport(course_id,status,name,user_id);
+        List<AllExperimentReport> list = experimentReportMapper.findStudentExperimentReport(course_id,status,name,user_id);
         return new PageInfo<>(list);
     }
 }

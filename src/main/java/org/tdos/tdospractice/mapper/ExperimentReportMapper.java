@@ -4,7 +4,6 @@ import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 import org.tdos.tdospractice.entity.ExperimentReportEntity;
 import org.tdos.tdospractice.type.AllExperimentReport;
-import org.tdos.tdospractice.type.StudentExperimentReport;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,6 +24,6 @@ public interface ExperimentReportMapper {
 
     List<AllExperimentReport> findExperimentReportAll(@Param("course_id") String course_id, @Param("status") int status, @Param("isCorrect") int isCorrect, @Param("name") String name, @Param("startTime") String startTime, @Param("endTime") String endTime, @Param("ownerId") String ownerId);
 
-    List<StudentExperimentReport> findStudentExperimentReport(@Param("course_id") String course_id, @Param("status") int status, @Param("name") String name, @Param("user_id") String user_id);
+    List<AllExperimentReport> findStudentExperimentReport(@Param("course_id") String course_id, @Param("isCorrect") int isCorrect, @Param("name") String name, @Param("user_id") String user_id);
 
 }

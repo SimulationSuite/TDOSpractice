@@ -98,7 +98,7 @@
         <if test="course_id != null and course_id != ''">
             and ccs.course_id = #{course_id} ::uuid
         </if>
-        <if test="status != -1">
+        <if test="isCorrect != -1">
             and er.status = #{status}
         </if>
         <if test="name != null and name != ''">
