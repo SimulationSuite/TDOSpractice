@@ -82,7 +82,7 @@
         small_section.NAME AS small_section_name,
         small_section.ORDER AS small_section_order
         FROM course c
-        LEFT JOIN class_course cc ON c.id = cc.course_id::uuid
+--         LEFT JOIN class_course cc ON c.id = cc.course_id::uuid
         LEFT JOIN course_chapter_section ccs ON  ccs.course_id = c.id
         LEFT JOIN chapter ON chapter.id = ccs.chapter_id and "chapter".order != -1
         LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
@@ -142,7 +142,7 @@
         small_section.ORDER AS small_section_order
         FROM course c
         LEFT JOIN course_chapter_section ccs on ccs.course_id = c.id
-        LEFT JOIN class_course cc ON cc.course_id :: uuid = ccs.course_id
+--         LEFT JOIN class_course cc ON cc.course_id :: uuid = ccs.course_id
         LEFT JOIN chapter ON chapter.id = ccs.chapter_id and "chapter".order != -1
         LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
         LEFT JOIN "small_section" ON "small_section".id = ccs.small_section_id and "small_section".order != -1
@@ -184,7 +184,7 @@ SELECT
 	small_section.ORDER AS small_section_order
 FROM
 	course c
-	LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
+-- 	LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
 	LEFT JOIN course_chapter_section ccs ON  ccs.course_id  = c.id
 	LEFT JOIN chapter ON chapter.id = ccs.chapter_id and "chapter".order != -1
 	LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
@@ -262,7 +262,7 @@ FROM
         small_section.ORDER AS small_section_order
         FROM
         course c
-        LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
+--         LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
         LEFT JOIN course_chapter_section ccs ON  ccs.course_id = c.id
         LEFT JOIN chapter ON chapter.id = ccs.chapter_id and "chapter".order != -1
         LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
@@ -364,7 +364,7 @@ FROM
         LEFT JOIN course_chapter_section ccs ON  ccs.course_id = c.id
         LEFT JOIN chapter ON chapter.id = ccs.chapter_id and "chapter".order != -1
         LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
-        LEFT JOIN class_course cc ON cc.course_id = ccs.course_id
+--         LEFT JOIN class_course cc ON cc.course_id = ccs.course_id
         LEFT JOIN "small_section" ON "small_section".id = ccs.small_section_id and "small_section".order != -1
         WHERE
         c.id  IN
@@ -474,7 +474,7 @@ SELECT
     small_section.NAME AS small_section_name,
     small_section.ORDER AS small_section_order
 FROM course c
-	LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
+-- 	LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
     LEFT JOIN course_chapter_section ccs ON c.id = ccs.course_id
     LEFT JOIN chapter ON chapter.id = ccs.chapter_id and "chapter".order != -1
     LEFT JOIN "section" ON "section".id = ccs.section_id and "section".order != -1
@@ -540,7 +540,7 @@ CASE
 	END AS section_has_experiment
 FROM
 	course c
-	LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
+-- 	LEFT JOIN class_course cc ON cc.course_id :: uuid = c.id
 	LEFT JOIN course_chapter_section ccs ON ccs.course_id = c.id
 	LEFT JOIN chapter ON chapter.id = ccs.chapter_id
 	AND "chapter".ORDER != - 1
