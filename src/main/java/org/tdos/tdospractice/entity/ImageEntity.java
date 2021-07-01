@@ -6,10 +6,10 @@ import lombok.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Builder
 public class ImageEntity implements Serializable {
 

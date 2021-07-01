@@ -103,39 +103,31 @@ public class KvmManager {
         return list;
     }
 
-    /**
-     * @param ContainerID
-     * @param nodeOrder
-     * @param type        0 start, 1 stop, 2 restart
-     */
-    public void execContainer(String ContainerID, int nodeOrder, int type) {
-        try {
-            DockerTool dockerTool = dockerTools.get(nodeOrder);
-            if (type == ExecType.START.ordinal()) {
-                dockerTool.start(ContainerID);
-                return;
-            } else if (type == ExecType.STOP.ordinal()) {
-                dockerTool.stop(ContainerID);
-                return;
-            } else if (type == ExecType.RESTART.ordinal()) {
-                dockerTool.restart(ContainerID);
-                return;
-            }
-        } catch (Exception e) {
-            return;
-        }
-    }
-
-    public void stopContainers(List<ContainerEntity> containerEntities) {
+    public void asyncExecContainer(List<ContainerEntity> containers, int type) {
         try {
             List<CompletableFuture<Void>> list = new ArrayList<>();
-            for (int x = 0; x < dockerTools.size(); x++) {
-                int finalX = x;
-                containerEntities.stream().filter(f -> f.getNodeOrder() == finalX).forEach(l -> {
-                    list.add(CompletableFuture.runAsync(() -> {
-                        dockerTools.get(finalX).stop(l.getContainerId());
-                    }, executor));
-                });
+            switch (type) {
+                case 0://start
+                    containers.forEach(l -> {
+                        list.add(CompletableFuture.runAsync(() -> {
+                            dockerTools.get(l.getNodeOrder()).start(l.getContainerId());
+                        }, executor));
+                    });
+                    break;
+                case 1://stop
+                    containers.forEach(l -> {
+                        list.add(CompletableFuture.runAsync(() -> {
+                            dockerTools.get(l.getNodeOrder()).stop(l.getContainerId());
+                        }, executor));
+                    });
+                    break;
+                case 2://restart
+                    containers.forEach(l -> {
+                        list.add(CompletableFuture.runAsync(() -> {
+                            dockerTools.get(l.getNodeOrder()).restart(l.getContainerId());
+                        }, executor));
+                    });
+                    break;
             }
             CompletableFuture.allOf(list.toArray(new CompletableFuture[]{})).join();
         } catch (Exception e) {

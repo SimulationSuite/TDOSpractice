@@ -60,7 +60,7 @@ public class MessageListener {
         if (list == null || list.size() == 0) {
             return;
         }
-        kvmManager.stopContainers(list);
+        kvmManager.asyncExecContainer(list, 1);
         containerMapper.updateContainerByIds(2, list.stream().map(ContainerEntity::getContainerId).collect(Collectors.toList()));
         int count = kvmManager.getRunContainerCount();
         log.info("One-key release has been completed. The number of running containers is " + count);

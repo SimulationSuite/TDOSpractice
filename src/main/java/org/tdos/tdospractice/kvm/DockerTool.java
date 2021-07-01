@@ -42,6 +42,8 @@ public class DockerTool implements CommonTool {
 
     private final ExposedPort tcp = ExposedPort.tcp(6080);
 
+    private final ExposedPort sshtcp = ExposedPort.tcp(4000);
+
     public enum Type {
         SSH, GUI
     }
@@ -254,9 +256,8 @@ public class DockerTool implements CommonTool {
 
     //Create SSH2
     private CreateContainerResponse createContainerSSH(String imageContainer, List<Integer> ports, String containerName) {
-        ExposedPort tcp = ExposedPort.tcp(4000);
         Ports portBindings = new Ports();
-        portBindings.bind(tcp, Ports.Binding.bindPort(ports.get(0)));
+        portBindings.bind(sshtcp, Ports.Binding.bindPort(ports.get(0)));
         CreateContainerResponse newContainer = dockerClient.createContainerCmd(imageContainer)
                 .withCmd("sh", "-c", "node /ssh/start.js")
                 .withName(containerName)

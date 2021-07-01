@@ -20,6 +20,7 @@ import org.tdos.tdospractice.utils.JsonUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ContainerServiceImpl implements ContainerService {
@@ -117,12 +118,10 @@ public class ContainerServiceImpl implements ContainerService {
         if (containers.size() != containerIds.size()) {
             return Response.error("未知实验");
         }
-        for (ContainerEntity c : containers) {
-            if (KvmManager.ExecType.START.ordinal() == type && c.getStatus() == 1) {
-                continue;
-            }
-            kvmManager.execContainer(c.getContainerId(), c.getNodeOrder(), type);
-        }
+
+        containers = containers.stream().filter(c -> KvmManager.ExecType.START.ordinal() != type && c.getStatus() != 1).collect(Collectors.toList());
+        kvmManager.asyncExecContainer(containers, type);
+
         int status;
         if (KvmManager.ExecType.STOP.ordinal() == type) {
             status = 2;
@@ -162,7 +161,7 @@ public class ContainerServiceImpl implements ContainerService {
             if (courseId != null && !courseId.equals("")) {
                 c.setCourseId(courseId);
             }
-            kvmManager.execContainer(c.getContainerId(), c.getNodeOrder(), KvmManager.ExecType.START.ordinal());
+            kvmManager.asyncExecContainer((List<ContainerEntity>) c, KvmManager.ExecType.START.ordinal());
             c.setStatus(1);
             containerMapper.insertContainer(c);
         }
@@ -171,13 +170,10 @@ public class ContainerServiceImpl implements ContainerService {
 
     @Override
     public void stopExperiment(String userId, String experimentId) {
-        List<String> containerIds = new ArrayList<>();
-        containerMapper.findContainerByExperimentidAndUserid(userId, experimentId).stream().forEach(c -> {
-            kvmManager.execContainer(c.getContainerId(), c.getNodeOrder(), KvmManager.ExecType.STOP.ordinal());
-            containerIds.add(c.getContainerId());
-        });
-        if (containerIds.size() > 0) {
-            containerMapper.updateContainerByIds(2, containerIds);
+        List<ContainerEntity> containerEntityList = containerMapper.findContainerByExperimentidAndUserid(userId, experimentId);
+        if (containerEntityList.size() > 0) {
+            kvmManager.asyncExecContainer(containerEntityList, KvmManager.ExecType.STOP.ordinal());
+            containerMapper.updateContainerByIds(2, containerEntityList.stream().map(c -> c.getContainerId()).collect(Collectors.toList()));
         }
     }
 }
