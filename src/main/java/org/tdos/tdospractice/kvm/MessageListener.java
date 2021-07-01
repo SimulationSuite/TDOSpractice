@@ -34,7 +34,12 @@ public class MessageListener {
     @JmsListener(destination = "image-Queue")
     public void execMessage(String message) {
         ImageEntity imageEntity = jsonUtils.decode(Hex.decode(message), ImageEntity.class);
+        if (imageEntity == null) {
+            return;
+        }
         log.info("Image name is " + imageEntity.getImageName() + ", Start to push");
+
+        kvmManager.addImage(imageEntity);
         //pull image
         kvmManager.pullImages(imageEntity.getImageName());
         List<Image> imageList = kvmManager.getImageInfo(imageEntity.getImageName());
@@ -52,6 +57,9 @@ public class MessageListener {
     @JmsListener(destination = "container-Queue")
     public void execContainerMessage(String message) {
         List<ContainerEntity> list = Arrays.asList(jsonUtils.decode(Hex.decode(message), ContainerEntity[].class));
+        if (list == null || list.size() == 0) {
+            return;
+        }
         kvmManager.stopContainers(list);
         containerMapper.updateContainerByIds(2, list.stream().map(ContainerEntity::getContainerId).collect(Collectors.toList()));
         int count = kvmManager.getRunContainerCount();

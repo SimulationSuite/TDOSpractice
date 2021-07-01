@@ -15,8 +15,7 @@ import org.apache.commons.io.IOUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static com.github.dockerjava.api.model.Capability.SYS_ADMIN;
 
@@ -37,13 +36,7 @@ public class DockerTool implements CommonTool {
 
     private List<Image> imageList;
 
-    private int startPort;
-
-    private int count;
-
-    private Set<Integer> usedPorts;
-
-    private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
+    private Queue<Integer> queue = new ConcurrentLinkedQueue<>();
 
     private final String downloadPath = "/root/Downloads/";
 
@@ -56,9 +49,9 @@ public class DockerTool implements CommonTool {
     public DockerTool(String certsPath, String serverName, String serverURL, int order, int startPort, int count) {
         this.serverName = serverName;
         this.order = order;
-        this.startPort = startPort;
-        this.count = count;
-        this.usedPorts = new HashSet<>();
+        for (int x = startPort; x < startPort + count; x++) {
+            queue.offer(x);
+        }
         initClient(certsPath, serverURL);
         this.IP = parseIP(serverURL);
         this.imageList = dockerClient.listImagesCmd().withShowAll(true).exec();
@@ -82,55 +75,28 @@ public class DockerTool implements CommonTool {
     }
 
     public void addPortList() {
-        List<Integer> ports = new ArrayList<>();
         getAllgetAllContainers(true).forEach(l -> {
             for (ContainerPort c : l.getPorts()) {
                 if (c.getPrivatePort() != null && c.getPublicPort() != null) {
-                    ports.add(c.getPublicPort());
+                    queue.remove(c.getPublicPort());
                 }
             }
         });
-        addPorts(ports);
-    }
-
-    public void addPorts(Collection<Integer> ports) {
-        rwLock.writeLock().lock();
-        try {
-            usedPorts.addAll(ports);
-        } finally {
-            rwLock.writeLock().unlock();
-        }
     }
 
     public void removePorts(Collection<Integer> ports) {
-        if (ports.size() == 0) {
-            return;
-        }
-        rwLock.writeLock().lock();
-        try {
-            usedPorts.removeAll(ports);
-        } finally {
-            rwLock.writeLock().unlock();
-        }
+        queue.addAll(ports);
     }
 
     public List<Integer> getFreePort(int counts) {
         List<Integer> list = new ArrayList<>();
-        int item = counts;
-        rwLock.readLock().lock();
-        try {
-            for (int x = startPort; x <= (startPort + count); x++) {
-                if (!usedPorts.contains(x)) {
-                    list.add(x);
-                    if (--item == 0) {
-                        break;
-                    }
-                }
+        for (int x = 0; x < counts; x++) {
+            Integer port = queue.poll();
+            if (port != null) {
+                list.add(port);
             }
-            return list;
-        } finally {
-            rwLock.readLock().unlock();
         }
+        return list;
     }
 
     public List<Container> getAllgetAllContainers(boolean type) {
@@ -263,11 +229,9 @@ public class DockerTool implements CommonTool {
      */
     public CreateContainerResponse creatContainer(String imageContainer, String containerName, int type, List<Integer> ports) {
         if (type == Type.GUI.ordinal()) {
-            addPorts(ports);
             return createContainerGUI(imageContainer, ports.get(0), containerName);
         }
         if (type == Type.SSH.ordinal()) {
-            addPorts(ports);
             return createContainerSSH(imageContainer, ports, containerName);
         }
         return null;

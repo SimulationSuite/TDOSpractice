@@ -5,7 +5,6 @@ import com.github.pagehelper.PageInfo;
 import lombok.SneakyThrows;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.commons.codec.binary.Hex;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jms.core.JmsMessagingTemplate;
@@ -17,8 +16,10 @@ import org.tdos.tdospractice.mapper.ImageMapper;
 import org.tdos.tdospractice.service.ImageService;
 import org.tdos.tdospractice.utils.JsonUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class ImageServiceImpl implements ImageService {
@@ -45,6 +46,17 @@ public class ImageServiceImpl implements ImageService {
     public PageInfo<ImageEntity> getImageList(int kind, String imageName, int page, int perPage) {
         PageHelper.startPage(page, perPage);
         List<ImageEntity> list = imageMapper.findImageByKindAndName(kind, imageName);
+        list.stream().forEach(i -> i.setState(0));
+        List<ImageEntity> cachelist = kvmManager.getCache();
+        List<ImageEntity> imageList = new ArrayList<>();
+        if (cachelist.size() > 0) {
+            cachelist = cachelist.stream().filter(i -> !list.contains(i)).collect(Collectors.toList());
+        }
+        if (cachelist.size() > 0) {
+            cachelist.stream().forEach(i -> i.setState(1));
+            imageList.addAll(cachelist);
+        }
+        imageList.addAll(list);
         return new PageInfo<>(list);
     }
 

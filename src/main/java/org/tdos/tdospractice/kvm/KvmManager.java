@@ -1,5 +1,7 @@
 package org.tdos.tdospractice.kvm;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
@@ -16,6 +18,7 @@ import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Component
@@ -37,6 +40,11 @@ public class KvmManager {
     public enum ExecType {
         START, STOP, RESTART
     }
+
+    private Cache<String, ImageEntity> cache = Caffeine.newBuilder()
+            .expireAfterWrite(1, TimeUnit.HOURS)
+            .maximumSize(1000)
+            .build();
 
     private void dockerInit() {
         this.dockerTools = new ArrayList<>();
@@ -92,9 +100,6 @@ public class KvmManager {
 
     private List<Integer> getFreePorts(DockerTool dockerTool) {
         List<Integer> list = dockerTool.getFreePort(1);
-        if (list.size() != 1) {
-            return new ArrayList<>();
-        }
         return list;
     }
 
@@ -219,5 +224,13 @@ public class KvmManager {
 
     public boolean isExistImageID(List<String> imageID) {
         return dockerTools.stream().anyMatch(s -> s.isExistImageID(imageID));
+    }
+
+    public void addImage(ImageEntity imageEntity) {
+        cache.put(imageEntity.getImageId(), imageEntity);
+    }
+
+    public List<ImageEntity> getCache() {
+        return (List<ImageEntity>) cache.asMap().values();
     }
 }
